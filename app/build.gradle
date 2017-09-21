@@ -15,8 +15,27 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'android'
+            keyPassword 'android'
+            storeFile file('../keystores/debug.jks')
+            storePassword 'android'
+        }
+
+        production {
+            def signFile = file("../local.properties")
+            def signingProps = new Properties()
+            signingProps.load(new FileInputStream(signFile))
+            storeFile file("../keystores/release.jks")
+            storePassword signingProps['storePassword']
+            keyAlias signingProps['keyAlias']
+            keyPassword signingProps['keyPassword']
+        }
+    }
+
     buildTypes {
-        release {
+        production {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -38,10 +57,20 @@ android {
             case "release":
                 def APP_NAME = "WAY"
                 variant.resValue("string", "app_name", "${APP_NAME}")
-                break;
         }
     }
 
+    android.variantFilter { variant ->
+        if (variant.buildType.name.equals("release")) {
+            variant.setIgnore(true)
+        }
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "${applicationId}-${variant.versionName}.apk"
+    }
 }
 
 dependencies {
@@ -49,7 +78,7 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
