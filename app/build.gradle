@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def keyPropertiesFile = rootProject.file("key.properties");
+def keyProperties = new Properties();
+keyProperties.load(new FileInputStream(keyPropertiesFile));
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
@@ -53,6 +57,10 @@ android {
             case "debug":
                 def APP_NAME = "[DEV] WAY"
                 variant.resValue("string", "app_name", "${APP_NAME}")
+                variant.buildConfigField "String", "HYPERTRACK_PK", keyProperties['HYPERTRACK_PUBLISHABLE_KEY']
+                variant.buildConfigField "String", "HYPERTRACK_BASE_URL", '"https://api.hypertrack.com/api/v1/"'
+                variant.resValue "string", "deeplink_scheme", "com.hypertracklive"
+                variant.resValue "string", "tracking_url", "www.trck.at"
                 break;
             case "release":
                 def APP_NAME = "WAY"
@@ -74,12 +82,43 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    implementation('com.hypertrack:android:0.4.8:release@aar') {
+        transitive = true;
+    }
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
+
+    // Retrofit 2
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // Google play services
+    implementation 'com.google.android.gms:play-services-gcm:11.2.2'
+    implementation 'com.google.android.gms:play-services-places:11.2.2'
+    implementation 'com.google.android.gms:play-services-location:11.2.2'
+    implementation 'com.google.firebase:firebase-messaging:11.2.2'
+
+    // Common
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+}
+
+/*
+* Enable FCM integration for real time tracking by adding a google-services.json
+* Once you have either an existing account on <a href="https://console.developers.google.com/">Google Developer</a>
+* or a new account <a href="https://console.firebase.google.com">Firebase console</a>,
+* you will need to add <a href="https://support.google.com/firebase/answer/7015592">google-services.json</a>
+* file for your app to remove the below compilation failure.
+*/
+File googleServicesFile = rootProject.file("app/google-services.json");
+if (googleServicesFile.exists()) {
+    System.out.println("Google Service File Exist");
+    apply plugin: 'com.google.gms.google-services'
 }
