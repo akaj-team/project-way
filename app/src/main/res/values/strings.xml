@@ -4,4 +4,5 @@
     <string name="splash_name_application">HIPERTRACK LIVE</string>
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
+    <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
 </resources>

@@ -29,8 +29,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:id="@+id/imgCircle"
+            android:layout_width="@dimen/splash_img_circle_with_hight"
+            android:layout_height="@dimen/splash_img_circle_with_hight"
             android:layout_weight="0.4"
             android:contentDescription="@string/splash_description_app"
             android:src="@drawable/ic_location_round" />
@@ -41,28 +42,36 @@
             android:layout_weight="0.1"
             android:text="@string/splash_name_application"
             android:textColor="@color/colorBlack"
-            android:textSize="30sp"
+            android:textSize="@dimen/splash_size_tv_app_name"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvAppDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="@dimen/splash_tv_description_margin"
+            android:layout_marginRight="@dimen/splash_tv_description_margin"
             android:layout_weight="0.4"
             android:gravity="center"
             android:text="@string/splash_description_app"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
+            android:textSize="@dimen/splash_tv_size_app_description" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/splash_progressBar_margin_bottom"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnEnableLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/splash_buttonEnable_marginButton"
             android:background="@drawable/common_bg_button_enable_location"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="@dimen/splash_buttonEnaleButton_padding"
+            android:paddingRight="@dimen/splash_buttonEnaleButton_padding"
             android:text="@string/splash_button_enable_location"
             android:textColor="@color/colorWhite" />
     </LinearLayout>

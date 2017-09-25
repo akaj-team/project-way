@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="splash_img_circle_with_hight">250dp</dimen>
+    <dimen name="splash_size_tv_app_name">25sp</dimen>
+    <dimen name="splash_tv_description_margin">50dp</dimen>
+    <dimen name="splash_tv_size_app_description">16sp</dimen>
+    <dimen name="splash_buttonEnable_marginButton">20dp</dimen>
+    <dimen name="splash_buttonEnaleButton_padding">20dp</dimen>
+    <dimen name="splash_progressBar_margin_bottom">20dp</dimen>
+</resources>
