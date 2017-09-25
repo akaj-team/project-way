@@ -48,10 +48,13 @@ class SplashActivity : BaseActivity() {
         val shrinkAnim = ScaleAnimation(1.05f, 0.9f, 1.05f, 0.9f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f)
+
         growAnim.duration = 800
         shrinkAnim.duration = 800
+
         imgCircle.animation = growAnim
         growAnim.start()
+
         growAnim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {}
 
