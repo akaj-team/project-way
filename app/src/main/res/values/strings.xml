@@ -1,4 +1,5 @@
 <resources>
+    <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="splash_image_description">image</string>
     <string name="splash_name_application">HIPERTRACK LIVE</string>

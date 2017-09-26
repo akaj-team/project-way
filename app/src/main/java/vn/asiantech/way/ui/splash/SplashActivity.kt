@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.splashScreen
+package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -6,15 +6,17 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
-import android.widget.Toast
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+
 /**
-* Created by atHangTran on 22/09/2017.
-*/
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by atHangTran on 26/09/2017.
+ */
 
 class SplashActivity : BaseActivity() {
 
@@ -23,7 +25,7 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
         setAnimationForBackground()
         setScaleForCircle()
-        handlePermission()
+        requestPermission()
     }
 
     private fun setAnimationForBackground() {
@@ -78,7 +80,7 @@ class SplashActivity : BaseActivity() {
         })
     }
 
-    private fun handlePermission() {
+    private fun requestPermission() {
         btnEnableLocation.setOnClickListener {
             if (HyperTrackUtils.isInternetConnected(this)) {
                 if (HyperTrackUtils.isLocationEnabled(this)) {
@@ -97,7 +99,7 @@ class SplashActivity : BaseActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, R.string.splash_toast_turn_on_wifi, Toast.LENGTH_LONG).show()
+                toast(getString(R.string.splash_toast_turn_on_wifi))
             }
         }
     }
