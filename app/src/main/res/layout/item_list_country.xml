@@ -2,15 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/imgFlag"
-        android:layout_width="wrap_content"
+        android:layout_width="36dp"
         android:layout_height="28dp"
         android:contentDescription="@null"
-        android:src="@drawable/bb" />
+        android:src="@drawable/vn" />
 
     <TextView
         android:id="@+id/tvCountryName"
@@ -19,6 +20,7 @@
         android:layout_toEndOf="@+id/imgFlag"
         android:layout_toRightOf="@+id/imgFlag"
         android:gravity="center"
-        tools:text="BB" />
+        android:paddingLeft="10dp"
+        tools:text="VN" />
 
 </RelativeLayout>

@@ -10,22 +10,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="56dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/ic_ht_user"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_default_avatar"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/ic_profile_camera"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp" />
@@ -36,8 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/frAvatar"
+        android:layout_marginLeft="@dimen/margin_xxhigh"
+        android:layout_marginRight="@dimen/margin_xxhigh"
+        android:layout_marginTop="@dimen/margin_xhigh"
         android:gravity="center"
-        android:padding="15dp"
         android:text="@string/register_description"
         android:textSize="16dp" />
 
@@ -46,10 +48,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDescription"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/custom_layout_phone">
+        android:layout_marginBottom="@dimen/margin_huge"
+        android:layout_marginLeft="@dimen/margin_high"
+        android:layout_marginRight="@dimen/margin_high"
+        android:layout_marginTop="@dimen/margin_high"
+        android:background="@drawable/custom_layout_phone"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <EditText
             android:id="@+id/edtName"
@@ -58,6 +63,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:hint="@string/register_hint_name"
+            android:imeOptions="actionNext"
             android:inputType="text" />
 
         <View
@@ -73,28 +79,34 @@
             android:layout_height="60dp"
             android:layout_below="@+id/view"
             android:orientation="horizontal"
-            android:padding="50dp">
+            android:paddingEnd="40dp"
+            android:paddingStart="40dp">
 
             <Spinner
                 android:id="@+id/spinnerNation"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical" />
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:id="@+id/tvBaseNumber"
                 android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:gravity="start|center_vertical"
+                android:textSize="16dp"
                 tools:text="+84" />
 
             <EditText
                 android:id="@+id/edtPhoneNumber"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="start|center_vertical"
                 android:hint="@string/register_hint_phone"
-                android:inputType="phone" />
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:textSize="16dp" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -106,7 +118,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/custom_button_save"
         android:text="@string/register_button_save_text"
         android:textAllCaps="false"

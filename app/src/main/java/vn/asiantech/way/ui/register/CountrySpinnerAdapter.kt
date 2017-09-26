@@ -10,6 +10,7 @@ import vn.asiantech.way.models.Country
 import java.util.*
 
 /**
+ * Adapter spinner Country
  * Created by haibt on 9/26/17.
  */
 class CountrySpinnerAdapter(val mContext: Context,
@@ -36,6 +37,7 @@ class CountrySpinnerAdapter(val mContext: Context,
         val view: View = LayoutInflater.from(mContext).inflate(mResource, parent, false)
         val isoCode: String = mCountries[position].iso
         view.imgFlag.setImageResource(getCountryFlag(isoCode))
+        view.tvCountryName.visibility = View.GONE
         return view
     }
 
