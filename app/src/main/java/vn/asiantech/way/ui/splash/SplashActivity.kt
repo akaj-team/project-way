@@ -35,10 +35,10 @@ class SplashActivity : BaseActivity() {
         transAnim.duration = 10000L
         transAnim.addUpdateListener { animation ->
             val progress = animation.animatedValue as Float
-            val width = imgBackground1.width
+            val width = imgFrontBackground.width
             val translationX = width * progress
-            imgBackground1.translationX = translationX
-            imgBackground2.translationX = translationX - width
+            imgFrontBackground.translationX = translationX
+            imgBehindBackground.translationX = translationX - width
         }
         transAnim.start()
     }

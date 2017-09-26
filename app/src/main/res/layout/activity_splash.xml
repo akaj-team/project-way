@@ -8,14 +8,14 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imgBackground1"
+            android:id="@+id/imgFrontBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_map"
             android:contentDescription="@string/splash_image_description" />
 
         <ImageView
-            android:id="@+id/imgBackground2"
+            android:id="@+id/imgBehindBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_map"
