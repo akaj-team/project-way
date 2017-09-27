@@ -1,9 +1,8 @@
 package vn.asiantech.way.ui.searchlocation
 
 /**
- * MyLocation.
- *
- * @author CuongCV
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by cuongcaov. on 25/09/2017.
  */
 
 class MyLocation {
@@ -12,18 +11,6 @@ class MyLocation {
     var name: String? = null
     var place_id: String? = null
     var geometry: Geometry? = null
-
-    constructor() {}
-
-    constructor(formatted_address: String?, id: String?, name: String?, place_id: String?, geometry: Geometry?) {
-        this.formatted_address = formatted_address
-        this.id = id
-        this.name = name
-        this.place_id = place_id
-        this.geometry = geometry
-    }
-
-
 }
 
 data class Geometry(var location: Coordinates)

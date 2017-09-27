@@ -14,10 +14,10 @@ import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
- * SearchLocationActivity.
- *
- * @author CuongCV
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by cuongcaov. on 25/09/2017.
  */
+
 class SearchLocationActivity : BaseActivity() {
 
     private var mTask: SearchLocationAsyncTask? = null
@@ -60,7 +60,7 @@ class SearchLocationActivity : BaseActivity() {
     private fun locationSearch() {
         edtLocation.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                if (p0.toString().length > 0) {
+                if (p0.toString().isNotEmpty()) {
                     if (mTask != null) {
                         mTask = null
                         mMyLocations.clear()
@@ -100,10 +100,10 @@ class SearchLocationActivity : BaseActivity() {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager ?: return null
         val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         val netLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        if (gpsLocation.time > netLocation.time) {
-            return gpsLocation
+        return if (gpsLocation.time > netLocation.time) {
+            gpsLocation
         } else {
-            return netLocation
+            netLocation
         }
     }
 }

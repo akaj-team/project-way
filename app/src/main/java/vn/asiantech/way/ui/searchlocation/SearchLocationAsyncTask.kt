@@ -6,18 +6,22 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * SearchLocationAsyncTask.
- *is
- * @author CuongCV
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by cuongcaov. on 25/09/2017.
  */
-class SearchLocationAsyncTask(val mListener: SearchLocationListener) : AsyncTask<String, Void, List<MyLocation>>() {
+
+class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : AsyncTask<String, Void, List<MyLocation>>() {
+
+    companion object {
+        private const val API_KEY = "AIzaSyAIue0sTuwo7Qsqwi5hhx6zbncDaS2YxDY"
+    }
 
     override fun doInBackground(vararg p0: String?): List<MyLocation>? {
         mListener.onStarted()
         var check = true
         var myLocations: List<MyLocation>? = null
         val apiService = RetrofitClient.getAPIService()
-        apiService.getLocation(p0.get(0)!!, "AIzaSyAIue0sTuwo7Qsqwi5hhx6zbncDaS2YxDY")
+        apiService.getLocation(p0[0]!!, API_KEY)
                 .enqueue(object : Callback<APIResult> {
                     override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
                         myLocations = response?.body()?.results

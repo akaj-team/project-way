@@ -8,10 +8,10 @@ import kotlinx.android.synthetic.main.item_search_location.view.*
 import vn.asiantech.way.R
 
 /**
- * LocationsAdapter.
- *
- * @author CuongCV
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by cuongcaov. on 25/09/2017.
  */
+
 class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener: RecyclerViewOnItemClickListener) : RecyclerView.Adapter<LocationsAdapter.LocationHolder>() {
 
     override fun onBindViewHolder(holder: LocationHolder?, position: Int) {

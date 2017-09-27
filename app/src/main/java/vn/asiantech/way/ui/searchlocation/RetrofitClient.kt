@@ -4,9 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
- * RetrofitClient.
- *
- * @author CuongCV
+ * Copyright © 2017 Asian Tech Co., Ltd.
+ * Created by cuongcaov. on 25/09/2017.
  */
 
 class RetrofitClient {
@@ -14,7 +13,7 @@ class RetrofitClient {
     companion object {
         private var retrofit: Retrofit? = null
 
-        fun getClient(): Retrofit {
+        private fun getClient(): Retrofit {
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
                         .baseUrl("https://maps.googleapis.com/maps/api/place/textsearch/")
