@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPink"
+    android:paddingBottom="@dimen/padding_medium"
+    android:paddingTop="@dimen/padding_high">
+
+    <com.hypertrack.lib.internal.consumer.view.RippleView
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_navigation_close" />
+
+    </com.hypertrack.lib.internal.consumer.view.RippleView>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_low"
+        android:gravity="center"
+        android:text="@string/textview.text.test_title_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/margin_huge"
+        android:layout_marginRight="@dimen/margin_huge"
+        android:layout_marginTop="@dimen/margin_base"
+        android:gravity="center"
+        android:text="@string/textview.text.test_description_text"
+        android:textSize="@dimen/text_medium"
+        android:visibility="visible" />
+
+    <com.hypertrack.lib.internal.consumer.view.RippleView
+        android:id="@+id/btnSharing"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tvDescription"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_low"
+        android:layout_marginLeft="@dimen/margin_huge"
+        android:layout_marginRight="@dimen/margin_huge"
+        android:layout_marginTop="@dimen/margin_high"
+        android:background="@drawable/custom_bg_button_share">
+
+        <TextView
+            android:id="@+id/tvStartShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Start Sharing"
+            android:textColor="#000000"
+            android:textSize="@dimen/text_large"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/imgLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_live_location_loading"
+            android:visibility="gone" />
+    </com.hypertrack.lib.internal.consumer.view.RippleView>
+
+    <RelativeLayout
+        android:id="@+id/rlLinkShare"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/btnSharing"
+        android:layout_marginLeft="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:background="@drawable/custom_bg_link_share_sheet"
+        android:padding="@dimen/padding_very_low"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_xxhigh"
+            android:text="@string/textview.text.test_link_text"
+            android:textColor="@color/white"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:id="@+id/tvCopyLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/margin_low"
+            android:background="@drawable/custom_bg_button_copy"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/padding_base"
+            android:text="@string/textview.text.copy_link"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textStyle="normal" />
+    </RelativeLayout>
+</RelativeLayout>
