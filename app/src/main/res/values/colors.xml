@@ -6,4 +6,8 @@
 
     <!-->SeaMyLocationtion Screen<-->
     <color name="colorSearchScreenBackground">#DDDDDD</color>
+    <color name="colorPink">#FF82DF</color>
+    <color name="colorPinkLight">#f5b0e3</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 </resources>
