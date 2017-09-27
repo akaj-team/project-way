@@ -1,3 +1,8 @@
 <resources>
     <string name="filter_title_track">WAY</string>
+    <string name="search_location_enter_a_place">Enter a place</string>
+    <string name="search_location_your_location">Your Location</string>
+    <string name="search_location_choose_on_map">Choose on map</string>
+    <!-->Google Place API Key<-->
+    <string name="google_place_api_key">AIzaSyCNHnvdx0nbWr9VYKazMqQZpjNg8KWaAAM</string>
 </resources>
