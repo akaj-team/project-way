@@ -95,7 +95,7 @@
                     android:spinnerMode="dialog" />
 
                 <TextView
-                    android:id="@+id/tvBaseNumber"
+                    android:id="@+id/tvTel"
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
                     android:gravity="start|center_vertical"

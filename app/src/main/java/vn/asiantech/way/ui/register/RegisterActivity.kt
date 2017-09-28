@@ -50,12 +50,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const private val REQUEST_CODE_GALLERY = 500
     }
 
-    var mBaseIsoCode: String? = null
-    var mIsoCode: String? = null
     var mBitmap: Bitmap? = null
     var mCountries: List<Country> = ArrayList()
     var mPreviousName: String? = null
     var mPreviousPhone: String? = null
+    var mIsoCode: String? = null
+    var mTel: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,11 +122,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        val newName: String = edtName.text.toString().trim()
-        val newPhone: String = edtPhoneNumber.text.toString().trim()
-        if ((newName.isBlank() && newPhone.isBlank())
-                || (mPreviousName?.trim() == newName
-                && mPreviousPhone == mIsoCode.plus("/").plus(newPhone))) {
+        val name: String = edtName.text.toString().trim()
+        val phone: String = edtPhoneNumber.text.toString().trim()
+        val tel: String = tvTel.text.toString().removeRange(0, 1)
+        if ((name.isBlank() && phone.isBlank())
+                || (mPreviousName?.trim() == name
+                && mPreviousPhone?.removeRange(0, 3) == phone
+                && mTel == tel)) {
             tvCancel.text = resources.getString(R.string.skip)
             btnSave.isEnabled = false
         } else {
@@ -136,7 +138,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun createUser(name: String, phoneNumber: String) {
-        Log.d("xxx", "create iso $mIsoCode")
         val userParam: UserParams = UserParams()
                 .setName(name)
                 .setPhoto(encodeImage(mBitmap))
@@ -209,11 +210,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         if (basePhone!!.size > 1) {
             //set isoCode
             mIsoCode = basePhone[0]
-            mBaseIsoCode = basePhone[0]
             for (i in 0..mCountries.size - 1) {
                 if (mIsoCode == mCountries[i].iso) {
                     spinnerNation.setSelection(i)
-                    tvBaseNumber.text = mCountries[i].tel
+                    val tel = mCountries[i].tel
+                    tvTel.text = tel
+                    mTel = tel
                     break
                 }
             }
@@ -221,11 +223,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         } else {
             edtPhoneNumber.setText(basePhone[0])
         }
-        if (checkUser(user.name, user.phone)) {
-            btnSave.isEnabled = true
-        }
-        btnSave.isEnabled = false
-
+        btnSave.isEnabled = checkUser(user.name, user.phone)
         mPreviousName = user.name
         mPreviousPhone = user.phone
     }
@@ -267,10 +265,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     private fun initView() {
         edtName.setOnEditorActionListener(this)
-        edtPhoneNumber.setOnEditorActionListener(this)
-        btnSave.setOnClickListener(this)
         edtName.addTextChangedListener(this)
+        edtPhoneNumber.setOnEditorActionListener(this)
         edtPhoneNumber.addTextChangedListener(this)
+        tvTel.addTextChangedListener(this)
+        btnSave.setOnClickListener(this)
     }
 
     private fun initCountrySpinner() {
@@ -280,8 +279,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                tvBaseNumber.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
-                btnSave.isEnabled = (mBaseIsoCode != mCountries[position].iso)
+                tvTel.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
                 mIsoCode = mCountries[position].iso
             }
         }
