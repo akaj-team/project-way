@@ -15,8 +15,9 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
-import android.util.Log
-import android.view.*
+import android.view.KeyEvent
+import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.TextView
@@ -30,19 +31,18 @@ import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.fragment_register.view.*
+import kotlinx.android.synthetic.main.activity_register.*
 import vn.asiantech.way.R
 import vn.asiantech.way.models.Country
-import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.util.Utils
 import java.io.ByteArrayOutputStream
 
 /**
- * Fragment register user
+ * Activity register user
  * Created by haibt on 9/26/17.
  */
-class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
+class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         , View.OnClickListener, TextWatcher {
     companion object {
         const private val REQUEST_CODE_PICK_IMAGE = 1001
@@ -53,17 +53,17 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
     var mBitmap: Bitmap? = null
     var mCountries: List<Country> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater!!.inflate(R.layout.fragment_register, container, false)
-        initView(view)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register)
+        initView()
         mCountries = getCountries(readJsonFromDirectory())
-        initCountrySpinner(view)
-        setUserInformation(view)
-        view.frAvatar.setOnClickListener {
+        initCountrySpinner()
+        setUserInformation()
+        frAvatar.setOnClickListener {
             checkPermissionGallery()
         }
         mIsoCode = resources.getString(R.string.iso_code_default)
-        return view
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
@@ -76,7 +76,7 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
             }
             R.id.edtPhoneNumber -> {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    Utils.hideKeyboard(context, edtPhoneNumber)
+                    Utils.hideKeyboard(this, edtPhoneNumber)
                     return true
                 }
             }
@@ -96,9 +96,16 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
                     edtPhoneNumber.text = null
                 }
                 createUser(name, phoneNumber)
+                /**
+                 * TODO
+                 * intent to home activity
+                 */
             }
             R.id.tvCancel -> {
-                //TODO
+                /**
+                 * TODO
+                 * intent to home activity
+                 */
             }
 
         }
@@ -126,35 +133,32 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
                 .setPhoto(encodeImage(mBitmap))
                 .setPhone(phoneNumber)
                 .setLookupId(mIsoCode)
-        Log.d("xxx", "" + mBitmap.toString())
         HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
                 HyperTrack.startTracking()
-                Log.d("xxx", "success")
             }
 
             override fun onError(p0: ErrorResponse) {
-                Log.e("xxx", " create error " + p0.errorMessage)
             }
         })
     }
 
-    private fun setUserInformation(view: View) {
-        visibleProgressBar(view)
+    private fun setUserInformation() {
+        visibleProgressBar()
         HyperTrack.getUser(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 val user: User? = response.responseObject as User
-                updateView(view, user)
-                invisibleProgressBar(view)
+                updateView(user)
+                invisibleProgressBar()
             }
 
             override fun onError(p0: ErrorResponse) {
-                invisibleProgressBar(view)
+                invisibleProgressBar()
             }
         })
     }
 
-    private fun updateView(view: View, user: User?) {
+    private fun updateView(user: User?) {
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
@@ -163,19 +167,19 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                view.imgAvatar.setImageBitmap(bitmap)
+                imgAvatar.setImageBitmap(bitmap)
                 mBitmap = bitmap
             }
         }
-        Picasso.with(context).load(user?.photo).into(target)
-        view.imgAvatar.tag = target
-        view.edtName.setText(user?.name)
-        view.edtPhoneNumber.setText(user?.phone)
+        Picasso.with(this).load(user?.photo).into(target)
+        imgAvatar.tag = target
+        edtName.setText(user?.name)
+        edtPhoneNumber.setText(user?.phone)
         val isoCode: String = user!!.lookupId
         for (i in 0..mCountries.size - 1) {
             if (isoCode == mCountries[i].iso) {
-                view.spinnerNation.setSelection(i)
-                view.tvBaseNumber.text = mCountries[i].tel
+                spinnerNation.setSelection(i)
+                tvBaseNumber.text = mCountries[i].tel
                 break
             }
         }
@@ -189,43 +193,43 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
     }
 
     private fun checkPermissionGallery() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
             }
         } else {
             intentGallery()
         }
     }
 
-    private fun visibleProgressBar(view: View) {
-        view.progressBar.visibility = View.VISIBLE
-        activity.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+    private fun visibleProgressBar() {
+        progressBar.visibility = View.VISIBLE
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun invisibleProgressBar(view: View) {
-        view.progressBar.visibility = View.GONE
-        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    private fun invisibleProgressBar() {
+        progressBar.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun initView(view: View) {
-        view.edtName.setOnEditorActionListener(this)
-        view.edtPhoneNumber.setOnEditorActionListener(this)
-        view.btnSave.setOnClickListener(this)
-        view.edtName.addTextChangedListener(this)
-        view.edtPhoneNumber.addTextChangedListener(this)
+    private fun initView() {
+        edtName.setOnEditorActionListener(this)
+        edtPhoneNumber.setOnEditorActionListener(this)
+        btnSave.setOnClickListener(this)
+        edtName.addTextChangedListener(this)
+        edtPhoneNumber.addTextChangedListener(this)
     }
 
-    private fun initCountrySpinner(view: View) {
-        view.spinnerNation.adapter = CountrySpinnerAdapter(context, R.layout.item_list_country, mCountries)
-        view.spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun initCountrySpinner() {
+        spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
+        spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 mIsoCode = mCountries[position].iso
-                view.tvBaseNumber.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
+                tvBaseNumber.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
             }
         }
     }
@@ -262,7 +266,7 @@ class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE) {
             val uri: Uri = data!!.data
             imgAvatar.setImageURI(uri)
-            mBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            mBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         }
     }
 
