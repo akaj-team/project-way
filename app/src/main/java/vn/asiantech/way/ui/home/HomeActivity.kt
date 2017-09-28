@@ -1,9 +1,12 @@
 package vn.asiantech.way.ui.home
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Point
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.android.gms.common.ConnectionResult
@@ -22,6 +25,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
@@ -31,7 +35,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     companion object {
         const val LOCATION_UPDATE_MIN_DISTANCE = 10f
         const val LOCATION_UPDATE_MIN_TIME = 5000L
-        const val GOOGLE_LOGO_MARGIN_TOP = 400
         const val TAG = "Error"
     }
 
@@ -70,7 +73,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onMapReady(p0: GoogleMap?) {
         mGoogleMap = p0
-        mGoogleMap!!.setPadding(0, 0, 0, GOOGLE_LOGO_MARGIN_TOP)
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        mGoogleMap!!.setPadding(0, 0, 0, size.y / 3)
         getCurrentLocation()
     }
 
@@ -104,9 +110,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         var location: android.location.Location? = null
 
         if (isNetworkEnabled) {
-            mLocationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationListener)
-            location = mLocationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                mLocationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                        LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationListener)
+                location = mLocationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            }
         }
 
         if (isGPSEnabled) {
@@ -140,11 +148,14 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     private fun setDataForRecyclerView() {
         val locations = ArrayList<Location>()
         // TODO: Get data from share function into locations
+
+        // set unreal data
         locations.add(Location("12:00 AM", "Stop", "hehe"))
         locations.add(Location("12:00 AM", "Stop", "hehe"))
         locations.add(Location("12:00 AM", "Stop", "hehe"))
         locations.add(Location("12:00 AM", "Stop", "hehe"))
         locations.add(Location("12:00 AM", "Stop", "hehe"))
+
         mHomeAdapter = HomeAdapter(locations) {
             if (mPosition >= 0) {
                 locations[mPosition].isChoose = false
