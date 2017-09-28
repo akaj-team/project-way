@@ -1,3 +1,5 @@
 <resources>
     <string name="filter_title_track">WAY</string>
+    <string name="description">image</string>
+    <string name="toolbar_title">Paceline</string>
 </resources>

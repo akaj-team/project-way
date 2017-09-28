@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llItemLocation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/home_screen_linearLayout_margin_bottom"
+    android:gravity="center_vertical"
+    android:padding="@dimen/home_screen_linearLayout_padding">
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/home_screen_view_margin"
+        android:layout_marginStart="@dimen/home_screen_view_margin">
+
+        <View
+            android:layout_width="@dimen/home_screen_line_with"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorBlack" />
+
+        <ImageView
+            android:id="@+id/imgPoint"
+            android:layout_width="@dimen/home_screen_view_margin"
+            android:layout_height="@dimen/home_screen_view_margin"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/description" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="@dimen/home_screen_imgStatus_dimension"
+        android:layout_height="@dimen/home_screen_imgStatus_dimension"
+        android:layout_marginLeft="@dimen/home_screen_view_margin"
+        android:layout_marginStart="@dimen/home_screen_view_margin"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_stop" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/home_screen_tvStatus_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/home_screen_view_margin" />
+    </LinearLayout>
+</LinearLayout>
