@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -49,21 +50,24 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const private val REQUEST_CODE_GALLERY = 500
     }
 
+    var mBaseIsoCode: String? = null
     var mIsoCode: String? = null
     var mBitmap: Bitmap? = null
     var mCountries: List<Country> = ArrayList()
+    var mPreviousName: String? = null
+    var mPreviousPhone: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         initView()
         mCountries = getCountries(readJsonFromDirectory())
+        mIsoCode = resources.getString(R.string.iso_code_default)
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
             checkPermissionGallery()
         }
-        mIsoCode = resources.getString(R.string.iso_code_default)
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
@@ -87,8 +91,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btnSave -> {
-                val name: String = edtName.text.toString()
-                val phoneNumber: String = edtPhoneNumber.text.toString()
+                val name: String = edtName.text.toString().trim()
+                val phoneNumber: String = edtPhoneNumber.text.toString().trim()
                 if (name.isBlank()) {
                     edtName.setText(R.string.user_name_default)
                 }
@@ -118,7 +122,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        if (edtName.text.isBlank() && edtPhoneNumber.text.isBlank()) {
+        val newName: String = edtName.text.toString().trim()
+        val newPhone: String = edtPhoneNumber.text.toString().trim()
+        if ((newName.isBlank() && newPhone.isBlank())
+                || (mPreviousName?.trim() == newName
+                && mPreviousPhone == mIsoCode.plus("/").plus(newPhone))) {
             tvCancel.text = resources.getString(R.string.skip)
             btnSave.isEnabled = false
         } else {
@@ -128,19 +136,39 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun createUser(name: String, phoneNumber: String) {
+        Log.d("xxx", "create iso $mIsoCode")
         val userParam: UserParams = UserParams()
                 .setName(name)
                 .setPhoto(encodeImage(mBitmap))
-                .setPhone(phoneNumber)
-                .setLookupId(mIsoCode)
-        HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
-            override fun onSuccess(p0: SuccessResponse) {
-                HyperTrack.startTracking()
-            }
+                .setPhone(mIsoCode?.plus("/")?.plus(phoneNumber))
+                .setLookupId(phoneNumber)
 
-            override fun onError(p0: ErrorResponse) {
-            }
-        })
+        //create new user
+        if (mPreviousPhone != phoneNumber) {
+            HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
+                override fun onSuccess(p0: SuccessResponse) {
+                    HyperTrack.startTracking()
+                    Log.d("xxx", "create ok")
+                }
+
+                override fun onError(p0: ErrorResponse) {
+                    Log.d("xxx", "create fail" + p0.errorMessage)
+                }
+            })
+        } else {
+            // update user information
+            HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
+                override fun onSuccess(p0: SuccessResponse) {
+                    HyperTrack.startTracking()
+                    Log.d("xxx", "update ok")
+                }
+
+                override fun onError(p0: ErrorResponse) {
+                    Log.d("xxx", "update fail" + p0.errorMessage)
+                }
+            })
+        }
+
     }
 
     private fun setUserInformation() {
@@ -171,18 +199,42 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 mBitmap = bitmap
             }
         }
-        Picasso.with(this).load(user?.photo).into(target)
+        Picasso.with(this)
+                .load(user?.photo)
+                .resize(300, 300)
+                .into(target)
         imgAvatar.tag = target
         edtName.setText(user?.name)
-        edtPhoneNumber.setText(user?.phone)
-        val isoCode: String = user!!.lookupId
-        for (i in 0..mCountries.size - 1) {
-            if (isoCode == mCountries[i].iso) {
-                spinnerNation.setSelection(i)
-                tvBaseNumber.text = mCountries[i].tel
-                break
+        val basePhone: List<String>? = user?.phone?.split("/")
+        if (basePhone!!.size > 1) {
+            //set isoCode
+            mIsoCode = basePhone[0]
+            mBaseIsoCode = basePhone[0]
+            for (i in 0..mCountries.size - 1) {
+                if (mIsoCode == mCountries[i].iso) {
+                    spinnerNation.setSelection(i)
+                    tvBaseNumber.text = mCountries[i].tel
+                    break
+                }
             }
+            edtPhoneNumber.setText(basePhone[1])
+        } else {
+            edtPhoneNumber.setText(basePhone[0])
         }
+        if (checkUser(user.name, user.phone)) {
+            btnSave.isEnabled = true
+        }
+        btnSave.isEnabled = false
+
+        mPreviousName = user.name
+        mPreviousPhone = user.phone
+    }
+
+    private fun checkUser(name: String, phone: String): Boolean {
+        if (mPreviousName != name.trim() && mPreviousPhone != phone.trim()) {
+            return true
+        }
+        return false
     }
 
     private fun intentGallery() {
@@ -228,8 +280,9 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                mIsoCode = mCountries[position].iso
                 tvBaseNumber.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
+                btnSave.isEnabled = (mBaseIsoCode != mCountries[position].iso)
+                mIsoCode = mCountries[position].iso
             }
         }
     }
