@@ -39,7 +39,7 @@ import vn.asiantech.way.util.Utils
 import java.io.ByteArrayOutputStream
 
 /**
- * Fragment register
+ * Fragment register user
  * Created by haibt on 9/26/17.
  */
 class RegisterFragment : BaseFragment(), TextView.OnEditorActionListener

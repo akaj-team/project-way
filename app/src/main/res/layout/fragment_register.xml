@@ -58,7 +58,8 @@
             android:layout_marginTop="@dimen/margin_high"
             android:background="@drawable/custom_layout_phone"
             android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/edtName"
@@ -75,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
                 android:layout_below="@id/edtName"
-                android:background="@color/lighter_gray" />
+                android:background="@color/light_gray" />
 
             <LinearLayout
                 android:id="@+id/llPhone"
@@ -117,12 +118,12 @@
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/rlInformation"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/custom_button_save"
             android:enabled="false"
             android:text="@string/register_button_save_text"
@@ -135,7 +136,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btnSave"
-            android:layout_marginTop="10dp"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
             android:text="@string/skip" />
     </RelativeLayout>

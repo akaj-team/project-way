@@ -10,7 +10,7 @@ import vn.asiantech.way.models.Country
 import java.util.*
 
 /**
- * Adapter spinner Country
+ * Adapter custom spinner Country
  * Created by haibt on 9/26/17.
  */
 class CountrySpinnerAdapter(val mContext: Context,
