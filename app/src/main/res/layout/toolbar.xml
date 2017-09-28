@@ -10,7 +10,7 @@
         android:id="@+id/imgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/description"
+        android:contentDescription="@string/image_description"
         android:src="@drawable/ic_logo" />
 
     <TextView
@@ -38,6 +38,6 @@
         android:id="@+id/imgArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/description"
+        android:contentDescription="@string/image_description"
         android:src="@drawable/ic_arrow_drop_down_white_24dp" />
 </LinearLayout>

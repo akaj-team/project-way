@@ -29,7 +29,7 @@
             android:layout_width="@dimen/home_screen_view_margin"
             android:layout_height="@dimen/home_screen_view_margin"
             android:layout_centerVertical="true"
-            android:contentDescription="@string/description" />
+            android:contentDescription="@string/image_description" />
     </RelativeLayout>
 
     <ImageView
@@ -38,7 +38,7 @@
         android:layout_height="@dimen/home_screen_imgStatus_dimension"
         android:layout_marginLeft="@dimen/home_screen_view_margin"
         android:layout_marginStart="@dimen/home_screen_view_margin"
-        android:contentDescription="@string/description"
+        android:contentDescription="@string/image_description"
         android:src="@drawable/ic_stop" />
 
     <LinearLayout
