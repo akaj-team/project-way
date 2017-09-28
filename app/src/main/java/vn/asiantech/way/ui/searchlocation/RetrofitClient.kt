@@ -12,11 +12,12 @@ class RetrofitClient {
 
     companion object {
         private var retrofit: Retrofit? = null
+        private const val BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/"
 
         private fun getClient(): Retrofit {
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
-                        .baseUrl("https://maps.googleapis.com/maps/api/place/textsearch/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
             }
