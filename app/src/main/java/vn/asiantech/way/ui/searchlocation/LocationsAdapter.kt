@@ -34,8 +34,16 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener:
         }
 
         fun onBind() {
-            itemView.tvLocationName.text = mMyLocations[adapterPosition].name
-            itemView.tvFormatAddress.text = mMyLocations[adapterPosition].formatted_address
+            with(mMyLocations[adapterPosition]) {
+                if (isHistory != null) {
+                    itemView.imgLocationIcon.setImageResource(R.drawable.ic_access_time)
+                } else {
+                    itemView.imgLocationIcon.setImageResource(R.drawable.ic_marker_gray)
+                }
+                itemView.tvLocationName.text = name
+                itemView.tvFormatAddress.text = formattedAddress
+            }
+
         }
     }
 

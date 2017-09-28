@@ -21,14 +21,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/viewBreakLine"
         android:layout_margin="10dp"
-        android:background="@drawable/ic_marker_gray"
         android:contentDescription="@null" />
 
     <TextView
-        android:layout_below="@id/viewBreakLine"
         android:id="@+id/tvLocationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/viewBreakLine"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/imgLocationIcon"

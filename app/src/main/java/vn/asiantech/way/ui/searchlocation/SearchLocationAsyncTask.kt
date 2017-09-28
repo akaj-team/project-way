@@ -17,7 +17,6 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : A
     }
 
     override fun doInBackground(vararg p0: String?): List<MyLocation>? {
-        mListener.onStarted()
         var check = true
         var myLocations: List<MyLocation>? = null
         val apiService = RetrofitClient.getAPIService()
@@ -46,6 +45,5 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : A
 
     interface SearchLocationListener {
         fun onCompleted(myLocations: List<MyLocation>?)
-        fun onStarted()
     }
 }

@@ -1,15 +1,16 @@
 package vn.asiantech.way.ui.searchlocation
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
-import android.location.LocationManager
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
+import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -23,22 +24,19 @@ class SearchLocationActivity : BaseActivity() {
     private var mTask: SearchLocationAsyncTask? = null
     private var mAdapter: LocationsAdapter? = null
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
+    private var mSharedPreferences: SharedPreferences? = null
 
-    @SuppressLint("MissingPermission")
+    companion object {
+        private const val SHARED_PREFERENCES = "shared"
+        private const val KEY_HISTORY = "history"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_location)
+        mSharedPreferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        initAdapter()
         locationSearch()
-
-        mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
-            override fun onItemClick(myLocation: MyLocation) {
-                // TODO: Call to ShareLocationActivity
-
-            }
-
-        })
-        recyclerViewLocations.layoutManager = LinearLayoutManager(this)
-        recyclerViewLocations.adapter = mAdapter
         onClick()
     }
 
@@ -48,11 +46,11 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlYourLocation.setOnClickListener {
-            // TODO: Call to ShareLocationActivity
+            // TODO: Call to ShareLocationActivity - atToanNguyen
         }
 
         rlChooseOnMap.setOnClickListener {
-            // TODO: Call to ShareLocationActivity
+            // TODO: Call to ShareLocationActivity - atToanNguyen
         }
 
     }
@@ -60,11 +58,11 @@ class SearchLocationActivity : BaseActivity() {
     private fun locationSearch() {
         edtLocation.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
+                mMyLocations.clear()
+                mAdapter?.notifyDataSetChanged()
                 if (p0.toString().isNotEmpty()) {
                     if (mTask != null) {
                         mTask = null
-                        mMyLocations.clear()
-                        mAdapter?.notifyDataSetChanged()
                     }
                     mTask = SearchLocationAsyncTask(object : SearchLocationAsyncTask.SearchLocationListener {
                         override fun onCompleted(myLocations: List<MyLocation>?) {
@@ -72,19 +70,19 @@ class SearchLocationActivity : BaseActivity() {
                                 runOnUiThread({
                                     myLocations?.forEach {
                                         mMyLocations.add(it)
-                                        mAdapter?.notifyItemInserted(mMyLocations.size - 1)
                                     }
+                                    mAdapter?.notifyDataSetChanged()
                                 })
                             })
                             thread.start()
                         }
 
-                        override fun onStarted() {
-                            Log.i("tag11", "started")
-                        }
-
                     })
                     mTask?.execute(p0.toString())
+                } else {
+                    if (getSearchHistory() != null) {
+                        mMyLocations.addAll(getSearchHistory()!!)
+                    }
                 }
             }
 
@@ -95,15 +93,54 @@ class SearchLocationActivity : BaseActivity() {
         })
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getCurrentLocation(): Location? {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager ?: return null
-        val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        val netLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        return if (gpsLocation.time > netLocation.time) {
-            gpsLocation
-        } else {
-            netLocation
+    private fun initAdapter() {
+        if (getSearchHistory() != null) {
+            mMyLocations.addAll(getSearchHistory()!!)
+        }
+        mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
+            override fun onItemClick(myLocation: MyLocation) {
+                saveSearchHistory(myLocation)
+                // TODO: Call to ShareLocationActivity - atToanNguyen
+            }
+
+        })
+        recyclerViewLocations.layoutManager = LinearLayoutManager(this)
+        recyclerViewLocations.adapter = mAdapter
+    }
+
+    private fun getSearchHistory(): MutableList<MyLocation>? {
+        val gson = Gson()
+        val result = mutableListOf<MyLocation>()
+        return try {
+            val history = mSharedPreferences?.getString(KEY_HISTORY, "")
+            val jsonArray = JSONArray(history)
+            (0 until jsonArray.length())
+                    .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), MyLocation::class.java) }
+            result
+        } catch (e: JsonSyntaxException) {
+            Log.i("tag11", e.message)
+            null
         }
     }
+
+    private fun saveSearchHistory(myLocation: MyLocation) {
+        val gson = Gson()
+        val editor = mSharedPreferences?.edit()
+        var history = getSearchHistory()
+        if (history == null) {
+            history = mutableListOf()
+        }
+        history.forEach {
+            if (it.id == myLocation.id) {
+                return
+            }
+        }
+        if (history.size > 10) {
+            history.removeAt(0)
+        }
+        history.add(myLocation)
+        editor?.putString(KEY_HISTORY, gson.toJson(history))
+        editor?.commit()
+    }
+
 }

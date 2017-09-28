@@ -1,15 +1,20 @@
 package vn.asiantech.way.ui.searchlocation
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
 
 class MyLocation {
-    var formatted_address: String? = null
+    var isHistory: Boolean? = null
+    @SerializedName("formattedAddress")
+    var formattedAddress: String? = null
     var id: String? = null
     var name: String? = null
-    var place_id: String? = null
+    @SerializedName("placeId")
+    var placeId: String? = null
     var geometry: Geometry? = null
 }
 
