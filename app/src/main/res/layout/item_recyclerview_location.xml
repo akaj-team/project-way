@@ -4,7 +4,8 @@
     android:id="@+id/llItemLocation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/home_screen_linearLayout_margin_bottom"
+    android:layout_marginBottom="@dimen/home_screen_linearLayout_margin"
+    android:layout_marginTop="@dimen/home_screen_linearLayout_margin"
     android:gravity="center_vertical"
     android:padding="@dimen/home_screen_linearLayout_padding">
 
@@ -65,7 +66,7 @@
             android:layout_marginRight="@dimen/home_screen_expTv_marginRight"
             android:layout_marginTop="@dimen/home_screen_view_margin"
             android:maxLines="1"
-            app:animation_duration="1000" />
+            app:animation_duration="100" />
 
         <ImageView
             android:id="@+id/imgArrow"

@@ -1,16 +1,10 @@
 package vn.asiantech.way.ui.home
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Point
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,7 +15,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.util.GPSUtil
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,52 +28,28 @@ import kotlin.collections.ArrayList
  */
 class HomeActivity : BaseActivity(), OnMapReadyCallback {
 
-    companion object {
-        const val LOCATION_UPDATE_MIN_DISTANCE = 10f
-        const val LOCATION_UPDATE_MIN_TIME = 5000L
-        const val TAG = "Error"
-    }
-
+    private var mPosition = -1
     private var mHomeAdapter: HomeAdapter? = null
     private var mGoogleMap: GoogleMap? = null
     private var mLocationManager: LocationManager? = null
 
-    private var mLocationListener = object : LocationListener {
-        override fun onLocationChanged(location: android.location.Location?) {
-            if (location != null) {
-                drawMarker(location)
-                mLocationManager!!.removeUpdates(this)
-            } else {
-                Log.d(TAG, "The location is null")
-            }
-        }
-
-        override fun onProviderEnabled(p0: String?) {
-        }
-
-        override fun onProviderDisabled(p0: String?) {
-        }
-
-        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        initViews()
         initMap()
+        initViews()
         setDataForRecyclerView()
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
-        mGoogleMap = p0
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        mGoogleMap!!.setPadding(0, 0, 0, size.y / 3)
-        getCurrentLocation()
+    override fun onMapReady(googleMap: GoogleMap?) {
+        mGoogleMap = googleMap
+        setPaddingGoogleLogo()
+        val location = GPSUtil(this).getCurrentLocation()
+        if (location != null) {
+            drawMaker(location)
+        } else {
+            toast("Not update current location!")
+        }
     }
 
     private fun initViews() {
@@ -90,50 +62,22 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initMap() {
+        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap) as SupportMapFragment
         supportMapFragment.getMapAsync(this)
-        val googlePlayStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-        if (googlePlayStatus != ConnectionResult.SUCCESS) {
-            GoogleApiAvailability.getInstance().getErrorDialog(this, googlePlayStatus, -1).show()
-            finish()
-        } else {
-            if (mGoogleMap != null) {
-                mGoogleMap!!.uiSettings.isMyLocationButtonEnabled = true
-                mGoogleMap!!.uiSettings.setAllGesturesEnabled(true)
-            }
-        }
     }
 
-    private fun getCurrentLocation() {
-        val isGPSEnabled = mLocationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        val isNetworkEnabled = mLocationManager!!.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        var location: android.location.Location? = null
-
-        if (isNetworkEnabled) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                mLocationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationListener)
-                location = mLocationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            }
-        }
-
-        if (isGPSEnabled) {
-            mLocationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationListener)
-            location = mLocationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        } else {
-            Log.d(TAG, "You need enable GPS or network")
-        }
-
-        if (location != null) {
-            drawMarker(location)
-        }
+    private fun setPaddingGoogleLogo() {
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        mGoogleMap!!.setPadding(0, 0, 0, size.y / 3)
     }
 
-    private fun drawMarker(location: android.location.Location) {
+    private fun drawMaker(location:android.location.Location) {
         if (mGoogleMap != null) {
             mGoogleMap!!.clear()
-            val currentLocation = LatLng(location.latitude, location.longitude)
+            val currentLocation = LatLng(location.latitude,location.longitude)
             mGoogleMap!!.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
@@ -141,7 +85,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
                     .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
             mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
         } else {
-            Log.d(TAG, "Google map is null")
+            toast("Google map is null")
         }
     }
 
@@ -152,23 +96,26 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         initDummyData(locations)
 
         mHomeAdapter = HomeAdapter(locations) {
-            locations.forEach {
-                it.isChoose = false
+            if (mPosition >= 0) {
+                locations[mPosition].isChoose = false
+                mHomeAdapter!!.notifyItemChanged(mPosition)
             }
+            mPosition = it
             locations[it].isChoose = true
-            recycleViewLocation.smoothScrollToPosition(it + 1)
-            mHomeAdapter!!.notifyDataSetChanged()
+            mHomeAdapter!!.notifyItemChanged(it)
+            recycleViewLocation.scrollToPosition(it + 1)
         }
         recycleViewLocation.layoutManager = LinearLayoutManager(this)
         recycleViewLocation.adapter = mHomeAdapter
     }
 
-    fun initDummyData(locations: ArrayList<Location>) {
-        locations.add(Location("12:00 AM", "Stop", "If you want to go market, you can turn left and go straight!!!!!!!"))
-        locations.add(Location("12:00 AM", "Stop", "Stop here"))
-        locations.add(Location("12:00 AM", "Stop", "Stop here"))
-        locations.add(Location("12:00 AM", "Stop", "Stop here"))
-        locations.add(Location("12:00 AM", "Stop", "Stop here"))
-        locations.add(Location("12:00 AM", "Stop", "Stop here"))
+    private fun initDummyData(locations: ArrayList<Location>) {
+        locations.add(Location("1:00 PM", "Stop", "30 minutes| If you want to go market, you can turn left and go straight!!!!!!!"))
+        locations.add(Location("2:00 PM", "Drive", "50 minutes|If you want to go market, you can turn left and go straight!!!!!!!"))
+        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km"))
+        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km"))
+        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
+        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
+        locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
     }
 }

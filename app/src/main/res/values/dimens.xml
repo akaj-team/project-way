@@ -11,7 +11,7 @@
 
     <!--Home screen-->
     <dimen name="toolbar_height">56dp</dimen>
-    <dimen name="home_screen_linearLayout_margin_bottom">10dp</dimen>
+    <dimen name="home_screen_linearLayout_margin">10dp</dimen>
     <dimen name="home_screen_linearLayout_padding">5dp</dimen>
     <dimen name="home_screen_view_margin">10dp</dimen>
     <dimen name="home_screen_line_with">1dp</dimen>

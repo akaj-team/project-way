@@ -93,7 +93,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
-    compile 'at.blogc:expandabletextview:1.0.3'git
+    compile 'at.blogc:expandabletextview:1.0.3'
 
     // Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'

@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/home_screen_recyclerView_height"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/home_screen_recyclerView_margin"
             android:layout_marginRight="@dimen/home_screen_recyclerView_margin"
             android:background="@android:color/transparent" />

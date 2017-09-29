@@ -39,6 +39,10 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
                 itemView.tvTime.text = time
                 itemView.tvStatus.text = status
                 itemView.expTvDescription.text = description
+
+
+
+               itemView.expTvDescription.postDelayed({
                     if (location.isChoose) {
                         if (itemView.expTvDescription.lineCount > 1) {
                             itemView.imgArrow.visibility = View.VISIBLE
@@ -52,6 +56,7 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
                         itemView.imgPoint.setBackgroundResource(R.drawable.ic_point_pink)
                         itemView.imgArrow.visibility = View.GONE
                     }
+               },100)
             }
 
             itemView.llItemLocation.setOnClickListener {
