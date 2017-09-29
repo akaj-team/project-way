@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragmentGoogleMap"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:name="com.hypertrack.lib.HyperTrackMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -21,81 +22,129 @@
         android:background="@drawable/ic_arrow_back"
         android:contentDescription="@null" />
 
+    <ImageButton
+        android:id="@+id/imgBtnResetPosition"
+        android:layout_width="@dimen/arrow_back_width"
+        android:layout_height="@dimen/arrow_back_width"
+        android:layout_above="@+id/llDetailTracking"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_ht_reset_button" />
+
     <LinearLayout
-        android:id="@+id/llShowResult"
+        android:id="@+id/llDetailTracking"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_above="@+id/tvShowSummary"
-        android:layout_margin="30dp"
-        android:background="@color/colorWhite"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnShowSummary"
+        android:layout_marginEnd="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginStart="30dp"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_arrow_back" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_weight="5"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/arrived_you_arrived"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/text_size_normal" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewShowResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/llShowResult"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/tvTimeTotalArrived"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/text_size_little"
-                    tools:text="14 min" />
+                <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
+                    android:id="@+id/progressBarCircular"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:rotation="90"
+                    app:circle_color="#ddd"
+                    app:circle_progress_color="@color/tracking_experience"
+                    app:circle_stroke_width="3dp"
+                    app:lock_enabled="true"
+                    app:max="100"
+                    app:progress="40" />
 
-                <TextView
-                    android:id="@+id/tvDistanceArrived"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    tools:text="( 0 km )" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgArrowRight"
-            android:layout_width="0dp"
-            android:layout_height="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_arrow_next"
-            android:contentDescription="@null" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/arrived_you_arrived"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTimeTotalArrived"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/text_size_little"
+                            tools:text="14 min" />
+
+                        <TextView
+                            android:id="@+id/tvDistanceArrived"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            tools:text="( 0 km )" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgArrowRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:contentDescription="@null" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray" />
+
+        <include
+            layout="@layout/detail_arrived"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvShowSummary"
+    <Button
+        android:id="@+id/btnShowSummary"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
         android:background="@color/colorWhite"
         android:gravity="center"
         android:text="@string/arrived_show_summary"
-        android:textSize="@dimen/text_size_normal" />
+        android:textSize="@dimen/text_size_normal"
+        android:visibility="visible" />
 
 </RelativeLayout>

@@ -46,84 +46,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
             android:text="@string/arrived_completed"
             android:textSize="@dimen/text_size_normal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text_size_normal"
-                    tools:text="14 min" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/arrived_elapsed"
-                    android:textSize="@dimen/text_size_little" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.5"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text_size_normal"
-                    tools:text="0 km" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/arrived_traveled"
-                    android:textSize="@dimen/text_size_little" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.5"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text_size_normal"
-                    tools:text="0kmph" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/arrived_average_speed"
-                    android:textSize="@dimen/text_size_little" />
-            </LinearLayout>
-        </LinearLayout>
+        <include layout="@layout/show_detail_arrived" />
 
     </LinearLayout>
 
@@ -143,6 +70,7 @@
         android:background="@color/colorGrayLight" />
 
     <Button
+        android:id="@+id/btnDoneDialog"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
