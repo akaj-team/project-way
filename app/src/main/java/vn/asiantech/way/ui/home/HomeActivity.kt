@@ -74,10 +74,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         mGoogleMap!!.setPadding(0, 0, 0, size.y / 3)
     }
 
-    private fun drawMaker(location:android.location.Location) {
+    private fun drawMaker(location: android.location.Location) {
         if (mGoogleMap != null) {
             mGoogleMap!!.clear()
-            val currentLocation = LatLng(location.latitude,location.longitude)
+            val currentLocation = LatLng(location.latitude, location.longitude)
             mGoogleMap!!.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
