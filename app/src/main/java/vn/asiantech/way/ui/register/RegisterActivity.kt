@@ -111,7 +111,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                  * intent to home activity
                  */
             }
-
         }
     }
 
