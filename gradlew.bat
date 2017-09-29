@@ -41,7 +41,7 @@ echo.
 echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
 echo.
 echo Please set the JAVA_HOME variable in your environment to match the
-echo myLocation of your Java installation.
+echo location of your Java installation.
 
 goto fail
 
