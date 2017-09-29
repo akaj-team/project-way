@@ -10,4 +10,8 @@
     <string name="textview.text.test_description_text">Share your location back so that they can see you on the map.</string>
     <string name="textview.text.test_link_text">https://www.trck.at/asdad</string>
     <string name="textview.text.copy_link">Copy Link</string>
+    <string name="textview.text.going_somewhere">Going somewhere?</string>
+    <string name="textview.text.description">Add a destination</string>
+    <string name="textview.text.look_good">Look good?</string>
+    <string name="textview.text.start_sharing">Start Sharing</string>
 </resources>

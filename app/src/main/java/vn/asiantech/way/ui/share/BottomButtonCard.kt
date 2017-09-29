@@ -2,11 +2,14 @@ package vn.asiantech.way.ui.share
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
+import com.hypertrack.lib.internal.consumer.view.RippleView
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import vn.asiantech.way.R
 
@@ -17,7 +20,7 @@ import vn.asiantech.way.R
 class BottomButtonCard @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : RelativeLayout(context, attrs, defStyleAttr) {
-    var type: ActionType
+    var actionType: ActionType
     var btnListener: ButtonListener? = null
 
     enum class ActionType {
@@ -29,20 +32,27 @@ class BottomButtonCard @JvmOverloads constructor(
 
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_button_card_view, this, true)
-        type = ActionType.START_TRACKING
+        actionType = ActionType.START_TRACKING
+        btnSharing.setOnRippleCompleteListener {
+            RippleView.OnRippleCompleteListener {
+                if (btnListener != null) {
+                    btnListener?.OnActionButtonClick()
+                    Log.d("TTTTT","AAAAA")
+                }
+                Log.d("TTTT","AAAAA")
+            }
+        }
     }
 
-    fun setOnClickView() {
+    private fun setOnClickView() {
         btnClose.setOnRippleCompleteListener {
-            if (btnListener != null) {
-                btnListener?.OnCloseButtonClick()
+            RippleView.OnRippleCompleteListener {
+                if (btnListener != null) {
+                    btnListener?.OnCloseButtonClick()
+                }
             }
         }
-        btnSharing.setOnRippleCompleteListener {
-            if (btnListener != null) {
-                btnListener?.OnActionButtonClick()
-            }
-        }
+
         tvCopyLink.setOnClickListener {
             if (btnListener != null) {
                 btnListener?.OnCopyButtonClick()
@@ -121,9 +131,9 @@ class BottomButtonCard @JvmOverloads constructor(
         rlLinkShare.visibility = View.GONE
     }
 
-    fun isActionTypeConfirmLocation(): Boolean = type.equals(ActionType.CONFIRM_LOCATION)
+    fun isActionTypeConfirmLocation(): Boolean = actionType.equals(ActionType.CONFIRM_LOCATION)
 
-    fun isActionTypeShareTrackingLink(): Boolean = type.equals(ActionType.SHARE_TRACKING_URL)
+    fun isActionTypeShareTrackingLink(): Boolean = actionType.equals(ActionType.SHARE_TRACKING_URL)
 
 
     fun hideTitle() {

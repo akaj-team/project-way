@@ -36,6 +36,7 @@
             </com.hypertrack.lib.internal.consumer.view.RippleView>
 
             <RelativeLayout
+                android:id="@+id/rlSearchLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/btnBack"
@@ -48,17 +49,19 @@
                     android:paddingTop="20dp"
                     android:paddingLeft="20dp"
                     android:paddingBottom="5dp"
-                    android:text="Going somewhere?"
+                    android:text="@string/textview.text.going_somewhere"
                     android:textSize="10dp"/>
 
                 <TextView
+                    android:id="@+id/tvAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvTitleAddress"
                     android:paddingLeft="20dp"
+                    android:paddingRight="50dp"
+                    android:clickable="true"
                     android:paddingBottom="10dp"
-                    android:paddRight="30dp"
-                    android:text="Add a destination"
+                    android:text="@string/textview.text.description"
                     android:textSize="15dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
@@ -67,8 +70,10 @@
                     android:paddingTop="15dp"
                     android:paddingRight="20dp"
                     android:paddingLeft="15dp"
+                    android:clickable="true"
                     android:layout_alignParentRight="true"/>
             </RelativeLayout>
+
 
             <com.hypertrack.lib.internal.consumer.view.WrappingViewPager
                 android:id="@+id/view_pager"
