@@ -19,4 +19,5 @@
     <dimen name="home_screen_tvStatus_size">15sp</dimen>
     <dimen name="home_screen_recyclerView_height">200dp</dimen>
     <dimen name="home_screen_recyclerView_margin">20dp</dimen>
+    <dimen name="home_screen_expTv_marginRight">25dp</dimen>
 </resources>

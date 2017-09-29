@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import at.blogc.android.views.ExpandableTextView
 import kotlinx.android.synthetic.main.item_recyclerview_location.view.*
 import vn.asiantech.way.R
 
@@ -22,29 +23,53 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
     override fun onBindViewHolder(holder: HomeViewHolder?, position: Int) {
         val homeViewHolder = holder as HomeViewHolder
         homeViewHolder.bindHomeViewHolder(locations[position])
-        if (locations[position].isChoose == true) {
-            homeViewHolder.itemView.setBackgroundResource(R.drawable.bg_item_location_choose)
-            homeViewHolder.itemView.imgPoint.setBackgroundResource(R.drawable.ic_point_white)
-        } else {
-            homeViewHolder.itemView.setBackgroundResource(R.drawable.bg_item_location_default)
-            homeViewHolder.itemView.imgPoint.setBackgroundResource(R.drawable.ic_point_pink)
-        }
     }
 
     override fun getItemCount(): Int {
         return locations.size
     }
 
+    /**
+     * To save data for items in recyclerView of locations
+     */
     inner class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bindHomeViewHolder(location: Location) {
             with(location) {
                 itemView.tvTime.text = time
                 itemView.tvStatus.text = status
-                itemView.tvDescription.text = description
+                itemView.expTvDescription.text = description
+                    if (location.isChoose) {
+                        if (itemView.expTvDescription.lineCount > 1) {
+                            itemView.imgArrow.visibility = View.VISIBLE
+                        } else {
+                            itemView.imgArrow.visibility = View.GONE
+                        }
+                        itemView.setBackgroundResource(R.drawable.bg_item_location_choose)
+                        itemView.imgPoint.setBackgroundResource(R.drawable.ic_point_white)
+                    } else {
+                        itemView.setBackgroundResource(R.drawable.bg_item_location_default)
+                        itemView.imgPoint.setBackgroundResource(R.drawable.ic_point_pink)
+                        itemView.imgArrow.visibility = View.GONE
+                    }
             }
 
             itemView.llItemLocation.setOnClickListener {
-                onClickItem(layoutPosition)
+                onClickItem(adapterPosition)
+            }
+
+            itemView.imgArrow.setOnClickListener {
+                itemView.expTvDescription.toggle()
+            }
+
+            itemView.expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
+                override fun onExpand(view: ExpandableTextView) {
+                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
+                }
+
+                override fun onCollapse(view: ExpandableTextView) {
+                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
+                }
             }
         }
     }

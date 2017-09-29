@@ -24,7 +24,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -38,10 +38,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         const val TAG = "Error"
     }
 
-    private var mPosition = -1
     private var mHomeAdapter: HomeAdapter? = null
     private var mGoogleMap: GoogleMap? = null
     private var mLocationManager: LocationManager? = null
+
     private var mLocationListener = object : LocationListener {
         override fun onLocationChanged(location: android.location.Location?) {
             if (location != null) {
@@ -149,23 +149,26 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         val locations = ArrayList<Location>()
         // TODO: Get data from share function into locations
 
-        // set unreal data
-        locations.add(Location("12:00 AM", "Stop", "hehe"))
-        locations.add(Location("12:00 AM", "Stop", "hehe"))
-        locations.add(Location("12:00 AM", "Stop", "hehe"))
-        locations.add(Location("12:00 AM", "Stop", "hehe"))
-        locations.add(Location("12:00 AM", "Stop", "hehe"))
+        initDummyData(locations)
 
         mHomeAdapter = HomeAdapter(locations) {
-            if (mPosition >= 0) {
-                locations[mPosition].isChoose = false
-                mHomeAdapter!!.notifyItemChanged(mPosition)
+            locations.forEach {
+                it.isChoose = false
             }
-            mPosition = it
             locations[it].isChoose = true
-            mHomeAdapter!!.notifyItemChanged(it)
+            recycleViewLocation.smoothScrollToPosition(it + 1)
+            mHomeAdapter!!.notifyDataSetChanged()
         }
         recycleViewLocation.layoutManager = LinearLayoutManager(this)
         recycleViewLocation.adapter = mHomeAdapter
+    }
+
+    fun initDummyData(locations: ArrayList<Location>) {
+        locations.add(Location("12:00 AM", "Stop", "If you want to go market, you can turn left and go straight!!!!!!!"))
+        locations.add(Location("12:00 AM", "Stop", "Stop here"))
+        locations.add(Location("12:00 AM", "Stop", "Stop here"))
+        locations.add(Location("12:00 AM", "Stop", "Stop here"))
+        locations.add(Location("12:00 AM", "Stop", "Stop here"))
+        locations.add(Location("12:00 AM", "Stop", "Stop here"))
     }
 }

@@ -5,5 +5,5 @@ package vn.asiantech.way.ui.home
  * Created by atHangTran on 28/09/2017.
  */
 class Location(var time: String?, var status: String?, var description: String?) {
-    var isChoose: Boolean? = null
+    var isChoose: Boolean = false
 }
