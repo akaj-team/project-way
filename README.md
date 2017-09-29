@@ -5,7 +5,7 @@ This is project help you __How to find your friend__ and go to anywhere when __y
 
 ## Feature
 
-* Show myLocation of your friends on screen - easy way to know and see where the myLocation your friends stay.
+* Show location of your friends on screen - easy way to know and see where the location your friends stay.
 * Click the maker on map screen can make to call the your friends belong the `name`, `phone`, `avatar`.
 * Create group then invite your friends join the group.
 
@@ -13,14 +13,14 @@ This is project help you __How to find your friend__ and go to anywhere when __y
 
 ### Feature branch
 
-* `feature/mTask-name`
+* `feature/task-name`
 
 > `feature/add-splash-screen`
 
 
 ### Fix branch
 
-* `fix/mTask-name`
+* `fix/task-name`
 
 > `fix/fix-splash-screen`
 
