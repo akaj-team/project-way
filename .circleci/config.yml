@@ -63,6 +63,6 @@ jobs:
 
 workflows:
   version: 2
-  build_and_deploy:
+  check_and_report:
     jobs:
       - build
