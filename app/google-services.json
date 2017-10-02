@@ -10,6 +10,50 @@
       "client_info": {
         "mobilesdk_app_id": "1:690255975023:android:e9fc3727466aaa05",
         "android_client_info": {
+          "package_name": "vn.asiantech.way"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690255975023-3kj13074htkt7ajcs1n8ktecl63bj5th.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.asiantech.way.debug",
+            "certificate_hash": "bef7f0dc8c8dbf52589dc5a0e3aabee7b66b4135"
+          }
+        },
+        {
+          "client_id": "690255975023-idoou6at7cu7g9ij6vifgeh856i024mc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJZfDSlepUsS9uBWA8OavXlnKsXg2FevI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690255975023-idoou6at7cu7g9ij6vifgeh856i024mc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690255975023:android:e9fc3727466aaa05",
+        "android_client_info": {
           "package_name": "vn.asiantech.way.debug"
         }
       },
