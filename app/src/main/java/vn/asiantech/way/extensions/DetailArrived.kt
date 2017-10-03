@@ -2,7 +2,6 @@ package vn.asiantech.way.extensions
 
 import android.content.Context
 import android.content.res.Resources
-import android.support.v4.content.ContextCompat
 import vn.asiantech.way.R
 
 /**

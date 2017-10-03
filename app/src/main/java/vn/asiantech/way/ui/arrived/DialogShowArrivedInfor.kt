@@ -19,9 +19,9 @@ import vn.asiantech.way.extensions.makeDuration
  * Created by at-hoavo on 26/09/2017.
  */
 class DialogShowArrivedInfor : DialogFragment() {
-    private  var mTime: Long?=null
-    private  var mDistance: Double?=null
-    private  var mAverageSpeed: Double?=null
+    private var mTime: Long? = null
+    private var mDistance: Double? = null
+    private var mAverageSpeed: Double? = null
 
     companion object {
         val TYPE_TIME = "time"
@@ -29,21 +29,21 @@ class DialogShowArrivedInfor : DialogFragment() {
         val TYPE_AVERAGE_SPEED = "average speed"
 
         fun newInstance(time: Long, distance: Double, speedAverage: Double): DialogShowArrivedInfor {
-            val dialogShowArrived:DialogShowArrivedInfor = DialogShowArrivedInfor()
-            val bundle :Bundle= Bundle()
+            val dialogShowArrived: DialogShowArrivedInfor = DialogShowArrivedInfor()
+            val bundle: Bundle = Bundle()
             bundle.putLong(TYPE_TIME, time)
             bundle.putDouble(TYPE_DISTANCE, distance)
             bundle.putDouble(TYPE_AVERAGE_SPEED, speedAverage)
-            dialogShowArrived.arguments=bundle
+            dialogShowArrived.arguments = bundle
             return dialogShowArrived
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mTime = arguments?.getLong(TYPE_TIME,0)
-        mDistance = arguments?.getDouble(TYPE_DISTANCE,0.0)
-        mAverageSpeed = arguments?.getDouble(TYPE_AVERAGE_SPEED,0.0)
+        mTime = arguments?.getLong(TYPE_TIME, 0)
+        mDistance = arguments?.getDouble(TYPE_DISTANCE, 0.0)
+        mAverageSpeed = arguments?.getDouble(TYPE_AVERAGE_SPEED, 0.0)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,7 +52,7 @@ class DialogShowArrivedInfor : DialogFragment() {
         v?.llShowDetailData?.tvTimeTotal?.text = mTime?.makeDuration(context)
         v?.llShowDetailData?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
         btnDoneDialog?.setOnClickListener {
-           dismiss()
+            dismiss()
         }
         return v
     }
