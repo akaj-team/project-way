@@ -6,10 +6,8 @@
 
     <RelativeLayout
         android:id="@+id/rlCalendar"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:visibility="invisible">
+        android:layout_width="140dp"
+        android:layout_height="70dp">
 
         <TextView
             android:id="@+id/tvCalendar"
@@ -17,25 +15,26 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:text="@string/calendar_title" />
+            android:background="@drawable/custom_textview"
+            android:gravity="center"
+            android:text="@string/calendar_title"
+            android:visibility="gone" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/imgCalendar"
+            android:id="@+id/fabCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_gravity="end"
+            android:layout_centerVertical="true"
             android:backgroundTint="@color/white"
-            android:src="@drawable/ic_profile" />
+            android:src="@drawable/ic_calendar" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlProfile"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:visibility="invisible">
+        android:layout_width="140dp"
+        android:layout_height="70dp">
 
         <TextView
             android:id="@+id/tvProfile"
@@ -43,14 +42,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:text="@string/profile_title" />
+            android:background="@drawable/custom_textview"
+            android:gravity="center"
+            android:text="@string/profile_title"
+            android:visibility="gone" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/imgProfile"
+            android:id="@+id/fabProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="end"
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_profile" />
@@ -58,9 +61,8 @@
 
     <RelativeLayout
         android:id="@+id/rlShare"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:visibility="invisible">
+        android:layout_width="140dp"
+        android:layout_height="70dp">
 
         <TextView
             android:id="@+id/tvShare"
@@ -68,21 +70,25 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:text="@string/share_title" />
+            android:background="@drawable/custom_textview"
+            android:gravity="center"
+            android:text="@string/share_title"
+            android:visibility="gone" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/imgShare"
+            android:id="@+id/fabShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="end"
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_share" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/imgMenu"
+        android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
