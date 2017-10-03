@@ -1,0 +1,68 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/code
+  docker:
+    - image: circleci/android:api-26-alpha
+  environment:
+    TERM: dumb
+    _JAVA_OPTIONS: "-Xms350m -Xmx1600m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2"
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+
+#Setup env
+      - run:
+          name: Install bundle
+          command: gem install bundle
+
+#Cache
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+      - restore_cache:
+          key: gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle install --path vendor/bundle
+      - save_cache:
+          paths:
+            - vendor/bundle
+          key: gems-{{ checksum "Gemfile.lock" }}
+
+#Run gradle tasks
+      - run:
+          name: Test and findbugs
+          command: ./gradlew :app:check --no-daemon
+
+      - run:
+          name: Move artifacts
+          command: |
+            ARTIFACTS="/tmp/circle_artifacts"
+            mkdir -p "$ARTIFACTS"
+            cp -v "app/build/reports/detekt/detekt-checkstyle.xml" "$ARTIFACTS/"
+            cp -v "app/build/reports/lint-results.xml" "$ARTIFACTS/"
+      - store_artifacts:
+          path: "/tmp/circle_artifacts"
+
+      - store_test_results:
+          path: app/build/test-results
+
+#Report github
+      - run:
+          name: Report github
+          command: scripts/saddler.sh
+
+workflows:
+  version: 2
+  check_and_report:
+    jobs:
+      - build
