@@ -5,8 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.RelativeLayout
-import android.widget.Toast
+import android.widget.*
 import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import com.hypertrack.lib.internal.consumer.view.RippleView
@@ -17,11 +16,21 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : RelativeLayout(context, attrs, defStyleAttr) {
+class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(mContext, attrs) {
+    var buttonListener: ButtonListener? = null
     var actionType: ActionType
-    var btnListener: ButtonListener? = null
+
+    val isActionTypeConfirmLocation: Boolean
+        get() = actionType == ActionType.CONFIRM_LOCATION
+
+    val isActionTypeStartTracking: Boolean
+        get() = actionType == ActionType.START_TRACKING
+
+    val isActionTypeShareTrackingLink: Boolean
+        get() = actionType == ActionType.SHARE_TRACKING_URL
+
+    val isActionTypeShareBackLocation: Boolean
+        get() = actionType == ActionType.SHARE_BACK_LOCATION
 
     enum class ActionType {
         START_TRACKING,
@@ -31,33 +40,30 @@ class BottomButtonCard @JvmOverloads constructor(
     }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.bottom_button_card_view, this, true)
+        LayoutInflater.from(mContext).inflate(R.layout.bottom_button_card_view, this, true)
+        initiateView()
         actionType = ActionType.START_TRACKING
-        btnSharing.setOnRippleCompleteListener {
-            RippleView.OnRippleCompleteListener {
-                if (btnListener != null) {
-                    btnListener?.OnActionButtonClick()
-                    Log.d("TTTTT","AAAAA")
-                }
-                Log.d("TTTT","AAAAA")
-            }
-        }
     }
 
-    private fun setOnClickView() {
+    private fun initiateView() {
         btnClose.setOnRippleCompleteListener {
-            RippleView.OnRippleCompleteListener {
-                if (btnListener != null) {
-                    btnListener?.OnCloseButtonClick()
-                }
+            if (buttonListener != null) {
+                buttonListener!!.OnCloseButtonClick()
             }
+        }
+
+        btnSharing.setOnRippleCompleteListener {
+            if (buttonListener != null) {
+                buttonListener!!.OnActionButtonClick()
+            }
+            Log.d("TTTTTT", "null")
         }
 
         tvCopyLink.setOnClickListener {
-            if (btnListener != null) {
-                btnListener?.OnCopyButtonClick()
-                tvCopyLink.isEnabled = false
-                tvCopyLink.text = "Copied"
+            if (buttonListener != null) {
+                buttonListener!!.OnCopyButtonClick()
+                tvCopyLink?.isEnabled = false
+                tvCopyLink?.text = "Copied"
             }
         }
     }
@@ -77,6 +83,10 @@ class BottomButtonCard @JvmOverloads constructor(
         }
     }
 
+    fun setErrorText(text: String) {
+        tvDescription.error = text
+    }
+
     fun showCloseButton() {
         btnClose.visibility = View.VISIBLE
     }
@@ -85,14 +95,14 @@ class BottomButtonCard @JvmOverloads constructor(
         btnClose.visibility = View.GONE
     }
 
-    fun setShareButtonText(shareText: String) {
+    fun setShareButtonText(actionText: String) {
         tvStartShare.visibility = View.VISIBLE
-        tvStartShare.text = shareText
+        tvStartShare.text = actionText
     }
 
     fun showBottomCardLayout() {
         hideProgress()
-        tvStartShare.visibility = View.VISIBLE
+        btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
@@ -110,17 +120,17 @@ class BottomButtonCard @JvmOverloads constructor(
         imgLoader.startAnimation(rotationAnim)
     }
 
-    fun hideProgress() {
-        imgLoader.visibility = View.GONE
-        imgLoader.clearAnimation()
-    }
-
-    fun hideSharingButton() {
+    fun hideActionButton() {
         AnimationUtils.collapse(btnSharing)
     }
 
-    fun showSharingButton() {
+    fun showActionButton() {
         AnimationUtils.expand(btnSharing)
+    }
+
+    fun hideProgress() {
+        imgLoader.visibility = View.GONE
+        imgLoader.clearAnimation()
     }
 
     fun showTrackingURLLayout() {
@@ -131,11 +141,6 @@ class BottomButtonCard @JvmOverloads constructor(
         rlLinkShare.visibility = View.GONE
     }
 
-    fun isActionTypeConfirmLocation(): Boolean = actionType.equals(ActionType.CONFIRM_LOCATION)
-
-    fun isActionTypeShareTrackingLink(): Boolean = actionType.equals(ActionType.SHARE_TRACKING_URL)
-
-
     fun hideTitle() {
         tvTitle.visibility = View.GONE
     }
@@ -144,7 +149,7 @@ class BottomButtonCard @JvmOverloads constructor(
         tvTitle.visibility = View.VISIBLE
     }
 
-    fun setTextLink(URL: String) {
+    fun setTrackingURL(URL: String) {
         tvURL.text = URL
     }
 

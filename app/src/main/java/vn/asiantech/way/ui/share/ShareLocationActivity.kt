@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
+import com.hypertrack.lib.HyperTrack
+import com.hypertrack.lib.callbacks.HyperTrackEventCallback
+import com.hypertrack.lib.internal.transmitter.models.HyperTrackEvent
+import com.hypertrack.lib.models.ErrorResponse
 import kotlinx.android.synthetic.main.activity_share_location.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,7 +25,6 @@ import vn.asiantech.way.utils.GPSUtil
  * Created by toan on 27/09/2017.
  */
 class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
-    var bottomButtonCard: BottomButtonCard? = null
     private val service = APIUtil.getService()
     var googleMap: GoogleMap? = null
 
@@ -51,24 +54,18 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
 
 
     private fun initializeUIViews() {
-        bottomButtonCard?.setOnClickListener {
-            object : BottomButtonCard.ButtonListener {
-                override fun OnCloseButtonClick() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun OnActionButtonClick() {
-                    if (bottomButtonCard?.isActionTypeConfirmLocation()!!) {
-                        initBottomButtonCard(true)
-                        return
-                    }
-                    bottomButtonCard?.startProgress()
-                }
-
-                override fun OnCopyButtonClick() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
+        bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
+            override fun OnCloseButtonClick() {
             }
+
+            override fun OnActionButtonClick() {
+                initBottomButtonCard(true)
+                bottomButtonCard.startProgress()
+            }
+
+            override fun OnCopyButtonClick() {
+            }
+
         }
     }
 
@@ -79,7 +76,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         bottomButtonCard?.hideTrackingURLLayout()
         bottomButtonCard?.setTitleText(getString(R.string.textview_text_look_good))
         bottomButtonCard?.setShareButtonText(getString(R.string.textview_text_start_sharing))
-        bottomButtonCard?.showSharingButton()
+        bottomButtonCard?.showActionButton()
         bottomButtonCard?.showTitle()
         if (show) {
             bottomButtonCard?.showBottomCardLayout()
