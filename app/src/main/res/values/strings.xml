@@ -14,5 +14,7 @@
     <string name="textview.text.description">Add a destination</string>
     <string name="textview.text.look_good">Look good?</string>
     <string name="textview.text.start_sharing">Start Sharing</string>
+    <string name="textview_text_test_title">You\'re 1 min away</string>
+    <string name="textview_text_text_test_description_success">Share your live location link:</string>
 
 </resources>

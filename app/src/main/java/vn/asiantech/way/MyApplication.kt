@@ -9,6 +9,9 @@ import com.hypertrack.lib.HyperTrack
  */
 
 class MyApplication : Application() {
+    companion object {
+        var mInstance: MyApplication? = null
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -16,5 +19,10 @@ class MyApplication : Application() {
         HyperTrack.initialize(this.applicationContext, BuildConfig.HYPERTRACK_PK)
         HyperTrack.enableMockLocations(true)
         HyperTrack.disablePersistentNotification(true)
+    }
+
+    @Synchronized
+    fun getInstance(): MyApplication? {
+        return mInstance
     }
 }

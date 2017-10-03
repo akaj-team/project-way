@@ -3,6 +3,8 @@ package vn.asiantech.way.ui.share
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
@@ -10,6 +12,7 @@ import com.hypertrack.lib.callbacks.HyperTrackEventCallback
 import com.hypertrack.lib.internal.transmitter.models.HyperTrackEvent
 import com.hypertrack.lib.models.ErrorResponse
 import kotlinx.android.synthetic.main.activity_share_location.*
+import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,13 +38,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         initializeUIViews()
         onClickButtonSearchLoaction()
+        initBottomButtonCard(true)
     }
 
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
         // Add a marker in Sydney and move the camera
         val myLocation = GPSUtil(this).getCurrentLocation()
-        val myLaLng = LatLng(myLocation.latitude, myLocation.longitude)
+        val myLaLng = LatLng(myLocation!!.latitude, myLocation.longitude)
         val cameraMove = CameraUpdateFactory.newLatLngZoom(
                 myLaLng, 16f)
         googleMap?.addMarker(MarkerOptions().position(myLaLng)
@@ -59,8 +63,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
             }
 
             override fun OnActionButtonClick() {
-                initBottomButtonCard(true)
-                bottomButtonCard.startProgress()
+                Log.d("TTTTT","CLick")
             }
 
             override fun OnCopyButtonClick() {
@@ -105,7 +108,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
 
         })
     }
-
+    private fun onCLickShareURL(){
+        bottomButtonCard.tvTitle.text=getString(R.string.textview_text_test_title)
+        bottomButtonCard.tvDescription.text=getString(R.string.textview_text_text_test_description_success)
+    }
     private fun onClickButtonSearchLoaction() {
         rlSearchLocation.setOnClickListener {
             //TODO:Update event onCLick for Search location

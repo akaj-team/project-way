@@ -56,7 +56,6 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
             if (buttonListener != null) {
                 buttonListener!!.OnActionButtonClick()
             }
-            Log.d("TTTTTT", "null")
         }
 
         tvCopyLink.setOnClickListener {
