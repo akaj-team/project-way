@@ -97,9 +97,9 @@ class ArrivedActivity : BaseActivity() {
             tvAverage.visibility = View.GONE
             tvTraveled.visibility = View.GONE
             tvElapsed.visibility = View.GONE
-            tvTimeTotal.text = mArrived.time.makeDuration()
-            tvDistance.text = mArrived.distance.makeDistance()
-            tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed()
+            tvTimeTotal.text = mArrived.time.makeDuration(this)
+            tvDistance.text = mArrived.distance.makeDistance(this)
+            tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
         }
 
         imgArrowDown.setOnClickListener {
@@ -171,9 +171,9 @@ class ArrivedActivity : BaseActivity() {
     private fun arrivedFinish() {
         btnShowSummary.visibility = View.VISIBLE
         progressBarCircular.progress = 100
-        tvTimeTotalArrived.text = mArrived.time.makeDuration()
-        tvDistanceArrived.text = mArrived.distance.makeDistance()
-        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed()
+        tvTimeTotalArrived.text = mArrived.time.makeDuration(this)
+        tvDistanceArrived.text = mArrived.distance.makeDistance(this)
+        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
         drawLine()
     }
 

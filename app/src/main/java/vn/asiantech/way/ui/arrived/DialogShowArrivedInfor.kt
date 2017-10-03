@@ -48,9 +48,9 @@ class DialogShowArrivedInfor : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater?.inflate(R.layout.dialog_show_arrived_infor, container, false)
-        v?.llShowDetailData?.tvDistance?.text = mDistance?.makeDistance()
-        v?.llShowDetailData?.tvTimeTotal?.text = mTime?.makeDuration()
-        v?.llShowDetailData?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed()
+        v?.llShowDetailData?.tvDistance?.text = mDistance?.makeDistance(context)
+        v?.llShowDetailData?.tvTimeTotal?.text = mTime?.makeDuration(context)
+        v?.llShowDetailData?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
         btnDoneDialog?.setOnClickListener {
            dismiss()
         }
