@@ -12,6 +12,7 @@ echo "* detekt           *"
 echo "********************"
 cat app/build/reports/detekt/detekt-checkstyle.xml \
     | bundle exec checkstyle_filter-git diff origin/master \
+    | sed "s#name='#name='$(pwd)/#g" \
     | bundle exec saddler report --require saddler/reporter/github --reporter $REPORTER
 
 
