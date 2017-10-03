@@ -1,8 +1,6 @@
 package vn.asiantech.way.ui.view
 
-import android.animation.Animator
 import android.content.Context
-import android.support.design.widget.FloatingActionButton
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -16,7 +14,7 @@ import vn.asiantech.way.R
  * Custom floating button menu
  * Created by haingoq on 29/09/2017.
  */
-class FloatingButtonMenu : LinearLayout, View.OnClickListener, View.OnTouchListener {
+class FloatingButtonMenuLinearLayout : LinearLayout, View.OnClickListener, View.OnTouchListener {
     constructor(context: Context) : super(context) {
     }
 
@@ -28,24 +26,25 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener, View.OnTouchListe
         when (view?.id) {
             R.id.fabMenu -> {
                 val anim: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_rotate)
-                val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_alpha)
-                val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_alpha_invisible)
+                val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_visible)
+                val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
                 fabMenu.startAnimation(anim)
-                endAnimation(fabShare)
-                endAnimation(fabProfile)
-                endAnimation(fabCalendar)
+                startAnimationFab(animInvisible)
+                if (rlShare.visibility == View.INVISIBLE) {
+                    startAnimationFab(animVisible)
+                    visibilityAllChildView(View.VISIBLE)
+                }
+                animInvisible.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(p0: Animation?) {
+                    }
 
-//                if (rlShare.visibility == View.VISIBLE) {
-//                    fabShare.startAnimation(anim)
-//                    fabProfile.startAnimation(anim)
-//                    fabCalendar.startAnimation(anim)
-//                    visibilityAllChildView(View.INVISIBLE)
-//                } else {
-//                    visibilityAllChildView(View.VISIBLE)
-//                    fabShare.startAnimation(animVisible)
-//                    fabProfile.startAnimation(animVisible)
-//                    fabCalendar.startAnimation(animVisible)
-//                }
+                    override fun onAnimationEnd(p0: Animation?) {
+                        visibilityAllChildView(View.INVISIBLE)
+                    }
+
+                    override fun onAnimationStart(p0: Animation?) {
+                    }
+                })
             }
         }
     }
@@ -80,33 +79,15 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener, View.OnTouchListe
         return false
     }
 
-    private fun endAnimation(fab: FloatingActionButton) {
-        fab.animate()
-                .translationY(30f)
-                .alpha(40f)
-                .setListener(object : Animator.AnimatorListener{
-                    override fun onAnimationRepeat(p0: Animator?) {
-                    }
-
-                    override fun onAnimationCancel(p0: Animator?) {
-                    }
-
-                    override fun onAnimationStart(p0: Animator?) {
-                    }
-
-                    override fun onAnimationEnd(p0: Animator?) {
-                        if (rlShare.visibility == View.VISIBLE) {
-                            visibilityAllChildView(View.INVISIBLE)
-                        } else {
-                            visibilityAllChildView(View.VISIBLE)
-                        }
-                    }
-                })
+    private fun startAnimationFab(animation: Animation) {
+        fabShare.startAnimation(animation)
+        fabProfile.startAnimation(animation)
+        fabCalendar.startAnimation(animation)
     }
 
     private fun initView() {
         View.inflate(context, R.layout.custom_menu, this)
-        fabMenu.setOnTouchListener(this)
+        fabMenu.setOnClickListener(this)
         fabShare.setOnTouchListener(this)
         fabProfile.setOnTouchListener(this)
         fabCalendar.setOnTouchListener(this)

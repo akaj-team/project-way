@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <vn.asiantech.way.ui.view.FloatingButtonMenu
-        android:id="@+id/fabMenu"
+    <vn.asiantech.way.ui.view.FloatingButtonMenuLinearLayout
+        android:id="@+id/llMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
