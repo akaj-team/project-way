@@ -12,7 +12,8 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - checkout
+      - checkout:
+      - run: git config diff.mnemonicprefix false
 
 #Setup env
       - run:
