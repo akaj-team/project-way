@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.view
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Build
@@ -37,19 +38,24 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener {
         initFloatingMenu()
     }
 
-    override fun onClick(p0: View?) {
-        val anim: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_rotate)
-        mFabMenu.startAnimation(anim)
-        val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_alpha)
-        mFabShare.startAnimation(animVisible)
-        mFabProfile.startAnimation(animVisible)
-        mFabCalendar.startAnimation(animVisible)
-        if (isVisible) {
-            visibilityAllChildView(View.INVISIBLE)
-            isVisible = false
-        } else {
-            visibilityAllChildView(View.VISIBLE)
-            isVisible = true
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            mFabMenu.id -> {
+                val anim: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_rotate)
+                mFabMenu.startAnimation(anim)
+                val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_alpha)
+                mFabShare.startAnimation(animVisible)
+                mFabProfile.startAnimation(animVisible)
+                mFabCalendar.startAnimation(animVisible)
+                if (isVisible) {
+                    visibilityAllChildView(View.INVISIBLE)
+                    isVisible = false
+                } else {
+                    visibilityAllChildView(View.VISIBLE)
+                    isVisible = true
+                }
+            }
         }
     }
 
@@ -59,7 +65,7 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @TargetApi(Build.VERSION_CODES.M)
     private fun initFloatingButton(fab: CustomFloatingButton, imgResource: Int, title: String) {
         //init parent layout
         val linearLayout = LinearLayout(context)
@@ -74,15 +80,13 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener {
         // init fab
         fab.id = View.generateViewId()
         fab.setImageResource(imgResource)
-        fab.background = resources.getDrawable(R.drawable.custom_floating_button, null)
         fab.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
-//        fab.visibility = View.INVISIBLE
         fab.setOnClickListener(this)
 
         // init textView title
         val tvTitleLayoutParam = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT)
-        tvTitleLayoutParam.marginEnd = 30
+        tvTitleLayoutParam.setMargins(0, 0, 30, 0)
         val tvTitle = TextView(context)
         tvTitle.layoutParams = tvTitleLayoutParam
         tvTitle.text = title
@@ -109,18 +113,16 @@ class FloatingButtonMenu : LinearLayout, View.OnClickListener {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun initFloatingMenu() {
-        //common layout
+        //  create layout param
         val layoutParam = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         layoutParam.setMargins(10, 10, 10, 10)
         layoutParam.gravity = Gravity.END
 
-        //init floating button Menu
+        //  init floating button Menu
         mFabMenu.id = View.generateViewId()
-        mFabMenu.background = resources.getDrawable(R.drawable.custom_floating_button_menu, null)
         mFabMenu.setImageResource(R.drawable.ic_menu)
         mFabMenu.layoutParams = layoutParam
-
         mFabMenu.setOnClickListener(this)
         addView(mFabMenu)
     }
