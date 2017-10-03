@@ -168,7 +168,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 }
             })
         }
-
     }
 
     private fun setUserInformation() {
