@@ -18,8 +18,8 @@ import android.util.Log
 class GPSUtil(var mContext: Context) : Service(), LocationListener {
 
     companion object {
-        private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
-        private val MIN_TIME_BW_UPDATES: Long = 1000L
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
+        private const val MIN_TIME_BW_UPDATES: Long = 1000L
         private val TAG = GPSUtil::class.java.simpleName
     }
 

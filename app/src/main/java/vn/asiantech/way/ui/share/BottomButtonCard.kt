@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.*
 import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
-import com.hypertrack.lib.internal.consumer.view.RippleView
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import vn.asiantech.way.R
 
@@ -56,6 +55,7 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
             if (buttonListener != null) {
                 buttonListener!!.OnActionButtonClick()
             }
+            Log.d("TTTTTT", "null")
         }
 
         tvCopyLink.setOnClickListener {
@@ -67,7 +67,7 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
         }
     }
 
-    fun setTitleText(title: String) {
+    internal fun setTitleText(title: String) {
         this.tvTitle.text = title
         tvTitle.visibility = View.VISIBLE
     }
