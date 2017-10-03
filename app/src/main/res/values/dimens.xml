@@ -10,4 +10,5 @@
     <dimen name="arrow_back_height">50dp</dimen>
     <dimen name="width_fragment">400dp</dimen>
     <dimen name="height_fragment">600dp</dimen>
+    <dimen name="arrived_show_result_height">100dp</dimen>
 </resources>

@@ -7,7 +7,7 @@
     tools:context="vn.asiantech.way.ui.arrived.ArrivedActivity">
 
     <fragment
-        android:id="@+id/fragmentGoogleMap"
+        android:id="@+id/fragmentHypertrackMap"
         android:name="com.hypertrack.lib.HyperTrackMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -16,16 +16,16 @@
         android:id="@+id/imgBtnArrowBack"
         android:layout_width="@dimen/arrow_back_width"
         android:layout_height="@dimen/arrow_back_height"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/ic_arrow_back"
         android:contentDescription="@null" />
 
     <ImageButton
         android:id="@+id/imgBtnResetPosition"
         android:layout_width="@dimen/arrow_back_width"
-        android:layout_height="@dimen/arrow_back_width"
+        android:layout_height="@dimen/arrow_back_height"
         android:layout_above="@+id/llDetailTracking"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -54,23 +54,38 @@
             <LinearLayout
                 android:id="@+id/llShowResult"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:layout_height="@dimen/arrived_show_result_height"
+                android:visibility="visible"
+                android:baselineAligned="false">
 
-                <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
-                    android:id="@+id/progressBarCircular"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:rotation="90"
-                    app:circle_color="#ddd"
-                    app:circle_progress_color="@color/tracking_experience"
-                    app:circle_stroke_width="3dp"
-                    app:lock_enabled="true"
-                    app:max="100"
-                    app:progress="40" />
+                    android:layout_weight="3">
+
+                    <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
+                        android:id="@+id/progressBarCircular"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="10dp"
+                        android:rotation="90"
+                        app:circle_color="#ddd"
+                        app:circle_progress_color="@color/violet"
+                        app:circle_stroke_width="3dp"
+                        app:lock_enabled="true"
+                        app:max="100"
+                        app:progress="100" />
+
+                    <ImageView
+                        android:id="@+id/imgReach"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_reached" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -91,8 +106,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:id="@+id/tvTimeTotalArrived"
@@ -107,21 +121,38 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             tools:text="( 0 km )" />
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imgArrowRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:contentDescription="@null" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
+                    <ImageView
+                        android:id="@+id/imgArrowRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/ic_keyboard_arrow_right_black_18dp"
+                        android:contentDescription="@null" />
+
+                    <ImageView
+                        android:id="@+id/imgArrowDown"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/ic_keyboard_arrow_down_black_18dp"
+                        android:contentDescription="@null" />
+
+                </RelativeLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -146,5 +177,4 @@
         android:text="@string/arrived_show_summary"
         android:textSize="@dimen/text_size_normal"
         android:visibility="visible" />
-
 </RelativeLayout>

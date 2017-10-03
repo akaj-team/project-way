@@ -1,6 +1,6 @@
 <resources>
     <string name="filter_title_track">WAY</string>
-    <string name="arrived_show_summary" >SHOW SUMMARY</string>
+    <string name="arrived_show_summary">SHOW SUMMARY</string>
     <string name="arrived_done">DONE</string>
     <string name="arrived_average_speed">Average Speed</string>
     <string name="arrived_traveled">Traveled</string>
@@ -9,4 +9,5 @@
     <string name="arrived_you">You</string>
     <string name="arrived_trip_summary">Trip Summary</string>
     <string name="arrived_you_arrived">your\'re arrived</string>
+    <string name="turn_gps">turn your location permisson</string>
 </resources>

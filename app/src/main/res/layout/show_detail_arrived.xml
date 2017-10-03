@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llShowDetailData"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false">
@@ -12,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvTimeTotalDialog"
+            android:id="@+id/tvTimeTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -22,6 +23,7 @@
             tools:text="14 min" />
 
         <TextView
+            android:id="@+id/tvElapsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -36,7 +38,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvDistanceDialog"
+            android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -46,6 +48,7 @@
             tools:text="0 km" />
 
         <TextView
+            android:id="@+id/tvTraveled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -60,7 +63,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvAverageSpeedDialog"
+            android:id="@+id/tvAverageSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -70,6 +73,7 @@
             tools:text="0kmph" />
 
         <TextView
+            android:id="@+id/tvAverage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/arrived_average_speed"
