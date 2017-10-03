@@ -7,4 +7,8 @@
     <string name="splash_button_enable_location">Enable location</string>
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
 
+    <!--Custom floating menu-->
+    <string name="calendar_title">Calendar</string>
+    <string name="profile_title">Profile</string>
+    <string name="share_title">Share</string>
 </resources>

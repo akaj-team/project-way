@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rlCalendar"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/tvCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/calendar_title" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/imgCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_profile" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlProfile"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/tvProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/profile_title" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/imgProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_profile" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlShare"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/tvShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/share_title" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/imgShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_share" />
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/imgMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_menu" />
+
+</LinearLayout>
