@@ -5,7 +5,7 @@ import com.hypertrack.lib.HyperTrack
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
- * Created by quocnguyenp. on 9/21/17.
+ * Created by quocnguyenp. on 9/21/17
  */
 
 class MyApplication : Application() {

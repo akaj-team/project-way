@@ -21,25 +21,24 @@ android {
 
     signingConfigs {
         debug {
-            keyAlias 'android'
-            keyPassword 'android'
             storeFile file('../keystores/debug.jks')
-            storePassword 'android'
         }
 
         production {
-            def signFile = file("../local.properties")
-            def signingProps = new Properties()
-            signingProps.load(new FileInputStream(signFile))
-            storeFile file("../keystores/release.jks")
-            storePassword signingProps['storePassword']
-            keyAlias signingProps['keyAlias']
-            keyPassword signingProps['keyPassword']
+            if (!System.getenv('CI')) {
+                def signFile = file("../local.properties")
+                def signingProps = new Properties()
+                signingProps.load(new FileInputStream(signFile))
+                storeFile file("../keystores/release.jks")
+                storePassword signingProps['storePassword']
+                keyAlias signingProps['keyAlias']
+                keyPassword signingProps['keyPassword']
+            }
         }
     }
 
     buildTypes {
-        production {
+        release {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -65,14 +64,17 @@ android {
             case "release":
                 def APP_NAME = "WAY"
                 variant.resValue("string", "app_name", "${APP_NAME}")
+                variant.resValue "string", "deeplink_scheme", "com.hypertracklive"
+                variant.resValue "string", "tracking_url", "www.trck.at"
+                variant.buildConfigField "String", "HYPERTRACK_PK", keyProperties['HYPERTRACK_PUBLISHABLE_KEY']
+                variant.buildConfigField "String", "HYPERTRACK_BASE_URL", '"https://api.hypertrack.com/api/v1/"'
         }
     }
 
-    android.variantFilter { variant ->
-        if (variant.buildType.name.equals("release")) {
-            variant.setIgnore(true)
-        }
+    lintOptions {
+        abortOnError false
     }
+
 }
 
 android.applicationVariants.all { variant ->
@@ -122,6 +124,8 @@ dependencies {
 */
 File googleServicesFile = rootProject.file("app/google-services.json");
 if (googleServicesFile.exists()) {
-    System.out.println("Google Service File Exist");
+    System.out.println("Google Service File Exist")
     apply plugin: 'com.google.gms.google-services'
 }
+
+apply from: "https://raw.githubusercontent.com/tientun/gradle-android-ci-check/master/ci.gradle"
