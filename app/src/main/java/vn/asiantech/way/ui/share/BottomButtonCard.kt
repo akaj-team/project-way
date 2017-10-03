@@ -2,7 +2,6 @@ package vn.asiantech.way.ui.share
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -15,21 +14,21 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(mContext, attrs) {
+class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: AttributeSet? = null) : RelativeLayout(mContext, attrs) {
     var buttonListener: ButtonListener? = null
     var actionType: ActionType
-
-    val isActionTypeConfirmLocation: Boolean
-        get() = actionType == ActionType.CONFIRM_LOCATION
-
-    val isActionTypeStartTracking: Boolean
-        get() = actionType == ActionType.START_TRACKING
-
-    val isActionTypeShareTrackingLink: Boolean
-        get() = actionType == ActionType.SHARE_TRACKING_URL
-
-    val isActionTypeShareBackLocation: Boolean
-        get() = actionType == ActionType.SHARE_BACK_LOCATION
+    // TODO: Will use in future
+//    val isActionTypeConfirmLocation: Boolean
+//        get() = actionType == ActionType.CONFIRM_LOCATION
+//
+//    val isActionTypeStartTracking: Boolean
+//        get() = actionType == ActionType.START_TRACKING
+//
+//    val isActionTypeShareTrackingLink: Boolean
+//        get() = actionType == ActionType.SHARE_TRACKING_URL
+//
+//    val isActionTypeShareBackLocation: Boolean
+//        get() = actionType == ActionType.SHARE_BACK_LOCATION
 
     enum class ActionType {
         START_TRACKING,
@@ -47,22 +46,21 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
     private fun initiateView() {
         btnClose.setOnRippleCompleteListener {
             if (buttonListener != null) {
-                buttonListener!!.OnCloseButtonClick()
+                buttonListener!!.onCloseButtonClick()
             }
         }
 
         btnSharing.setOnRippleCompleteListener {
             if (buttonListener != null) {
-                buttonListener!!.OnActionButtonClick()
+                buttonListener!!.onActionButtonClick()
             }
-            Log.d("TTTTTT", "null")
         }
 
         tvCopyLink.setOnClickListener {
             if (buttonListener != null) {
-                buttonListener!!.OnCopyButtonClick()
+                buttonListener!!.onCopyButtonClick()
                 tvCopyLink?.isEnabled = false
-                tvCopyLink?.text = "Copied"
+                tvCopyLink?.text = context.getString(R.string.textview_text_copied)
             }
         }
     }
@@ -82,13 +80,10 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
         }
     }
 
-    fun setErrorText(text: String) {
-        tvDescription.error = text
-    }
-
-    fun showCloseButton() {
-        btnClose.visibility = View.VISIBLE
-    }
+    // TODO: Will use in future
+//    fun showCloseButton() {
+//        btnClose.visibility = View.VISIBLE
+//    }
 
     fun hideCloseButton() {
         btnClose.visibility = View.GONE
@@ -104,24 +99,26 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
         btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
+    // TODO: Will use in future
 
-    fun hideBottomCardLayout() {
-        hideProgress()
-        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
-    }
-
-    fun startProgress() {
-        tvStartShare.visibility = View.GONE
-        imgLoader.visibility = View.VISIBLE
-        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
-                R.anim.rotate)
-        rotationAnim.fillAfter = true
-        imgLoader.startAnimation(rotationAnim)
-    }
-
-    fun hideActionButton() {
-        AnimationUtils.collapse(btnSharing)
-    }
+//    fun hideBottomCardLayout() {
+//        hideProgress()
+//        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
+//    }
+    // TODO: Will use in future
+//
+//    fun startProgress() {
+//        tvStartShare.visibility = View.GONE
+//        imgLoader.visibility = View.VISIBLE
+//        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
+//                R.anim.rotate)
+//        rotationAnim.fillAfter = true
+//        imgLoader.startAnimation(rotationAnim)
+//    }
+    // TODO: Will use in future
+//    fun hideActionButton() {
+//        AnimationUtils.collapse(btnSharing)
+//    }
 
     fun showActionButton() {
         AnimationUtils.expand(btnSharing)
@@ -135,28 +132,24 @@ class BottomButtonCard @JvmOverloads constructor(private val mContext: Context, 
     fun showTrackingURLLayout() {
         AnimationUtils.expand(rlLinkShare)
     }
-
-    fun hideTrackingURLLayout() {
-        rlLinkShare.visibility = View.GONE
-    }
-
-    fun hideTitle() {
-        tvTitle.visibility = View.GONE
-    }
+    // TODO: Will use in future
+//    fun hideTrackingURLLayout() {
+//        rlLinkShare.visibility = View.GONE
+//    }
+    // TODO: Will use in future
+//    fun hideTitle() {
+//        tvTitle.visibility = View.GONE
+//    }
 
     fun showTitle() {
         tvTitle.visibility = View.VISIBLE
     }
 
-    fun setTrackingURL(URL: String) {
-        tvURL.text = URL
-    }
-
     interface ButtonListener {
-        fun OnCloseButtonClick()
+        fun onCloseButtonClick()
 
-        fun OnActionButtonClick()
+        fun onActionButtonClick()
 
-        fun OnCopyButtonClick()
+        fun onCopyButtonClick()
     }
 }

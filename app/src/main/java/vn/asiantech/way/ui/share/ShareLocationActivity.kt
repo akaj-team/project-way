@@ -1,16 +1,13 @@
 package vn.asiantech.way.ui.share
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import com.hypertrack.lib.HyperTrack
-import com.hypertrack.lib.callbacks.HyperTrackEventCallback
-import com.hypertrack.lib.internal.transmitter.models.HyperTrackEvent
-import com.hypertrack.lib.models.ErrorResponse
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import retrofit2.Call
@@ -29,7 +26,7 @@ import vn.asiantech.way.utils.GPSUtil
  */
 class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
     private val service = APIUtil.getService()
-    var googleMap: GoogleMap? = null
+    private var googleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +34,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
         initializeUIViews()
-        onClickButtonSearchLoaction()
+        onClickButtonSearchLocation()
         initBottomButtonCard(true)
     }
 
@@ -59,25 +56,29 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun initializeUIViews() {
         bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
-            override fun OnCloseButtonClick() {
+            override fun onCloseButtonClick() {
+                // No-op
             }
 
-            override fun OnActionButtonClick() {
-                Log.d("TTTTT","CLick")
+            override fun onActionButtonClick() {
+                shareLocation()
             }
 
-            override fun OnCopyButtonClick() {
+            override fun onCopyButtonClick() {
+                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
+                        ClipData.newPlainText("tracking_url", bottomButtonCard.tvURL.text)
             }
 
         }
     }
-
+    //TODO: will change code logic in future
     private fun initBottomButtonCard(show: Boolean) {
         bottomButtonCard?.hideCloseButton()
         bottomButtonCard?.setDescriptionText("")
-        bottomButtonCard?.actionType = BottomButtonCard.ActionType.START_TRACKING
-        bottomButtonCard?.hideTrackingURLLayout()
-        bottomButtonCard?.setTitleText(getString(R.string.textview_text_look_good))
+        bottomButtonCard?.actionType = BottomButtonCard.ActionType.SHARE_TRACKING_URL
+        bottomButtonCard?.showTrackingURLLayout()
+        bottomButtonCard?.setTitleText(getString(R.string.textview_text_test_title_text))
+        bottomButtonCard?.setDescriptionText(getString(R.string.textview_text_test_description_text))
         bottomButtonCard?.setShareButtonText(getString(R.string.textview_text_start_sharing))
         bottomButtonCard?.showActionButton()
         bottomButtonCard?.showTitle()
@@ -85,7 +86,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
             bottomButtonCard?.showBottomCardLayout()
         }
     }
-
+    private fun shareLocation(){
+        val sharingIntent= Intent(android.content.Intent.ACTION_SEND)
+        val message="My Location is ${bottomButtonCard.tvURL.text}"
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,message)
+        startActivityForResult(Intent.createChooser(sharingIntent,"Share via"),200)
+    }
     //todo: will update code with base API
     private fun getLocationAddress(latLng: String) {
         service?.getAddressLocation(latLng)?.enqueue(object : Callback<LocationResponse> {
@@ -93,7 +100,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
                 if (!response!!.isSuccessful) {
                     return
                 }
-                if ("INVALID_REQUEST".equals(response.body()?.status)) {
+                if ("INVALID_REQUEST" == response.body()?.status) {
                     return
                 }
                 val locations = response.body()?.results
@@ -103,16 +110,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
             }
 
             override fun onFailure(call: Call<LocationResponse>?, t: Throwable?) {
-                Log.d("TTTTTT", "fail")
             }
 
         })
     }
-    private fun onCLickShareURL(){
-        bottomButtonCard.tvTitle.text=getString(R.string.textview_text_test_title)
-        bottomButtonCard.tvDescription.text=getString(R.string.textview_text_text_test_description_success)
-    }
-    private fun onClickButtonSearchLoaction() {
+
+    private fun onClickButtonSearchLocation() {
         rlSearchLocation.setOnClickListener {
             //TODO:Update event onCLick for Search location
         }

@@ -8,7 +8,7 @@
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
     <string name="textview.text.test_title_text">Your friend is 23 min away!</string>
     <string name="textview.text.test_description_text">Share your location back so that they can see you on the map.</string>
-    <string name="textview.text.test_link_text">https://www.trck.at/asdad</string>
+    <string name="textview.text.test_link_text">https://www.trck.at/MGSLWx</string>
     <string name="textview.text.copy_link">Copy Link</string>
     <string name="textview.text.going_somewhere">Going somewhere?</string>
     <string name="textview.text.description">Add a destination</string>
@@ -16,5 +16,6 @@
     <string name="textview.text.start_sharing">Start Sharing</string>
     <string name="textview_text_test_title">You\'re 1 min away</string>
     <string name="textview_text_text_test_description_success">Share your live location link:</string>
+    <string name="textview_text_copied">Copied</string>
 
 </resources>
