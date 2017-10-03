@@ -52,7 +52,7 @@ class DialogShowArrivedInfor : DialogFragment() {
         v?.llShowDetailData?.tvTimeTotal?.text = mTime?.makeDuration()
         v?.llShowDetailData?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed()
         btnDoneDialog?.setOnClickListener {
-            //TODO("for button Done")
+           dismiss()
         }
         return v
     }

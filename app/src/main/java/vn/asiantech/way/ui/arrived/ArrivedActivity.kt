@@ -1,6 +1,8 @@
 package vn.asiantech.way.ui.arrived
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -44,7 +46,7 @@ class ArrivedActivity : BaseActivity() {
 
     private var mGoogleMap: GoogleMap? = null
     private lateinit var mDestinationPosition: LatLng
-    private var mArrived: Arrived = Arrived()
+    private var mArrived = Arrived()
     private var mPoints: MutableList<LatLng> = mutableListOf()
     private var mHypertrackMapFragment: HyperTrackMapFragment? = null
     private var mCurrentLocation: HyperTrackLocation? = null
@@ -58,11 +60,11 @@ class ArrivedActivity : BaseActivity() {
         mHypertrackMapFragment = fragmentHypertrackMap as HyperTrackMapFragment
         mHypertrackMapFragment?.setMapFragmentCallback(object : MapFragmentCallback() {
             override fun onMapReadyCallback(hyperTrackMapFragment: HyperTrackMapFragment?, map: GoogleMap?) {
-                setOnMapReady(map)
+                mGoogleMap = map
+                setOnMapReady()
             }
 
             override fun onMapLoadedCallback(hyperTrackMapFragment: HyperTrackMapFragment?, map: GoogleMap?) {
-                mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, mPoints[0]))
                 HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
                     override fun onSuccess(response: SuccessResponse) {
                         Log.d(TAG, "onSuccess: Current Location Recieved")
@@ -71,8 +73,8 @@ class ArrivedActivity : BaseActivity() {
                         mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, mCurrentLocation?.latLng!!))
                         mPoints.add(mCurrentLocation!!.latLng)
                         mDestinationPosition = mCurrentLocation!!.latLng
-                        if (checkDestination(mCurrentLocation!!.latLng)) {
-                            arrivedFinish(mArrived.time, mArrived.distance, mArrived.averageSpeed)
+                        if (checkDestination()) {
+                            arrivedFinish()
                         }
                     }
 
@@ -85,7 +87,7 @@ class ArrivedActivity : BaseActivity() {
         })
 
         btnShowSummary.setOnClickListener {
-            showDialog(mArrived.time, mArrived.distance, mArrived.averageSpeed)
+            showDialog()
         }
 
         imgArrowRight.setOnClickListener {
@@ -111,7 +113,7 @@ class ArrivedActivity : BaseActivity() {
         }
 
         imgBtnResetPosition.setOnClickListener {
-            mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 14.0f))
+            mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng ?: LatLng(resources.getDimension(R.dimen.default_location_latitude).toDouble(), resources.getDimension(R.dimen.default_location_longtitude).toDouble()), 12.0f))
         }
     }
 
@@ -122,8 +124,18 @@ class ArrivedActivity : BaseActivity() {
                 checkForLocationSetting()
 
             } else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                toast(resources.getString(R.string.turn_gps))
+                toast(resources.getString(R.string.arrived_turn_location_permision))
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == HyperTrack.REQUEST_CODE_LOCATION_SERVICES) {
+            if (resultCode != Activity.RESULT_OK) {
+                toast(resources.getString(R.string.arrived_turn_location_service))
+            }
+            checkForLocationSetting()
         }
     }
 
@@ -143,26 +155,25 @@ class ArrivedActivity : BaseActivity() {
         mPoints.add(LatLng(16.0751387, 108.1538494))
     }
 
-    private fun setOnMapReady(map: GoogleMap?) {
-        mGoogleMap = map
+    private fun setOnMapReady() {
         mGoogleMap?.setMaxZoomPreference(16.9f)
         mGoogleMap?.uiSettings?.isMapToolbarEnabled = false
-        mGoogleMap?.uiSettings?.isZoomControlsEnabled = true
         mGoogleMap?.uiSettings?.isCompassEnabled = false
+        mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, mPoints[0]))
     }
 
     private fun setMarkerOption(resource: Int, position: LatLng): MarkerOptions = MarkerOptions().position(position).
             icon(BitmapDescriptorFactory.fromResource(resource))
             .anchor(0.5f, 0.5f)
 
-    private fun checkDestination(latlng: LatLng): Boolean = latlng.latitude == mDestinationPosition.latitude && latlng.longitude == mDestinationPosition.longitude
+    private fun checkDestination(): Boolean = mCurrentLocation?.latLng?.latitude == mDestinationPosition.latitude && mCurrentLocation?.latLng?.longitude == mDestinationPosition.longitude
 
-    private fun arrivedFinish(time: Long, distance: Double, averageSpeed: Double) {
+    private fun arrivedFinish() {
         btnShowSummary.visibility = View.VISIBLE
         progressBarCircular.progress = 100
-        tvTimeTotalArrived.text = time.makeDuration()
-        tvDistanceArrived.text = distance.makeDistance()
-        tvAverageSpeed.text = averageSpeed.makeAverageSpeed()
+        tvTimeTotalArrived.text = mArrived.time.makeDuration()
+        tvDistanceArrived.text = mArrived.distance.makeDistance()
+        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed()
         drawLine()
     }
 
@@ -174,8 +185,8 @@ class ArrivedActivity : BaseActivity() {
         mGoogleMap?.addPolyline(polyPointOption)
     }
 
-    private fun showDialog(time: Long, distance: Double, averageSpeed: Double) {
-        val dialog = DialogShowArrivedInfor.newInstance(time, distance, averageSpeed)
+    private fun showDialog() {
+        val dialog = DialogShowArrivedInfor.newInstance(mArrived.time, mArrived.distance, mArrived.averageSpeed)
         val fragmentManager = supportFragmentManager as? FragmentManager
         dialog.show(fragmentManager, "Dialog Fragment")
     }

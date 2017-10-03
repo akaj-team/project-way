@@ -11,4 +11,6 @@
     <dimen name="width_fragment">400dp</dimen>
     <dimen name="height_fragment">600dp</dimen>
     <dimen name="arrived_show_result_height">100dp</dimen>
+    <item name="default_location_latitude" type="dimen" format="float">16.0804598</item>
+    <item name="default_location_longtitude" type="dimen" format="float">108.2385744</item>
 </resources>
