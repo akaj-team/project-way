@@ -65,24 +65,7 @@ class ArrivedActivity : BaseActivity() {
             }
 
             override fun onMapLoadedCallback(hyperTrackMapFragment: HyperTrackMapFragment?, map: GoogleMap?) {
-                HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
-                    override fun onSuccess(response: SuccessResponse) {
-                        Log.d(TAG, "onSuccess: Current Location Recieved")
-                        mCurrentLocation = HyperTrackLocation(response.responseObject as Location)
-                        mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 14.0f))
-                        mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, mCurrentLocation?.latLng!!))
-                        mPoints.add(mCurrentLocation!!.latLng)
-                        mDestinationPosition = mCurrentLocation!!.latLng
-                        if (checkDestination()) {
-                            arrivedFinish()
-                        }
-                    }
-
-                    override fun onError(errorResponse: ErrorResponse) {
-                        Log.d(TAG, "onError: Current Location Receiving error")
-                        Log.d(TAG, "onError: " + errorResponse.errorMessage)
-                    }
-                })
+                getCurrentLocation()
             }
         })
 
@@ -113,7 +96,9 @@ class ArrivedActivity : BaseActivity() {
         }
 
         imgBtnResetPosition.setOnClickListener {
-            mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng ?: LatLng(resources.getDimension(R.dimen.default_location_latitude).toDouble(), resources.getDimension(R.dimen.default_location_longtitude).toDouble()), 12.0f))
+            if (mCurrentLocation != null) {
+                mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 12f))
+            }
         }
     }
 
@@ -156,10 +141,32 @@ class ArrivedActivity : BaseActivity() {
     }
 
     private fun setOnMapReady() {
+        mGoogleMap?.setPadding(0, 0, 0, 500)
         mGoogleMap?.setMaxZoomPreference(16.9f)
         mGoogleMap?.uiSettings?.isMapToolbarEnabled = false
         mGoogleMap?.uiSettings?.isCompassEnabled = false
         mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, mPoints[0]))
+    }
+
+    private fun getCurrentLocation() {
+        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                Log.d(TAG, "onSuccess: Current Location Recieved")
+                mCurrentLocation = HyperTrackLocation(response.responseObject as Location)
+                mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 14.0f))
+                mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, mCurrentLocation?.latLng!!))
+                mPoints.add(mCurrentLocation!!.latLng)
+                mDestinationPosition = mCurrentLocation!!.latLng
+                if (checkDestination()) {
+                    arrivedFinish()
+                }
+            }
+
+            override fun onError(errorResponse: ErrorResponse) {
+                Log.d(TAG, "onError: Current Location Receiving error")
+                Log.d(TAG, "onError: " + errorResponse.errorMessage)
+            }
+        })
     }
 
     private fun setMarkerOption(resource: Int, position: LatLng): MarkerOptions = MarkerOptions().position(position).
@@ -193,7 +200,7 @@ class ArrivedActivity : BaseActivity() {
 
     private fun checkForLocationSetting() {
         if (!HyperTrack.checkLocationPermission(this)) {
-            HyperTrack.requestLocationServices(this)
+            HyperTrack.requestPermissions(this)
             return
         }
 

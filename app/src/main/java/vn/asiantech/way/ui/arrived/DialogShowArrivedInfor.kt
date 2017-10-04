@@ -24,9 +24,9 @@ class DialogShowArrivedInfor : DialogFragment() {
     private var mAverageSpeed: Double? = null
 
     companion object {
-        val TYPE_TIME = "time"
-        val TYPE_DISTANCE = "distance"
-        val TYPE_AVERAGE_SPEED = "average speed"
+        const val TYPE_TIME = "time"
+        const val TYPE_DISTANCE = "distance"
+        const val TYPE_AVERAGE_SPEED = "average speed"
 
         fun newInstance(time: Long, distance: Double, speedAverage: Double): DialogShowArrivedInfor {
             val dialogShowArrived: DialogShowArrivedInfor = DialogShowArrivedInfor()
