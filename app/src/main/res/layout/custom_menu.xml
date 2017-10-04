@@ -6,8 +6,8 @@
 
     <RelativeLayout
         android:id="@+id/rlCalendar"
-        android:layout_width="140dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:visibility="invisible">
 
         <TextView
@@ -21,20 +21,24 @@
             android:text="@string/calendar_title"
             android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabCalendar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/imgBtnCalendar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
             android:src="@drawable/ic_calendar" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlProfile"
-        android:layout_width="140dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:visibility="invisible">
 
         <TextView
@@ -48,21 +52,25 @@
             android:text="@string/profile_title"
             android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/imgBtnProfile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
             android:src="@drawable/ic_profile" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlShare"
-        android:layout_width="140dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:visibility="invisible">
 
         <TextView
@@ -76,23 +84,33 @@
             android:text="@string/share_title"
             android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/imgBtnShare"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
             android:src="@drawable/ic_share" />
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/imgBtnMenu"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="end"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/custom_menu_button"
+        android:contentDescription="@null"
+        android:padding="10dp"
         android:src="@drawable/ic_menu" />
 
 </LinearLayout>
