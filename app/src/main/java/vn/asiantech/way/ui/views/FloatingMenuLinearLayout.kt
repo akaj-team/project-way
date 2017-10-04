@@ -1,6 +1,8 @@
-package vn.asiantech.way.ui.view
+package vn.asiantech.way.ui.views
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -14,8 +16,9 @@ import vn.asiantech.way.R
  * Custom floating button menu
  * Created by haingoq on 29/09/2017.
  */
-class FloatingButtonMenuLinearLayout : LinearLayout, View.OnClickListener, View.OnTouchListener {
+class FloatingMenuLinearLayout : LinearLayout, View.OnClickListener, View.OnTouchListener {
     constructor(context: Context) : super(context) {
+        initView()
     }
 
     constructor (context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -46,35 +49,33 @@ class FloatingButtonMenuLinearLayout : LinearLayout, View.OnClickListener, View.
                     }
                 })
             }
+            R.id.fabShare -> {
+                // TODO Share location
+            }
+            R.id.fabProfile -> {
+                // TODO Update profile
+            }
+            R.id.fabCalendar -> {
+                // TODO Show calendar
+            }
         }
     }
 
     override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-        when (view?.id) {
-            R.id.fabShare -> {
-                if (event?.action == MotionEvent.ACTION_DOWN) {
-                    tvShare.visibility = View.VISIBLE
-                } else if (event?.action == MotionEvent.ACTION_UP) {
-                    tvShare.visibility = View.GONE
-                }
-                return true
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            when (view?.id) {
+                R.id.fabShare -> tvShare.visibility = View.VISIBLE
+                R.id.fabProfile -> tvProfile.visibility = View.VISIBLE
+                R.id.fabCalendar -> tvCalendar.visibility = View.VISIBLE
             }
-            R.id.fabProfile -> {
-                if (event?.action == MotionEvent.ACTION_DOWN) {
-                    tvProfile.visibility = View.VISIBLE
-                } else if (event?.action == MotionEvent.ACTION_UP) {
-                    tvProfile.visibility = View.GONE
-                }
-                return true
+            return true
+        } else if (event?.action == MotionEvent.ACTION_UP) {
+            when (view?.id) {
+                R.id.fabShare -> tvShare.visibility = View.GONE
+                R.id.fabProfile -> tvProfile.visibility = View.GONE
+                R.id.fabCalendar -> tvCalendar.visibility = View.GONE
             }
-            R.id.fabCalendar -> {
-                if (event?.action == MotionEvent.ACTION_DOWN) {
-                    tvCalendar.visibility = View.VISIBLE
-                } else if (event?.action == MotionEvent.ACTION_UP) {
-                    tvCalendar.visibility = View.GONE
-                }
-                return true
-            }
+            return true
         }
         return false
     }
@@ -86,8 +87,14 @@ class FloatingButtonMenuLinearLayout : LinearLayout, View.OnClickListener, View.
     }
 
     private fun initView() {
-        View.inflate(context, R.layout.custom_menu, this)
+        inflate(context, R.layout.custom_menu, this)
+        fabShare.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        fabProfile.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        fabCalendar.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
         fabMenu.setOnClickListener(this)
+        fabShare.setOnClickListener(this)
+        fabProfile.setOnClickListener(this)
+        fabCalendar.setOnClickListener(this)
         fabShare.setOnTouchListener(this)
         fabProfile.setOnTouchListener(this)
         fabCalendar.setOnTouchListener(this)

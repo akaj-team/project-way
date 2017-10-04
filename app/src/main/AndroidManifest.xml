@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.view.TestActivity">
+        <activity android:name=".ui.views.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
