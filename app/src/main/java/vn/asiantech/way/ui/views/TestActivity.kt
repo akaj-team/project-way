@@ -6,7 +6,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
- *
+ * Test activity
  * Created by haingoq on 29/09/2017.
  */
 class TestActivity: BaseActivity() {
