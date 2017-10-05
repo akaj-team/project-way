@@ -6,8 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import retrofit2.Call
@@ -18,7 +23,6 @@ import vn.asiantech.way.api.APIUtil
 import vn.asiantech.way.api.LocationResponse
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.utils.GPSUtil
-
 
 /**
  * Copyright © AsianTech Co., Ltd

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.RelativeLayout
 import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
