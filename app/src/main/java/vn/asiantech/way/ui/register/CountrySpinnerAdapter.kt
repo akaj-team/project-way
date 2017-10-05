@@ -21,7 +21,7 @@ import kotlin.collections.HashMap
 class CountrySpinnerAdapter(val mContext: Context,
                             val mResource: Int,
                             val mCountries: List<Country>) : ArrayAdapter<Country>(mContext, mResource, mCountries) {
-    var flags: HashMap<String, Bitmap>? = getFlagMap()
+    var mFlags: HashMap<String, Bitmap>? = getFlagMap()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         return getCustomSelectionView(position, parent)
@@ -34,7 +34,7 @@ class CountrySpinnerAdapter(val mContext: Context,
     private fun getCustomDialogView(position: Int, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(mContext).inflate(mResource, parent, false)
         val isoCode: String = mCountries[position].iso
-        view.imgFlag.setImageBitmap(flags?.get(isoCode.plus(".png").toLowerCase()))
+        view.imgFlag.setImageBitmap(mFlags?.get(isoCode.plus(".png").toLowerCase()))
         view.tvCountryName.text = getCountryName(isoCode.toLowerCase())
         return view
     }
@@ -42,7 +42,7 @@ class CountrySpinnerAdapter(val mContext: Context,
     private fun getCustomSelectionView(position: Int, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(mContext).inflate(mResource, parent, false)
         val isoCode: String = mCountries[position].iso
-        view.imgFlag.setImageBitmap(flags?.get(isoCode.plus(".png").toLowerCase()))
+        view.imgFlag.setImageBitmap(mFlags?.get(isoCode.plus(".png").toLowerCase()))
         view.tvCountryName.visibility = View.GONE
         return view
     }
