@@ -76,6 +76,10 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
         rlCalendar.visibility = visibilityState
     }
 
+    /**
+     * Set listener for menu item
+     * @param listener: OnMenuClickListener
+     */
     fun setOnMenuItemClickListener(listener: OnMenuClickListener) {
         mOnMenuClickListener = listener
     }
