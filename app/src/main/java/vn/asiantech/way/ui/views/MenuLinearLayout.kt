@@ -80,10 +80,13 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
      * Set listener for menu item
      * @param listener: OnMenuClickListener
      */
-    fun setOnMenuItemClickListener(listener: OnMenuClickListener) {
+    internal fun setOnMenuItemClickListener(listener: OnMenuClickListener) {
         mOnMenuClickListener = listener
     }
 
+    /**
+     * interface menu click listener
+     */
     interface OnMenuClickListener {
         fun onShareClick()
         fun onProfileClick()
