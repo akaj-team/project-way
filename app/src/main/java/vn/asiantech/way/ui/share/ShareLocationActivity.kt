@@ -71,6 +71,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
 
         }
     }
+
     //TODO: will change code logic in future
     private fun initBottomButtonCard(show: Boolean) {
         bottomButtonCard?.hideCloseButton()
@@ -86,13 +87,15 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
             bottomButtonCard?.showBottomCardLayout()
         }
     }
-    private fun shareLocation(){
-        val sharingIntent= Intent(android.content.Intent.ACTION_SEND)
-        val message="My Location is ${bottomButtonCard.tvURL.text}"
+
+    private fun shareLocation() {
+        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        val message = "My Location is ${bottomButtonCard.tvURL.text}"
         sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,message)
-        startActivityForResult(Intent.createChooser(sharingIntent,"Share via"),200)
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message)
+        startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), 200)
     }
+
     //todo: will update code with base API
     private fun getLocationAddress(latLng: String) {
         service?.getAddressLocation(latLng)?.enqueue(object : Callback<LocationResponse> {

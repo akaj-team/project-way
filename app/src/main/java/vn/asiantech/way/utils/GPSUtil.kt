@@ -1,6 +1,5 @@
 package vn.asiantech.way.utils
 
-import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -15,7 +14,7 @@ import android.util.Log
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 28/09/2017.
  */
-class GPSUtil(var mContext: Context) : Service(), LocationListener {
+class GPSUtil(private var mContext: Context) : Service(), LocationListener {
 
     companion object {
         private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
