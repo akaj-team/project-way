@@ -14,7 +14,8 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: AttributeSet? = null) : RelativeLayout(mContext, attrs) {
+class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: AttributeSet? = null)
+    : RelativeLayout(mContext, attrs) {
     var buttonListener: ButtonListener? = null
     var actionType: ActionType
     // TODO: Will use in future
@@ -29,7 +30,9 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
 //
 //    val isActionTypeShareBackLocation: Boolean
 //        get() = actionType == ActionType.SHARE_BACK_LOCATION
-
+    /**
+     * Enum define for item type
+     */
     enum class ActionType {
         START_TRACKING,
         CONFIRM_LOCATION,
@@ -46,19 +49,19 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
     private fun initiateView() {
         btnClose.setOnRippleCompleteListener {
             if (buttonListener != null) {
-                buttonListener!!.onCloseButtonClick()
+                buttonListener?.onCloseButtonClick()
             }
         }
 
         btnSharing.setOnRippleCompleteListener {
             if (buttonListener != null) {
-                buttonListener!!.onActionButtonClick()
+                buttonListener?.onActionButtonClick()
             }
         }
 
         tvCopyLink.setOnClickListener {
             if (buttonListener != null) {
-                buttonListener!!.onCopyButtonClick()
+                buttonListener?.onCopyButtonClick()
                 tvCopyLink?.isEnabled = false
                 tvCopyLink?.text = context.getString(R.string.textview_text_copied)
             }
@@ -66,11 +69,11 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
     }
 
     internal fun setTitleText(title: String) {
-        this.tvTitle.text = title
+        tvTitle.text = title
         tvTitle.visibility = View.VISIBLE
     }
 
-    fun setDescriptionText(description: String) {
+    internal fun setDescriptionText(description: String) {
         if (HTTextUtils.isEmpty(description)) {
             tvDescription.text = ""
             tvDescription.visibility = View.GONE
@@ -85,21 +88,21 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
 //        btnClose.visibility = View.VISIBLE
 //    }
 
-    fun hideCloseButton() {
+    internal fun hideCloseButton() {
         btnClose.visibility = View.GONE
     }
 
-    fun setShareButtonText(actionText: String) {
+    internal fun setShareButtonText(actionText: String) {
         tvStartShare.visibility = View.VISIBLE
         tvStartShare.text = actionText
     }
 
-    fun showBottomCardLayout() {
+    internal fun showBottomCardLayout() {
         hideProgress()
         btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
-    // TODO: Will use in future
+    // TODO:Will use in future
 
 //    fun hideBottomCardLayout() {
 //        hideProgress()
@@ -120,16 +123,16 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
 //        AnimationUtils.collapse(btnSharing)
 //    }
 
-    fun showActionButton() {
+    internal fun showActionButton() {
         AnimationUtils.expand(btnSharing)
     }
 
-    fun hideProgress() {
+    private fun hideProgress() {
         imgLoader.visibility = View.GONE
         imgLoader.clearAnimation()
     }
 
-    fun showTrackingURLLayout() {
+    internal fun showTrackingURLLayout() {
         AnimationUtils.expand(rlLinkShare)
     }
     // TODO: Will use in future
@@ -141,10 +144,13 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
 //        tvTitle.visibility = View.GONE
 //    }
 
-    fun showTitle() {
+    internal fun showTitle() {
         tvTitle.visibility = View.VISIBLE
     }
 
+    /**
+     * Interface create fun onClickListener for BottomButtonCard
+     */
     interface ButtonListener {
         fun onCloseButtonClick()
 

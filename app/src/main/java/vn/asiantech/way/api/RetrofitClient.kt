@@ -14,7 +14,11 @@ class RetrofitClient {
         const val BASE_URL = "https://maps.googleapis.com/maps/api/"
         var retrofit: Retrofit? = null
         val builder = OkHttpClient.Builder()
-        fun getClient(): Retrofit? {
+        /**
+         * get retrofit
+         * @return Retrofit
+         */
+        internal fun getClient(): Retrofit? {
             if (retrofit == null) {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY

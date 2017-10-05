@@ -6,6 +6,9 @@ package vn.asiantech.way.api
  */
 class APIUtil {
     companion object {
-        fun getService(): ServiceApi? = RetrofitClient.getClient()?.create(ServiceApi::class.java)
+        /**
+         * function use get Service
+         */
+        internal fun getService(): ServiceApi? = RetrofitClient.getClient()?.create(ServiceApi::class.java)
     }
 }

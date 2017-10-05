@@ -9,10 +9,6 @@ import com.hypertrack.lib.HyperTrack
  */
 
 class MyApplication : Application() {
-    companion object {
-        var mInstance: MyApplication? = null
-    }
-
     override fun onCreate() {
         super.onCreate()
         // Initialize HyperTrack SDK
@@ -21,8 +17,4 @@ class MyApplication : Application() {
         HyperTrack.disablePersistentNotification(true)
     }
 
-    @Synchronized
-    fun getInstance(): MyApplication? {
-        return mInstance
-    }
 }
