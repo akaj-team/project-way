@@ -42,6 +42,12 @@ import vn.asiantech.way.ui.base.BaseActivity
 class ArrivedActivity : BaseActivity() {
     companion object {
         val TAG = ArrivedActivity::class.toString()
+        const val TYPE_CAMERA_ZOOM = 12f
+        const val TYPE_MAP_ZOOM = 16.9f
+        const val TYPE_PADDING_BOTTOM = 500
+        const val TYPE_PADDING_TOP = 0
+        const val TYPE_PADDING_RIGHT = 0
+        const val TYPE_PADDING_LEFT = 0
     }
 
     private var mGoogleMap: GoogleMap? = null
@@ -74,15 +80,7 @@ class ArrivedActivity : BaseActivity() {
         }
 
         imgArrowRight.setOnClickListener {
-            imgArrowRight.visibility = View.GONE
-            imgArrowDown.visibility = View.VISIBLE
-            cardViewDetailArrived.visibility = View.VISIBLE
-            tvAverage.visibility = View.GONE
-            tvTraveled.visibility = View.GONE
-            tvElapsed.visibility = View.GONE
-            tvTimeTotal.text = mArrived.time.makeDuration(this)
-            tvDistance.text = mArrived.distance.makeDistance(this)
-            tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
+            showDetailInfor()
         }
 
         imgArrowDown.setOnClickListener {
@@ -96,8 +94,8 @@ class ArrivedActivity : BaseActivity() {
         }
 
         imgBtnResetPosition.setOnClickListener {
-            if (mCurrentLocation != null) {
-                mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 12f))
+            mCurrentLocation?.latLng?.let {
+                mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, TYPE_CAMERA_ZOOM))
             }
         }
     }
@@ -141,8 +139,8 @@ class ArrivedActivity : BaseActivity() {
     }
 
     private fun setOnMapReady() {
-        mGoogleMap?.setPadding(0, 0, 0, 500)
-        mGoogleMap?.setMaxZoomPreference(16.9f)
+        mGoogleMap?.setPadding(TYPE_PADDING_LEFT, TYPE_PADDING_TOP, TYPE_PADDING_RIGHT, TYPE_PADDING_BOTTOM)
+        mGoogleMap?.setMaxZoomPreference(TYPE_MAP_ZOOM)
         mGoogleMap?.uiSettings?.isMapToolbarEnabled = false
         mGoogleMap?.uiSettings?.isCompassEnabled = false
         mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, mPoints[0]))
@@ -152,13 +150,15 @@ class ArrivedActivity : BaseActivity() {
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 Log.d(TAG, "onSuccess: Current Location Recieved")
-                mCurrentLocation = HyperTrackLocation(response.responseObject as Location)
-                mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation?.latLng, 14.0f))
-                mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, mCurrentLocation?.latLng!!))
-                mPoints.add(mCurrentLocation!!.latLng)
-                mDestinationPosition = mCurrentLocation!!.latLng
-                if (checkDestination()) {
-                    arrivedFinish()
+                mCurrentLocation = HyperTrackLocation(response.responseObject as? Location)
+                mCurrentLocation?.latLng?.let {
+                    mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, TYPE_CAMERA_ZOOM))
+                    mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, it))
+                    mPoints.add(it)
+                    mDestinationPosition = it
+                    if (checkDestination()) {
+                        arrivedFinish()
+                    }
                 }
             }
 
@@ -196,6 +196,18 @@ class ArrivedActivity : BaseActivity() {
         val dialog = DialogShowArrivedInfor.newInstance(mArrived.time, mArrived.distance, mArrived.averageSpeed)
         val fragmentManager = supportFragmentManager as? FragmentManager
         dialog.show(fragmentManager, "Dialog Fragment")
+    }
+
+    private fun showDetailInfor() {
+        imgArrowRight.visibility = View.GONE
+        imgArrowDown.visibility = View.VISIBLE
+        cardViewDetailArrived.visibility = View.VISIBLE
+        tvAverage.visibility = View.GONE
+        tvTraveled.visibility = View.GONE
+        tvElapsed.visibility = View.GONE
+        tvTimeTotal.text = mArrived.time.makeDuration(this)
+        tvDistance.text = mArrived.distance.makeDistance(this)
+        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
     }
 
     private fun checkForLocationSetting() {
