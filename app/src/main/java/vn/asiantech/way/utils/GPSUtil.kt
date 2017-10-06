@@ -31,6 +31,9 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
     private var mTurnOnGps: TurnOnGPS? = null
     private var mLocationManager: LocationManager? = null
 
+    /**
+     * Get Current Location
+     */
     fun getCurrentLocation(): Location? {
         if (canGetLocation()) {
             mCanGetLocation = true
@@ -39,43 +42,51 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
                         .getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
                 // getting GPS status
-                mIsGPSEnabled = mLocationManager!!
-                        .isProviderEnabled(LocationManager.GPS_PROVIDER)
+                mLocationManager?.let {
+                    mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                }
 
                 // getting network status
-                mIsNetworkEnabled = mLocationManager!!
-                        .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                mLocationManager?.let {
+                    mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                }
 
                 if (mIsNetworkEnabled) {
-                    mLocationManager!!.requestLocationUpdates(
+                    mLocationManager?.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                    mLocation = mLocationManager!!
-                            .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
+                    mLocationManager?.let {
+                        mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    }
                     if (mLocationManager != null) {
-                        mLocation = mLocationManager!!
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        mLocationManager?.let {
+                            mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        }
                     }
 
                     if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
+                        mLocation?.let {
+                            mLatitude = it.latitude
+                            mLongitude = it.longitude
+                        }
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (mIsGPSEnabled && mLocation == null) {
-                    mLocationManager!!.requestLocationUpdates(
+                    mLocationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                    mLocation = mLocationManager!!
-                            .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    mLocationManager?.let {
+                        mLocation = it.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    }
 
                     if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
+                        mLocation?.let {
+                            mLatitude = it.latitude
+                            mLongitude = it.longitude
+                        }
                     }
                 }
             } catch (e: SecurityException) {
@@ -117,11 +128,10 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
 
     override fun onBind(p0: Intent?): IBinder? = null
 
-
     /**
      * To handler click do not open gps
      */
-    interface TurnOnGPS {
+    internal interface TurnOnGPS {
         fun onChangeLocation(location: Location)
     }
 }
