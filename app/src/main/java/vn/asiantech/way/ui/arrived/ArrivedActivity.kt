@@ -50,6 +50,9 @@ internal class ArrivedActivity : BaseActivity() {
         private const val TYPE_PADDING_TOP = 0
         private const val TYPE_PADDING_RIGHT = 0
         private const val TYPE_PADDING_LEFT = 0
+        private const val TYPE_ANCHOR = 0.5f
+        private const val TYPE_ORIGIN_DEFAULT_LATITUDE = 16.0751387
+        private const val TYPE_ORIGIN_DEFAULT_LONGITUDE = 108.1538494
     }
 
     private var mGoogleMap: GoogleMap? = null
@@ -94,7 +97,7 @@ internal class ArrivedActivity : BaseActivity() {
         }
 
         imgBtnArrowBack.setOnClickListener {
-            //TODO("back to previous screen")
+            //TODO("Back to previous screen")
         }
 
         imgBtnResetPosition.setOnClickListener {
@@ -129,19 +132,19 @@ internal class ArrivedActivity : BaseActivity() {
     }
 
     private fun setArrivedDetail() {
-        //TODO("set for mArrived")
+        //TODO("Set for mArrived")
 //        mArrived.time = 0
 //        mArrived.distance = 0.0
 //        mArrived.averageSpeed = 0.0
     }
 
     private fun configFirst() {
-        //TODO("set for mPoint base on mArrived")
+        //TODO("Set for mPoint base on mArrived")
 //        mArrived.segments.forEach {
 //            mPoints.add(LatLng(it.startLocation.latitude, it.startLocation.longitude))
 //            mPoints.add(LatLng(it.endLocation.latitude, it.endLocation.longitude))
 //        }
-//        mPoints.add(LatLng(16.0751387, 108.1538494))
+        mPoints.add(LatLng(TYPE_ORIGIN_DEFAULT_LATITUDE, TYPE_ORIGIN_DEFAULT_LONGITUDE))
     }
 
     private fun setOnMapReady() {
@@ -181,7 +184,7 @@ internal class ArrivedActivity : BaseActivity() {
     private fun setMarkerOption(resource: Int, position: LatLng): MarkerOptions =
             MarkerOptions().position(position).
                     icon(BitmapDescriptorFactory.fromResource(resource))
-                    .anchor(0.5f, 0.5f)
+                    .anchor(TYPE_ANCHOR, TYPE_ANCHOR)
 
     private fun checkDestination(): Boolean = mCurrentLocation?.latLng?.latitude ==
             mDestinationPosition.latitude
@@ -205,7 +208,7 @@ internal class ArrivedActivity : BaseActivity() {
     }
 
     private fun showDialog() {
-        val dialog = DialogShowArrivedInfor.newInstance(mArrived.time, mArrived.distance,
+        val dialog = DialogShowArrivedInformation.newInstance(mArrived.time, mArrived.distance,
                 mArrived.averageSpeed)
         val fragmentManager = supportFragmentManager as? FragmentManager
         dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))

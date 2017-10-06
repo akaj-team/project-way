@@ -18,7 +18,7 @@ import vn.asiantech.way.extension.makeDuration
  *  Copyright © 2017 AsianTech inc.
  * Created by at-hoavo on 26/09/2017.
  */
-internal class DialogShowArrivedInfor : DialogFragment() {
+internal class DialogShowArrivedInformation : DialogFragment() {
     private var mTime: Long? = null
     private var mDistance: Double? = null
     private var mAverageSpeed: Double? = null
@@ -28,7 +28,7 @@ internal class DialogShowArrivedInfor : DialogFragment() {
         private const val TYPE_DISTANCE = "distance"
         private const val TYPE_AVERAGE_SPEED = "average speed"
         private const val TYPE_UNIT_DIALOG_HEIGHT = 5
-        private const val TYPE_DIALOG_MARGIN_WiDTH = 80
+        private const val TYPE_DIALOG_MARGIN_WIDTH = 80
 
         /**
          *  Create new instance
@@ -37,8 +37,9 @@ internal class DialogShowArrivedInfor : DialogFragment() {
          *  @averageSpeed: Double, averageSpeed to show on dialog
          *  @return Dialog to show detail user tracked
          */
-        internal fun newInstance(time: Long, distance: Double, averageSpeed: Double): DialogShowArrivedInfor {
-            val dialogShowArrived = DialogShowArrivedInfor()
+        internal fun newInstance(time: Long, distance: Double, averageSpeed: Double)
+                : DialogShowArrivedInformation {
+            val dialogShowArrived = DialogShowArrivedInformation()
             val bundle = Bundle()
             bundle.putLong(TYPE_TIME, time)
             bundle.putDouble(TYPE_DISTANCE, distance)
@@ -75,7 +76,7 @@ internal class DialogShowArrivedInfor : DialogFragment() {
         windowParams.copyFrom(dialog.window.attributes)
         windowParams.height = height - height /
                 TYPE_UNIT_DIALOG_HEIGHT
-        windowParams.width = width - TYPE_DIALOG_MARGIN_WiDTH
+        windowParams.width = width - TYPE_DIALOG_MARGIN_WIDTH
         dialog.window.attributes = windowParams
     }
 }
