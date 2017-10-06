@@ -37,7 +37,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 
 /**
  *  Copyright © 2017 AsianTech inc.
- * Created by at-hoavo on 26/09/2017.
+ *  Created by at-hoavo on 26/09/2017.
  */
 internal class ArrivedActivity : BaseActivity() {
     companion object {
@@ -141,7 +141,7 @@ internal class ArrivedActivity : BaseActivity() {
 //            mPoints.add(LatLng(it.startLocation.latitude, it.startLocation.longitude))
 //            mPoints.add(LatLng(it.endLocation.latitude, it.endLocation.longitude))
 //        }
-        mPoints.add(LatLng(16.0751387, 108.1538494))
+//        mPoints.add(LatLng(16.0751387, 108.1538494))
     }
 
     private fun setOnMapReady() {
