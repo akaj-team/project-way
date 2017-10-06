@@ -34,7 +34,7 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
      * Get Current Location
      * @return location your location
      */
-    fun getCurrentLocation(): Location? {
+    internal fun getCurrentLocation(): Location? {
         if (canGetLocation()) {
             mCanGetLocation = true
             try {
@@ -98,14 +98,10 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
         return mLocation
     }
 
-    /**
-     * Function to check GPS/wifi enabled
-     *
-     * @return boolean
-     */
     private fun canGetLocation(): Boolean {
         mLocationManager = mContext
                 .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        // Check GPS/Wifi enabled
         mLocationManager?.let {
             mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
             mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
