@@ -9,6 +9,6 @@
     <color name="colorBlack">#000000</color>
     <color name="light_orange">#FC6400</color>
     <color name="pink">#FF065D</color>
-    <color name="low_light_gray">#19d6d6d6</color>
-    <color name="low_gray">#19e9e9e9</color>
+    <color name="grayLowLight">#19d6d6d6</color>
+    <color name="grayLow">#19e9e9e9</color>
 </resources>

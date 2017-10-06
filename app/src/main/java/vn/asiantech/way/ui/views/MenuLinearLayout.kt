@@ -39,6 +39,7 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
                 }
                 animInvisible.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationRepeat(p0: Animation?) {
+                        // No-op
                     }
 
                     override fun onAnimationEnd(p0: Animation?) {
@@ -46,6 +47,7 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
                     }
 
                     override fun onAnimationStart(p0: Animation?) {
+                        // No-op
                     }
                 })
             }
@@ -85,7 +87,7 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
     }
 
     /**
-     * interface menu click listener
+     * Interface menu click listener
      */
     interface OnMenuClickListener {
         fun onShareClick()

@@ -8,14 +8,14 @@
         android:top="3dp">
         <shape android:shape="oval">
             <!--shadow Color-->
-            <solid android:color="@color/low_light_gray" />
+            <solid android:color="@color/grayLowLight" />
         </shape>
     </item>
 
     <item>
         <shape android:shape="oval">
             <!--shadow Color-->
-            <solid android:color="@color/low_gray" />
+            <solid android:color="@color/grayLow" />
         </shape>
     </item>
 
