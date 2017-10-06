@@ -10,8 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.os.Build
 import vn.asiantech.way.ui.base.BaseActivity
 
-
-class MapActivity : BaseActivity() {
+internal class MapActivity : BaseActivity() {
     private companion object {
         private const val REQUESTCODE_PERMISSION = 200
         private const val VERSION_SDK = 23
@@ -34,9 +33,6 @@ class MapActivity : BaseActivity() {
         supportFragmentManager.executePendingTransactions()
     }
 
-    /**
-     * Method use check permission
-     */
     private fun askPermissionsAccessLocation() {
         // Ask for permission with API >= 23
         if (Build.VERSION.SDK_INT >= VERSION_SDK) {

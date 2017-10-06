@@ -14,11 +14,11 @@ import android.util.Log
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 06/10/2017.
  */
-class GPSUtil(private val mContext: Context) : LocationListener, Service() {
+internal class GPSUtil(private val mContext: Context) : LocationListener, Service() {
 
-    companion object {
-        private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
-        private val MIN_TIME_BW_UPDATES: Long = 1000L
+    private companion object {
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
+        private const val MIN_TIME_BW_UPDATES: Long = 1000L
         private val TAG = GPSUtil::class.java.simpleName
     }
 
@@ -30,6 +30,7 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
     private var mLocation: Location? = null
     private var mTurnOnGps: TurnOnGPS? = null
     private var mLocationManager: LocationManager? = null
+
     /**
      * Get Current Location
      * @return location your location
@@ -123,8 +124,6 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
     override fun onProviderDisabled(p0: String?) {}
 
     override fun onBind(p0: Intent?): IBinder? = null
-
-
     /**
      * To handler click do not open gps
      */

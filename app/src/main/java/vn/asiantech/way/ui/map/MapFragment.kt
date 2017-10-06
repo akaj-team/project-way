@@ -17,7 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_map.*
+import kotlinx.android.synthetic.main.fragment_map.map
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.utils.GPSUtil
@@ -26,7 +26,11 @@ import vn.asiantech.way.utils.GPSUtil
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 06/10/2017.
  */
-class MapFragment : Fragment(), OnMapReadyCallback {
+internal class MapFragment : Fragment(), OnMapReadyCallback {
+    private companion object {
+        private const val LEVEL_ZOOM = 16f
+    }
+
     private var mGoogleMap: GoogleMap? = null
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -62,7 +66,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     .draggable(true)
                     .title(getString(R.string.marker_title)))
                     ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
-            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, LEVEL_ZOOM))
         } else {
             activity.toast(getString(R.string.toast_text_google_map_null))
         }
