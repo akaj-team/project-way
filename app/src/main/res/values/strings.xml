@@ -6,5 +6,11 @@
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
+    <string name="toast_text_google_map_null">Google map is null</string>
+    <string name="dialog_message_enable_gps">App need GPS.Do you want enable your GPS?</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="marker_title">Current location</string>
+    <string name="toast_text_location_null">Not update current location!</string>
 
 </resources>

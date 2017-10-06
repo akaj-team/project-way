@@ -10,7 +10,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,11 +37,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (location != null) {
             drawMaker(location)
         } else {
-            activity.toast("Not update current location!")
+            activity.toast(getString(R.string.toast_text_location_null))
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?
+                              , savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -49,37 +53,31 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.getMapAsync(this)
     }
 
-    /**
-     * Draw current marker
-     */
     private fun drawMaker(location: android.location.Location) {
         if (mGoogleMap != null) {
-            mGoogleMap!!.clear()
+            mGoogleMap?.clear()
             val currentLocation = LatLng(location.latitude, location.longitude)
-            mGoogleMap!!.addMarker(MarkerOptions()
+            mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
-                    .title("Current location"))
-                    .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
-            mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+                    .title(getString(R.string.marker_title)))
+                    ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
         } else {
-            activity.toast("Google map is null")
+            activity.toast(getString(R.string.toast_text_google_map_null))
         }
     }
 
-    /**
-     * Check your GPS enable
-     */
     private fun checkGPS() {
         val manager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             val builder = AlertDialog.Builder(activity)
-            builder.setMessage("App need GPS.Do you want enable your GPS?")
-                    .setPositiveButton("OK") { dialogInterface, _ ->
+            builder.setMessage(getString(R.string.dialog_message_enable_gps))
+                    .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
                         activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         dialogInterface.dismiss()
                     }
-                    .setNegativeButton("Cancel") { dialogInterface, _ ->
+                    .setNegativeButton(getString(R.string.dialog_button_cancel)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
             builder.create().show()
@@ -92,7 +90,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (location != null) {
             drawMaker(location)
         } else {
-            activity.toast("Not update current location!")
+            activity.toast(getString(R.string.toast_text_location_null))
         }
     }
 }

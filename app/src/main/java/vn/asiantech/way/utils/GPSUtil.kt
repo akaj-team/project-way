@@ -30,7 +30,10 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
     private var mLocation: Location? = null
     private var mTurnOnGps: TurnOnGPS? = null
     private var mLocationManager: LocationManager? = null
-
+    /**
+     * Get Current Location
+     * @return location your location
+     */
     fun getCurrentLocation(): Location? {
         if (canGetLocation()) {
             mCanGetLocation = true
@@ -39,43 +42,51 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
                         .getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
                 // getting GPS status
-                mIsGPSEnabled = mLocationManager!!
-                        .isProviderEnabled(LocationManager.GPS_PROVIDER)
+                mLocationManager?.let {
+                    mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                }
 
                 // getting network status
-                mIsNetworkEnabled = mLocationManager!!
-                        .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                mLocationManager?.let {
+                    mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                }
 
                 if (mIsNetworkEnabled) {
-                    mLocationManager!!.requestLocationUpdates(
+                    mLocationManager?.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                    mLocation = mLocationManager!!
-                            .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
+                    mLocationManager?.let {
+                        mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    }
                     if (mLocationManager != null) {
-                        mLocation = mLocationManager!!
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        mLocationManager?.let {
+                            mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        }
                     }
 
                     if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
+                        mLocation?.let {
+                            mLatitude = it.latitude
+                            mLongitude = it.longitude
+                        }
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (mIsGPSEnabled && mLocation == null) {
-                    mLocationManager!!.requestLocationUpdates(
+                    mLocationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                    mLocation = mLocationManager!!
-                            .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    mLocationManager?.let {
+                        mLocation = it.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    }
 
                     if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
+                        mLocation?.let {
+                            mLatitude = it.latitude
+                            mLongitude = it.longitude
+                        }
                     }
                 }
             } catch (e: SecurityException) {
@@ -95,17 +106,17 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
     private fun canGetLocation(): Boolean {
         mLocationManager = mContext
                 .getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        mIsGPSEnabled = mLocationManager!!
-                .isProviderEnabled(LocationManager.GPS_PROVIDER)
-        mIsNetworkEnabled = mLocationManager!!
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        mLocationManager?.let {
+            mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        }
         this.mCanGetLocation = !(!mIsGPSEnabled && !mIsNetworkEnabled)
         return this.mCanGetLocation
     }
 
     override fun onLocationChanged(location: Location) {
         if (mTurnOnGps != null) {
-            mTurnOnGps!!.onChangeLocation(location)
+            mTurnOnGps?.onChangeLocation(location)
         }
     }
 
@@ -121,7 +132,7 @@ class GPSUtil(private val mContext: Context) : LocationListener, Service() {
     /**
      * To handler click do not open gps
      */
-    interface TurnOnGPS {
+    internal interface TurnOnGPS {
         fun onChangeLocation(location: Location)
     }
 }
