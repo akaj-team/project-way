@@ -8,6 +8,8 @@
     <dimen name="splash_buttonEnable_marginButton">20dp</dimen>
     <dimen name="splash_buttonEnaleButton_padding">20dp</dimen>
     <dimen name="splash_progressBar_margin_bottom">20dp</dimen>
+
+    <!--Arrived screen-->
     <dimen name="width_dialog">500dp</dimen>
     <dimen name="height_dialog">300dp</dimen>
     <dimen name="text_size_normal">20dp</dimen>
@@ -19,6 +21,6 @@
     <dimen name="width_fragment">400dp</dimen>
     <dimen name="height_fragment">600dp</dimen>
     <dimen name="arrived_show_result_height">100dp</dimen>
-    <item name="default_location_latitude" type="dimen" format="float">16.0804598</item>
-    <item name="default_location_longtitude" type="dimen" format="float">108.2385744</item>
+    <dimen name="width_circular_seekBar">50dp</dimen>
+    <dimen name="circle_stroke_width">3dp</dimen>
 </resources>

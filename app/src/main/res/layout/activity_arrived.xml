@@ -55,8 +55,8 @@
                 android:id="@+id/llShowResult"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/arrived_show_result_height"
-                android:visibility="visible"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -66,14 +66,14 @@
 
                     <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
                         android:id="@+id/progressBarCircular"
-                        android:layout_width="50dp"
+                        android:layout_width="@dimen/width_circular_seekBar"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_margin="10dp"
                         android:rotation="90"
-                        app:circle_color="#ddd"
+                        app:circle_color="@color/colorWhite"
                         app:circle_progress_color="@color/violet"
-                        app:circle_stroke_width="3dp"
+                        app:circle_stroke_width="@dimen/circle_stroke_width"
                         app:lock_enabled="true"
                         app:max="100"
                         app:progress="100" />
@@ -143,14 +143,14 @@
 
                     <ImageView
                         android:id="@+id/imgArrowDown"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="25dp"
                         android:background="@drawable/ic_keyboard_arrow_down_black_18dp"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
             </LinearLayout>

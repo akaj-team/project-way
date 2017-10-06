@@ -3,5 +3,6 @@
     android:id="@+id/cardViewDetailArrived"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <include layout="@layout/show_detail_arrived"/>
+
+    <include layout="@layout/show_detail_arrived" />
 </android.support.v7.widget.CardView>

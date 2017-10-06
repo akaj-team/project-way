@@ -10,30 +10,39 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.dialog_show_arrived_infor.*
 import kotlinx.android.synthetic.main.show_detail_arrived.view.*
 import vn.asiantech.way.R
-import vn.asiantech.way.extensions.makeAverageSpeed
-import vn.asiantech.way.extensions.makeDistance
-import vn.asiantech.way.extensions.makeDuration
+import vn.asiantech.way.extension.makeAverageSpeed
+import vn.asiantech.way.extension.makeDistance
+import vn.asiantech.way.extension.makeDuration
 
 /**
  *  Copyright © 2017 AsianTech inc.
  * Created by at-hoavo on 26/09/2017.
  */
-class DialogShowArrivedInfor : DialogFragment() {
+internal class DialogShowArrivedInfor : DialogFragment() {
     private var mTime: Long? = null
     private var mDistance: Double? = null
     private var mAverageSpeed: Double? = null
 
     companion object {
-        const val TYPE_TIME = "time"
-        const val TYPE_DISTANCE = "distance"
-        const val TYPE_AVERAGE_SPEED = "average speed"
+        private const val TYPE_TIME = "time"
+        private const val TYPE_DISTANCE = "distance"
+        private const val TYPE_AVERAGE_SPEED = "average speed"
+        private const val TYPE_UNIT_DIALOG_HEIGHT = 5
+        private const val TYPE_DIALOG_MARGIN_WiDTH = 80
 
-        fun newInstance(time: Long, distance: Double, speedAverage: Double): DialogShowArrivedInfor {
-            val dialogShowArrived: DialogShowArrivedInfor = DialogShowArrivedInfor()
-            val bundle: Bundle = Bundle()
+        /**
+         *  Create new instance
+         *  @param time: Long, time to show on dialog
+         *  @param distance: Double , distance to show on dialog
+         *  @averageSpeed: Double, averageSpeed to show on dialog
+         *  @return Dialog to show detail user tracked
+         */
+        internal fun newInstance(time: Long, distance: Double, averageSpeed: Double): DialogShowArrivedInfor {
+            val dialogShowArrived = DialogShowArrivedInfor()
+            val bundle = Bundle()
             bundle.putLong(TYPE_TIME, time)
             bundle.putDouble(TYPE_DISTANCE, distance)
-            bundle.putDouble(TYPE_AVERAGE_SPEED, speedAverage)
+            bundle.putDouble(TYPE_AVERAGE_SPEED, averageSpeed)
             dialogShowArrived.arguments = bundle
             return dialogShowArrived
         }
@@ -64,8 +73,9 @@ class DialogShowArrivedInfor : DialogFragment() {
         val height = displayMetrics.heightPixels
         val windowParams = WindowManager.LayoutParams()
         windowParams.copyFrom(dialog.window.attributes)
-        windowParams.height = height - (height / 5)
-        windowParams.width = width - 80
+        windowParams.height = height - height /
+                TYPE_UNIT_DIALOG_HEIGHT
+        windowParams.width = width - TYPE_DIALOG_MARGIN_WiDTH
         dialog.window.attributes = windowParams
     }
 }
