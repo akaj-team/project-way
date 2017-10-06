@@ -46,14 +46,16 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         googleMap = map
         // Add a marker in Sydney and move the camera
         val myLocation = GPSUtil(this).getCurrentLocation()
-        val myLaLng = LatLng(myLocation!!.latitude, myLocation.longitude)
+        val myLaLng = myLocation?.latitude?.let { LatLng(it, myLocation.longitude) }
         val cameraMove = CameraUpdateFactory.newLatLngZoom(
                 myLaLng, 16f)
-        googleMap?.addMarker(MarkerOptions().position(myLaLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
-                .anchor(0.5f, 0.5f))
+        googleMap?.addMarker(myLaLng?.let {
+            MarkerOptions().position(it)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
+                    .anchor(0.5f, 0.5f)
+        })
         googleMap?.animateCamera(cameraMove)
-        getLocationAddress("${myLaLng.latitude},${myLaLng.longitude}")
+        getLocationAddress("${myLaLng?.latitude},${myLaLng?.longitude}")
 
     }
 
@@ -104,13 +106,15 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
     private fun getLocationAddress(latLng: String) {
         service?.getAddressLocation(latLng)?.enqueue(object : Callback<LocationResponse> {
             override fun onResponse(call: Call<LocationResponse>?, response: Response<LocationResponse>?) {
-                if (!response!!.isSuccessful) {
+                response?.isSuccessful?.let {
+                    if (!it) {
+                        return
+                    }
+                }
+                if ("INVALID_REQUEST" == response?.body()?.status) {
                     return
                 }
-                if ("INVALID_REQUEST" == response.body()?.status) {
-                    return
-                }
-                val locations = response.body()?.results
+                val locations = response?.body()?.results
                 val address = locations?.get(0)
                 tvAddress.text = address?.address
                 tvAddress.setTextColor(Color.BLACK)

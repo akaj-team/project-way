@@ -98,25 +98,21 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
         return mLocation
     }
 
-    /**
-     * Function to check GPS/wifi enabled
-     *
-     * @return boolean
-     */
     private fun canGetLocation(): Boolean {
         mLocationManager = mContext
                 .getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        mIsGPSEnabled = mLocationManager!!
-                .isProviderEnabled(LocationManager.GPS_PROVIDER)
-        mIsNetworkEnabled = mLocationManager!!
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        // Check GPS/Wifi
+        mLocationManager?.let {
+            mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        }
         this.mCanGetLocation = !(!mIsGPSEnabled && !mIsNetworkEnabled)
         return this.mCanGetLocation
     }
 
     override fun onLocationChanged(location: Location) {
         if (mTurnOnGps != null) {
-            mTurnOnGps!!.onChangeLocation(location)
+            mTurnOnGps?.onChangeLocation(location)
         }
     }
 
