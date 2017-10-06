@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
@@ -55,6 +55,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_margin="20dp"
+            android:layout_toEndOf="@id/tvTitle"
+            android:layout_toRightOf="@id/tvTitle"
             android:contentDescription="@null"
             android:src="@drawable/ic_ht_edit_expected_place" />
     </RelativeLayout>
