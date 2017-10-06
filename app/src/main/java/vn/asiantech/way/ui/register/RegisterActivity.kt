@@ -46,8 +46,8 @@ import java.io.ByteArrayOutputStream
 class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         , View.OnClickListener, TextWatcher {
     companion object {
-        const private val REQUEST_CODE_PICK_IMAGE = 1001
-        const private val REQUEST_CODE_GALLERY = 500
+        private const val REQUEST_CODE_PICK_IMAGE = 1001
+        private const val REQUEST_CODE_GALLERY = 500
     }
 
     var mBitmap: Bitmap? = null
@@ -60,9 +60,9 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        initView()
+        initListener()
         mCountries = getCountries(readJsonFromDirectory())
-        mIsoCode = resources.getString(R.string.iso_code_default)
+        mIsoCode = getString(R.string.iso_code_default)
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
@@ -115,9 +115,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun afterTextChanged(p0: Editable?) {
+        // No-op
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        // No-op
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -128,10 +130,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 || (mPreviousName?.trim() == name
                 && mPreviousPhone?.removeRange(0, 3) == phone
                 && mTel == tel)) {
-            tvCancel.text = resources.getString(R.string.skip)
+            tvCancel.text = getString(R.string.skip)
             btnSave.isEnabled = false
         } else {
-            tvCancel.text = resources.getString(R.string.cancel)
+            tvCancel.text = getString(R.string.cancel)
             btnSave.isEnabled = true
         }
     }
@@ -143,7 +145,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 .setPhone(mIsoCode?.plus("/")?.plus(phoneNumber))
                 .setLookupId(phoneNumber)
 
-        //create new user
+        // Create new user
         if (mPreviousPhone != phoneNumber) {
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
@@ -156,7 +158,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 }
             })
         } else {
-            // update user information
+            // Update user information
             HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
@@ -188,9 +190,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private fun updateView(user: User?) {
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                // No-op
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
+                // No-op
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -206,7 +210,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         edtName.setText(user?.name)
         val basePhone: List<String>? = user?.phone?.split("/")
         if (basePhone!!.size > 1) {
-            //set isoCode
+            // Set isoCode
             mIsoCode = basePhone[0]
             for (i in 0..mCountries.size - 1) {
                 if (mIsoCode == mCountries[i].iso) {
@@ -261,7 +265,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun initView() {
+    private fun initListener() {
         edtName.setOnEditorActionListener(this)
         edtName.addTextChangedListener(this)
         edtPhoneNumber.setOnEditorActionListener(this)
@@ -274,17 +278,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
         spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                // No-op
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                tvTel.text = resources.getString(R.string.plus).plus(mCountries[position].tel)
+                tvTel.text = getString(R.string.plus).plus(mCountries[position].tel)
                 mIsoCode = mCountries[position].iso
             }
         }
     }
 
     /**
-     * read file json from raw directory
+     * Read file json from raw directory
      */
     private fun readJsonFromDirectory(): String {
         val iStream = resources.openRawResource(R.raw.countries)

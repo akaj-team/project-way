@@ -10,7 +10,7 @@ import android.view.inputmethod.InputMethodManager
 class Utils {
     companion object {
         /**
-         * method to hide keyboard
+         * Method to hide keyboard
          */
         fun hideKeyboard(context: Context, view: View) {
             val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

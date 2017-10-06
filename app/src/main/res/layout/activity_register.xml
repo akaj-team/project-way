@@ -1,151 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/frAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp">
 
-        <FrameLayout
-            android:id="@+id/frAvatar"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_default_avatar"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="56dp">
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_profile_camera"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp" />
+    </FrameLayout>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgAvatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/ic_default_avatar"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp" />
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frAvatar"
+        android:layout_marginLeft="@dimen/margin_xxhigh"
+        android:layout_marginRight="@dimen/margin_xxhigh"
+        android:layout_marginTop="@dimen/margin_xhigh"
+        android:gravity="center"
+        android:text="@string/register_description"
+        android:textSize="16dp" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/ic_profile_camera"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp" />
-        </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/rlInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescription"
+        android:layout_marginBottom="@dimen/margin_huge"
+        android:layout_marginLeft="@dimen/margin_high"
+        android:layout_marginRight="@dimen/margin_high"
+        android:layout_marginTop="@dimen/margin_high"
+        android:background="@drawable/custom_layout_phone"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:gravity="center">
 
-        <TextView
-            android:id="@+id/tvDescription"
+        <EditText
+            android:id="@+id/edtName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/frAvatar"
-            android:layout_marginLeft="@dimen/margin_xxhigh"
-            android:layout_marginRight="@dimen/margin_xxhigh"
-            android:layout_marginTop="@dimen/margin_xhigh"
+            android:layout_height="60dp"
+            android:background="@android:color/transparent"
             android:gravity="center"
-            android:text="@string/register_description"
-            android:textSize="16dp" />
+            android:hint="@string/register_hint_name"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
 
-        <RelativeLayout
-            android:id="@+id/rlInformation"
+        <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDescription"
-            android:layout_marginBottom="@dimen/margin_huge"
-            android:layout_marginLeft="@dimen/margin_high"
-            android:layout_marginRight="@dimen/margin_high"
-            android:layout_marginTop="@dimen/margin_high"
-            android:background="@drawable/custom_layout_phone"
-            android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true"
-            android:gravity="center">
+            android:layout_height="1dp"
+            android:layout_below="@id/edtName"
+            android:background="@color/light_gray" />
+
+        <LinearLayout
+            android:id="@+id/llPhone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/view"
+            android:orientation="horizontal"
+            android:paddingEnd="40dp"
+            android:paddingStart="40dp">
+
+            <Spinner
+                android:id="@+id/spinnerNation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:spinnerMode="dialog" />
+
+            <TextView
+                android:id="@+id/tvTel"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:gravity="start|center_vertical"
+                android:textSize="16dp"
+                tools:text="+84" />
 
             <EditText
-                android:id="@+id/edtName"
+                android:id="@+id/edtPhoneNumber"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:gravity="center"
-                android:hint="@string/register_hint_name"
-                android:imeOptions="actionNext"
-                android:inputType="text" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/edtName"
-                android:background="@color/light_gray" />
-
-            <LinearLayout
-                android:id="@+id/llPhone"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@+id/view"
-                android:orientation="horizontal"
-                android:paddingEnd="40dp"
-                android:paddingStart="40dp">
-
-                <Spinner
-                    android:id="@+id/spinnerNation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:spinnerMode="dialog" />
-
-                <TextView
-                    android:id="@+id/tvTel"
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:gravity="start|center_vertical"
-                    android:textSize="16dp"
-                    tools:text="+84" />
-
-                <EditText
-                    android:id="@+id/edtPhoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:gravity="start|center_vertical"
-                    android:hint="@string/register_hint_phone"
-                    android:imeOptions="actionDone"
-                    android:inputType="phone"
-                    android:textSize="16dp" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rlInformation"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_button_save"
-            android:enabled="false"
-            android:text="@string/register_button_save_text"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="19dp" />
-
-        <TextView
-            android:id="@+id/tvCancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btnSave"
-            android:textSize="16dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="@string/skip" />
+                android:gravity="start|center_vertical"
+                android:hint="@string/register_hint_phone"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:textSize="16dp" />
+        </LinearLayout>
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlInformation"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_button_save"
+        android:enabled="false"
+        android:text="@string/register_button_save_text"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="19dp" />
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSave"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/skip"
+        android:textSize="16dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:visibility="gone" />
-</FrameLayout>
+</RelativeLayout>
