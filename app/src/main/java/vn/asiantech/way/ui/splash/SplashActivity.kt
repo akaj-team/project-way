@@ -87,7 +87,7 @@ class SplashActivity : BaseActivity() {
                     progressBar.visibility = View.VISIBLE
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
-                    //TODO: intent to login screen
+                    //TODO: intent to login screen a
 
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
