@@ -48,7 +48,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         if (location != null) {
             drawMaker(location)
         } else {
-            toast("Not update current location!")
+            toast("Do not update the current location!")
         }
     }
 
@@ -62,28 +62,28 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initMap() {
-        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap) as SupportMapFragment
-        supportMapFragment.getMapAsync(this)
+        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap) as? SupportMapFragment
+        supportMapFragment?.getMapAsync(this)
     }
 
     private fun setPaddingGoogleLogo() {
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        mGoogleMap!!.setPadding(0, 0, 0, size.y / 3)
+        mGoogleMap?.setPadding(0, 0, 0, size.y / 3)
     }
 
     private fun drawMaker(location: android.location.Location) {
         if (mGoogleMap != null) {
-            mGoogleMap!!.clear()
+            mGoogleMap?.clear()
             val currentLocation = LatLng(location.latitude, location.longitude)
-            mGoogleMap!!.addMarker(MarkerOptions()
+            mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
                     .title("Current location"))
-                    .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-            mGoogleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+                    ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
         } else {
             toast("Google map is null")
         }
@@ -98,11 +98,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         mHomeAdapter = HomeAdapter(locations) {
             if (mPosition >= 0) {
                 locations[mPosition].isChoose = false
-                mHomeAdapter!!.notifyItemChanged(mPosition)
+                mHomeAdapter?.notifyItemChanged(mPosition)
             }
             mPosition = it
             locations[it].isChoose = true
-            mHomeAdapter!!.notifyItemChanged(it)
+            mHomeAdapter?.notifyItemChanged(it)
             recycleViewLocation.scrollToPosition(it + 1)
         }
         recycleViewLocation.layoutManager = LinearLayoutManager(this)

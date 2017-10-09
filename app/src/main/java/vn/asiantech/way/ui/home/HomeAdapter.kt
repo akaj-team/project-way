@@ -16,14 +16,13 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): HomeViewHolder {
-        val inflater = LayoutInflater.from(parent!!.context)
+        val inflater = LayoutInflater.from(parent?.context)
         val itemView = inflater.inflate(R.layout.item_recyclerview_location, parent, false)
         return HomeViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder?, position: Int) {
-        val homeViewHolder = holder as HomeViewHolder
-        homeViewHolder.bindHomeViewHolder(locations[position])
+        holder?.bindHomeViewHolder(locations[position])
     }
 
     override fun getItemCount(): Int {
@@ -35,12 +34,11 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
      */
     inner class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindHomeViewHolder(location: Location) {
+        internal fun bindHomeViewHolder(location: Location) {
             with(location) {
                 itemView.tvTime.text = time
                 itemView.tvStatus.text = status
                 itemView.expTvDescription.text = description
-
                 itemView.expTvDescription.post {
                     if (location.isChoose) {
                         if (itemView.expTvDescription.lineCount > 1) {
