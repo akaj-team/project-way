@@ -23,7 +23,7 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
         val apiService = RetrofitClient.getAPIService()
         val query = p0[0]
         if (query != null) {
-            apiService.getLocation(p0[0]!!, API_KEY)
+            apiService.getLocation(query, API_KEY)
                     .enqueue(object : Callback<APIResult> {
                         override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
                             myLocations = response?.body()?.results
