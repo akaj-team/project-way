@@ -96,7 +96,7 @@ class LocationUtil(private val mContext: Context) : LocationListener {
     interface TurnOnGPS {
 
         /**
-         * Get location when location change
+         * Update the current location
          */
         fun onChangeLocation(location: Location)
     }
