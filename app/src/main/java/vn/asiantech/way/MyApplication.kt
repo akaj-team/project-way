@@ -16,5 +16,4 @@ class MyApplication : Application() {
         HyperTrack.enableMockLocations(true)
         HyperTrack.disablePersistentNotification(true)
     }
-
 }

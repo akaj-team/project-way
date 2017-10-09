@@ -152,10 +152,19 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
      * Interface create fun onClickListener for BottomButtonCard
      */
     interface ButtonListener {
+        /**
+         * Button close click listener
+         */
         fun onCloseButtonClick()
 
+        /**
+         * Button share click listener
+         */
         fun onActionButtonClick()
 
+        /**
+         * Button copy link click listener
+         */
         fun onCopyButtonClick()
     }
 }

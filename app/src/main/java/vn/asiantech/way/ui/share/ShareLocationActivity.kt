@@ -35,8 +35,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_location)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
         initializeUIViews()
         onClickButtonSearchLocation()
         initBottomButtonCard(true)

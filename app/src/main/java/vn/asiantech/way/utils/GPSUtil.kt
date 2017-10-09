@@ -39,7 +39,7 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
             mCanGetLocation = true
             try {
                 mLocationManager = mContext
-                        .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                        .getSystemService(Context.LOCATION_SERVICE) as? LocationManager
 
                 // getting GPS status
                 mLocationManager?.let {
@@ -100,7 +100,7 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
 
     private fun canGetLocation(): Boolean {
         mLocationManager = mContext
-                .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                .getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         // Check GPS/Wifi
         mLocationManager?.let {
             mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -128,6 +128,9 @@ class GPSUtil(private var mContext: Context) : Service(), LocationListener {
      * To handler click do not open gps
      */
     internal interface TurnOnGPS {
+        /**
+         * Check current location
+         */
         fun onChangeLocation(location: Location)
     }
 }
