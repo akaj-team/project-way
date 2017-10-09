@@ -100,7 +100,7 @@ class SearchLocationActivity : BaseActivity() {
         mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
                 saveSearchHistory(myLocation)
-                // TODO: Call to ShareLocationActivity - atToanNguyen
+                // TODO: Call to ShareLocationActivity - atToanNguyen.
             }
 
         })
