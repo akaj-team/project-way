@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.util.GPSUtil
+import vn.asiantech.way.util.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,7 +44,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         mGoogleMap = googleMap
         setPaddingGoogleLogo()
-        val location = GPSUtil(this).getCurrentLocation()
+        val location = LocationUtil(this).getCurrentLocation()
         if (location != null) {
             drawMaker(location)
         } else {
@@ -110,8 +110,8 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initDummyData(locations: ArrayList<Location>) {
-        locations.add(Location("1:00 PM", "Stop", "30 minutes| If you want to go market, you can turn left and go straight!!!!!!!"))
-        locations.add(Location("2:00 PM", "Drive", "50 minutes|If you want to go market, you can turn left and go straight!!!!!!!"))
+        locations.add(Location("1:00 PM", "Stop", "30 minutes| You went to market"))
+        locations.add(Location("2:00 PM", "Drive", "50 minutes|You went to market"))
         locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km"))
         locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km"))
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))

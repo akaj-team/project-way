@@ -11,16 +11,14 @@ import android.util.Log
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 29/09/2017.
  */
-class GPSUtil(private val mContext: Context) : LocationListener {
+class LocationUtil(private val mContext: Context) : LocationListener {
 
     companion object {
-        private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 5L
-        private val MIN_TIME_BW_UPDATES: Long = 1000L
-        private val TAG = GPSUtil::class.java.simpleName
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 5L
+        private const val MIN_TIME_BW_UPDATES = 1000L
+        private const val TAG = "Error"
     }
 
-    private var mLatitude = 0.toDouble()
-    private var mLongitude = 0.toDouble()
     private var mIsGPSEnabled = false
     private var mCanGetLocation = false
     private var mIsNetworkEnabled = false
@@ -45,34 +43,15 @@ class GPSUtil(private val mContext: Context) : LocationListener {
 
                 if (mIsNetworkEnabled) {
                     mLocationManager!!.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
+                            LocationManager.NETWORK_PROVIDER
+                            , MIN_TIME_BW_UPDATES
+                            , MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
                     mLocation = mLocationManager!!
                             .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
                     if (mLocationManager != null) {
                         mLocation = mLocationManager!!
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                    }
-
-                    if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
-                    }
-                }
-                // if GPS Enabled get lat/long using GPS Services
-                if (mIsGPSEnabled && mLocation == null) {
-                    mLocationManager!!.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                    mLocation = mLocationManager!!
-                            .getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-                    if (mLocation != null) {
-                        mLatitude = mLocation!!.latitude
-                        mLongitude = mLocation!!.longitude
                     }
                 }
             } catch (e: SecurityException) {
@@ -96,8 +75,8 @@ class GPSUtil(private val mContext: Context) : LocationListener {
                 .isProviderEnabled(LocationManager.GPS_PROVIDER)
         mIsNetworkEnabled = mLocationManager!!
                 .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        this.mCanGetLocation = !(!mIsGPSEnabled && !mIsNetworkEnabled)
-        return this.mCanGetLocation
+        mCanGetLocation = !(!mIsGPSEnabled && !mIsNetworkEnabled)
+        return mCanGetLocation
     }
 
     override fun onLocationChanged(location: Location) {
@@ -113,7 +92,7 @@ class GPSUtil(private val mContext: Context) : LocationListener {
     override fun onProviderDisabled(p0: String?) {}
 
     /**
-     * To handler click do not open gps
+     * To handler click do not open GPS
      */
     interface TurnOnGPS {
         fun onChangeLocation(location: Location)

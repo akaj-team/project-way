@@ -12,7 +12,8 @@ import vn.asiantech.way.R
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 27/09/2017.
  */
-class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) -> Unit) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) -> Unit)
+    : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): HomeViewHolder {
         val inflater = LayoutInflater.from(parent!!.context)
