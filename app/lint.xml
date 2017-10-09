@@ -21,4 +21,3 @@
     <issue id="StringFormatInvalid" severity="ignore"/>
     <issue id="UnusedResources" severity="ignore"/>
 </lint>
->>>>>>> master
