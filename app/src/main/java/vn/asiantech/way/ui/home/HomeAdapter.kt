@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import at.blogc.android.views.ExpandableTextView
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.*
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.tvTime
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.tvStatus
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.expTvDescription
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.imgArrow
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.imgPoint
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.llItemLocation
 import vn.asiantech.way.R
 
 /**
