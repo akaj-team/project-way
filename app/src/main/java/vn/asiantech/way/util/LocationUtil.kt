@@ -94,6 +94,10 @@ class LocationUtil(private val mContext: Context) : LocationListener {
      * To handler click do not open GPS
      */
     interface TurnOnGPS {
+
+        /**
+         * Get location when location change
+         */
         fun onChangeLocation(location: Location)
     }
 }
