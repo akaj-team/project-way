@@ -24,6 +24,9 @@ class RetrofitClient {
             return retrofit!!
         }
 
+        /**
+         *  get api service
+         */
         fun getAPIService(): APIService {
             return getClient().create(APIService::class.java)
         }

@@ -12,7 +12,9 @@ import vn.asiantech.way.R
  * Created by cuongcaov. on 25/09/2017.
  */
 
-class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener: RecyclerViewOnItemClickListener) : RecyclerView.Adapter<LocationsAdapter.LocationHolder>() {
+class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
+                       val mListener: RecyclerViewOnItemClickListener)
+    : RecyclerView.Adapter<LocationsAdapter.LocationHolder>() {
 
     override fun onBindViewHolder(holder: LocationHolder?, position: Int) {
         holder?.onBind()
@@ -25,7 +27,9 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener:
 
     override fun getItemCount() = mMyLocations.size
 
-
+    /**
+     *  Custom item of location list
+     */
     inner class LocationHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.setOnClickListener {
@@ -33,6 +37,9 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener:
             }
         }
 
+        /**
+         * bind data to view holder
+         */
         fun onBind() {
             with(mMyLocations[adapterPosition]) {
                 if (isHistory != null) {
@@ -47,7 +54,16 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>, val mListener:
         }
     }
 
+    /**
+     *  listener for item onclick of RecyclerView
+     */
+
     interface RecyclerViewOnItemClickListener {
+
+        /**
+         *  event on item click
+         */
+
         fun onItemClick(myLocation: MyLocation)
     }
 }

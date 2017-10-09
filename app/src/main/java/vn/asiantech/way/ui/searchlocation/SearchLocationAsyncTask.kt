@@ -10,7 +10,8 @@ import retrofit2.Response
  * Created by cuongcaov. on 25/09/2017.
  */
 
-class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : AsyncTask<String, Void, List<MyLocation>>() {
+class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
+    : AsyncTask<String, Void, List<MyLocation>>() {
 
     companion object {
         private const val API_KEY = "AIzaSyAIue0sTuwo7Qsqwi5hhx6zbncDaS2YxDY"
@@ -20,20 +21,23 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : A
         var check = true
         var myLocations: List<MyLocation>? = null
         val apiService = RetrofitClient.getAPIService()
-        apiService.getLocation(p0[0]!!, API_KEY)
-                .enqueue(object : Callback<APIResult> {
-                    override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
-                        myLocations = response?.body()?.results
-                        check = false
-                    }
+        val query = p0[0]
+        if (query != null) {
+            apiService.getLocation(p0[0]!!, API_KEY)
+                    .enqueue(object : Callback<APIResult> {
+                        override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
+                            myLocations = response?.body()?.results
+                            check = false
+                        }
 
-                    override fun onFailure(call: Call<APIResult>?, t: Throwable?) {
-                        check = false
-                    }
+                        override fun onFailure(call: Call<APIResult>?, t: Throwable?) {
+                            check = false
+                        }
 
-                })
-        while (check) {
-
+                    })
+            while (check) {
+                // Nothing here!
+            }
         }
         return myLocations
     }
@@ -43,7 +47,14 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener) : A
         mListener.onCompleted(result)
     }
 
+    /**
+     *  listener for Search Location AsyncTask
+     */
     interface SearchLocationListener {
+
+        /**
+         *  event for AsyncTask completed
+         */
         fun onCompleted(myLocations: List<MyLocation>?)
     }
 }

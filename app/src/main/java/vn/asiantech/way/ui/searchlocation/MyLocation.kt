@@ -18,6 +18,12 @@ class MyLocation {
     var geometry: Geometry? = null
 }
 
+/**
+ *  Geometry of location
+ */
 data class Geometry(var location: Coordinates)
 
+/**
+ *  Coordinates of location
+ */
 data class Coordinates(var lat: Double, var lng: Double)

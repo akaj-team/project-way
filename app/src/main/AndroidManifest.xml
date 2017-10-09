@@ -69,6 +69,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.searchlocation.SearchLocationActivity" />
+
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.

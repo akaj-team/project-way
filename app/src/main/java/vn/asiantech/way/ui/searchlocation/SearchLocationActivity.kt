@@ -29,6 +29,7 @@ class SearchLocationActivity : BaseActivity() {
     companion object {
         private const val SHARED_PREFERENCES = "shared"
         private const val KEY_HISTORY = "history"
+        private const val HISTORY_MAX_SIZE = 10
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,8 +81,9 @@ class SearchLocationActivity : BaseActivity() {
                     })
                     mTask?.execute(p0.toString())
                 } else {
-                    if (getSearchHistory() != null) {
-                        mMyLocations.addAll(getSearchHistory()!!)
+                    val history = getSearchHistory()
+                    if (history != null) {
+                        mMyLocations.addAll(history)
                     }
                 }
             }
@@ -94,8 +96,9 @@ class SearchLocationActivity : BaseActivity() {
     }
 
     private fun initAdapter() {
-        if (getSearchHistory() != null) {
-            mMyLocations.addAll(getSearchHistory()!!)
+        val history = getSearchHistory()
+        if (history != null) {
+            mMyLocations.addAll(history)
         }
         mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
@@ -112,7 +115,7 @@ class SearchLocationActivity : BaseActivity() {
         val gson = Gson()
         val result = mutableListOf<MyLocation>()
         return try {
-            val history = mSharedPreferences?.getString(KEY_HISTORY, "")
+            val history = mSharedPreferences?.getString(KEY_HISTORY, "[]")
             val jsonArray = JSONArray(history)
             (0 until jsonArray.length())
                     .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), MyLocation::class.java) }
@@ -135,7 +138,7 @@ class SearchLocationActivity : BaseActivity() {
                 return
             }
         }
-        if (history.size > 10) {
+        if (history.size > HISTORY_MAX_SIZE) {
             history.removeAt(0)
         }
         history.add(myLocation)

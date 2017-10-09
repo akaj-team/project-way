@@ -10,7 +10,12 @@ import retrofit2.http.Query
  */
 
 interface APIService {
-
+    /**
+     *  This method to search location by name
+     *
+     *  @param query the query to search location
+     *  @param key the api key of google place api
+     */
     @GET("json")
     fun getLocation(@Query("query") query: String, @Query("key") key: String): Call<APIResult>
 }
