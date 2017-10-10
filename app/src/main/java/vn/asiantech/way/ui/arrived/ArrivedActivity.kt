@@ -118,18 +118,20 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun checkGPS() {
-        val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage(getString(R.string.dialog_message_enable_gps))
-                    .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
-                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                        dialogInterface.dismiss()
-                    }
-                    .setNegativeButton(getString(R.string.dialog_button_cancel)) { dialogInterface, _ ->
-                        dialogInterface.cancel()
-                    }
-            builder.create().show()
+        val manager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        manager?.let {
+            if (!it.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage(getString(R.string.dialog_message_enable_gps))
+                        .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            dialogInterface.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.dialog_button_cancel)) { dialogInterface, _ ->
+                            dialogInterface.cancel()
+                        }
+                builder.create().show()
+            }
         }
     }
 
