@@ -23,7 +23,6 @@ class LocationUtil(private val mContext: Context) : LocationListener {
     private var mCanGetLocation = false
     private var mIsNetworkEnabled = false
     private var mLocation: Location? = null
-    private var mTurnOnGps: TurnOnGPS? = null
     private var mLocationManager: LocationManager? = null
 
     /**
@@ -79,9 +78,7 @@ class LocationUtil(private val mContext: Context) : LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        if (mTurnOnGps != null) {
-            mTurnOnGps?.onChangeLocation(location)
-        }
+
     }
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
@@ -89,15 +86,4 @@ class LocationUtil(private val mContext: Context) : LocationListener {
     override fun onProviderEnabled(p0: String?) {}
 
     override fun onProviderDisabled(p0: String?) {}
-
-    /**
-     * To handler click do not open GPS
-     */
-    interface TurnOnGPS {
-
-        /**
-         * Update the current location
-         */
-        fun onChangeLocation(location: Location)
-    }
 }
