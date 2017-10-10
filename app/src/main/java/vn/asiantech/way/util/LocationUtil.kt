@@ -77,9 +77,7 @@ class LocationUtil(private val mContext: Context) : LocationListener {
         }
     }
 
-    override fun onLocationChanged(location: Location) {
-
-    }
+    override fun onLocationChanged(location: Location) {}
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
 
