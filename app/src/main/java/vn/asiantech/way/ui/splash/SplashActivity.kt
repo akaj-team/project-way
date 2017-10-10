@@ -9,7 +9,9 @@ import android.view.animation.ScaleAnimation
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import kotlinx.android.synthetic.main.activity_splash.*
+import vn.asiantech.way.BR
 import vn.asiantech.way.R
+import vn.asiantech.way.databinding.ActivitySplashBinding
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -18,14 +20,17 @@ import vn.asiantech.way.ui.base.BaseActivity
  * Created by atHangTran on 26/09/2017.
  */
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(), SplashNavigator {
+
+    private var mSplashBinding: ActivitySplashBinding? = null
+    private var mSplashViewModel: SplashViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        mSplashBinding = getViewDataBinding()
+        mSplashViewModel?.navigator
         setAnimationForBackground()
         setScaleForCircle()
-        requestPermission()
     }
 
     private fun setAnimationForBackground() {
@@ -80,7 +85,7 @@ class SplashActivity : BaseActivity() {
         })
     }
 
-    private fun requestPermission() {
+    override fun switchRegisterScreen() {
         btnEnableLocation.setOnClickListener {
             if (HyperTrackUtils.isInternetConnected(this)) {
                 if (HyperTrackUtils.isLocationEnabled(this)) {
@@ -103,4 +108,13 @@ class SplashActivity : BaseActivity() {
             }
         }
     }
+
+    override val bindingVariable: Int
+        get() = BR.splashViewModel
+
+    override val viewModel: SplashViewModel
+        get() = mSplashViewModel as SplashViewModel
+
+    override val layoutId: Int
+        get() = R.layout.activity_splash
 }
