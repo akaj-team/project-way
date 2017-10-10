@@ -7,8 +7,8 @@
     tools:context="vn.asiantech.way.ui.arrived.ArrivedActivity">
 
     <fragment
-        android:id="@+id/fragmentHypertrackMap"
-        android:name="com.hypertrack.lib.HyperTrackMapFragment"
+        android:id="@+id/fragmentGoogleMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -17,11 +17,12 @@
     <string name="arrived_you">You</string>
     <string name="arrived_trip_summary">Trip Summary</string>
     <string name="arrived_you_arrived">your\'re arrived</string>
-    <string name="arrived_turn_location_permission"> you need to allow this to access this device’s location.</string>
-    <string name="arrived_turn_location_service">Need Location Services.</string>
     <string name="show_hour"> h </string>
     <string name="show_minutes"> min </string>
     <string name="show_distance"> km </string>
     <string name="show_average_speed"> kmph </string>
     <string name="arrived_dialog_tag">Dialog Fragment</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_ok">Ok</string>
+    <string name="dialog_message_enable_gps">Turn on GPS</string>
 </resources>
