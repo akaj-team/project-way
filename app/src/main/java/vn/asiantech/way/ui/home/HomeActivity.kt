@@ -28,6 +28,13 @@ import kotlin.collections.ArrayList
  */
 class HomeActivity : BaseActivity(), OnMapReadyCallback {
 
+    companion object {
+        const val PADDING_LEFT = 0
+        const val PADDING_TOP = 0
+        const val PADDING_RIGHT = 0
+        const val ZOOM = 16f
+    }
+
     private var mPosition = -1
     private var mHomeAdapter: HomeAdapter? = null
     private var mGoogleMap: GoogleMap? = null
@@ -69,7 +76,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        mGoogleMap?.setPadding(0, 0, 0, size.y / 3)
+        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / 3)
     }
 
     private fun drawMaker(location: android.location.Location) {
@@ -81,7 +88,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
                     .draggable(true)
                     .title("Current location"))
                     ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, ZOOM))
         } else {
             toast("Google map is null")
         }
