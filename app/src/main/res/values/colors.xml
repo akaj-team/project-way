@@ -7,4 +7,5 @@
     <color name="colorPinkLight">#f5b0e3</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+    <color name="progressRestColor">#ddd</color>
 </resources>
