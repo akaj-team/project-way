@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_list_country.view.*
-import vn.asiantech.way.models.Country
+import vn.asiantech.way.data.models.Country
 import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,9 +18,9 @@ import kotlin.collections.HashMap
  * Adapter custom spinner Country
  * Created by haibt on 9/26/17.
  */
-class CountrySpinnerAdapter(val mContext: Context,
-                            val mResource: Int,
-                            val mCountries: List<Country>) : ArrayAdapter<Country>(mContext, mResource, mCountries) {
+class CountrySpinnerAdapter(private val mContext: Context,
+                            private val mResource: Int,
+                            private val mCountries: List<Country>) : ArrayAdapter<Country>(mContext, mResource, mCountries) {
     var mFlags: HashMap<String, Bitmap>? = getFlagMap()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {

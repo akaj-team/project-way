@@ -136,4 +136,4 @@ if (googleServicesFile.exists()) {
     apply plugin: 'com.google.gms.google-services'
 }
 
-apply from: "https://raw.githubusercontent.com/tientun/gradle-android-ci-check/master/ci.gradle"
+//apply from: "https://raw.githubusercontent.com/tientun/gradle-android-ci-check/master/ci.gradle"

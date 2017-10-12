@@ -15,12 +15,12 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -34,9 +34,10 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_register.*
 import vn.asiantech.way.R
-import vn.asiantech.way.models.Country
+import vn.asiantech.way.data.models.Country
+import vn.asiantech.way.extension.hideKeyboard
+import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.util.Utils
 import java.io.ByteArrayOutputStream
 
 /**
@@ -48,9 +49,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1001
         private const val REQUEST_CODE_GALLERY = 500
+        private const val IMAGE_SIZE_LIMIT = 1048576
     }
 
     var mBitmap: Bitmap? = null
+    var mByteArray: ByteArray? = null
     var mCountries: List<Country> = ArrayList()
     var mPreviousName: String? = null
     var mPreviousPhone: String? = null
@@ -62,7 +65,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         setContentView(R.layout.activity_register)
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
-        mIsoCode = getString(R.string.iso_code_default)
+        mIsoCode = getString(R.string.register_iso_code_default)
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
@@ -80,7 +83,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
             R.id.edtPhoneNumber -> {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    Utils.hideKeyboard(this, edtPhoneNumber)
+                    edtPhoneNumber.hideKeyboard(this)
                     return true
                 }
             }
@@ -94,7 +97,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 val name: String = edtName.text.toString().trim()
                 val phoneNumber: String = edtPhoneNumber.text.toString().trim()
                 if (name.isBlank()) {
-                    edtName.setText(R.string.user_name_default)
+                    edtName.setText(R.string.register_user_name_default)
                 }
                 if (phoneNumber.isBlank()) {
                     edtPhoneNumber.text = null
@@ -130,10 +133,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 || (mPreviousName?.trim() == name
                 && mPreviousPhone?.removeRange(0, 3) == phone
                 && mTel == tel)) {
-            tvCancel.text = getString(R.string.skip)
+            tvCancel.text = getString(R.string.register_skip)
             btnSave.isEnabled = false
         } else {
-            tvCancel.text = getString(R.string.cancel)
+            tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
     }
@@ -141,7 +144,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private fun createUser(name: String, phoneNumber: String) {
         val userParam: UserParams = UserParams()
                 .setName(name)
-                .setPhoto(encodeImage(mBitmap))
+                .setPhoto(encodeImage())
                 .setPhone(mIsoCode?.plus("/")?.plus(phoneNumber))
                 .setLookupId(phoneNumber)
 
@@ -150,11 +153,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
-                    Log.d("xxx", "create ok")
+                    RegisterActivity().toast(getString(R.string.register_create_user))
                 }
 
                 override fun onError(p0: ErrorResponse) {
-                    Log.d("xxx", "create fail" + p0.errorMessage)
+                    // No-op
                 }
             })
         } else {
@@ -162,27 +165,27 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
-                    Log.d("xxx", "update ok")
+                    RegisterActivity().toast(getString(R.string.register_update_user))
                 }
 
                 override fun onError(p0: ErrorResponse) {
-                    Log.d("xxx", "update fail" + p0.errorMessage)
+                    // No-op
                 }
             })
         }
     }
 
     private fun setUserInformation() {
-        visibleProgressBar()
+        visibleProgressBar(progressBar)
         HyperTrack.getUser(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 val user: User? = response.responseObject as User
                 updateView(user)
-                invisibleProgressBar()
+                invisibleProgressBar(progressBar)
             }
 
             override fun onError(p0: ErrorResponse) {
-                invisibleProgressBar()
+                invisibleProgressBar(progressBar)
             }
         })
     }
@@ -190,7 +193,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private fun updateView(user: User?) {
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                // No-op
+                visibleProgressBar(progressBarAvatar)
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
@@ -199,12 +202,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 imgAvatar.setImageBitmap(bitmap)
+                invisibleProgressBar(progressBarAvatar)
                 mBitmap = bitmap
             }
         }
         Picasso.with(this)
                 .load(user?.photo)
-                .resize(300, 300)
+                .resize(100, 100)
                 .into(target)
         imgAvatar.tag = target
         edtName.setText(user?.name)
@@ -212,7 +216,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         if (basePhone!!.size > 1) {
             // Set isoCode
             mIsoCode = basePhone[0]
-            for (i in 0..mCountries.size - 1) {
+            for (i in 0 until mCountries.size) {
                 if (mIsoCode == mCountries[i].iso) {
                     spinnerNation.setSelection(i)
                     val tel = mCountries[i].tel
@@ -238,7 +242,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun intentGallery() {
-        val intent: Intent = Intent()
+        val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
@@ -254,13 +258,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         }
     }
 
-    private fun visibleProgressBar() {
+    private fun visibleProgressBar(progressBar: ProgressBar) {
         progressBar.visibility = View.VISIBLE
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun invisibleProgressBar() {
+    private fun invisibleProgressBar(progressBar: ProgressBar) {
         progressBar.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
@@ -282,7 +286,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                tvTel.text = getString(R.string.plus).plus(mCountries[position].tel)
+                tvTel.text = getString(R.string.register_plus).plus(mCountries[position].tel)
                 mIsoCode = mCountries[position].iso
             }
         }
@@ -293,7 +297,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
      */
     private fun readJsonFromDirectory(): String {
         val iStream = resources.openRawResource(R.raw.countries)
-        val byteStream: ByteArrayOutputStream = ByteArrayOutputStream()
+        val byteStream = ByteArrayOutputStream()
         val buffer = ByteArray(iStream.available())
         iStream.read(buffer)
         byteStream.write(buffer)
@@ -303,24 +307,27 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun getCountries(json: String): List<Country> {
-        val countries: List<Country> = Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
-        return countries
+        return Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
     }
 
-    private fun encodeImage(bitmap: Bitmap?): String {
-        val baoStream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, baoStream)
-        val b = baoStream.toByteArray()
-        val encodeImage = Base64.encodeToString(b, Base64.DEFAULT)
-        return encodeImage
+    private fun encodeImage(): String {
+        return Base64.encodeToString(mByteArray, Base64.DEFAULT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE) {
-            val uri: Uri = data!!.data
-            imgAvatar.setImageURI(uri)
+            val uri: Uri? = data?.data
             mBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val baoStream = ByteArrayOutputStream()
+            mBitmap?.compress(Bitmap.CompressFormat.JPEG, 50, baoStream)
+            mByteArray = baoStream.toByteArray()
+            val imageSize: Int = mByteArray!!.size
+            if (imageSize > IMAGE_SIZE_LIMIT) {
+                this.toast(getString(R.string.toast_image_size))
+            } else {
+                imgAvatar.setImageBitmap(mBitmap)
+            }
         }
     }
 

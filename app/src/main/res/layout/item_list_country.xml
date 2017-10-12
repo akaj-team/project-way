@@ -21,5 +21,4 @@
         android:gravity="center"
         android:paddingLeft="10dp"
         tools:text="VN" />
-
 </RelativeLayout>
