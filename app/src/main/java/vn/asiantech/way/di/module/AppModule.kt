@@ -4,6 +4,8 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import vn.asiantech.way.MyApplication
+import vn.asiantech.way.utils.rx.AppSchedulerProvider
+import vn.asiantech.way.utils.rx.SchedulerProvider
 import javax.inject.Singleton
 
 /**
@@ -18,5 +20,10 @@ class AppModule {
     @Singleton
     fun provideContext(application: MyApplication): Context {
         return application
+    }
+
+    @Provides
+    fun provideSchedulerProvider(): SchedulerProvider {
+        return AppSchedulerProvider()
     }
 }

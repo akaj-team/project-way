@@ -14,6 +14,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.databinding.ActivitySplashBinding
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import javax.inject.Inject
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -23,12 +24,13 @@ import vn.asiantech.way.ui.base.BaseActivity
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(), SplashNavigator {
 
     private var mSplashBinding: ActivitySplashBinding? = null
-    private var mSplashViewModel: SplashViewModel? = null
+
+    @Inject lateinit var mSplashViewModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mSplashBinding = getViewDataBinding()
-        mSplashViewModel?.navigator
+        mSplashViewModel.navigator
         setAnimationForBackground()
         setScaleForCircle()
     }
@@ -113,7 +115,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(), S
         get() = BR.splashViewModel
 
     override val viewModel: SplashViewModel
-        get() = mSplashViewModel as SplashViewModel
+        get() = mSplashViewModel
 
     override val layoutId: Int
         get() = R.layout.activity_splash
