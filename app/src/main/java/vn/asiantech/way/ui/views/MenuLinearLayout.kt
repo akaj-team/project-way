@@ -90,13 +90,19 @@ class MenuLinearLayout(context: Context, attrs: AttributeSet) :
      * Interface menu click listener
      */
     internal interface OnMenuClickListener {
-        // Event when button share clicked
+        /**
+         * Event when button share clicked
+         */
         fun onShareClick()
 
-        // Event when button profile clicked
+        /**
+         * Event when button profile clicked
+         */
         fun onProfileClick()
 
-        // Event when button calendar clicked
+        /**
+         * Event when button calendar clicked
+         */
         fun onCalendarClick()
     }
 }
