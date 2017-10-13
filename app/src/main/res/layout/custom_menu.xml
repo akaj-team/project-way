@@ -112,5 +112,4 @@
         android:contentDescription="@null"
         android:padding="10dp"
         android:src="@drawable/ic_menu" />
-
 </LinearLayout>
