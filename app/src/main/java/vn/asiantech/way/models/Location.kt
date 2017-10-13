@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.home
+package vn.asiantech.way.models
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

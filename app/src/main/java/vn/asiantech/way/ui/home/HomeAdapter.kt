@@ -1,17 +1,13 @@
 package vn.asiantech.way.ui.home
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import at.blogc.android.views.ExpandableTextView
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.tvTime
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.tvStatus
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.expTvDescription
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.imgArrow
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.imgPoint
-import kotlinx.android.synthetic.main.item_recyclerview_location.view.llItemLocation
+import kotlinx.android.synthetic.main.item_recyclerview_location.view.*
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.inflate
+import vn.asiantech.way.models.Location
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -21,9 +17,8 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): HomeViewHolder {
-        val inflater = LayoutInflater.from(parent?.context)
-        val itemView = inflater.inflate(R.layout.item_recyclerview_location, parent, false)
-        return HomeViewHolder(itemView)
+        val inflatedView = parent!!.inflate(R.layout.item_recyclerview_location, false)
+        return HomeViewHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder?, position: Int) {

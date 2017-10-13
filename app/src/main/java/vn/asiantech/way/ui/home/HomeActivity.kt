@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
+import vn.asiantech.way.models.Location
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.util.LocationUtil
 import java.text.SimpleDateFormat
@@ -36,7 +37,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private var mPosition = -1
-    private var mHomeAdapter: HomeAdapter? = null
+    private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,26 +96,34 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun setDataForRecyclerView() {
+        val positions: MutableList<Int> = mutableListOf()
         val locations = ArrayList<Location>()
         // TODO: Get data from share function into locations
         initDummyData(locations)
         mHomeAdapter = HomeAdapter(locations) {
             if (mPosition >= 0) {
                 locations[mPosition].isChoose = false
-                mHomeAdapter?.notifyItemChanged(mPosition)
+                mHomeAdapter.notifyItemChanged(mPosition)
             }
-            mPosition = it
+            positions.add(it)
+            if (positions.size > 1) {
+                if (it > positions[positions.size - 2]) {
+                    recycleViewLocation.scrollToPosition(it + 1)
+                } else {
+                    recycleViewLocation.scrollToPosition(it - 1)
+                }
+            }
             locations[it].isChoose = true
-            mHomeAdapter?.notifyItemChanged(it)
-            recycleViewLocation.scrollToPosition(it + 1)
+            mHomeAdapter.notifyItemChanged(it)
+            mPosition = it
         }
         recycleViewLocation.layoutManager = LinearLayoutManager(this)
         recycleViewLocation.adapter = mHomeAdapter
     }
 
     private fun initDummyData(locations: ArrayList<Location>) {
-        locations.add(Location("1:00 PM", "Stop", "30 minutes| You went to market"))
-        locations.add(Location("2:00 PM", "Drive", "50 minutes|You went to market"))
+        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school..............."))
+        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........"))
         locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km"))
         locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km"))
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
