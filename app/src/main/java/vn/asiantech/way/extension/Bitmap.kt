@@ -2,7 +2,6 @@ package vn.asiantech.way.extension
 
 import android.graphics.Bitmap
 import android.util.Base64
-import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
