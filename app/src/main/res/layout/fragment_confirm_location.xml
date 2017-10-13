@@ -4,10 +4,16 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/fragmentMap"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_choose_on_map" />
 
     <include layout="@layout/view_confirm_location_layout" />
 </FrameLayout>
