@@ -9,12 +9,10 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -36,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_register.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.models.Country
 import vn.asiantech.way.extension.hideKeyboard
+import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import java.io.ByteArrayOutputStream
@@ -49,11 +48,9 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1001
         private const val REQUEST_CODE_GALLERY = 500
-        private const val IMAGE_SIZE_LIMIT = 1048576
     }
 
     var mBitmap: Bitmap? = null
-    var mByteArray: ByteArray? = null
     var mCountries: List<Country> = ArrayList()
     var mPreviousName: String? = null
     var mPreviousPhone: String? = null
@@ -144,16 +141,16 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private fun createUser(name: String, phoneNumber: String) {
         val userParam: UserParams = UserParams()
                 .setName(name)
-                .setPhoto(encodeImage())
+                .setPhoto(mBitmap?.toBase64())
                 .setPhone(mIsoCode?.plus("/")?.plus(phoneNumber))
                 .setLookupId(phoneNumber)
 
         // Create new user
-        if (mPreviousPhone != phoneNumber) {
+        if (mPreviousPhone?.removeRange(0, 3) != phoneNumber) {
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
-                    RegisterActivity().toast(getString(R.string.register_create_user))
+                    toast(getString(R.string.register_create_user))
                 }
 
                 override fun onError(p0: ErrorResponse) {
@@ -165,7 +162,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
-                    RegisterActivity().toast(getString(R.string.register_update_user))
+                    toast(getString(R.string.register_update_user))
                 }
 
                 override fun onError(p0: ErrorResponse) {
@@ -208,7 +205,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         }
         Picasso.with(this)
                 .load(user?.photo)
-                .resize(100, 100)
                 .into(target)
         imgAvatar.tag = target
         edtName.setText(user?.name)
@@ -310,24 +306,28 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         return Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
     }
 
-    private fun encodeImage(): String {
-        return Base64.encodeToString(mByteArray, Base64.DEFAULT)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE) {
             val uri: Uri? = data?.data
-            mBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            val baoStream = ByteArrayOutputStream()
-            mBitmap?.compress(Bitmap.CompressFormat.JPEG, 50, baoStream)
-            mByteArray = baoStream.toByteArray()
-            val imageSize: Int = mByteArray!!.size
-            if (imageSize > IMAGE_SIZE_LIMIT) {
-                this.toast(getString(R.string.toast_image_size))
-            } else {
-                imgAvatar.setImageBitmap(mBitmap)
-            }
+            Picasso.with(this)
+                    .load(uri)
+                    .resize(300, 300)
+                    .into(object : Target {
+                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                            visibleProgressBar(progressBarAvatar)
+                        }
+
+                        override fun onBitmapFailed(errorDrawable: Drawable?) {
+                            // No-op
+                        }
+
+                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                            invisibleProgressBar(progressBarAvatar)
+                            imgAvatar.setImageBitmap(bitmap)
+                            mBitmap = bitmap
+                        }
+                    })
         }
     }
 
