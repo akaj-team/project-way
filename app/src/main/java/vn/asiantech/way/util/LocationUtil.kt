@@ -25,7 +25,12 @@ class LocationUtil(private val mContext: Context) : LocationListener {
     private var mLocation: Location? = null
     private var mLocationManager: LocationManager? = null
 
-    internal fun getCurrentLocation(): Location? {
+    /**
+     * To get the current location
+     *
+     * @return mLocation is the current location
+     */
+    fun getCurrentLocation(): Location? {
         if (canGetLocation()) {
             mCanGetLocation = true
             try {
