@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
-import vn.asiantech.way.models.Location
+import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.util.LocationUtil
 import java.text.SimpleDateFormat
