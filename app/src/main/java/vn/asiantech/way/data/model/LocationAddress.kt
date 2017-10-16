@@ -1,4 +1,4 @@
-package vn.asiantech.way.models
+package vn.asiantech.way.data.model
 
 import com.google.gson.annotations.SerializedName
 

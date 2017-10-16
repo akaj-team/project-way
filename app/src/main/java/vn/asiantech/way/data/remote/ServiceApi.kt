@@ -1,8 +1,9 @@
-package vn.asiantech.way.api
+package vn.asiantech.way.data.remote
 
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import vn.asiantech.way.data.model.LocationResponse
 
 /**
  * Copyright © AsianTech Co., Ltd

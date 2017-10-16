@@ -19,10 +19,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
-import vn.asiantech.way.api.APIUtil
-import vn.asiantech.way.api.LocationResponse
+import vn.asiantech.way.data.remote.APIUtil
+import vn.asiantech.way.data.model.LocationResponse
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.utils.GPSUtil
+import vn.asiantech.way.util.LocationUtil
 
 /**
  * Copyright © AsianTech Co., Ltd
@@ -45,7 +45,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
         // Add a marker in Sydney and move the camera
-        val myLocation = GPSUtil(this).getCurrentLocation()
+        val myLocation = LocationUtil(this).getCurrentLocation()
         val myLaLng = myLocation?.latitude?.let { LatLng(it, myLocation.longitude) }
         val cameraMove = CameraUpdateFactory.newLatLngZoom(
                 myLaLng, 16f)

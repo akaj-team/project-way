@@ -30,11 +30,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ui.splash.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <!-- Intent Filter to handle browsable deeplinks -->
             <intent-filter android:label="@string/filter_title_track">
                 <action android:name="android.intent.action.VIEW" />
@@ -99,7 +95,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <service android:name=".utils.GPSUtil"/>
     </application>
 
 </manifest>

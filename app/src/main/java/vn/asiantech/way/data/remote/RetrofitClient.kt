@@ -1,4 +1,4 @@
-package vn.asiantech.way.api
+package vn.asiantech.way.data.remote
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
