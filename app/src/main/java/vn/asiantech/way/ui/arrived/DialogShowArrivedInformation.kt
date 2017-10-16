@@ -3,11 +3,8 @@ package vn.asiantech.way.ui.arrived
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import kotlinx.android.synthetic.main.dialog_show_arrived_infor.*
+import android.view.*
+import kotlinx.android.synthetic.main.dialog_show_arrived_infor.view.*
 import kotlinx.android.synthetic.main.show_detail_arrived.view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.makeAverageSpeed
@@ -58,17 +55,18 @@ internal class DialogShowArrivedInformation : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater?.inflate(R.layout.dialog_show_arrived_infor, container, false)
-        v?.llShowDetailData?.tvDistance?.text = mDistance?.makeDistance(context)
-        v?.llShowDetailData?.tvTimeTotal?.text = mTime?.makeDuration(context)
-        v?.llShowDetailData?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
-        btnDoneDialog?.setOnClickListener {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        v?.tvDistance?.text = mDistance?.makeDistance(context)
+        v?.tvTimeTotal?.text = mTime?.makeDuration(context)
+        v?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
+        v?.btnDoneDialog?.setOnClickListener {
             dismiss()
         }
         return v
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         val displayMetrics: DisplayMetrics = resources.displayMetrics
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
