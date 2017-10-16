@@ -32,7 +32,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_register.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.models.Country
+import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.extension.toast

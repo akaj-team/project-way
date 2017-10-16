@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_list_country.view.*
-import vn.asiantech.way.data.models.Country
+import vn.asiantech.way.data.model.Country
 import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList

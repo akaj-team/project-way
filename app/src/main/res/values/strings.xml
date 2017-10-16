@@ -1,7 +1,7 @@
 <resources>
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
-    <string name="splash_image_description">image</string>
+    <string name="image_description">image</string>
     <string name="splash_name_application">WHERE ARE YOU</string>
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
@@ -20,6 +20,8 @@
     <string name="register_cancel">Cancel</string>
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
+    <!--Home screen-->
+    <string name="toolbar_title">Home</string>
     <!-- Search Location Screen-->
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
