@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.models
+package vn.asiantech.way.data.model
 
 /**
  * Model store information of country

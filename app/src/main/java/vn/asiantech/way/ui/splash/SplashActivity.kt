@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -12,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.register.RegisterActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -88,7 +90,7 @@ class SplashActivity : BaseActivity() {
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
                     //TODO: intent to login screen a
-
+                    startActivity(Intent(this, RegisterActivity::class.java))
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)
