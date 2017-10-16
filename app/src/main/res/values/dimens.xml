@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Splash screen-->
-    <dimen name="splash_img_circle_with_hight">250dp</dimen>
+    <dimen name="splash_img_circle_with_high">250dp</dimen>
     <dimen name="splash_size_tv_app_name">25sp</dimen>
     <dimen name="splash_tv_description_margin">50dp</dimen>
     <dimen name="splash_tv_size_app_description">16sp</dimen>
     <dimen name="splash_buttonEnable_marginButton">20dp</dimen>
-    <dimen name="splash_buttonEnaleButton_padding">20dp</dimen>
+    <dimen name="splash_buttonEnableButton_padding">20dp</dimen>
     <dimen name="splash_progressBar_margin_bottom">20dp</dimen>
 
+    <!--Home screen-->
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="home_screen_linearLayout_margin">10dp</dimen>
+    <dimen name="home_screen_linearLayout_padding">5dp</dimen>
+    <dimen name="home_screen_view_margin">10dp</dimen>
+    <dimen name="home_screen_line_with">1dp</dimen>
+    <dimen name="home_screen_imgStatus_dimension">50dp</dimen>
+    <dimen name="home_screen_tvStatus_size">15sp</dimen>
+    <dimen name="home_screen_recyclerView_height">200dp</dimen>
+    <dimen name="home_screen_recyclerView_margin">20dp</dimen>
+    <dimen name="home_screen_expTv_marginRight">25dp</dimen>
 </resources>
