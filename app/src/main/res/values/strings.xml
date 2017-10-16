@@ -1,7 +1,7 @@
 <resources>
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
-    <string name="splash_image_description">image</string>
+    <string name="image_description">image</string>
     <string name="splash_name_application">WHERE ARE YOU</string>
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
@@ -11,4 +11,19 @@
     <string name="confirm_move_map">Move map to adjust marker</string>
     <string name="confirm_location">Confirm Location</string>
 
+    <!--Register screen-->
+    <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
+    <string name="toast_image_size">Please choose image with size less than...</string>
+    <string name="register_hint_name">Name</string>
+    <string name="register_hint_phone">Phone Number</string>
+    <string name="register_button_save_text">Save Profile</string>
+    <string name="register_plus">+</string>
+    <string name="register_user_name_default">User</string>
+    <string name="register_iso_code_default">VN</string>
+    <string name="register_skip">Skip</string>
+    <string name="register_cancel">Cancel</string>
+    <string name="register_create_user">Create user completed</string>
+    <string name="register_update_user">Update user completed</string>
+    <!--Home screen-->
+    <string name="toolbar_title">Home</string>
 </resources>
