@@ -35,7 +35,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <!-- Intent Filter to handle browsable deeplinks -->
             <intent-filter android:label="@string/filter_title_track">
                 <action android:name="android.intent.action.VIEW" />
@@ -43,7 +42,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/deeplink_scheme" />
+                <data android:scheme="com.hypertracklive" />
             </intent-filter>
 
 
@@ -59,7 +58,7 @@
 
                 <!-- Add trck.at DeepLink URL -->
                 <data
-                    android:host="@string/tracking_url"
+                    android:host="a"
                     android:pathPrefix="/" />
             </intent-filter>
 
@@ -75,6 +74,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.share.ShareLocationActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.register.RegisterActivity" />
 
         <activity android:name=".ui.searchlocation.SearchLocationActivity" />
