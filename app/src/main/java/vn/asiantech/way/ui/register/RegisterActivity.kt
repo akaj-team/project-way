@@ -239,12 +239,16 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun intentGallery() {
+        // Gallery intent
         val galleryIntent = Intent()
         galleryIntent.type = "image/*"
         galleryIntent.action = Intent.ACTION_PICK
 
+        // Camera intent
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val pickTitle = getString(R.string.register_select_image)
+
+        // Chooser intent
         val chooserIntent = Intent.createChooser(galleryIntent, pickTitle)
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
         startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
