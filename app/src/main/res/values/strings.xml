@@ -14,7 +14,8 @@
 
     <!--Register screen-->
     <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
-    <string name="toast_image_size">Please choose image with size less than...</string>
+    <string name="register_select_image">Select or take a new picture</string>
+    <string name="register_toast_image_size">Please choose image with size less than...</string>
     <string name="register_hint_name">Name</string>
     <string name="register_hint_phone">Phone Number</string>
     <string name="register_button_save_text">Save Profile</string>
