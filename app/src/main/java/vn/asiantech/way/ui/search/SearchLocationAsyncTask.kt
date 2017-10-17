@@ -12,7 +12,6 @@ import vn.asiantech.way.data.remote.APIUtil
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-
 class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
     : AsyncTask<String, Void, List<MyLocation>>() {
 

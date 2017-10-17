@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
@@ -19,7 +18,6 @@ import vn.asiantech.way.ui.base.BaseActivity
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-
 class SearchLocationActivity : BaseActivity() {
 
     private var mTask: SearchLocationAsyncTask? = null
@@ -122,7 +120,6 @@ class SearchLocationActivity : BaseActivity() {
                     .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), MyLocation::class.java) }
             result
         } catch (e: JsonSyntaxException) {
-            Log.i("tag11", e.message)
             null
         }
     }
@@ -146,5 +143,4 @@ class SearchLocationActivity : BaseActivity() {
         editor?.putString(KEY_HISTORY, gson.toJson(history))
         editor?.commit()
     }
-
 }

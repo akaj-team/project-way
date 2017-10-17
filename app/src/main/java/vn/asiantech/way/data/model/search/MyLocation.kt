@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-
 class MyLocation {
     var isHistory: Boolean? = null
     @SerializedName("formattedAddress")

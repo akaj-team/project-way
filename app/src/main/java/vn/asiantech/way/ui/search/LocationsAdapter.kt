@@ -12,7 +12,6 @@ import vn.asiantech.way.data.model.search.MyLocation
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-
 class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
                        val mListener: RecyclerViewOnItemClickListener)
     : RecyclerView.Adapter<LocationsAdapter.LocationHolder>() {
@@ -58,13 +57,11 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
     /**
      *  listener for item onclick of RecyclerView
      */
-
     interface RecyclerViewOnItemClickListener {
 
         /**
          *  event on item click
          */
-
         fun onItemClick(myLocation: MyLocation)
     }
 }
