@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.confirm_location
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
