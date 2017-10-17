@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.views
+package vn.asiantech.way.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,24 +6,25 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
-import kotlinx.android.synthetic.main.custom_menu.view.*
+import kotlinx.android.synthetic.main.custom_floating_button_menu_horizontal.view.*
 import vn.asiantech.way.R
 
 /**
  * Custom floating button menu
  * Created by haingoq on 29/09/2017.
  */
-class MenuLinearLayout(context: Context, attrs: AttributeSet) :
+class FloatingButtonHorizontal @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null) :
         LinearLayout(context, attrs), View.OnClickListener {
-    private var mOnMenuClickListener: OnMenuClickListener? = null
-
     init {
-        inflate(context, R.layout.custom_menu, this)
+        inflate(context, R.layout.custom_floating_button_menu_horizontal, this)
         imgBtnMenu.setOnClickListener(this)
         imgBtnShare.setOnClickListener(this)
         imgBtnProfile.setOnClickListener(this)
         imgBtnCalendar.setOnClickListener(this)
     }
+
+    private var mOnMenuClickListener: OnMenuClickListener? = null
 
     override fun onClick(view: View?) {
         when (view?.id) {
