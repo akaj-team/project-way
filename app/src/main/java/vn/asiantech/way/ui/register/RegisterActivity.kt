@@ -286,6 +286,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     private fun initCountrySpinner() {
         spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
+        // Set priority for VietNam nation (index 198)
+        spinnerNation.setSelection(198)
         spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 // No-op
