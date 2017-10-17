@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.share
+package vn.asiantech.way.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
@@ -16,8 +16,10 @@ import vn.asiantech.way.R
  */
 class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: AttributeSet? = null)
     : RelativeLayout(mContext, attrs) {
+
     var buttonListener: ButtonListener? = null
     var actionType: ActionType
+
     // TODO: Will use in future
 //    val isActionTypeConfirmLocation: Boolean
 //        get() = actionType == ActionType.CONFIRM_LOCATION
@@ -30,6 +32,12 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
 //
 //    val isActionTypeShareBackLocation: Boolean
 //        get() = actionType == ActionType.SHARE_BACK_LOCATION
+    init {
+        LayoutInflater.from(mContext).inflate(R.layout.bottom_button_card_view, this, true)
+        initiateView()
+        actionType = ActionType.START_TRACKING
+    }
+
     /**
      * Enum define for item type
      */
@@ -38,12 +46,6 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
         CONFIRM_LOCATION,
         SHARE_TRACKING_URL,
         SHARE_BACK_LOCATION
-    }
-
-    init {
-        LayoutInflater.from(mContext).inflate(R.layout.bottom_button_card_view, this, true)
-        initiateView()
-        actionType = ActionType.START_TRACKING
     }
 
     private fun initiateView() {

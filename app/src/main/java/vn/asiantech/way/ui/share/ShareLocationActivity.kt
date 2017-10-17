@@ -22,6 +22,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.data.remote.APIUtil
 import vn.asiantech.way.data.model.LocationResponse
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.util.LocationUtil
 
 /**
@@ -50,13 +51,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         if (myLaLng != null) {
             val cameraMove = CameraUpdateFactory.newLatLngZoom(
                     myLaLng, 16f)
-            googleMap?.addMarker(myLaLng?.let {
+            googleMap?.addMarker(myLaLng.let {
                 MarkerOptions().position(it)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
                         .anchor(0.5f, 0.5f)
             })
             googleMap?.animateCamera(cameraMove)
-            getLocationAddress("${myLaLng?.latitude},${myLaLng?.longitude}")
+            getLocationAddress("${myLaLng.latitude},${myLaLng.longitude}")
         }
     }
 

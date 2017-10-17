@@ -30,7 +30,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_low"
         android:gravity="center"
-        android:text="@string/textview.text.test_title_text"
+        android:text="@string/bottom_button_card_title_text"
         android:textColor="@color/white"
         android:textSize="@dimen/text_large"
         android:textStyle="bold" />
@@ -45,7 +45,7 @@
         android:layout_marginRight="@dimen/margin_huge"
         android:layout_marginTop="@dimen/margin_base"
         android:gravity="center"
-        android:text="@string/textview.text.test_description_text"
+        android:text="@string/bottom_button_card_description_text"
         android:textSize="@dimen/text_medium"
         android:visibility="visible" />
 
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_xxhigh"
-            android:text="@string/textview.text.test_link_text"
+            android:text="@string/bottom_button_card_link_text"
             android:textColor="@color/white"
             android:textIsSelectable="true" />
 
@@ -113,7 +113,7 @@
             android:background="@drawable/custom_bg_button_copy"
             android:foreground="?attr/selectableItemBackground"
             android:padding="@dimen/padding_base"
-            android:text="@string/textview.text.copy_link"
+            android:text="@string/bottom_button_card_text_copy_link"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textStyle="normal" />

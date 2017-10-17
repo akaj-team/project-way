@@ -121,7 +121,7 @@
 
     </FrameLayout>
 
-    <vn.asiantech.way.ui.share.BottomButtonCard
+    <vn.asiantech.way.ui.custom.BottomButtonCard
         android:id="@+id/bottomButtonCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
