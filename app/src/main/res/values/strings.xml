@@ -1,4 +1,7 @@
 <resources>
+    <!--Common -->
+    <string name="current_location">Current location</string>
+    
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
