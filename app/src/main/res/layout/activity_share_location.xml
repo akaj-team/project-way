@@ -49,7 +49,7 @@
                     android:paddingTop="20dp"
                     android:paddingLeft="20dp"
                     android:paddingBottom="5dp"
-                    android:text="@string/textview_text_going_somewhere"
+                    android:text="@string/share_textview_text_going_somewhere"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:paddingRight="50dp"
                     android:clickable="true"
                     android:paddingBottom="10dp"
-                    android:text="@string/textview_text_description"
+                    android:text="@string/share_textview_text_description"
                     android:textSize="15dp"/>
                 <ImageView
                     android:layout_width="wrap_content"

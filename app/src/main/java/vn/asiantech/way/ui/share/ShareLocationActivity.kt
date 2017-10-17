@@ -88,7 +88,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         bottomButtonCard?.showTrackingURLLayout()
         bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
         bottomButtonCard?.setDescriptionText(getString(R.string.bottom_button_card_description_text))
-        bottomButtonCard?.setShareButtonText(getString(R.string.textview_text_start_sharing))
+        bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
         bottomButtonCard?.showActionButton()
         bottomButtonCard?.showTitle()
         if (show) {

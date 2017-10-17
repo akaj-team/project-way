@@ -11,13 +11,14 @@
     <string name="bottom_button_card_description_text">Share your location back so that they can see you on the map.</string>
     <string name="bottom_button_card_link_text">https://www.trck.at/MGSLWx</string>
     <string name="bottom_button_card_text_copy_link">Copy Link</string>
-    <string name="textview_text_going_somewhere">Going somewhere?</string>
-    <string name="textview_text_description">Add a destination</string>
-    <string name="textview_text_look_good">Look good?</string>
-    <string name="textview_text_start_sharing">Start Sharing</string>
-    <string name="textview_text_test_title">You\'re 1 min away</string>
-    <string name="textview_text_text_test_description_success">Share your live location link:</string>
-    <string name="textview_text_copied">Copied</string>
+    <!--Share Screen-->
+    <string name="share_textview_text_going_somewhere">Going somewhere?</string>
+    <string name="share_textview_text_description">Add a destination</string>
+    <string name="share_textview_text_look_good">Look good?</string>
+    <string name="share_textview_text_start_sharing">Start Sharing</string>
+    <string name="share_textview_text_test_title">You\'re 1 min away</string>
+    <string name="share_textview_text_text_test_description_success">Share your live location link:</string>
+    <string name="share_textview_text_copied">Copied</string>
 
     <!--Custom floating menu-->
     <string name="custom_floating_menu_calendar_title">Calendar</string>

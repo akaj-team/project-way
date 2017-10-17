@@ -65,7 +65,7 @@ class BottomButtonCard @JvmOverloads constructor(mContext: Context, attrs: Attri
             if (buttonListener != null) {
                 buttonListener?.onCopyButtonClick()
                 tvCopyLink?.isEnabled = false
-                tvCopyLink?.text = context.getString(R.string.textview_text_copied)
+                tvCopyLink?.text = context.getString(R.string.share_textview_text_copied)
             }
         }
     }
