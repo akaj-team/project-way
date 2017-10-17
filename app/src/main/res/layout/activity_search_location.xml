@@ -40,8 +40,7 @@
                 android:background="#FFFFFF"
                 android:hint="@string/search_location_enter_a_place"
                 android:padding="10dp"
-                android:textSize="@dimen/searchScreenTextSize" />
-
+                android:textSize="@dimen/search_screen_text_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,7 +73,7 @@
                     android:layout_toRightOf="@id/imgYourLocationYIcon"
                     android:padding="5dp"
                     android:text="@string/search_location_your_location"
-                    android:textSize="@dimen/searchScreenTextSize" />
+                    android:textSize="@dimen/search_screen_text_size" />
 
                 <View
                     android:layout_width="match_parent"
@@ -85,7 +84,6 @@
                     android:layout_marginStart="64dp"
                     android:layout_marginTop="2dp"
                     android:background="@color/colorSearchScreenBackground" />
-
             </RelativeLayout>
 
             <RelativeLayout
@@ -111,17 +109,13 @@
                     android:layout_toRightOf="@id/imgChooseOnMapIcon"
                     android:padding="5dp"
                     android:text="@string/search_location_choose_on_map"
-                    android:textSize="@dimen/searchScreenTextSize" />
-
+                    android:textSize="@dimen/search_screen_text_size" />
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewLocations"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
         </LinearLayout>
-
     </RelativeLayout>
-
 </FrameLayout>

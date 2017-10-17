@@ -1,10 +1,10 @@
-package vn.asiantech.way.ui.searchlocation
+package vn.asiantech.way.data.model.search
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
 
-class APIResult {
+class ResultLocation {
     var results: List<MyLocation>? = null
 }

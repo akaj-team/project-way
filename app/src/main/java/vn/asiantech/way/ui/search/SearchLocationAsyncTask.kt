@@ -1,9 +1,12 @@
-package vn.asiantech.way.ui.searchlocation
+package vn.asiantech.way.ui.search
 
 import android.os.AsyncTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import vn.asiantech.way.data.model.search.MyLocation
+import vn.asiantech.way.data.model.search.ResultLocation
+import vn.asiantech.way.data.remote.APIUtil
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -20,17 +23,17 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
     override fun doInBackground(vararg p0: String?): List<MyLocation>? {
         var check = true
         var myLocations: List<MyLocation>? = null
-        val apiService = RetrofitClient.getAPIService()
+        val apiService = APIUtil.getService()
         val query = p0[0]
         if (query != null) {
-            apiService.getLocation(query, API_KEY)
-                    .enqueue(object : Callback<APIResult> {
-                        override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
+            apiService?.getLocation(query, API_KEY)
+                    ?.enqueue(object : Callback<ResultLocation> {
+                        override fun onResponse(call: Call<ResultLocation>?, response: Response<ResultLocation>?) {
                             myLocations = response?.body()?.results
                             check = false
                         }
 
-                        override fun onFailure(call: Call<APIResult>?, t: Throwable?) {
+                        override fun onFailure(call: Call<ResultLocation>?, t: Throwable?) {
                             check = false
                         }
 

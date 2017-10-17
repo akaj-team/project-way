@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.searchlocation
+package vn.asiantech.way.ui.search
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,6 +12,7 @@ import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
 import org.json.JSONArray
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**

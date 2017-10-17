@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.searchlocation
+package vn.asiantech.way.data.model.search
 
 import com.google.gson.annotations.SerializedName
 

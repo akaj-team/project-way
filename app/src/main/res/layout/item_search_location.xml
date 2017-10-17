@@ -33,7 +33,7 @@
         android:layout_toEndOf="@id/imgLocationIcon"
         android:layout_toRightOf="@id/imgLocationIcon"
         android:maxLines="1"
-        android:textSize="@dimen/searchScreenTextSize"
+        android:textSize="@dimen/search_screen_text_size"
         android:textStyle="bold" />
 
     <TextView
@@ -47,6 +47,5 @@
         android:layout_toRightOf="@id/imgLocationIcon"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textSize="@dimen/searchScreenTextSize" />
-
+        android:textSize="@dimen/search_screen_text_size" />
 </RelativeLayout>

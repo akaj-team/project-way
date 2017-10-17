@@ -80,7 +80,7 @@
 
         <activity android:name=".ui.register.RegisterActivity" />
 
-        <activity android:name=".ui.searchlocation.SearchLocationActivity" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
 
         <!-- Register meta-data here -->
         <!--
