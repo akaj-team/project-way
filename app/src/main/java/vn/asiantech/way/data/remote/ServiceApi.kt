@@ -3,7 +3,7 @@ package vn.asiantech.way.data.remote
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import vn.asiantech.way.data.model.LocationResponse
+import vn.asiantech.way.data.model.share.LocationResponse
 
 /**
  * Copyright © AsianTech Co., Ltd

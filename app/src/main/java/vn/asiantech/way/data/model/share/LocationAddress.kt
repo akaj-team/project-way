@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.model
+package vn.asiantech.way.data.model.share
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class LocationAddress(
         @SerializedName("formatted_address")
-        val address:String,
+        val address: String,
         @SerializedName("place_id")
-        val placeId:String
+        val placeId: String
 )

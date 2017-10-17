@@ -11,9 +11,10 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class RetrofitClient {
     companion object {
-        const val BASE_URL = "https://maps.googleapis.com/maps/api/"
-        var retrofit: Retrofit? = null
-        val builder = OkHttpClient.Builder()
+        private const val BASE_URL = "https://maps.googleapis.com/maps/api/"
+        private var retrofit: Retrofit? = null
+        private val builder = OkHttpClient.Builder()
+
         /**
          * get retrofit
          * @return Retrofit

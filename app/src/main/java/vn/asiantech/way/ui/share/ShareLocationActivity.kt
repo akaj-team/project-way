@@ -20,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.remote.APIUtil
-import vn.asiantech.way.data.model.LocationResponse
+import vn.asiantech.way.data.model.share.LocationResponse
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.util.LocationUtil
@@ -30,6 +30,10 @@ import vn.asiantech.way.util.LocationUtil
  * Created by toan on 27/09/2017.
  */
 class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
+    companion object {
+        private const val INVALID_REQUEST = "INVALID_REQUEST"
+    }
+
     private val service = APIUtil.getService()
     private var googleMap: GoogleMap? = null
 
@@ -113,7 +117,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
                         return
                     }
                 }
-                if ("INVALID_REQUEST" == response?.body()?.status) {
+                if (INVALID_REQUEST == response?.body()?.status) {
                     return
                 }
                 val locations = response?.body()?.results

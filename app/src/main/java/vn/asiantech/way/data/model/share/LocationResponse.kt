@@ -1,6 +1,4 @@
-package vn.asiantech.way.data.model
-
-import vn.asiantech.way.data.model.LocationAddress
+package vn.asiantech.way.data.model.share
 
 /**
  * Copyright © AsianTech Co., Ltd
