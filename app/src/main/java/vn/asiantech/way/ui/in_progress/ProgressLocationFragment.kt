@@ -5,12 +5,17 @@ import android.animation.Animator
 import android.animation.IntEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.GradientDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.os.BatteryManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -25,14 +30,17 @@ import android.widget.Toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
+import com.hypertrack.lib.HyperTrack.stopTracking
 import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
+import com.hypertrack.lib.callbacks.HyperTrackEventCallback
+import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
-import com.hypertrack.lib.models.ErrorResponse
-import com.hypertrack.lib.models.HyperTrackLocation
-import com.hypertrack.lib.models.SuccessResponse
+import com.hypertrack.lib.internal.transmitter.models.HyperTrackEvent
+import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.fragment_progress_location.*
 import vn.asiantech.way.R
+import vn.asiantech.way.ui.splash.SplashActivity
 
 
 /**
@@ -41,9 +49,27 @@ import vn.asiantech.way.R
 class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
 
     private var mGoogleMap: GoogleMap? = null
+
     private var mCurrentLocationMarker: Marker? = null
     private var mCircle: GroundOverlay? = null
     private var mValueAnimator: ValueAnimator? = null
+    private var mCircleRadius: Int = 160
+    private var mIsMapLoaded = false
+    private var mIsVehicleTypeTabLayoutVisible = false
+    private var mExpectedPlace: Place? = null
+    private var mIsRestoreLocationSharing = false
+    private var mIsHandleTrackingUrlDeeplink = false
+
+    private var mDestinationPlace: Place? = null
+    private var mUserPositions: MutableList<Location> ?= null
+
+    private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val level = p1?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
+            tvBattery.text = "${level.toString()}%"
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,12 +80,20 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         checkGPS()
         initView()
+        getCurrentLocation()
+        activity.registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+//        setHyperTrackCallbackForActivityUpdates()
         addEvents()
     }
 
     private fun initView() {
         val mapFragment = activity.fragmentManager.findFragmentById(R.id.mapFragment) as MapFragment
         mapFragment.getMapAsync(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        startPulse(false)
     }
 
     private fun addEvents() {
@@ -73,8 +107,14 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
             }
         }
         //TODO Action ripple here!
-        rippleViewStop.setOnClickListener { Toast.makeText(context, "STOP STOP STOP", Toast.LENGTH_SHORT).show() }
-        rippleViewShare.setOnClickListener { Toast.makeText(context, "SHARE SHARE SHARE", Toast.LENGTH_SHORT).show() }
+        rippleTrackingToggle.setOnRippleCompleteListener {
+            if (rippleTrackingToggle.tag == "stop") {
+                stopTracking()
+            } else if (rippleTrackingToggle.tag == "summary") {
+
+            }
+        }
+        rippleShareLink.setOnClickListener { Toast.makeText(context, "SHARE SHARE SHARE", Toast.LENGTH_SHORT).show() }
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -87,10 +127,10 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1)*/
         mGoogleMap?.addMarker(MarkerOptions()
-                .title("Đà Nẵng đó!")
-                .position(LatLng(16.074812, 108.233132))
+                .title("A Place!")
+                .position(LatLng(16.082709, 108.236512))
                 .draggable(true)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker_car))
         )
         mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(16.074812, 108.233132), 12f))
     }
@@ -115,83 +155,203 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    //init List of location when update location
+    private fun getCurrentLocation() {
+        mUserPositions = ArrayList()
+//        mUserPositions.add(Location(LatLng(16.082709, 108.236512)))
+        mIsMapLoaded = true
+        updateCurrentLocation(null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+//        stopPulse()
+    }
+
+    private fun setHyperTrackCallbackForActivityUpdates() {
+        HyperTrack.setCallback(object : HyperTrackEventCallback() {
+            override fun onEvent(p0: HyperTrackEvent) {
+                when (p0.eventType) {
+                    HyperTrackEvent.EventType.LOCATION_CHANGED_EVENT -> updateCurrentLocation(p0.location)
+                }
+            }
+
+            override fun onError(p0: ErrorResponse) {
+                Log.d("at-dinhvo", "ErrorResponse when setHyperTrackCallbackForActivityUpdates()")
+            }
+        })
+    }
+
+    private fun setCallbackForHyperTrackEvents() {
+        HyperTrack.setCallback(object : HyperTrackEventCallback() {
+            override fun onEvent(event: HyperTrackEvent) {
+                when (event.eventType) {
+                    HyperTrackEvent.EventType.STOP_ENDED_EVENT -> {
+                        /*//Check if user has shared his tracking link
+                        if (ActionManager.getSharedManager(this@Home).isActionLive()) {
+                            return
+                        }*/
+
+                        activity.runOnUiThread({
+                            val builder = ServiceNotificationParamsBuilder()
+                            val action = ArrayList<String>()
+                            action.add("Set Destination Address")
+                            val notificationParams = builder
+                                    .setSmallIcon(R.drawable.ic_ht_hero_marker_car)
+                                    .setSmallIconBGColor(ContextCompat.getColor(context, R.color.colorAccent))
+                                    .setContentTitle("setContentTitle: pewpewpewpew")
+                                    .setContextText("setContextText: pewpewpewpew")
+                                    .setContentIntentActivityClass(SplashActivity::class.java)
+                                    .setContentIntentExtras(action)
+                                    .build()
+                            HyperTrack.setServiceNotificationParams(notificationParams)
+                        })
+                    }
+                    HyperTrackEvent.EventType.TRACKING_STOPPED_EVENT, HyperTrackEvent.EventType.ACTION_ASSIGNED_EVENT, HyperTrackEvent.EventType.ACTION_COMPLETED_EVENT, HyperTrackEvent.EventType.STOP_STARTED_EVENT -> HyperTrack.clearServiceNotificationParams()
+                    HyperTrackEvent.EventType.LOCATION_CHANGED_EVENT -> {
+                        Log.d("at-dinhvo", "onEvent: Location Changed")
+                        updateCurrentLocation(event.location)
+                    }
+                }
+            }
+
+            override fun onError(errorResponse: ErrorResponse) {
+                // do nothing
+                Log.d("at-dinhvo", "onError: ErrorResponse Location Changed")
+            }
+        })
+    }
+
     fun updateCurrentLocation(location: HyperTrackLocation?) {
         if (location?.geoJSONLocation == null || location.geoJSONLocation.latLng == null) {
             HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
-                    Log.d("at-dinhvo", "onSuccess: Current Location Recieved");
+                    Log.d("at-dinhvo", "onSuccess: Current Location Recieved")
                     val hyperTrackLocation = HyperTrackLocation(p0.responseObject as? Location)
+                    // check speed
+                    Log.d("at-dinhvo", "speed: ${hyperTrackLocation.distanceTo(
+                            HyperTrackLocation(16.082709, 108.236512))}")
+//                    tvSpeed.text = hyperTrackLocation.speed.toString()
                     updateCurrentLocation(hyperTrackLocation)
                 }
 
                 override fun onError(p0: ErrorResponse) {
-                    Log.d("at-dinhvo", "onError: Current Location Receiving error");
+                    Log.d("at-dinhvo", "onError: Current Location Receiving error")
                     Log.d("at-dinhvo", "onError: " + p0.errorMessage)
                 }
             })
             return
         }
         val latLng = location.geoJSONLocation.latLng
+        Log.d("at-dinhvo", "Lat: " + latLng.latitude + "; Lng: " + latLng.longitude)
         if (mCurrentLocationMarker == null) {
-            mCurrentLocationMarker = mGoogleMap?.addMarker(MarkerOptions()
+            Log.d("at-dinhvo", "CurrentLocationMarker is null")
+            /*mCurrentLocationMarker = mGoogleMap?.addMarker(MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
-                    .anchor(0.5f, 0.5f));
-            addPulseRing(latLng)
+                    .anchor(0.5f, 0.5f))*/
+            mCurrentLocationMarker = mGoogleMap?.addMarker(MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
+                    .anchor(0.5f, 0.5f))
+//            addPulseRing(latLng)
         } else {
-            currentLocationMarker.setVisible(true);
-            circle.setPosition(latLng);
-            circle.setVisible(true);
-            MarkerAnimation.animateMarker(currentLocationMarker, latLng);
+            mCurrentLocationMarker?.isVisible = true
+            mCircle?.position = latLng
+            mCircle?.isVisible = true
+            MarkerAnimation.animateMarker(mCurrentLocationMarker, latLng)
         }
-        startPulse(false);
-        if (!isRestoreLocationSharing && !isHandleTrackingUrlDeeplink)
-            updateMapView();
+//        startPulse(false)
+        if (!mIsRestoreLocationSharing && !mIsHandleTrackingUrlDeeplink) {
+            updateMapView()
+        }
+    }
+
+    private fun updateMapView() {
+        Log.d("at-dinhvo", "UpdateMapView")
+        if (mGoogleMap == null || !mIsMapLoaded) {
+            return
+        }
+        if (mCurrentLocationMarker == null && mExpectedPlace == null) {
+            return
+        }
+        val builder = LatLngBounds.Builder()
+        if (mCurrentLocationMarker != null) {
+            val current = mCurrentLocationMarker?.position
+            builder.include(current)
+        }
+        if (mExpectedPlace != null) {
+            val destination = mExpectedPlace?.location?.latLng
+            builder.include(destination)
+        }
+        val bounds = builder.build()
+
+        try {
+            val cameraUpdate: CameraUpdate
+            cameraUpdate = if (mExpectedPlace != null && mCurrentLocationMarker != null) {
+                val width = resources.displayMetrics.widthPixels
+                val height = resources.displayMetrics.heightPixels
+                val padding = (width * 0.12).toInt()
+                CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding)
+            } else {
+                val latLng = if (mCurrentLocationMarker != null)
+                    mCurrentLocationMarker?.position
+                else
+                    mExpectedPlace?.location?.latLng
+                CameraUpdateFactory.newLatLngZoom(latLng, 16f)
+            }
+            mGoogleMap?.animateCamera(cameraUpdate, 1000, null)
+        } catch (e: Exception) {
+            Log.d("at-dinhvo", "Exception when updateMapView()")
+        }
+
     }
 
     private fun startPulse(reset: Boolean) {
-
-        if (!HyperTrackUtils.isInternetConnected(this)) {
-            if (circle != null) {
-                circle.remove()
+        Log.d("at-dinhvo", "startPulse")
+        if (!HyperTrackUtils.isInternetConnected(context)) {
+            Log.d("at-dinhvo", "is InternetConnected")
+            if (mCircle != null) {
+                mCircle?.remove()
             }
-            if (valueAnimator != null) {
-                valueAnimator.cancel()
+            if (mValueAnimator != null) {
+                mValueAnimator?.cancel()
             }
         }
-        if (valueAnimator == null || reset) {
-            if (valueAnimator != null)
-                valueAnimator.end()
-            val radius = intArrayOf(circleRadius)
-            valueAnimator = ValueAnimator()
-            valueAnimator.setRepeatCount(ValueAnimator.INFINITE)
-            valueAnimator.setRepeatMode(ValueAnimator.RESTART)
-            valueAnimator.setIntValues(0, radius[0].toInt())
-            valueAnimator.setDuration(2000)
-            valueAnimator.setEvaluator(IntEvaluator())
-            valueAnimator.setInterpolator(AccelerateDecelerateInterpolator())
-            valueAnimator.addUpdateListener(ValueAnimator.AnimatorUpdateListener { valueAnimator ->
+        if (mValueAnimator == null || reset) {
+            if (mValueAnimator != null)
+                mValueAnimator?.end()
+            val radius = intArrayOf(mCircleRadius)
+            mValueAnimator = ValueAnimator()
+            mValueAnimator?.repeatCount = ValueAnimator.INFINITE
+            mValueAnimator?.repeatMode = ValueAnimator.RESTART
+            mValueAnimator?.setIntValues(0, radius[0])
+            mValueAnimator?.duration = 2000
+            mValueAnimator?.setEvaluator(IntEvaluator())
+            mValueAnimator?.interpolator = AccelerateDecelerateInterpolator()
+            mValueAnimator?.addUpdateListener({ valueAnimator ->
                 val animatedFraction = valueAnimator.animatedFraction
-                circle.setDimensions(animatedFraction * radius[0].toInt())
-                circle.setTransparency(animatedFraction)
+                mCircle?.setDimensions(animatedFraction * radius[0])
+                mCircle?.transparency = animatedFraction
             })
-            valueAnimator.addListener(object : Animator.AnimatorListener {
+            mValueAnimator?.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {
-                    circle.setTransparency(1f)
-                    circle.setVisible(true)
-                    if (currentLocationMarker != null)
-                        currentLocationMarker.setVisible(true)
+                    mCircle?.transparency = 1f
+                    mCircle?.isVisible = true
+                    if (mCurrentLocationMarker != null)
+                        mCurrentLocationMarker?.isVisible = true
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
 
                 }
 
+                @SuppressLint("ObjectAnimatorBinding")
                 override fun onAnimationCancel(animation: Animator) {
-                    ObjectAnimator.ofFloat(circle, "transparency", 1f, 0f).setDuration(500).start()
-                    circle.setVisible(false)
-                    if (currentLocationMarker != null)
-                        currentLocationMarker.setVisible(false)
+                    ObjectAnimator.ofFloat(mCircle, "transparency", 1f, 0f).setDuration(500).start()
+                    mCircle?.isVisible = false
+                    if (mCurrentLocationMarker != null)
+                        mCurrentLocationMarker?.isVisible = false
                 }
 
                 override fun onAnimationRepeat(animation: Animator) {
@@ -199,176 +359,46 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             })
         }
-
-        valueAnimator.start()
+        mValueAnimator?.start()
     }
 
     private fun stopPulse() {
-        if (valueAnimator != null) {
-            valueAnimator.cancel()
+        Log.d("at-dinhvo", "stopPulse")
+        if (mValueAnimator != null) {
+            mValueAnimator?.cancel()
         }
     }
 
     private fun addPulseRing(latLng: LatLng) {
+        Log.d("at-dinhvo", "addPulseRing")
         val d = GradientDrawable()
         d.shape = GradientDrawable.OVAL
         d.setSize(500, 500)
-        d.setColor(ContextCompat.getColor(this, R.color.pulse_color))
-
+        d.setColor(ContextCompat.getColor(context, R.color.pulse_color))
         val bitmap = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
-
         // Convert the drawable to bitmap
         val canvas = Canvas(bitmap)
         d.setBounds(0, 0, canvas.width, canvas.height)
         d.draw(canvas)
-
         // Radius of the circle
         val radius = 100
-
         // Add the circle to the map
-        circle = mMap.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, (2 * radius).toFloat()).image(BitmapDescriptorFactory.fromBitmap(bitmap)))
+        mCircle = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
+                .position(latLng, (2 * radius).toFloat())
+                .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
     }
 
-    private fun startPulse(reset: Boolean) {
-        if (!HyperTrackUtils.isInternetConnected(this)) {
-            if (mCircle != null) {
-                mCircle.remove()
+    private fun track(latLng: LatLng){
+        HyperTrack.getETA(latLng, VehicleType.WALK, object : HyperTrackCallback(){
+            override fun onSuccess(p0: SuccessResponse) {
+                Log.d("at-dinhvo", "eta: ${p0.responseObject}")
+//                LatLng = p0.responseObject.
             }
-            if (valueAnimator != null) {
-                valueAnimator.cancel()
+
+            override fun onError(p0: ErrorResponse) {
+
             }
-        }
-        if (valueAnimator == null || reset) {
-            if (valueAnimator != null)
-                valueAnimator.end()
-            val radius = intArrayOf(circleRadius)
-            valueAnimator = ValueAnimator()
-            valueAnimator.setRepeatCount(ValueAnimator.INFINITE)
-            valueAnimator.setRepeatMode(ValueAnimator.RESTART)
-            valueAnimator.setIntValues(0, radius[0].toInt())
-            valueAnimator.setDuration(2000)
-            valueAnimator.setEvaluator(IntEvaluator())
-            valueAnimator.setInterpolator(AccelerateDecelerateInterpolator())
-            valueAnimator.addUpdateListener(ValueAnimator.AnimatorUpdateListener { valueAnimator ->
-                val animatedFraction = valueAnimator.animatedFraction
-                circle.setDimensions(animatedFraction * radius[0].toInt())
-                circle.setTransparency(animatedFraction)
-            })
-            valueAnimator.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {
-                    circle.setTransparency(1f)
-                    circle.setVisible(true)
-                    if (currentLocationMarker != null)
-                        currentLocationMarker.setVisible(true)
-                }
 
-                override fun onAnimationEnd(animation: Animator) {
-
-                }
-
-                override fun onAnimationCancel(animation: Animator) {
-                    ObjectAnimator.ofFloat(circle, "transparency", 1f, 0f).setDuration(500).start()
-                    circle.setVisible(false)
-                    if (currentLocationMarker != null)
-                        currentLocationMarker.setVisible(false)
-                }
-
-                override fun onAnimationRepeat(animation: Animator) {
-                    //radius[0] = circleRadius;
-                }
-            })
-        }
+        })
     }
-
-/*private void updateCurrentLocationMarker(final HyperTrackLocation location) {
-        if (!showCurrentLocationMarker) {
-            if (currentLocationMarker != null)
-                currentLocationMarker.remove();
-            currentLocationMarker = null;
-            return;
-        }
-        if (ActionManager.getSharedManager(this).isActionLive()) {
-            if (circle != null) {
-                stopPulse();
-            }
-            return;
-        }
-
-        if (location == null || location.getGeoJSONLocation() == null ||
-                location.getGeoJSONLocation().getLatLng() == null) {
-            HyperTrack.getCurrentLocation(new HyperTrackCallback() {
-                @Override
-                public void onSuccess(@NonNull SuccessResponse response) {
-                    Log.d(TAG, "onSuccess: Current Location Recieved");
-                    HyperTrackLocation hyperTrackLocation =
-                            new HyperTrackLocation((Location) response.getResponseObject());
-                    SharedPreferenceManager.setLastKnownLocation((Location) response.getResponseObject());
-                    updateCurrentLocationMarker(hyperTrackLocation);
-                }
-
-                @Override
-                public void onError(@NonNull ErrorResponse errorResponse) {
-                    Log.d(TAG, "onError: Current Location Receiving error");
-                    Log.d(TAG, "onError: " + errorResponse.getErrorMessage());
-                }
-            });
-            return;
-        }
-        LatLng latLng = location.getGeoJSONLocation().getLatLng();
-        if (currentLocationMarker == null) {
-            currentLocationMarker = mMap.addMarker(new MarkerOptions().
-                    position(latLng).
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
-                    .anchor(0.5f, 0.5f));
-            addPulseRing(latLng);
-        } else {
-            currentLocationMarker.setVisible(true);
-            circle.setPosition(latLng);
-            circle.setVisible(true);
-            MarkerAnimation.animateMarker(currentLocationMarker, latLng);
-        }
-        startPulse(false);
-        if (!isRestoreLocationSharing && !isHandleTrackingUrlDeeplink)
-            updateMapView();
-    }*/
-
-/*void getCurrentLocation(@NonNull final HyperTrackCallback callback) {
-        this.getCurrentLocation((Integer)null, new HyperTrackCallback() {
-            public void onSuccess(@NonNull SuccessResponse response) {
-                HyperTrackLocation hyperTrackLocation = (HyperTrackLocation)response.getResponseObject();
-                Location location = new Location(hyperTrackLocation.getProvider());
-                if(hyperTrackLocation.getGeoJSONLocation() != null) {
-                    location.setLatitude(hyperTrackLocation.getGeoJSONLocation().getLatitude());
-                    location.setLongitude(hyperTrackLocation.getGeoJSONLocation().getLongitude());
-                }
-
-                if(hyperTrackLocation.getAccuracy() != null) {
-                    location.setAccuracy(hyperTrackLocation.getAccuracy().floatValue());
-                }
-
-                if(hyperTrackLocation.getSpeed() != null) {
-                    location.setSpeed(hyperTrackLocation.getSpeed().floatValue());
-                }
-
-                if(hyperTrackLocation.getBearing() != null) {
-                    location.setBearing(hyperTrackLocation.getBearing().floatValue());
-                }
-
-                if(hyperTrackLocation.getAltitude() != null) {
-                    location.setAltitude(hyperTrackLocation.getAltitude().doubleValue());
-                }
-
-                if(callback != null) {
-                    callback.onSuccess(new SuccessResponse(location));
-                }
-
-            }
-
-            public void onError(@NonNull ErrorResponse errorResponse) {
-                if(callback != null) {
-                    callback.onError(errorResponse);
-                }
-
-            }
-        });*/
+}

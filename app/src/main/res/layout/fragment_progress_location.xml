@@ -244,7 +244,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/speed"
+                            android:id="@+id/tvSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/mask"
@@ -267,7 +267,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/battery"
+                            android:id="@+id/tvBattery"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="6dp"
@@ -295,7 +295,7 @@
             android:visibility="visible">
 
             <com.hypertrack.lib.internal.consumer.view.RippleView
-                android:id="@+id/rippleViewStop"
+                android:id="@+id/rippleTrackingToggle"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -318,7 +318,7 @@
                 android:background="@color/divider_light" />
 
             <com.hypertrack.lib.internal.consumer.view.RippleView
-                android:id="@+id/rippleViewShare"
+                android:id="@+id/rippleShareLink"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
