@@ -8,6 +8,10 @@
     <color name="colorPinkLight">#f5b0e3</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+    <color name="light_orange">#FC6400</color>
+    <color name="pink">#FF065D</color>
+    <color name="grayLowLight">#19d6d6d6</color>
+    <color name="grayLow">#19e9e9e9</color>
     <color name="colorGrayLight">#bab9b9</color>
     <color name="colorAccentLight">#ff3add</color>
 </resources>

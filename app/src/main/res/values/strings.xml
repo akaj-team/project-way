@@ -7,6 +7,11 @@
     <string name="splash_button_enable_location">Enable location</string>
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
 
+    <!--Custom floating menu-->
+    <string name="custom_floating_menu_calendar_title">Calendar</string>
+    <string name="custom_floating_menu_profile_title">Profile</string>
+    <string name="custom_floating_menu_share_title">Share</string>
+
     <!--Register screen-->
     <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
     <string name="toast_image_size">Please choose image with size less than...</string>
