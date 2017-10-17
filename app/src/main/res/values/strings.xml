@@ -18,6 +18,11 @@
     <string name="textview_text_text_test_description_success">Share your live location link:</string>
     <string name="textview_text_copied">Copied</string>
 
+    <!--Custom floating menu-->
+    <string name="custom_floating_menu_calendar_title">Calendar</string>
+    <string name="custom_floating_menu_profile_title">Profile</string>
+    <string name="custom_floating_menu_share_title">Share</string>
+
     <!--Register screen-->
     <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
     <string name="toast_image_size">Please choose image with size less than...</string>
