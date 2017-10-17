@@ -76,9 +76,8 @@
         </activity>
         <activity
             android:name=".ui.share.ShareLocationActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" />
 
-        </activity>
         <activity android:name=".ui.register.RegisterActivity" />
         <!-- Register meta-data here -->
         <!--
@@ -95,7 +94,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <service android:name=".utils.GPSUtil"/>
     </application>
 
 </manifest>

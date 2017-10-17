@@ -47,16 +47,17 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val myLocation = LocationUtil(this).getCurrentLocation()
         val myLaLng = myLocation?.latitude?.let { LatLng(it, myLocation.longitude) }
-        val cameraMove = CameraUpdateFactory.newLatLngZoom(
-                myLaLng, 16f)
-        googleMap?.addMarker(myLaLng?.let {
-            MarkerOptions().position(it)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
-                    .anchor(0.5f, 0.5f)
-        })
-        googleMap?.animateCamera(cameraMove)
-        getLocationAddress("${myLaLng?.latitude},${myLaLng?.longitude}")
-
+        if (myLaLng != null) {
+            val cameraMove = CameraUpdateFactory.newLatLngZoom(
+                    myLaLng, 16f)
+            googleMap?.addMarker(myLaLng?.let {
+                MarkerOptions().position(it)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
+                        .anchor(0.5f, 0.5f)
+            })
+            googleMap?.animateCamera(cameraMove)
+            getLocationAddress("${myLaLng?.latitude},${myLaLng?.longitude}")
+        }
     }
 
 
