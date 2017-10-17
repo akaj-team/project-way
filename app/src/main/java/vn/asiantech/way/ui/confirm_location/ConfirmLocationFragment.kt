@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.confirm_location
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.arsy.maps_library.MapRipple
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -63,6 +65,8 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             tvLocation.text = address.getAddressLine(0)
+        } else {
+            tvLocation.text = null
         }
     }
 
@@ -72,19 +76,28 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
             val currentLocation = LatLng(location.latitude, location.longitude)
             mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
-                    .draggable(true)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
                     .title(getString(R.string.current_location)))
-                    ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
-            val from = 0
-            val to = 100
-            val fraction = 255 / to
-
-            addPulseAnimator(mGoogleMap!!, circles, currentLocation, from, to, fraction, 1)
+            addMarkerAnimation(currentLocation)
+//            val from = 0
+//            val to = 100
+//            val fraction = 255 / to
+//
+//            addPulseAnimator(currentLocation, from, to, fraction, 1)
         }
     }
 
-    private fun addPulseAnimator(gMap: GoogleMap, circles: Array<Circle?>, latLng: LatLng, from: Int, to: Int, colorFraction: Int, currentPosition: Int) {
+    private fun addMarkerAnimation(latLng: LatLng) {
+        val mapRipple = MapRipple(mGoogleMap, latLng, context)
+        mapRipple.withNumberOfRipples(1)
+        mapRipple.withRippleDuration(2000)
+        mapRipple.withFillColor(Color.BLUE)
+        mapRipple.withDistance(100.0)
+        mapRipple.startRippleMapAnimation()
+    }
+
+    private fun addPulseAnimator(latLng: LatLng, from: Int, to: Int, colorFraction: Int, currentPosition: Int) {
         val valueAnimator = ValueAnimator.ofInt(from, to)
         valueAnimator.duration = animationDuration.toLong()
         valueAnimator.repeatCount = ValueAnimator.INFINITE
@@ -101,7 +114,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
                 circle.strokeWidth = 0f
 
             } ?: run {
-                circles[currentPosition] = gMap.addCircle(CircleOptions()
+                circles[currentPosition] = mGoogleMap?.addCircle(CircleOptions()
                         .center(latLng)
                         .radius(radius.toDouble())
                         .fillColor(Color.argb((to - radius) * colorFraction, 48, 118, 254))
