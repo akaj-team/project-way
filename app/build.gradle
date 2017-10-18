@@ -104,6 +104,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
+
     // Google play services
     implementation 'com.google.android.gms:play-services-gcm:11.2.2'
     implementation 'com.google.android.gms:play-services-places:11.2.2'

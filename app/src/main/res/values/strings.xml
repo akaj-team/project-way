@@ -65,7 +65,4 @@
     <string name="show_distance"> km </string>
     <string name="show_average_speed"> kmph </string>
     <string name="arrived_dialog_tag">Dialog Fragment</string>
-    <string name="dialog_button_cancel">Cancel</string>
-    <string name="dialog_button_ok">OK</string>
-    <string name="dialog_message_enable_gps">Turn on GPS</string>
 </resources>
