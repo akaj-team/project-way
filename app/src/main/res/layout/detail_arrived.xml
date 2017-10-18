@@ -1,8 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardViewDetailArrived"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include layout="@layout/show_detail_arrived" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgStartPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/ic_ht_source_place_marker" />
+
+        <TextView
+            android:id="@+id/tvLineStartEnd"
+            android:layout_width="@dimen/arrived_line_start_end_width"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imgEndPoint"
+            android:layout_alignLeft="@+id/imgStartPoint"
+            android:layout_alignStart="@id/imgStartPoint"
+            android:layout_below="@+id/imgStartPoint"
+            android:layout_marginBottom="-4.5dp"
+            android:layout_marginLeft="10.5dp"
+            android:layout_marginTop="-5.5dp"
+            android:background="@color/black" />
+
+        <ImageView
+            android:id="@+id/imgEndPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imgStartPoint"
+            android:layout_alignTop="@+id/tvEndTime"
+            android:background="@drawable/ic_ht_expected_place_marker" />
+
+        <TextView
+            android:id="@+id/tvStartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toLeftOf="@+id/imgArrowRightStartItem"
+            android:layout_toRightOf="@+id/imgStartPoint"
+            tools:text="3:08 CH, th 10, 2017" />
+
+        <TextView
+            android:id="@+id/tvStartAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvStartTime"
+            android:layout_below="@+id/tvStartTime"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            tools:text="An Hai Bac An Hai Bac An Hai Bac An Hai Bac" />
+
+        <ImageView
+            android:id="@+id/imgArrowRightStartItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvStartTime"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_keyboard_arrow_right_black_18dp" />
+
+        <ImageView
+            android:id="@+id/imgArrowRightEndItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvEndTime"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_keyboard_arrow_right_black_18dp" />
+
+        <ImageView
+            android:id="@+id/imgArrowDropDownStartItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvStartTime"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_keyboard_arrow_down_black_18dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgArrowDropDownEndItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvEndTime"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_keyboard_arrow_down_black_18dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvStartAddress"
+            android:layout_below="@+id/tvStartAddress"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@+id/imgArrowRightEndItem"
+            tools:text="3:11 CH, th 10, 2017" />
+
+        <TextView
+            android:id="@+id/tvEndAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvEndTime"
+            android:layout_below="@+id/tvEndTime"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            tools:text="An Hai Bac" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

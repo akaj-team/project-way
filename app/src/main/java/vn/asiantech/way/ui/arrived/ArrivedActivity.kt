@@ -31,9 +31,7 @@ import com.hypertrack.lib.models.HyperTrackLocation
 import com.hypertrack.lib.models.SuccessResponse
 import kotlinx.android.synthetic.main.activity_arrived.*
 import kotlinx.android.synthetic.main.detail_arrived.*
-import kotlinx.android.synthetic.main.show_detail_arrived.*
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.makeAverageSpeed
 import vn.asiantech.way.extension.makeDistance
 import vn.asiantech.way.extension.makeDuration
 import vn.asiantech.way.models.Arrived
@@ -57,8 +55,6 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         private const val TYPE_PADDING_RIGHT = 0
         private const val TYPE_PADDING_LEFT = 0
         private const val TYPE_ANCHOR = 0.5f
-        private const val TYPE_ORIGIN_DEFAULT_LATITUDE = 16.0751387
-        private const val TYPE_ORIGIN_DEFAULT_LONGITUDE = 108.1538494
     }
 
     private var mGoogleMap: GoogleMap? = null
@@ -70,7 +66,6 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_arrived)
         setArrivedDetail()
-        configFirst()
         checkGPS()
         askPermissionsAccessLocation()
         val supportMapFragment = fragmentGoogleMap as? SupportMapFragment
@@ -85,9 +80,23 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         imgArrowDown.setOnClickListener {
-            imgArrowDown.visibility = View.GONE
-            imgArrowRight.visibility = View.VISIBLE
-            cardViewDetailArrived.visibility = View.GONE
+            setArrowDownClick()
+        }
+
+        imgArrowRightStartItem.setOnClickListener {
+            setArrowRightStartItemClick()
+        }
+
+        imgArrowRightEndItem.setOnClickListener {
+            setArrowRightEndItemClick()
+        }
+
+        imgArrowDropDownStartItem.setOnClickListener {
+            setArrowDropDownStartItemClick()
+        }
+
+        imgArrowDropDownEndItem.setOnClickListener {
+            setArrowDropDownEndItemClick()
         }
 
         imgBtnArrowBack.setOnClickListener {
@@ -109,12 +118,12 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun setArrivedDetail() {
         //TODO("Set for mArrived")
-    }
-
-    private fun configFirst() {
-        //TODO("Set list LatLng of mArrived")
         mArrived.latLngs = mutableListOf()
-        mArrived.latLngs?.add(LatLng(TYPE_ORIGIN_DEFAULT_LATITUDE, TYPE_ORIGIN_DEFAULT_LONGITUDE))
+//        mArrived.latLngs?.add(LatLng(16.0751387, 108.1538494))
+//        mArrived.dateTimeFirst = "3:08 CH,th 10 17"
+//        mArrived.dateTimeEnd = "5:00 CH,th 10 17"
+//        mArrived.firstLocation = "Đường số 4, An Hải Bắc, KCN An Đồn, Đà Nẵng, Việt Nam"
+//        mArrived.endLocation = "Đường số 4, An Hải Bắc, KCN An Đồn, Đà Nẵng, Việt Nam"
     }
 
     private fun checkGPS() {
@@ -158,7 +167,9 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         mGoogleMap?.uiSettings?.isMapToolbarEnabled = false
         mGoogleMap?.uiSettings?.isCompassEnabled = false
         mArrived.latLngs?.let {
-            mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, it[0]))
+            if (it.size > 0) {
+                mGoogleMap?.addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, it[0]))
+            }
         }
     }
 
@@ -201,7 +212,6 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         progressBarCircular.progress = TYPE_PROGRESS_MAX
         tvTimeTotalArrived.text = mArrived.time.makeDuration(this)
         tvDistanceArrived.text = mArrived.distance.makeDistance(this)
-        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
         drawLine()
     }
 
@@ -226,11 +236,39 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
         imgArrowRight.visibility = View.GONE
         imgArrowDown.visibility = View.VISIBLE
         cardViewDetailArrived.visibility = View.VISIBLE
-        tvAverage.visibility = View.GONE
-        tvTraveled.visibility = View.GONE
-        tvElapsed.visibility = View.GONE
-        tvTimeTotal.text = mArrived.time.makeDuration(this)
-        tvDistance.text = mArrived.distance.makeDistance(this)
-        tvAverageSpeed.text = mArrived.averageSpeed.makeAverageSpeed(this)
+        tvStartTime.text = mArrived.dateTimeFirst
+        tvStartAddress.text = mArrived.firstLocation
+        tvEndTime.text = mArrived.dateTimeEnd
+        tvEndAddress.text = mArrived.endLocation
+    }
+
+    private fun setArrowDownClick() {
+        imgArrowDown.visibility = View.GONE
+        imgArrowRight.visibility = View.VISIBLE
+        cardViewDetailArrived.visibility = View.GONE
+    }
+
+    private fun setArrowRightStartItemClick() {
+        imgArrowRightStartItem.visibility = View.GONE
+        imgArrowDropDownStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.VISIBLE
+    }
+
+    private fun setArrowDropDownEndItemClick() {
+        imgArrowDropDownEndItem.visibility = View.GONE
+        imgArrowRightEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.GONE
+    }
+
+    private fun setArrowDropDownStartItemClick() {
+        imgArrowDropDownStartItem.visibility = View.GONE
+        imgArrowRightStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.GONE
+    }
+
+    private fun setArrowRightEndItemClick() {
+        imgArrowRightEndItem.visibility = View.GONE
+        imgArrowDropDownEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.VISIBLE
     }
 }

@@ -37,7 +37,7 @@
     <string name="arrived_completed">completed</string>
     <string name="arrived_you">You</string>
     <string name="arrived_trip_summary">Trip Summary</string>
-    <string name="arrived_you_arrived">your\'re arrived</string>
+    <string name="arrived_you_arrived">you\'ve arrived</string>
     <string name="show_hour"> h </string>
     <string name="show_minutes"> min </string>
     <string name="show_distance"> km </string>
