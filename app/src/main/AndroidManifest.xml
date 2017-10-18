@@ -45,8 +45,7 @@
                 <data android:scheme="com.hypertracklive" />
             </intent-filter>
 
-
-            <!-- Intent Filter to handle trck.at link  -->
+            <!-- Intent Filter to handle trck.at link -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,12 +61,12 @@
                     android:pathPrefix="/" />
             </intent-filter>
 
-
-            <!--Intent filter to handle Branch Deep Link-->
+            <!-- Intent filter to handle Branch Deep Link -->
             <intent-filter>
                 <data
                     android:host="open"
                     android:scheme="hypertrack.io" />
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -90,13 +89,16 @@
             You need a different API key for each encryption key, including the release key that is used to
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-       -->
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".ui.map.MapActivity" />
+
     </application>
 
 </manifest>

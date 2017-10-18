@@ -16,7 +16,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.util.LocationUtil
+import vn.asiantech.way.utils.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
