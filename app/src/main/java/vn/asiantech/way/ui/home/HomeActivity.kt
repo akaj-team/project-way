@@ -1,7 +1,9 @@
 package vn.asiantech.way.ui.home
 
+import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,8 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.toast
 import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.util.LocationUtil
 import java.text.SimpleDateFormat
@@ -22,6 +24,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
+
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -39,6 +42,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     private var mPosition = -1
     private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
+    private var isExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,5 +133,18 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
         locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
         locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+    }
+
+    override fun onBackPressed() {
+        if (isExit) {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } else {
+            toast("Press back again to exit!")
+            isExit = true
+            Handler().postDelayed({ isExit = false }, 3 * 1000)
+        }
     }
 }
