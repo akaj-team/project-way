@@ -20,16 +20,16 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class SearchLocationActivity : BaseActivity() {
 
-    private var mTask: SearchLocationAsyncTask? = null
-    private var mAdapter: LocationsAdapter? = null
-    private var mMyLocations: MutableList<MyLocation> = mutableListOf()
-    private var mSharedPreferences: SharedPreferences? = null
-
     companion object {
         private const val SHARED_PREFERENCES = "shared"
         private const val KEY_HISTORY = "history"
         private const val HISTORY_MAX_SIZE = 10
     }
+
+    private var mTask: SearchLocationAsyncTask? = null
+    private var mAdapter: LocationsAdapter? = null
+    private var mMyLocations: MutableList<MyLocation> = mutableListOf()
+    private var mSharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

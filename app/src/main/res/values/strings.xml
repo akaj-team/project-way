@@ -49,6 +49,22 @@
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
+
+    <!--Arrived screen-->
+    <string name="arrived_show_summary">SHOW SUMMARY</string>
+    <string name="arrived_done">DONE</string>
+    <string name="arrived_average_speed">Average Speed</string>
+    <string name="arrived_traveled">Traveled</string>
+    <string name="arrived_elapsed">Elapsed</string>
+    <string name="arrived_completed">completed</string>
+    <string name="arrived_you">You</string>
+    <string name="arrived_trip_summary">Trip Summary</string>
+    <string name="arrived_you_arrived">you\'ve arrived</string>
+    <string name="show_hour"> h </string>
+    <string name="show_minutes"> min </string>
+    <string name="show_distance"> km </string>
+    <string name="show_average_speed"> kmph </string>
+    <string name="arrived_dialog_tag">Dialog Fragment</string>
     <!-- Search Location Screen-->
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
