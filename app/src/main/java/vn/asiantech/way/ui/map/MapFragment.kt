@@ -73,8 +73,8 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun checkGPS() {
-        val manager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        val manager = activity.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        if (!manager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(getString(R.string.dialog_message_enable_gps))
                     .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
