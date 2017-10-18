@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.home
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -16,6 +17,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.util.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,8 +29,7 @@ import kotlin.collections.ArrayList
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-class HomeActivity : BaseActivity(), OnMapReadyCallback {
-
+class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
     companion object {
         const val PADDING_LEFT = 0
         const val PADDING_TOP = 0
@@ -57,6 +58,16 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         } else {
             toast("Do not update the current location!")
         }
+    }
+
+    override fun onShareClick() {
+        Log.d("xxx", "share")
+    }
+
+    override fun onProfileClick() {
+    }
+
+    override fun onCalendarClick() {
     }
 
     private fun initViews() {

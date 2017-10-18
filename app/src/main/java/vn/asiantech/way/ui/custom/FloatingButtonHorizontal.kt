@@ -34,7 +34,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
                 imgBtnMenu.startAnimation(anim)
                 startAnimationFab(animInvisible)
-                if (rlShare.visibility == View.INVISIBLE) {
+                if (imgBtnShare.visibility == View.INVISIBLE) {
                     startAnimationFab(animVisible)
                     visibilityAllChildView(View.VISIBLE)
                 }
@@ -53,30 +53,27 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 })
             }
             R.id.imgBtnShare -> {
-                tvShare.visibility = View.VISIBLE
                 mOnMenuClickListener?.onShareClick()
             }
             R.id.imgBtnProfile -> {
-                tvProfile.visibility = View.VISIBLE
                 mOnMenuClickListener?.onProfileClick()
             }
             R.id.imgBtnCalendar -> {
-                tvCalendar.visibility = View.VISIBLE
                 mOnMenuClickListener?.onCalendarClick()
             }
         }
     }
 
     private fun startAnimationFab(animation: Animation) {
-        rlShare.startAnimation(animation)
-        rlProfile.startAnimation(animation)
-        rlCalendar.startAnimation(animation)
+        imgBtnShare.startAnimation(animation)
+        imgBtnProfile.startAnimation(animation)
+        imgBtnCalendar.startAnimation(animation)
     }
 
     private fun visibilityAllChildView(visibilityState: Int) {
-        rlShare.visibility = visibilityState
-        rlProfile.visibility = visibilityState
-        rlCalendar.visibility = visibilityState
+        imgBtnShare.visibility = visibilityState
+        imgBtnProfile.visibility = visibilityState
+        imgBtnCalendar.visibility = visibilityState
     }
 
     /**
