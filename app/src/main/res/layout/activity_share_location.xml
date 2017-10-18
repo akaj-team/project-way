@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vn.asiantech.way.ui.share.ShareLocationActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/fgMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.hypertrack.lib.internal.consumer.view.RippleView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_base">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back_icon_button" />
+            </com.hypertrack.lib.internal.consumer.view.RippleView>
+
+            <RelativeLayout
+                android:id="@+id/rlSearchLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btnBack"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tvTitleAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/share_textview_text_going_somewhere"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvTitleAddress"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="50dp"
+                    android:clickable="true"
+                    android:paddingBottom="10dp"
+                    android:text="@string/share_textview_text_description"
+                    android:textSize="15dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_location"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="15dp"
+                    android:clickable="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+
+            <com.hypertrack.lib.internal.consumer.view.WrappingViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/margin_high" />
+
+            <ImageView
+                android:id="@+id/imgBoundLocation"
+                android:layout_width="@dimen/set_bounds_icon_size"
+                android:layout_height="@dimen/set_bounds_icon_size"
+                android:layout_above="@+id/view_pager"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_margin="@dimen/margin_medium"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_ht_reset_button"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgChooseMarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/select_expected_place"
+                android:padding="10dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin_high"
+                android:background="@drawable/button_background"
+                android:text="Done"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <vn.asiantech.way.ui.custom.BottomButtonCard
+        android:id="@+id/bottomButtonCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
