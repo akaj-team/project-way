@@ -12,7 +12,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 
 internal class MapActivity : BaseActivity() {
     private companion object {
-        private const val REQUESTCODE_PERMISSION = 200
+        private const val REQUEST_CODE_PERMISSION = 200
         private const val VERSION_SDK = 23
     }
 
@@ -42,7 +42,7 @@ internal class MapActivity : BaseActivity() {
                 // Permissions
                 val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
                 // Dialog
-                ActivityCompat.requestPermissions(this, permissions, REQUESTCODE_PERMISSION)
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION)
             } else {
                 // No-op
             }
