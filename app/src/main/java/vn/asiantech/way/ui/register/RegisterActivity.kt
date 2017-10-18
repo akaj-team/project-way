@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -58,6 +59,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mPreviousPhone: String? = null
     var mIsoCode: String? = null
     var mTel: String? = null
+    var mIsExitPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         setUserInformation()
         frAvatar.setOnClickListener {
             checkPermissionGallery()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!mIsExitPressed) {
+            mIsExitPressed = true
+            toast(getString(R.string.register_double_click_to_exit))
+            Handler().postDelayed({
+                mIsExitPressed = false
+            }, 1500)
+        } else {
+            finishAffinity()
         }
     }
 
