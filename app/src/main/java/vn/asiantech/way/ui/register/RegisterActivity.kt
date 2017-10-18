@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
@@ -37,6 +39,7 @@ import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.home.HomeActivity
 import java.io.ByteArrayOutputStream
 
 /**
@@ -56,6 +59,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mPreviousPhone: String? = null
     var mIsoCode: String? = null
     var mTel: String? = null
+    var mIsExitPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +71,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         setUserInformation()
         frAvatar.setOnClickListener {
             checkPermissionGallery()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!mIsExitPressed) {
+            mIsExitPressed = true
+            toast(getString(R.string.register_double_click_to_exit))
+            Handler().postDelayed({
+                mIsExitPressed = false
+            }, 1500)
+        } else {
+            finishAffinity()
         }
     }
 
@@ -100,16 +116,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     edtPhoneNumber.text = null
                 }
                 createUser(name, phoneNumber)
-                /**
-                 * TODO
-                 * intent to home activity
-                 */
+                startActivity(Intent(this, HomeActivity::class.java))
             }
             R.id.tvCancel -> {
-                /**
-                 * TODO
-                 * intent to home activity
-                 */
+                startActivity(Intent(this, HomeActivity::class.java))
             }
         }
     }
@@ -238,10 +248,19 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun intentGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+        // Gallery intent
+        val galleryIntent = Intent()
+        galleryIntent.type = "image/*"
+        galleryIntent.action = Intent.ACTION_PICK
+
+        // Camera intent
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val pickTitle = getString(R.string.register_select_image)
+
+        // Chooser intent
+        val chooserIntent = Intent.createChooser(galleryIntent, pickTitle)
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+        startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
     }
 
     private fun checkPermissionGallery() {
@@ -272,10 +291,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         edtPhoneNumber.addTextChangedListener(this)
         tvTel.addTextChangedListener(this)
         btnSave.setOnClickListener(this)
+        tvCancel.setOnClickListener(this)
     }
 
     private fun initCountrySpinner() {
         spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
+        // Set priority for VietNam nation (index 198)
+        spinnerNation.setSelection(198)
         spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 // No-op
