@@ -32,9 +32,9 @@ import com.hypertrack.lib.models.SuccessResponse
 import kotlinx.android.synthetic.main.activity_arrived.*
 import kotlinx.android.synthetic.main.detail_arrived.*
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.arrived.Arrived
 import vn.asiantech.way.extension.makeDistance
 import vn.asiantech.way.extension.makeDuration
-import vn.asiantech.way.models.Arrived
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -44,7 +44,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
     companion object {
         private val TAG = ArrivedActivity::class.toString()
-        private const val REQUESTCODE_PERMISSION = 200
+        private const val REQUEST_CODE_PERMISSION = 200
         private const val VERSION_SDK = 23
         private const val TYPE_PROGRESS_MAX = 100
         private const val TYPE_CAMERA_ZOOM = 14f
@@ -153,7 +153,7 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
                 // Permissions
                 val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
                 // Dialog
-                ActivityCompat.requestPermissions(this, permissions, REQUESTCODE_PERMISSION)
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION)
             } else {
                 // No-op
             }
@@ -226,7 +226,7 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun showDialog() {
-        val dialog = DialogShowArrivedInformation.newInstance(mArrived.time, mArrived.distance,
+        val dialog = DialogArrived.newInstance(mArrived.time, mArrived.distance,
                 mArrived.averageSpeed)
         val fragmentManager = supportFragmentManager as? FragmentManager
         dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))

@@ -7,6 +7,7 @@ import vn.asiantech.way.R
  * Copyright © 2017 AsianTech inc.
  * Created by at-hoavo on 03/10/2017.
  */
+
 private const val UNIT_MILLISECOND = 1000
 private const val UNIT_METER = 1000
 private const val UNIT_SECOND = 60
@@ -18,7 +19,7 @@ private const val UNIT_MINUTE = 60
  * @return time to string
  */
 internal fun Long.makeDuration(context: Context): String {
-    var timer: String = ""
+    var timer = ""
     var checkHour = false
     val hours = this / (UNIT_MILLISECOND * UNIT_MINUTE * UNIT_SECOND)
     val minutes = (this % (UNIT_MILLISECOND * UNIT_SECOND * UNIT_MINUTE)) /

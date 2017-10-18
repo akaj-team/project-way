@@ -15,11 +15,7 @@ import vn.asiantech.way.extension.makeDuration
  *  Copyright © 2017 AsianTech inc.
  * Created by at-hoavo on 26/09/2017.
  */
-internal class DialogShowArrivedInformation : DialogFragment() {
-    private var mTime: Long? = null
-    private var mDistance: Double? = null
-    private var mAverageSpeed: Double? = null
-
+internal class DialogArrived : DialogFragment() {
     companion object {
         private const val TYPE_TIME = "time"
         private const val TYPE_DISTANCE = "distance"
@@ -35,8 +31,8 @@ internal class DialogShowArrivedInformation : DialogFragment() {
          *  @return Dialog to show detail user tracked
          */
         internal fun newInstance(time: Long, distance: Double, averageSpeed: Double)
-                : DialogShowArrivedInformation {
-            val dialogShowArrived = DialogShowArrivedInformation()
+                : DialogArrived {
+            val dialogShowArrived = DialogArrived()
             val bundle = Bundle()
             bundle.putLong(TYPE_TIME, time)
             bundle.putDouble(TYPE_DISTANCE, distance)
@@ -45,6 +41,10 @@ internal class DialogShowArrivedInformation : DialogFragment() {
             return dialogShowArrived
         }
     }
+
+    private var mTime: Long? = null
+    private var mDistance: Double? = null
+    private var mAverageSpeed: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

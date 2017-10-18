@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.arrived.ArrivedActivity">
+
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +45,8 @@
                 <data android:scheme="com.hypertracklive" />
             </intent-filter>
 
-            <!-- Intent Filter to handle trck.at link -->
+
+            <!-- Intent Filter to handle trck.at link  -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -60,12 +62,12 @@
                     android:pathPrefix="/" />
             </intent-filter>
 
-            <!-- Intent filter to handle Branch Deep Link -->
+
+            <!--Intent filter to handle Branch Deep Link-->
             <intent-filter>
                 <data
                     android:host="open"
                     android:scheme="hypertrack.io" />
-
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -78,6 +80,7 @@
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.arrived.ArrivedActivity" />
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
@@ -86,14 +89,13 @@
             You need a different API key for each encryption key, including the release key that is used to
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+       -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
 
 </manifest>

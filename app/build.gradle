@@ -104,7 +104,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
-
     // Google play services
     implementation 'com.google.android.gms:play-services-gcm:11.2.2'
     implementation 'com.google.android.gms:play-services-places:11.2.2'
@@ -113,7 +112,6 @@ dependencies {
 
     // Common
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:26.1.0'
