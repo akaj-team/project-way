@@ -46,6 +46,7 @@
     <string name="register_cancel">Cancel</string>
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
+    <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
 </resources>

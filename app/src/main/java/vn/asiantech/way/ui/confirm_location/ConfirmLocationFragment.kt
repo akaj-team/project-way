@@ -6,9 +6,11 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import com.arsy.maps_library.MapRipple
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.view_confirm_location_layout.*
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.util.LocationUtil
 import java.util.*
 
@@ -31,6 +34,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
     private val pulseCount = 4
     private val animationDuration = (pulseCount + 1) * 1000
     private var circles = Array<Circle?>(pulseCount, { null })
+    private var mapFragment: SupportMapFragment? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater!!.inflate(R.layout.fragment_confirm_location, container, false)
@@ -53,9 +57,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
     }
 
     private fun initGoogleMap() {
-        val mapFragment = childFragmentManager
+        mapFragment = childFragmentManager
                 .findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
     }
 
     private fun getLocationName(latLng: LatLng) {
@@ -77,12 +81,13 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
                     .title(getString(R.string.current_location)))
-            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
             addMarkerAnimation(currentLocation)
-//            val from = 0
-//            val to = 100
-//            val fraction = 255 / to
-//
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+//            test(currentLocation)
+            val from = 0
+            val to = 100
+            val fraction = 255 / to
+
 //            addPulseAnimator(currentLocation, from, to, fraction, 1)
         }
     }
@@ -90,10 +95,20 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.On
     private fun addMarkerAnimation(latLng: LatLng) {
         val mapRipple = MapRipple(mGoogleMap, latLng, context)
         mapRipple.withNumberOfRipples(1)
-        mapRipple.withRippleDuration(2000)
+        mapRipple.withRippleDuration(3000)
         mapRipple.withFillColor(Color.BLUE)
         mapRipple.withDistance(100.0)
         mapRipple.startRippleMapAnimation()
+    }
+
+    private fun test(latLng: LatLng) {
+        val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
+                .position(latLng, 100f)
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point)))
+        val groundAnimation = RadiusAnimation(groundOverlay!!)
+        groundAnimation.repeatCount = Animation.INFINITE
+        groundAnimation.duration = 2000
+        mapFragment?.view?.startAnimation(groundAnimation)
     }
 
     private fun addPulseAnimator(latLng: LatLng, from: Int, to: Int, colorFraction: Int, currentPosition: Int) {
