@@ -39,6 +39,7 @@ import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.home.HomeActivity
 import java.io.ByteArrayOutputStream
 
 /**
@@ -115,16 +116,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     edtPhoneNumber.text = null
                 }
                 createUser(name, phoneNumber)
-                /**
-                 * TODO
-                 * intent to home activity
-                 */
+                startActivity(Intent(this, HomeActivity::class.java))
             }
             R.id.tvCancel -> {
-                /**
-                 * TODO
-                 * intent to home activity
-                 */
+                startActivity(Intent(this, HomeActivity::class.java))
             }
         }
     }
@@ -296,10 +291,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         edtPhoneNumber.addTextChangedListener(this)
         tvTel.addTextChangedListener(this)
         btnSave.setOnClickListener(this)
+        tvCancel.setOnClickListener(this)
     }
 
     private fun initCountrySpinner() {
         spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
+        // Set priority for VietNam nation (index 198)
+        spinnerNation.setSelection(198)
         spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 // No-op
