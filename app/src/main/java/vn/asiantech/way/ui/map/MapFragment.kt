@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_map.map
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
-import vn.asiantech.way.utils.GPSUtil
+import vn.asiantech.way.utils.LocationUtil
 
 /**
  * Copyright © AsianTech Co., Ltd
@@ -37,7 +37,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         MapsInitializer.initialize(activity)
         checkGPS()
         mGoogleMap = googleMap
-        val location = GPSUtil(activity).getCurrentLocation()
+        val location = LocationUtil(activity).getCurrentLocation()
         if (location != null) {
             drawMaker(location)
         } else {
@@ -85,16 +85,6 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
                         dialogInterface.cancel()
                     }
             builder.create().show()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val location = GPSUtil(activity).getCurrentLocation()
-        if (location != null) {
-            drawMaker(location)
-        } else {
-            activity.toast(getString(R.string.toast_text_location_null))
         }
     }
 }
