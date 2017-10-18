@@ -1,4 +1,4 @@
-package vn.asiantech.way.util
+package vn.asiantech.way.utils
 
 import android.content.Context
 import android.location.Location

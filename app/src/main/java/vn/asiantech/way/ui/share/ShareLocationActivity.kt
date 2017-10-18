@@ -23,7 +23,7 @@ import vn.asiantech.way.data.remote.APIUtil
 import vn.asiantech.way.data.model.share.LocationResponse
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.BottomButtonCard
-import vn.asiantech.way.util.LocationUtil
+import vn.asiantech.way.utils.LocationUtil
 
 /**
  * Copyright © AsianTech Co., Ltd
