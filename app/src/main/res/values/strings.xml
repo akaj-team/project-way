@@ -9,6 +9,13 @@
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
+    <!--Map screen-->
+    <string name="toast_text_google_map_null">Google map is null</string>
+    <string name="dialog_message_enable_gps">App need GPS.Do you want enable your GPS?</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="marker_title">Current location</string>
+    <string name="toast_text_location_null">Not update current location!</string>
     <!--bottom button card-->
     <string name="bottom_button_card_title_text">Your friend is 23 min away!</string>
     <string name="bottom_button_card_description_text">Share your location back so that they can see you on the map.</string>
@@ -49,4 +56,20 @@
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
+
+    <!--Arrived screen-->
+    <string name="arrived_show_summary">SHOW SUMMARY</string>
+    <string name="arrived_done">DONE</string>
+    <string name="arrived_average_speed">Average Speed</string>
+    <string name="arrived_traveled">Traveled</string>
+    <string name="arrived_elapsed">Elapsed</string>
+    <string name="arrived_completed">completed</string>
+    <string name="arrived_you">You</string>
+    <string name="arrived_trip_summary">Trip Summary</string>
+    <string name="arrived_you_arrived">you\'ve arrived</string>
+    <string name="show_hour"> h </string>
+    <string name="show_minutes"> min </string>
+    <string name="show_distance"> km </string>
+    <string name="show_average_speed"> kmph </string>
+    <string name="arrived_dialog_tag">Dialog Fragment</string>
 </resources>
