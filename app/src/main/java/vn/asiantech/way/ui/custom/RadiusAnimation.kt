@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.GroundOverlay
  */
 class RadiusAnimation(val mGroundOverlay: GroundOverlay) : Animation() {
     override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-        mGroundOverlay.setDimensions((100 * interpolatedTime))
+        mGroundOverlay.setDimensions((400 * interpolatedTime))
         mGroundOverlay.transparency = interpolatedTime
     }
 }
