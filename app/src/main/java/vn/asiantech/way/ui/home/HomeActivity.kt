@@ -14,16 +14,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.utils.LocationUtil
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import kotlin.collections.ArrayList
 import android.view.WindowManager
 
@@ -66,11 +61,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initViews() {
-        val monthFormat = SimpleDateFormat("MMM", Locale.US)
-        val month = monthFormat.format(Calendar.getInstance().time)
-        val dateFormat = SimpleDateFormat(" dd,yyyy", Locale.getDefault())
-        val date = Date()
-        val time = month + dateFormat.format(date)
+//        val monthFormat = SimpleDateFormat("MMM", Locale.US)
+//        val month = monthFormat.format(Calendar.getInstance().time)
+//        val dateFormat = SimpleDateFormat(" dd,yyyy", Locale.getDefault())
+//        val date = Date()
+//        val time = month + dateFormat.format(date)
 //        tvCurrentTime.text = time
         setStatusBarTranslucent(true)
     }
