@@ -19,7 +19,6 @@ import vn.asiantech.way.ui.register.RegisterActivity
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-
 class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +88,9 @@ class SplashActivity : BaseActivity() {
                     progressBar.visibility = View.VISIBLE
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
-                    startActivity(Intent(this, RegisterActivity::class.java))
+                    val intent = Intent(this, RegisterActivity::class.java)
+                    intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                    startActivity(intent)
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)

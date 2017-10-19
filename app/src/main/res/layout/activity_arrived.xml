@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vn.asiantech.way.ui.arrived.ArrivedActivity">
+
+    <fragment
+        android:id="@+id/fragmentGoogleMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/imgBtnArrowBack"
+        android:layout_width="@dimen/arrow_back_width"
+        android:layout_height="@dimen/arrow_back_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_arrow_back"
+        android:contentDescription="@null" />
+
+    <ImageButton
+        android:id="@+id/imgBtnResetPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llDetailTracking"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_ht_reset_button" />
+
+    <LinearLayout
+        android:id="@+id/llDetailTracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnShowSummary"
+        android:layout_marginEnd="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginStart="30dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewShowResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llShowResult"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/arrived_show_result_height"
+                android:baselineAligned="false"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3">
+
+                    <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
+                        android:id="@+id/progressBarCircular"
+                        android:layout_width="@dimen/width_circular_seekBar"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="10dp"
+                        android:rotation="90"
+                        app:circle_color="@color/colorWhite"
+                        app:circle_progress_color="@color/violet"
+                        app:circle_stroke_width="@dimen/circle_stroke_width"
+                        app:lock_enabled="true"
+                        app:max="100"
+                        app:progress="100" />
+
+                    <ImageView
+                        android:id="@+id/imgReach"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_reached" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/arrived_you_arrived"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/tvTimeTotalArrived"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/text_size_little"
+                            tools:text="14 min" />
+
+                        <TextView
+                            android:id="@+id/tvDistanceArrived"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
+                            tools:text="( 0 km )" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imgArrowRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/ic_keyboard_arrow_right_black_18dp"
+                        android:contentDescription="@null" />
+
+                    <ImageView
+                        android:id="@+id/imgArrowDown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/ic_keyboard_arrow_down_black_18dp"
+                        android:contentDescription="@null"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <include
+            layout="@layout/detail_arrived"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnShowSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:text="@string/arrived_show_summary"
+        android:textSize="@dimen/text_size_normal"
+        android:visibility="visible" />
+</RelativeLayout>

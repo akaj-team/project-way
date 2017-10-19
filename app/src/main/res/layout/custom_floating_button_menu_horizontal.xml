@@ -12,7 +12,8 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/custom_item_menu_button"
         android:contentDescription="@null"
-        android:src="@drawable/ic_calendar" />
+        android:src="@drawable/ic_calendar"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imgBtnProfile"
@@ -23,7 +24,8 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/custom_item_menu_button"
         android:contentDescription="@null"
-        android:src="@drawable/ic_profile" />
+        android:src="@drawable/ic_profile"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imgBtnShare"
@@ -34,7 +36,8 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/custom_item_menu_button"
         android:contentDescription="@null"
-        android:src="@drawable/ic_share" />
+        android:src="@drawable/ic_share"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imgBtnMenu"

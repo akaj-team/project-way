@@ -1,9 +1,10 @@
 package vn.asiantech.way.ui.home
 
+import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,11 +15,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.toast
 import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
-import vn.asiantech.way.util.LocationUtil
+import vn.asiantech.way.ui.register.RegisterActivity
+import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.utils.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -40,12 +43,14 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     private var mPosition = -1
     private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
+    private var isExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initMap()
         initViews()
+        fabMenuGroup.setOnMenuItemClickListener(this)
         setDataForRecyclerView()
     }
 
@@ -61,13 +66,17 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onShareClick() {
-        Log.d("xxx", "share")
+        startActivity(Intent(this, ShareLocationActivity::class.java))
     }
 
     override fun onProfileClick() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_HOME)
+        startActivity(intent)
     }
 
     override fun onCalendarClick() {
+        // TODO after completed calendar feature
     }
 
     private fun initViews() {
@@ -140,5 +149,18 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
         locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
         locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+    }
+
+    override fun onBackPressed() {
+        if (isExit) {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } else {
+            toast("Press back again to exit!")
+            isExit = true
+            Handler().postDelayed({ isExit = false }, 3 * 1000)
+        }
     }
 }

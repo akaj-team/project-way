@@ -51,6 +51,9 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1001
         private const val REQUEST_CODE_GALLERY = 500
+        const val INTENT_CODE_SPLASH = 100
+        const val INTENT_CODE_HOME = 101
+        const val INTENT_REGISTER = "Register"
     }
 
     var mBitmap: Bitmap? = null
@@ -60,10 +63,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mIsoCode: String? = null
     var mTel: String? = null
     var mIsExitPressed = false
+    var mIntentCode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        checkIntent()
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
@@ -75,14 +80,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onBackPressed() {
-        if (!mIsExitPressed) {
-            mIsExitPressed = true
-            toast(getString(R.string.register_double_click_to_exit))
-            Handler().postDelayed({
-                mIsExitPressed = false
-            }, 1500)
-        } else {
-            finishAffinity()
+        if (mIntentCode == INTENT_CODE_SPLASH) {
+            if (!mIsExitPressed) {
+                mIsExitPressed = true
+                toast(getString(R.string.register_double_click_to_exit))
+                Handler().postDelayed({
+                    mIsExitPressed = false
+                }, 1500)
+            } else {
+                finishAffinity()
+            }
+        } else if (mIntentCode == INTENT_CODE_HOME) {
+            super.onBackPressed()
         }
     }
 
@@ -247,6 +256,15 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         return false
     }
 
+    private fun checkIntent() {
+        val bundle = intent.extras
+        if (bundle.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
+            mIntentCode = INTENT_CODE_HOME
+        } else if (bundle.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
+            mIntentCode = INTENT_CODE_SPLASH
+        }
+    }
+
     private fun intentGallery() {
         // Gallery intent
         val galleryIntent = Intent()
@@ -296,6 +314,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     private fun initCountrySpinner() {
         spinnerNation.adapter = CountrySpinnerAdapter(this, R.layout.item_list_country, mCountries)
+        // Set priority for VietNam nation (index 198)
+        spinnerNation.setSelection(198)
         spinnerNation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 // No-op
