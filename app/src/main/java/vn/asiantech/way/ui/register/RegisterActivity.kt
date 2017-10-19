@@ -63,12 +63,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mIsoCode: String? = null
     var mTel: String? = null
     var mIsExitPressed = false
-    var mIntentCode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        checkIntent()
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
@@ -80,7 +78,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onBackPressed() {
-        if (mIntentCode == INTENT_CODE_SPLASH) {
+        if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
             if (!mIsExitPressed) {
                 mIsExitPressed = true
                 toast(getString(R.string.register_double_click_to_exit))
@@ -90,7 +88,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             } else {
                 finishAffinity()
             }
-        } else if (mIntentCode == INTENT_CODE_HOME) {
+        } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
             super.onBackPressed()
         }
     }
@@ -254,15 +252,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             return true
         }
         return false
-    }
-
-    private fun checkIntent() {
-        val bundle = intent.extras
-        if (bundle.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
-            mIntentCode = INTENT_CODE_HOME
-        } else if (bundle.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
-            mIntentCode = INTENT_CODE_SPLASH
-        }
     }
 
     private fun intentGallery() {

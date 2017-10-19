@@ -53,12 +53,15 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 })
             }
             R.id.imgBtnShare -> {
+                visibilityAllChildView(View.INVISIBLE)
                 mOnMenuClickListener?.onShareClick()
             }
             R.id.imgBtnProfile -> {
+                visibilityAllChildView(View.INVISIBLE)
                 mOnMenuClickListener?.onProfileClick()
             }
             R.id.imgBtnCalendar -> {
+                visibilityAllChildView(View.INVISIBLE)
                 mOnMenuClickListener?.onCalendarClick()
             }
         }
