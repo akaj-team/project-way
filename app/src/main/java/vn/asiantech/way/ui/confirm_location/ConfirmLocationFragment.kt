@@ -83,7 +83,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
 
     private fun initMap() {
         mapFragment = childFragmentManager
-                .findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment
+                .findFragmentById(R.id.fragmentConfirmMap) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
     }
 
