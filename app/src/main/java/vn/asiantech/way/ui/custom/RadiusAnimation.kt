@@ -8,9 +8,9 @@ import com.google.android.gms.maps.model.GroundOverlay
  * Custom Ground overlay
  * Created by haingoq on 18/10/2017.
  */
-class RadiusAnimation(val mGroundOverlay: GroundOverlay) : Animation() {
+class RadiusAnimation(val mGroundOverlay: GroundOverlay?) : Animation() {
     override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-        mGroundOverlay.setDimensions((400 * interpolatedTime))
-        mGroundOverlay.transparency = interpolatedTime
+        mGroundOverlay?.setDimensions((400 * interpolatedTime))
+        mGroundOverlay?.transparency = interpolatedTime
     }
 }

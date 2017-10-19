@@ -39,9 +39,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     private var mDestinationName: String? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_confirm_location, container, false)
+        val view = inflater?.inflate(R.layout.fragment_confirm_location, container, false)
         initMap()
-        initListener(view)
+        initListener(view!!)
         return view
     }
 
@@ -56,12 +56,12 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     override fun onLocationChanged(location: Location?) {
-        drawCurrentMaker(location!!)
+        drawCurrentMaker(location)
     }
 
     override fun onCameraIdle() {
         mLatLng = mGoogleMap?.cameraPosition?.target
-        getLocationName()
+        getLocationName(mLatLng)
     }
 
     override fun onClick(view: View?) {
@@ -70,7 +70,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
                 //TODO intent to search
             }
             R.id.btnConfirm -> {
-                addDestinationMarker()
+                addDestinationMarker(mLatLng)
                 //TODO handle share location
             }
         }
@@ -87,9 +87,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         mapFragment?.getMapAsync(this)
     }
 
-    private fun getLocationName() {
+    private fun getLocationName(latLng: LatLng?) {
         val geoCoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(mLatLng!!.latitude, mLatLng!!.longitude, 1)
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             tvLocation.text = address.getAddressLine(0)
@@ -103,9 +103,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         }
     }
 
-    private fun addDestinationMarker() {
+    private fun addDestinationMarker(latLng: LatLng?) {
         mGoogleMap?.addMarker(MarkerOptions()
-                .position(mLatLng!!)
+                .position(latLng!!)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                 .title(mDestinationName)
                 .anchor(0.5f, 0.5f))
@@ -114,10 +114,10 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16f))
     }
 
-    private fun drawCurrentMaker(location: Location) {
+    private fun drawCurrentMaker(location: Location?) {
         if (mGoogleMap != null) {
             mGoogleMap?.clear()
-            val currentLocation = LatLng(location.latitude, location.longitude)
+            val currentLocation = LatLng(location!!.latitude, location.longitude)
             mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
@@ -141,7 +141,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
                 .position(latLng, 500f)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
-        val groundAnimation = RadiusAnimation(groundOverlay!!)
+        val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
         groundAnimation.duration = 2000
         mapFragment?.view?.startAnimation(groundAnimation)
