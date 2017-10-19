@@ -125,9 +125,6 @@ dependencies {
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.4.0'
-
-    // Google map animations
-    implementation 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
 }
 
 /*
