@@ -41,7 +41,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_confirm_location, container, false)
         initMap()
-        initListener(view!!)
+        initListener(view)
         return view
     }
 
@@ -56,12 +56,12 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     override fun onLocationChanged(location: Location?) {
-        drawCurrentMaker(location)
+        drawCurrentMaker(location!!)
     }
 
     override fun onCameraIdle() {
         mLatLng = mGoogleMap?.cameraPosition?.target
-        getLocationName(mLatLng)
+        getLocationName(mLatLng!!)
     }
 
     override fun onClick(view: View?) {
@@ -70,15 +70,15 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
                 //TODO intent to search
             }
             R.id.btnConfirm -> {
-                addDestinationMarker(mLatLng)
+                addDestinationMarker(mLatLng!!)
                 //TODO handle share location
             }
         }
     }
 
-    private fun initListener(view: View) {
-        view.imgEdit.setOnClickListener(this)
-        view.btnConfirm.setOnClickListener(this)
+    private fun initListener(view: View?) {
+        view?.imgEdit?.setOnClickListener(this)
+        view?.btnConfirm?.setOnClickListener(this)
     }
 
     private fun initMap() {
@@ -86,9 +86,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         mapFragment?.getMapAsync(this)
     }
 
-    private fun getLocationName(latLng: LatLng?) {
+    private fun getLocationName(latLng: LatLng) {
         val geoCoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             tvLocation.text = address.getAddressLine(0)
@@ -102,9 +102,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         }
     }
 
-    private fun addDestinationMarker(latLng: LatLng?) {
+    private fun addDestinationMarker(latLng: LatLng) {
         mGoogleMap?.addMarker(MarkerOptions()
-                .position(latLng!!)
+                .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                 .title(mDestinationName)
                 .anchor(0.5f, 0.5f))
@@ -113,10 +113,10 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16f))
     }
 
-    private fun drawCurrentMaker(location: Location?) {
+    private fun drawCurrentMaker(location: Location) {
         if (mGoogleMap != null) {
             mGoogleMap?.clear()
-            val currentLocation = LatLng(location!!.latitude, location.longitude)
+            val currentLocation = LatLng(location.latitude, location.longitude)
             mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
