@@ -51,6 +51,9 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1001
         private const val REQUEST_CODE_GALLERY = 500
+        const val INTENT_CODE_SPLASH = 100
+        const val INTENT_CODE_HOME = 101
+        const val INTENT_REGISTER = "Register"
     }
 
     var mBitmap: Bitmap? = null
@@ -75,14 +78,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onBackPressed() {
-        if (!mIsExitPressed) {
-            mIsExitPressed = true
-            toast(getString(R.string.register_double_click_to_exit))
-            Handler().postDelayed({
-                mIsExitPressed = false
-            }, 1500)
-        } else {
-            finishAffinity()
+        if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
+            if (!mIsExitPressed) {
+                mIsExitPressed = true
+                toast(getString(R.string.register_double_click_to_exit))
+                Handler().postDelayed({
+                    mIsExitPressed = false
+                }, 1500)
+            } else {
+                finishAffinity()
+            }
+        } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
+            super.onBackPressed()
         }
     }
 
