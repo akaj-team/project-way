@@ -80,6 +80,8 @@
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.arrived.ArrivedActivity" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
+
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
