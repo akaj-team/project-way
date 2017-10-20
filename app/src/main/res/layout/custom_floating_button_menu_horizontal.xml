@@ -4,100 +4,40 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/rlCalendar"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:visibility="invisible">
+    <ImageButton
+        android:id="@+id/imgBtnCalendar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/custom_item_menu_button"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_calendar"
+        android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/tvCalendar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@drawable/custom_textview"
-            android:gravity="center"
-            android:text="@string/custom_floating_menu_calendar_title"
-            android:visibility="gone" />
+    <ImageButton
+        android:id="@+id/imgBtnProfile"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/custom_item_menu_button"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_profile"
+        android:visibility="invisible" />
 
-        <ImageButton
-            android:id="@+id/imgBtnCalendar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_calendar" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlProfile"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/tvProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@drawable/custom_textview"
-            android:gravity="center"
-            android:text="@string/custom_floating_menu_profile_title"
-            android:visibility="gone" />
-
-        <ImageButton
-            android:id="@+id/imgBtnProfile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_profile" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlShare"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/tvShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@drawable/custom_textview"
-            android:gravity="center"
-            android:text="@string/custom_floating_menu_share_title"
-            android:visibility="gone" />
-
-        <ImageButton
-            android:id="@+id/imgBtnShare"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_share" />
-    </RelativeLayout>
+    <ImageButton
+        android:id="@+id/imgBtnShare"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/custom_item_menu_button"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_share"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imgBtnMenu"

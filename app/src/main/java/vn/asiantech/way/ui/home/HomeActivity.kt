@@ -18,6 +18,9 @@ import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.register.RegisterActivity
+import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -25,13 +28,11 @@ import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
 
-
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-class HomeActivity : BaseActivity(), OnMapReadyCallback {
-
+class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
     companion object {
         const val PADDING_LEFT = 0
         const val PADDING_TOP = 0
@@ -49,6 +50,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_home)
         initMap()
         initViews()
+        fabMenuGroup.setOnMenuItemClickListener(this)
         setDataForRecyclerView()
     }
 
@@ -61,6 +63,20 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         } else {
             toast("Do not update the current location!")
         }
+    }
+
+    override fun onShareClick() {
+        startActivity(Intent(this, ShareLocationActivity::class.java))
+    }
+
+    override fun onProfileClick() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_HOME)
+        startActivity(intent)
+    }
+
+    override fun onCalendarClick() {
+        // TODO after completed calendar feature
     }
 
     private fun initViews() {
