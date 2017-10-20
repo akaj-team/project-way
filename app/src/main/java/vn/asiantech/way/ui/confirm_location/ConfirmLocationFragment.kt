@@ -61,7 +61,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
 
     override fun onCameraIdle() {
         mLatLng = mGoogleMap?.cameraPosition?.target
-        getLocationName(mLatLng!!)
+        getLocationName(mLatLng)
     }
 
     override fun onClick(view: View?) {
@@ -70,7 +70,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
                 //TODO intent to search
             }
             R.id.btnConfirm -> {
-                addDestinationMarker(mLatLng!!)
+                addDestinationMarker(mLatLng)
                 //TODO handle share location
             }
         }
@@ -82,13 +82,13 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     private fun initMap() {
-        mapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment
+        mapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
 
-    private fun getLocationName(latLng: LatLng) {
+    private fun getLocationName(latLng: LatLng?) {
         val geoCoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             tvLocation.text = address.getAddressLine(0)
@@ -102,15 +102,15 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         }
     }
 
-    private fun addDestinationMarker(latLng: LatLng) {
+    private fun addDestinationMarker(latLng: LatLng?) {
         mGoogleMap?.addMarker(MarkerOptions()
-                .position(latLng)
+                .position(latLng!!)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                 .title(mDestinationName)
                 .anchor(0.5f, 0.5f))
                 ?.showInfoWindow()
         imgPickLocation.visibility = View.INVISIBLE
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16f))
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
     }
 
     private fun drawCurrentMaker(location: Location) {
