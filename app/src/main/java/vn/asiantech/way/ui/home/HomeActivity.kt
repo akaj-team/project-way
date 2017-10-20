@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.home
 
 import android.content.Intent
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.extension.toast
@@ -22,11 +22,8 @@ import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.LocationUtil
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import kotlin.collections.ArrayList
+import android.view.WindowManager
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -80,12 +77,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun initViews() {
-        val monthFormat = SimpleDateFormat("MMM", Locale.US)
-        val month = monthFormat.format(Calendar.getInstance().time)
-        val dateFormat = SimpleDateFormat(" dd,yyyy", Locale.getDefault())
-        val date = Date()
-        val time = month + dateFormat.format(date)
-        tvCurrentTime.text = time
+        setStatusBarTranslucent(true)
     }
 
     private fun initMap() {
@@ -149,6 +141,16 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
         locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
         locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+    }
+
+    private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (makeTranslucent) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            }
+        }
     }
 
     override fun onBackPressed() {
