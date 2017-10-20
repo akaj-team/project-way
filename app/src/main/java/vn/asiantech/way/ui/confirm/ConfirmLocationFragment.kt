@@ -34,7 +34,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         LocationSource.OnLocationChangedListener,
         GoogleMap.OnCameraIdleListener, View.OnClickListener {
     private var mGoogleMap: GoogleMap? = null
-    private var mapFragment: SupportMapFragment? = null
+    private var mMapFragment: SupportMapFragment? = null
     private var mLatLng: LatLng? = null
     private var mDestinationName: String? = null
 
@@ -82,8 +82,8 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     private fun initMap() {
-        mapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
+        mMapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment?
+        mMapFragment?.getMapAsync(this)
     }
 
     private fun getLocationName(latLng: LatLng?) {
@@ -143,6 +143,6 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
         groundAnimation.duration = 2000
-        mapFragment?.view?.startAnimation(groundAnimation)
+        mMapFragment?.view?.startAnimation(groundAnimation)
     }
 }
