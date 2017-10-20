@@ -61,12 +61,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initViews() {
-//        val monthFormat = SimpleDateFormat("MMM", Locale.US)
-//        val month = monthFormat.format(Calendar.getInstance().time)
-//        val dateFormat = SimpleDateFormat(" dd,yyyy", Locale.getDefault())
-//        val date = Date()
-//        val time = month + dateFormat.format(date)
-//        tvCurrentTime.text = time
         setStatusBarTranslucent(true)
     }
 
