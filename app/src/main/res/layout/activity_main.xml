@@ -17,6 +17,6 @@
         android:id="@+id/frContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="vn.asiantech.way.ui.confirm_location.ConfirmLocationFragment"/>
+        android:name="vn.asiantech.way.ui.confirm.ConfirmLocationFragment"/>
 
 </android.support.constraint.ConstraintLayout>

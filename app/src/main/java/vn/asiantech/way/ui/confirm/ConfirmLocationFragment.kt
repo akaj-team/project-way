@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.confirm_location
+package vn.asiantech.way.ui.confirm
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -33,7 +33,7 @@ import java.util.*
 class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         LocationSource.OnLocationChangedListener,
         GoogleMap.OnCameraIdleListener, View.OnClickListener {
-    var mGoogleMap: GoogleMap? = null
+    private var mGoogleMap: GoogleMap? = null
     private var mapFragment: SupportMapFragment? = null
     private var mLatLng: LatLng? = null
     private var mDestinationName: String? = null
