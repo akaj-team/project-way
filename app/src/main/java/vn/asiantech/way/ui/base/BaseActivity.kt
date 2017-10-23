@@ -1,10 +1,6 @@
 package vn.asiantech.way.ui.base
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.annotation.Nullable
 import android.support.v7.app.AppCompatActivity
 
 /**
@@ -12,51 +8,9 @@ import android.support.v7.app.AppCompatActivity
  * Created by quocnguyenp. on 9/21/17.
  */
 
-abstract class BaseActivity<T : ViewDataBinding, out V : BaseViewModel<*>> : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
-    var mViewDataBinding: T? = null
-        private set
-    private var mViewModel: V? = null
-
-    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performDataBinding()
-        mViewModel?.onViewCreated()
     }
-
-    private fun performDataBinding() {
-        mViewDataBinding = DataBindingUtil.setContentView<T>(this, layoutId)
-        this.mViewModel = if (mViewModel == null) viewModel else mViewModel
-        (mViewDataBinding as T).setVariable(bindingVariable, mViewModel)
-        (mViewDataBinding as T).executePendingBindings()
-    }
-
-    override fun onDestroy() {
-        mViewModel?.onDestroyView()
-        super.onDestroy()
-    }
-
-    fun getViewDataBinding(): T {
-        return mViewDataBinding as T
-    }
-
-    /**
-     * Override for set view model
-
-     * @return view model instance
-     */
-    abstract val viewModel: V
-
-    /**
-     * Override for set binding variable
-
-     * @return variable id
-     */
-    abstract val bindingVariable: Int
-
-    /**
-     * @return layout resource id
-     */
-    @get:LayoutRes
-    abstract val layoutId: Int
 }
