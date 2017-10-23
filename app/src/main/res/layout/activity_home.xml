@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/fragmentMap"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="vn.asiantech.way.ui.home.HomeActivity" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleViewLocation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_screen_recyclerView_height"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/home_screen_recyclerView_margin"
+            android:layout_marginRight="@dimen/home_screen_recyclerView_margin"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+
+    <vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+        android:id="@+id/fabMenuGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp" />
+</RelativeLayout>

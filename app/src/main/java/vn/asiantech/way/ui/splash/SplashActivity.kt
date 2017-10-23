@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -14,6 +15,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.databinding.ActivitySplashBinding
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.register.RegisterActivity
 import javax.inject.Inject
 
 /**
@@ -94,8 +96,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(), S
                     progressBar.visibility = View.VISIBLE
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
-                    //TODO: intent to login screen
-
+                    val intent = Intent(this, RegisterActivity::class.java)
+                    intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                    startActivity(intent)
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)

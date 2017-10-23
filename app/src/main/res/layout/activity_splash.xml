@@ -1,91 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <variable
-            name="splashViewModel"
-            type="vn.asiantech.way.ui.splash.SplashViewModel"/>
-
-        <import type="android.view.View"/>
-    </data>
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/imgFrontBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_map"
-                android:contentDescription="@string/splash_image_description"/>
-
-            <ImageView
-                android:id="@+id/imgBehindBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_map"
-                android:contentDescription="@string/splash_image_description"/>
-        </FrameLayout>
-
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imgFrontBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:background="@drawable/bg_map"
+            android:contentDescription="@string/image_description" />
 
-            <ImageView
-                android:id="@+id/imgCircle"
-                android:layout_width="@dimen/splash_img_circle_with_hight"
-                android:layout_height="@dimen/splash_img_circle_with_hight"
-                android:layout_weight="0.4"
-                android:contentDescription="@string/splash_description_app"
-                android:src="@drawable/ic_location_round"/>
+        <ImageView
+            android:id="@+id/imgBehindBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_map"
+            android:contentDescription="@string/image_description" />
+    </FrameLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:text="@string/splash_name_application"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/splash_size_tv_app_name"
-                android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvAppDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/splash_tv_description_margin"
-                android:layout_marginRight="@dimen/splash_tv_description_margin"
-                android:layout_weight="0.4"
-                android:gravity="center"
-                android:text="@string/splash_description_app"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/splash_tv_size_app_description"/>
+        <ImageView
+            android:id="@+id/imgCircle"
+            android:layout_width="@dimen/splash_img_circle_with_high"
+            android:layout_height="@dimen/splash_img_circle_with_high"
+            android:layout_weight="0.4"
+            android:contentDescription="@string/splash_description_app"
+            android:src="@drawable/ic_location_round" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/splash_progressBar_margin_bottom"
-                android:visibility="gone"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/splash_name_application"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/splash_size_tv_app_name"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnEnableLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/splash_buttonEnable_marginButton"
-                android:background="@drawable/common_bg_button_enable_location"
-                android:paddingLeft="@dimen/splash_buttonEnaleButton_padding"
-                android:paddingRight="@dimen/splash_buttonEnaleButton_padding"
-                android:text="@string/splash_button_enable_location"
-                android:textColor="@color/colorWhite"
-                android:onClick="@{() -> splashViewModel.onBtnEnableLocationClick()}"/>
-        </LinearLayout>
-    </RelativeLayout>
-</layout>
+        <TextView
+            android:id="@+id/tvAppDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/splash_tv_description_margin"
+            android:layout_marginRight="@dimen/splash_tv_description_margin"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:text="@string/splash_description_app"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/splash_tv_size_app_description" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/splash_progressBar_margin_bottom"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnEnableLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/splash_buttonEnable_marginButton"
+            android:background="@drawable/common_bg_button_enable_location"
+            android:paddingLeft="@dimen/splash_buttonEnableButton_padding"
+            android:paddingRight="@dimen/splash_buttonEnableButton_padding"
+            android:text="@string/splash_button_enable_location"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vn.asiantech.way">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="true" />
 
     <application
         android:name=".MyApplication"
@@ -25,11 +31,10 @@
 
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <!-- Intent Filter to handle browsable deeplinks -->
             <intent-filter android:label="@string/filter_title_track">
                 <action android:name="android.intent.action.VIEW" />
@@ -37,11 +42,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/deeplink_scheme" />
+                <data android:scheme="com.hypertracklive" />
             </intent-filter>
 
-
-            <!-- Intent Filter to handle trck.at link  -->
+            <!-- Intent Filter to handle trck.at link -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -53,22 +57,30 @@
 
                 <!-- Add trck.at DeepLink URL -->
                 <data
-                    android:host="@string/tracking_url"
+                    android:host="a"
                     android:pathPrefix="/" />
             </intent-filter>
 
-
-            <!--Intent filter to handle Branch Deep Link-->
+            <!-- Intent filter to handle Branch Deep Link -->
             <intent-filter>
                 <data
                     android:host="open"
                     android:scheme="hypertrack.io" />
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.share.ShareLocationActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.arrived.ArrivedActivity" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
 
         <!-- Register meta-data here -->
         <!--
@@ -78,13 +90,16 @@
             You need a different API key for each encryption key, including the release key that is used to
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-       -->
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".ui.map.MapActivity" />
+
     </application>
 
 </manifest>
