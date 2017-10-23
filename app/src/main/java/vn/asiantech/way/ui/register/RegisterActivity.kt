@@ -76,9 +76,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
         mSharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
-        if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
-            startActivity(Intent(this, HomeActivity::class.java))
-        }
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
