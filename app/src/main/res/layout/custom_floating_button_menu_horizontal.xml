@@ -6,111 +6,132 @@
 
     <RelativeLayout
         android:id="@+id/rlSearch"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/imgBtnSearch"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_bg_item_search_button"
             android:src="@drawable/ic_search" />
 
         <TextView
             android:id="@+id/tvSearchTitle"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/imgBtnSearch"
+            android:background="@drawable/custom_bg_item_menu_title"
             android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/custom_floating_menu_search_title" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlCalendar"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/imgBtnCalendar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_bg_item_calendar_button"
             android:src="@drawable/ic_calendar" />
 
         <TextView
             android:id="@+id/tvCalendarTitle"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/imgBtnCalendar"
+            android:background="@drawable/custom_bg_item_menu_title"
             android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/custom_floating_menu_calendar_title" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlProfile"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/imgBtnProfile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_gravity="end"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_bg_item_profile_button"
             android:src="@drawable/ic_profile" />
 
         <TextView
             android:id="@+id/tvProfileTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/imgBtnProfile"
+            android:background="@drawable/custom_bg_item_menu_title"
             android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/custom_floating_menu_profile_title" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlShare"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/imgBtnShare"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="end"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_bg_item_share_button"
             android:src="@drawable/ic_share" />
 
         <TextView
             android:id="@+id/tvShareTitle"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/imgBtnShare"
+            android:background="@drawable/custom_bg_item_menu_title"
             android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/custom_floating_menu_share_title" />
     </RelativeLayout>
 
@@ -120,9 +141,8 @@
         android:layout_height="60dp"
         android:layout_gravity="end"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/custom_menu_button"
-        android:contentDescription="@null"
         android:padding="10dp"
         android:src="@drawable/ic_menu" />
 </LinearLayout>

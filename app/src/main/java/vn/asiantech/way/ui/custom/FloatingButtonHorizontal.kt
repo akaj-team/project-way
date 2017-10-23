@@ -33,26 +33,14 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 val anim: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_rotate)
                 val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_visible)
                 val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
-                val animAlpha: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_alpha_title)
                 imgBtnMenu.startAnimation(anim)
-                startAnimationFab(animInvisible)
                 if (rlShare.visibility == View.INVISIBLE) {
                     startAnimationFab(animVisible)
                     visibilityAllChildView(View.VISIBLE)
-                    startAnimationTitle(animAlpha)
-                    animAlpha.setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationRepeat(p0: Animation?) {
-                            // No-op
-                        }
-
-                        override fun onAnimationEnd(p0: Animation?) {
-                            invisibleAllTitle()
-                        }
-
-                        override fun onAnimationStart(p0: Animation?) {
-                            // No-op
-                        }
-                    })
+                    mOnMenuClickListener?.onMenuClick(true)
+                } else {
+                    startAnimationFab(animInvisible)
+                    mOnMenuClickListener?.onMenuClick(false)
                 }
                 animInvisible.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationRepeat(p0: Animation?) {
@@ -87,25 +75,17 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         }
     }
 
+    fun collapseMenu() {
+        val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
+        startAnimationFab(animInvisible)
+        visibilityAllChildView(View.INVISIBLE)
+    }
+
     private fun startAnimationFab(animation: Animation) {
         rlShare.startAnimation(animation)
         rlProfile.startAnimation(animation)
         rlCalendar.startAnimation(animation)
         rlSearch.startAnimation(animation)
-    }
-
-    private fun startAnimationTitle(animation: Animation) {
-        tvShareTitle.startAnimation(animation)
-        tvProfileTitle.startAnimation(animation)
-        tvCalendarTitle.startAnimation(animation)
-        tvSearchTitle.startAnimation(animation)
-    }
-
-    private fun invisibleAllTitle() {
-        tvShareTitle.visibility = View.INVISIBLE
-        tvProfileTitle.visibility = View.INVISIBLE
-        tvCalendarTitle.visibility = View.INVISIBLE
-        tvSearchTitle.visibility = View.INVISIBLE
     }
 
     private fun visibilityAllChildView(visibilityState: Int) {
@@ -127,6 +107,10 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
      * Interface menu click listener
      */
     internal interface OnMenuClickListener {
+        /**
+         * Event when button menu clicked
+         */
+        fun onMenuClick(isShowMenu: Boolean)
         /**
          * Event when button share clicked
          */
