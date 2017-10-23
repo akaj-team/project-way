@@ -1,7 +1,10 @@
 package vn.asiantech.way.ui.home
 
+import android.content.Intent
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -11,24 +14,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.toolbar.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.util.LocationUtil
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.register.RegisterActivity
+import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.utils.LocationUtil
 import kotlin.collections.ArrayList
+import android.view.WindowManager
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-class HomeActivity : BaseActivity(), OnMapReadyCallback {
-
+class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
     companion object {
         const val PADDING_LEFT = 0
         const val PADDING_TOP = 0
@@ -39,12 +40,14 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
     private var mPosition = -1
     private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
+    private var isExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initMap()
         initViews()
+        fabMenuGroup.setOnMenuItemClickListener(this)
         setDataForRecyclerView()
     }
 
@@ -59,13 +62,22 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onShareClick() {
+        startActivity(Intent(this, ShareLocationActivity::class.java))
+    }
+
+    override fun onProfileClick() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_HOME)
+        startActivity(intent)
+    }
+
+    override fun onCalendarClick() {
+        // TODO after completed calendar feature
+    }
+
     private fun initViews() {
-        val monthFormat = SimpleDateFormat("MMM", Locale.US)
-        val month = monthFormat.format(Calendar.getInstance().time)
-        val dateFormat = SimpleDateFormat(" dd,yyyy", Locale.getDefault())
-        val date = Date()
-        val time = month + dateFormat.format(date)
-        tvCurrentTime.text = time
+        setStatusBarTranslucent(true)
     }
 
     private fun initMap() {
@@ -129,5 +141,28 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback {
         locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
         locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
         locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+    }
+
+    private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (makeTranslucent) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (isExit) {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } else {
+            toast("Press back again to exit!")
+            isExit = true
+            Handler().postDelayed({ isExit = false }, 3 * 1000)
+        }
     }
 }

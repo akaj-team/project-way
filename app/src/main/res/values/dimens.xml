@@ -21,4 +21,20 @@
     <dimen name="home_screen_recyclerView_height">200dp</dimen>
     <dimen name="home_screen_recyclerView_margin">20dp</dimen>
     <dimen name="home_screen_expTv_marginRight">25dp</dimen>
+
+    <!--Arrived screen-->
+    <dimen name="width_dialog">500dp</dimen>
+    <dimen name="height_dialog">300dp</dimen>
+    <dimen name="text_size_normal">20dp</dimen>
+    <dimen name="text_size_little">15dp</dimen>
+    <dimen name="avatar_width">50dp</dimen>
+    <dimen name="avatar_height">50dp</dimen>
+    <dimen name="arrow_back_width">50dp</dimen>
+    <dimen name="arrow_back_height">50dp</dimen>
+    <dimen name="width_fragment">400dp</dimen>
+    <dimen name="height_fragment">600dp</dimen>
+    <dimen name="arrived_show_result_height">100dp</dimen>
+    <dimen name="width_circular_seekBar">50dp</dimen>
+    <dimen name="circle_stroke_width">3dp</dimen>
+    <dimen name="arrived_line_start_end_width">2dp</dimen>
 </resources>

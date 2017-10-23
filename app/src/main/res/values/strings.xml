@@ -6,6 +6,31 @@
     <string name="splash_description_app">We need your location permission to capture your location, activity through the day and to let you share your live location with your friends when you are on the way.</string>
     <string name="splash_button_enable_location">Enable location</string>
     <string name="splash_toast_turn_on_wifi">Please turn on your internet</string>
+    <!--Map screen-->
+    <string name="toast_text_google_map_null">Google map is null</string>
+    <string name="dialog_message_enable_gps">App need GPS.Do you want enable your GPS?</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="current_location">Current location</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="marker_title">Current location</string>
+    <string name="toast_text_location_null">Not update current location!</string>
+    <!--bottom button card-->
+    <string name="bottom_button_card_title_text">Your friend is 23 min away!</string>
+    <string name="bottom_button_card_description_text">Share your location back so that they can see you on the map.</string>
+    <string name="bottom_button_card_link_text">https://www.trck.at/MGSLWx</string>
+    <string name="bottom_button_card_text_copy_link">Copy Link</string>
+    <!--Share Screen-->
+    <string name="share_textview_text_going_somewhere">Going somewhere?</string>
+    <string name="share_textview_text_description">Add a destination</string>
+    <string name="share_textview_text_look_good">Look good?</string>
+    <string name="share_textview_text_start_sharing">Start Sharing</string>
+    <string name="share_textview_text_test_title">You\'re 1 min away</string>
+    <string name="share_textview_text_text_test_description_success">Share your live location link:</string>
+    <string name="share_textview_text_copied">Copied</string>
+
+    <!--Confirm location screen-->
+    <string name="confirm_move_map">Move map to adjust marker</string>
+    <string name="confirm_location">Confirm Location</string>
 
     <!--Custom floating menu-->
     <string name="custom_floating_menu_calendar_title">Calendar</string>
@@ -14,7 +39,8 @@
 
     <!--Register screen-->
     <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
-    <string name="toast_image_size">Please choose image with size less than...</string>
+    <string name="register_select_image">Select or take a new picture</string>
+    <string name="register_toast_image_size">Please choose image with size less than...</string>
     <string name="register_hint_name">Name</string>
     <string name="register_hint_phone">Phone Number</string>
     <string name="register_button_save_text">Save Profile</string>
@@ -25,8 +51,30 @@
     <string name="register_cancel">Cancel</string>
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
+    <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
+
+    <!--Arrived screen-->
+    <string name="arrived_show_summary">SHOW SUMMARY</string>
+    <string name="arrived_done">DONE</string>
+    <string name="arrived_average_speed">Average Speed</string>
+    <string name="arrived_traveled">Traveled</string>
+    <string name="arrived_elapsed">Elapsed</string>
+    <string name="arrived_completed">completed</string>
+    <string name="arrived_you">You</string>
+    <string name="arrived_trip_summary">Trip Summary</string>
+    <string name="arrived_you_arrived">you\'ve arrived</string>
+    <string name="show_hour"> h </string>
+    <string name="show_minutes"> min </string>
+    <string name="show_distance"> km </string>
+    <string name="show_average_speed"> kmph </string>
+    <string name="arrived_dialog_tag">Dialog Fragment</string>
+    <!-- Search Location Screen-->
+    <string name="search_location_enter_a_place">Enter a place</string>
+    <string name="search_location_your_location">Your Location</string>
+    <string name="search_location_choose_on_map">Choose on map</string>
+
     <!--In-ProgressLocation-->
     <string name="share">SHARE</string>
     <string name="stop">STOP</string>

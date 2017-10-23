@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/deeplink_scheme" />
+                <data android:scheme="com.hypertracklive" />
             </intent-filter>
 
             <!-- Intent Filter to handle trck.at link -->
@@ -50,11 +50,12 @@
 
                 <!-- Add trck.at DeepLink URL -->
                 <data
-                    android:host="@string/tracking_url"
+                    android:host="a"
                     android:pathPrefix="/" />
             </intent-filter>
 
-            <!-- Intent filter to handle Branch Deep Link -->
+
+            <!--Intent filter to handle Branch Deep Link-->
             <intent-filter>
                 <data
                     android:host="open"
@@ -66,8 +67,16 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.share.ShareLocationActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.in_progress.ProgressLocationActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.arrived.ArrivedActivity" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
+
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
@@ -76,7 +85,7 @@
             You need a different API key for each encryption key, including the release key that is used to
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+       -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
@@ -84,10 +93,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service
-            android:name=".ui.in_progress.ServiceTracking"
-            android:enabled="true"
-            android:exported="false"/>
+        <activity android:name=".ui.map.MapActivity" />
+
     </application>
 
 </manifest>
