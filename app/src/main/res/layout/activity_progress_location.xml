@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vn.asiantech.way.ui.in_progress.ProgressLocationActivity">
+    tools:context="vn.asiantech.way.ui.tracking.ProgressLocationActivity">
 
     <FrameLayout
         android:id="@+id/frContainer"

@@ -37,4 +37,5 @@
     <dimen name="width_circular_seekBar">50dp</dimen>
     <dimen name="circle_stroke_width">3dp</dimen>
     <dimen name="arrived_line_start_end_width">2dp</dimen>
+    <dimen name="ripple_height">40dp</dimen>
 </resources>

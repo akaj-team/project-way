@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.in_progress
+package vn.asiantech.way.ui.tracking
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

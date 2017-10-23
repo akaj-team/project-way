@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.in_progress
+package vn.asiantech.way.ui.tracking
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -39,6 +39,9 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         GoogleApiClient.OnConnectionFailedListener {
 
     companion object {
+        private val KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates"
+        private val KEY_LAST_UPDATED_TIME_STRING = "last-updated-time-string"
+        private val KEY_LOCATION = "location"
         private val ONE_MIN = (1000 * 60).toLong()
         private val INTERVAL = (1000 * 30).toLong()
         private val FASTEST_UPDATE = (1000 * 5).toLong()
@@ -52,6 +55,8 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     private var mBestReading: Location? = null
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mLocations: MutableList<Location>? = null
+    private var mRequestingLocationUpdates: Boolean = false
+    private var mLastUpdateTime: String? = null
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -64,6 +69,7 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         initMapView()
+        updateValuesFromBundle(savedInstanceState)
         activity.registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         return inflater!!.inflate(R.layout.fragment_progress_location, container, false)
     }
@@ -129,6 +135,30 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         rippleShareLink.setOnClickListener {
             Toast.makeText(context, "Location: " + mBestReading?.latitude + " - " + mBestReading?.longitude, Toast.LENGTH_SHORT).show()
             Toast.makeText(context, "Size of list location: " + mLocations!!.size, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle?) {
+        savedInstanceState!!.putBoolean(KEY_REQUESTING_LOCATION_UPDATES,
+                mRequestingLocationUpdates)
+        savedInstanceState.putParcelable(KEY_LOCATION, mBestReading)
+        savedInstanceState.putString(KEY_LAST_UPDATED_TIME_STRING, mLastUpdateTime)
+        super.onSaveInstanceState(savedInstanceState)
+    }
+
+    private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.keySet().contains(KEY_REQUESTING_LOCATION_UPDATES)) {
+                mRequestingLocationUpdates = savedInstanceState.getBoolean(KEY_REQUESTING_LOCATION_UPDATES)
+//                setButtonsEnabledState()
+            }
+            if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
+                mBestReading = savedInstanceState.getParcelable(KEY_LOCATION)
+            }
+            if (savedInstanceState.keySet().contains(KEY_LAST_UPDATED_TIME_STRING)) {
+                mLastUpdateTime = savedInstanceState.getString(KEY_LAST_UPDATED_TIME_STRING)
+            }
+            updateUI()
         }
     }
 

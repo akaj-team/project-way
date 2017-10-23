@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.in_progress.ProgressLocationActivity
+import vn.asiantech.way.ui.tracking.ProgressLocationActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

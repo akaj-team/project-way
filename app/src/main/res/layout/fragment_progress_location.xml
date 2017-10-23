@@ -3,13 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vn.asiantech.way.ui.in_progress.ProgressLocationFragment">
+    tools:context="vn.asiantech.way.ui.tracking.ProgressLocationFragment">
 
-    <!--<fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
     <FrameLayout
         android:id="@+id/frMapContainer"
         android:layout_width="match_parent"
@@ -38,11 +33,12 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            tools:ignore="RelativeOverlap"
             tools:text="name" />
 
         <TextView
@@ -122,6 +118,7 @@
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text_medium"
+                        tools:ignore="RelativeOverlap"
                         tools:text="@string/leaving" />
 
                     <ImageView
@@ -169,7 +166,6 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <!--Layout detail each action-->
             <RelativeLayout
                 android:id="@+id/rlExpandedInfo"
                 android:layout_width="match_parent"
@@ -214,7 +210,6 @@
                             android:layout_marginTop="@dimen/margin_low"
                             android:text="@string/elapse"
                             android:textColor="@color/gray" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -237,7 +232,6 @@
                             android:layout_marginTop="@dimen/margin_low"
                             android:text="@string/travelled"
                             android:textColor="@color/gray" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -260,7 +254,6 @@
                             android:layout_marginTop="@dimen/margin_low"
                             android:text="@string/speed"
                             android:textColor="@color/gray" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -283,25 +276,22 @@
                             android:layout_height="wrap_content"
                             android:contentDescription="@null"
                             android:src="@drawable/ic_battery_icon" />
-
                     </LinearLayout>
                 </LinearLayout>
-
             </RelativeLayout>
-
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llActionTracking"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/ripple_height"
             android:background="@color/white"
             android:visibility="visible">
 
             <com.hypertrack.lib.internal.consumer.view.RippleView
                 android:id="@+id/rippleTrackingToggle"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:tag="stop"
                 app:rv_centered="true">
@@ -318,13 +308,13 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:background="@color/divider_light" />
 
             <com.hypertrack.lib.internal.consumer.view.RippleView
                 android:id="@+id/rippleShareLink"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:rv_centered="true">
 
@@ -340,5 +330,4 @@
             </com.hypertrack.lib.internal.consumer.view.RippleView>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>
