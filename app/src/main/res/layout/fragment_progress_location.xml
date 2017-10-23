@@ -5,9 +5,13 @@
     android:layout_height="match_parent"
     tools:context="vn.asiantech.way.ui.in_progress.ProgressLocationFragment">
 
-    <fragment
+    <!--<fragment
         android:id="@+id/mapFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+    <FrameLayout
+        android:id="@+id/frMapContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

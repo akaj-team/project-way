@@ -1,18 +1,14 @@
 package vn.asiantech.way.ui.in_progress
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
-import android.location.LocationManager
 import android.os.BatteryManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,19 +19,21 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_progress_location.*
 import vn.asiantech.way.R
+import vn.asiantech.way.ui.map.MapFragment
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListener,
+class ProgressLocationFragment : Fragment(), LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -49,11 +47,12 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         private val MIN_LAST_READ_ACCURACY = 500.0f
     }
 
+    private var mMapFragmentCustom: MapFragment? = null
     private var mGoogleMap: GoogleMap? = null
-    private var mMapFragment: SupportMapFragment? = null
     private var mLocationRequest: LocationRequest? = null
     private var mBestReading: Location? = null
     private var mGoogleApiClient: GoogleApiClient? = null
+    private var mLocationTracking: MutableList<Location>? = null
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -65,7 +64,6 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        checkGPS()
         initMapView()
         activity.registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         return inflater!!.inflate(R.layout.fragment_progress_location, container, false)
@@ -90,6 +88,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     private fun initRequestLocation() {
+        mLocationTracking = ArrayList()
         mLocationRequest = LocationRequest.create()
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest?.interval = POLLING_FREQ
@@ -102,8 +101,11 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     private fun initMapView() {
-        mMapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mMapFragment?.getMapAsync(this)
+        mMapFragmentCustom = MapFragment()
+        activity.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frMapContainer, mMapFragmentCustom)
+                .commit()
     }
 
     private fun addEvents() {
@@ -123,48 +125,31 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
             }
         }
-        rippleShareLink.setOnClickListener { Toast.makeText(context, "SHARE SHARE SHARE", Toast.LENGTH_SHORT).show() }
-    }
-
-    override fun onMapReady(p0: GoogleMap?) {
-        MapsInitializer.initialize(context)
-        mGoogleMap = p0
-        mGoogleMap?.addMarker(MarkerOptions()
-                .title("A Place!")
-                .position(LatLng(16.082709, 108.236512))
-                .draggable(true)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker_car))
-        )
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(16.074812, 108.233132), 14f))
-    }
-
-    // check GPS
-    private fun checkGPS() {
-        val manager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage("Turn on GPS")
-                    .setPositiveButton("OK") { dialogInterface, _ ->
-                        //                        activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                        ActivityCompat.requestPermissions(activity,
-                                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-                                1)
-                        dialogInterface.dismiss()
-                    }
-                    .setNegativeButton("Cancel") { dialogInterface, _ ->
-                        dialogInterface.cancel()
-                    }
-            builder.create().show()
+        rippleShareLink.setOnClickListener {
+            Toast.makeText(context, "Location: " + mBestReading?.latitude + " - " + mBestReading?.longitude, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onLocationChanged(p0: Location?) {
+        Toast.makeText(context, "onLocationChanged: " + p0!!.latitude + " - " + p0.longitude, Toast.LENGTH_SHORT).show()
         if (mBestReading == null || p0!!.accuracy < mBestReading!!.accuracy) {
+            mLocationTracking!!.add(p0!!)
             mBestReading = p0
+            updateUI()
             if (mBestReading!!.accuracy < MIN_ACCURACY) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         }
+    }
+
+    private fun updateUI() {
+        mGoogleMap?.addMarker(MarkerOptions()
+                .title("A Place!")
+                .position(LatLng(mBestReading!!.latitude, mBestReading!!.longitude))
+                .draggable(true)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
+        )
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mBestReading!!.latitude, mBestReading!!.longitude), 14f))
     }
 
     @SuppressLint("MissingPermission")
