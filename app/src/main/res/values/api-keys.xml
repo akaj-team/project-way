@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<string name="GoogleMapsKey">AIzaSyD664LpwMkJJUA44QxFdQ_NL7eGPnfYE04</string>-->
     <string name="GoogleMapsKey">AIzaSyARdmHFGQ9mlF9EW9Qu8OfPWMMAmcbo8F4</string>
     <string name="branch_live">BRANCH_LIVE_KEY</string>
     <string name="branch_test">BRANCH_TEST_KEY</string>

@@ -66,7 +66,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.in_progress.ProgressLocationActivity" />
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
@@ -83,7 +84,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ui.in_progress.ProgressLocationActivity" />
+        <service
+            android:name=".ui.in_progress.ServiceTracking"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

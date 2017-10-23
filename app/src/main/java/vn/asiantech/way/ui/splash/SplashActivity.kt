@@ -90,9 +90,8 @@ class SplashActivity : BaseActivity() {
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
                     //TODO: intent to login screen
-
                     startActivity(Intent(this@SplashActivity, ProgressLocationActivity::class.java))
-
+//                    startActivity(Intent(this, RegisterActivity::class.java))
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)
