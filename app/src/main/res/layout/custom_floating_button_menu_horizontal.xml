@@ -10,6 +10,15 @@
         android:layout_height="wrap_content"
         android:visibility="visible">
 
+        <ImageButton
+            android:id="@+id/imgBtnSearch"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_search" />
+
         <TextView
             android:id="@+id/tvSearchTitle"
             android:layout_width="wrap_content"
@@ -20,15 +29,6 @@
             android:layout_toLeftOf="@id/imgBtnSearch"
             android:gravity="center"
             android:text="@string/custom_floating_menu_search_title" />
-
-        <ImageButton
-            android:id="@+id/imgBtnSearch"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_search" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -36,6 +36,15 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/imgBtnCalendar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_calendar" />
 
         <TextView
             android:id="@+id/tvCalendarTitle"
@@ -47,15 +56,6 @@
             android:layout_toLeftOf="@id/imgBtnCalendar"
             android:gravity="center"
             android:text="@string/custom_floating_menu_calendar_title" />
-
-        <ImageButton
-            android:id="@+id/imgBtnCalendar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_calendar" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -63,6 +63,16 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/imgBtnProfile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_profile" />
 
         <TextView
             android:id="@+id/tvProfileTitle"
@@ -74,16 +84,6 @@
             android:layout_toLeftOf="@id/imgBtnProfile"
             android:gravity="center"
             android:text="@string/custom_floating_menu_profile_title" />
-
-        <ImageButton
-            android:id="@+id/imgBtnProfile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="end"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_profile" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -91,6 +91,16 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/imgBtnShare"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:background="@drawable/custom_item_menu_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_share" />
 
         <TextView
             android:id="@+id/tvShareTitle"
@@ -102,16 +112,6 @@
             android:layout_toLeftOf="@id/imgBtnShare"
             android:gravity="center"
             android:text="@string/custom_floating_menu_share_title" />
-
-        <ImageButton
-            android:id="@+id/imgBtnShare"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="end"
-            android:background="@drawable/custom_item_menu_button"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_share" />
     </RelativeLayout>
 
     <ImageButton
