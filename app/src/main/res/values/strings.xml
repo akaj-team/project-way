@@ -28,6 +28,7 @@
     <string name="share_textview_text_copied">Copied</string>
 
     <!--Custom floating menu-->
+    <string name="custom_floating_menu_search_title">Search</string>
     <string name="custom_floating_menu_calendar_title">Calendar</string>
     <string name="custom_floating_menu_profile_title">Profile</string>
     <string name="custom_floating_menu_share_title">Share</string>

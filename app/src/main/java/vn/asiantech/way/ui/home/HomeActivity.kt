@@ -24,6 +24,7 @@ import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 import kotlin.collections.ArrayList
 import android.view.WindowManager
+import vn.asiantech.way.ui.search.SearchLocationActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -74,6 +75,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     override fun onCalendarClick() {
         // TODO after completed calendar feature
+    }
+
+    override fun onSearchClick() {
+        startActivity(Intent(this, SearchLocationActivity::class.java))
     }
 
     private fun initViews() {
