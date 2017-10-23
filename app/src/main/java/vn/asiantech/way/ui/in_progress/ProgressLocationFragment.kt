@@ -9,12 +9,13 @@ import android.location.Location
 import android.os.BatteryManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GooglePlayServicesUtil
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
@@ -39,10 +40,8 @@ class ProgressLocationFragment : Fragment(), LocationListener,
 
     companion object {
         private val ONE_MIN = (1000 * 60).toLong()
-        private val TWO_MIN = ONE_MIN * 2
-        private val FIVE_MIN = ONE_MIN * 5
-        private val POLLING_FREQ = (1000 * 30).toLong()
-        private val FASTEST_UPDATE_FREQ = (1000 * 5).toLong()
+        private val INTERVAL = (1000 * 30).toLong()
+        private val FASTEST_UPDATE = (1000 * 5).toLong()
         private val MIN_ACCURACY = 25.0f
         private val MIN_LAST_READ_ACCURACY = 500.0f
     }
@@ -52,7 +51,7 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     private var mLocationRequest: LocationRequest? = null
     private var mBestReading: Location? = null
     private var mGoogleApiClient: GoogleApiClient? = null
-    private var mLocationTracking: MutableList<Location>? = null
+    private var mLocations: MutableList<Location>? = null
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -71,7 +70,7 @@ class ProgressLocationFragment : Fragment(), LocationListener,
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRequestLocation()
+        createLocationRequest()
         addEvents()
     }
 
@@ -87,17 +86,19 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         }
     }
 
-    private fun initRequestLocation() {
-        mLocationTracking = ArrayList()
+    private fun createLocationRequest() {
+        mLocations = ArrayList()
         mLocationRequest = LocationRequest.create()
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest?.interval = POLLING_FREQ
-        mLocationRequest?.fastestInterval = FASTEST_UPDATE_FREQ
-        mGoogleApiClient = GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build()
+        mLocationRequest?.interval = INTERVAL
+        mLocationRequest?.fastestInterval = FASTEST_UPDATE
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build()
+        }
     }
 
     private fun initMapView() {
@@ -127,13 +128,14 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         }
         rippleShareLink.setOnClickListener {
             Toast.makeText(context, "Location: " + mBestReading?.latitude + " - " + mBestReading?.longitude, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Size of list location: " + mLocations!!.size, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onLocationChanged(p0: Location?) {
         Toast.makeText(context, "onLocationChanged: " + p0!!.latitude + " - " + p0.longitude, Toast.LENGTH_SHORT).show()
         if (mBestReading == null || p0!!.accuracy < mBestReading!!.accuracy) {
-            mLocationTracking!!.add(p0!!)
+            mLocations!!.add(p0!!)
             mBestReading = p0
             updateUI()
             if (mBestReading!!.accuracy < MIN_ACCURACY) {
@@ -154,11 +156,12 @@ class ProgressLocationFragment : Fragment(), LocationListener,
 
     @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
-        if (servicesAvailable()) {
-            mBestReading = bestLastKnownLocation(MIN_LAST_READ_ACCURACY, FIVE_MIN)
+        if (checkPlayServices()) {
+            mBestReading = getBestLastKnownLocation(MIN_LAST_READ_ACCURACY, ONE_MIN * 5)
+            Log.d("at-dinhvo", "onConnected: " + mBestReading?.latitude + "-" + mBestReading?.longitude)
             if (mBestReading == null
                     || mBestReading!!.accuracy > MIN_LAST_READ_ACCURACY
-                    || mBestReading!!.time < System.currentTimeMillis() - TWO_MIN) {
+                    || mBestReading!!.time < System.currentTimeMillis() - ONE_MIN * 2) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
                 Executors.newScheduledThreadPool(1).schedule({
                     LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
@@ -176,16 +179,16 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     }
 
     @SuppressLint("MissingPermission")
-    private fun bestLastKnownLocation(minAccuracy: Float, minTime: Long): Location? {
+    private fun getBestLastKnownLocation(minAccuracy: Float, minTime: Long): Location? {
         var bestResult: Location? = null
-        var bestAccuracy = java.lang.Float.MAX_VALUE
-        var bestTime = java.lang.Long.MIN_VALUE
-        val mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-        if (mCurrentLocation != null) {
-            val accuracy = mCurrentLocation.accuracy
-            val time = mCurrentLocation.time
+        var bestAccuracy = 5f
+        var bestTime = -1000000L
+        val currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+        if (currentLocation != null) {
+            val accuracy = currentLocation.accuracy
+            val time = currentLocation.time
             if (accuracy < bestAccuracy) {
-                bestResult = mCurrentLocation
+                bestResult = currentLocation
                 bestAccuracy = accuracy
                 bestTime = time
             }
@@ -197,13 +200,15 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         }
     }
 
-    private fun servicesAvailable(): Boolean {
-        val resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context)
-        return if (ConnectionResult.SUCCESS == resultCode) {
-            true
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(resultCode, activity, 0).show()
-            false
+    private fun checkPlayServices(): Boolean {
+        val googleAPI = GoogleApiAvailability.getInstance()
+        val result = googleAPI.isGooglePlayServicesAvailable(context)
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(activity, result, 0).show()
+            }
+            return false
         }
+        return true
     }
 }
