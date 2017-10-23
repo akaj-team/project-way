@@ -75,6 +75,9 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Collapse menu
+     */
     fun collapseMenu() {
         val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
         startAnimationFab(animInvisible)
