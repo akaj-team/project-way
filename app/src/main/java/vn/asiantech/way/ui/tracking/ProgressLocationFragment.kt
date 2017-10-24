@@ -8,12 +8,14 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.BatteryManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.animation.LinearInterpolator
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_progress_location.*
 import vn.asiantech.way.R
@@ -50,13 +53,13 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     }
 
     private var mMapFragmentCustom: MapFragment? = null
-    private var mGoogleMap: GoogleMap? = null
     private var mLocationRequest: LocationRequest? = null
     private var mBestReading: Location? = null
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mLocations: MutableList<Location>? = null
     private var mRequestingLocationUpdates: Boolean = false
     private var mLastUpdateTime: String? = null
+    private var mGoogleMap: GoogleMap? = null
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -105,14 +108,17 @@ class ProgressLocationFragment : Fragment(), LocationListener,
                     .addOnConnectionFailedListener(this)
                     .build()
         }
+        Log.d("at-dinhvo", "createLocationRequest")
     }
 
     private fun initMapView() {
         mMapFragmentCustom = MapFragment()
+        mMapFragmentCustom?.clearAllMarker()
         activity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.frMapContainer, mMapFragmentCustom)
                 .commit()
+        mGoogleMap = mMapFragmentCustom!!.getGoogleMap()
     }
 
     private fun addEvents() {
@@ -133,8 +139,8 @@ class ProgressLocationFragment : Fragment(), LocationListener,
             }
         }
         rippleShareLink.setOnClickListener {
-            Toast.makeText(context, "Location: " + mBestReading?.latitude + " - " + mBestReading?.longitude, Toast.LENGTH_SHORT).show()
-            Toast.makeText(context, "Size of list location: " + mLocations!!.size, Toast.LENGTH_SHORT).show()
+            Log.d("at-dinhvo", "Location: " + mBestReading?.latitude + " - " + mBestReading?.longitude
+                    + " - " + "Size of list location: " + mLocations!!.size)
         }
     }
 
@@ -163,25 +169,32 @@ class ProgressLocationFragment : Fragment(), LocationListener,
     }
 
     override fun onLocationChanged(p0: Location?) {
-        Toast.makeText(context, "onLocationChanged: " + p0!!.latitude + " - " + p0.longitude, Toast.LENGTH_SHORT).show()
-        if (mBestReading == null || p0!!.accuracy < mBestReading!!.accuracy) {
-            mLocations!!.add(p0!!)
+        Log.d("at-dinhvo", "onLocationChanged: " + p0!!.latitude + " - " + p0.longitude)
+        if (mBestReading != p0) {
+            mLocations!!.add(p0)
+        }
+        if (mBestReading == null || p0.accuracy < mBestReading!!.accuracy) {
+//            mLocations!!.add(p0)
             mBestReading = p0
             updateUI()
             if (mBestReading!!.accuracy < MIN_ACCURACY) {
+                Log.d("at-dinhvo", "onLocationChanged: removeLocationUpdates")
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         }
     }
 
     private fun updateUI() {
-        mGoogleMap?.addMarker(MarkerOptions()
-                .title("A Place!")
-                .position(LatLng(mBestReading!!.latitude, mBestReading!!.longitude))
+        val currentLocation = LatLng(mBestReading!!.latitude, mBestReading!!.longitude)
+        val marker = mGoogleMap?.addMarker(MarkerOptions()
+                .position(currentLocation)
                 .draggable(true)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
-        )
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mBestReading!!.latitude, mBestReading!!.longitude), 14f))
+                .title(getString(R.string.marker_title)))
+        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+        if (marker != null) {
+            animateMarker(marker, currentLocation, true)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -235,10 +248,56 @@ class ProgressLocationFragment : Fragment(), LocationListener,
         val result = googleAPI.isGooglePlayServicesAvailable(context)
         if (result != ConnectionResult.SUCCESS) {
             if (googleAPI.isUserResolvableError(result)) {
+                Log.d("at-dinhvo", "Check play_service ${ConnectionResult.SUCCESS}")
                 googleAPI.getErrorDialog(activity, result, 0).show()
             }
             return false
         }
         return true
+    }
+
+    /*private class UpdateMarker(val googleMap: GoogleMap) : AsyncTask<List<Marker>, LatLng, LatLng>() {
+
+        override fun doInBackground(vararg p0: List<Marker>?): LatLng {
+
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+        override fun onProgressUpdate(vararg values: LatLng?) {
+            super.onProgressUpdate(*values)
+        }
+
+        override fun onPostExecute(result: LatLng?) {
+            super.onPostExecute(result)
+        }
+    }*/
+
+    private fun animateMarker(marker: Marker, latLng: LatLng, hideMarker: Boolean) {
+        Log.d("at-dinhvo", "animateMarker")
+        val handler = Handler()
+        val start = SystemClock.uptimeMillis()
+        val projection = mGoogleMap?.projection
+        val startPoint = projection?.toScreenLocation(marker.position)
+        val startLatLng = projection?.fromScreenLocation(startPoint)
+        val interpolator = LinearInterpolator()
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = SystemClock.uptimeMillis() - start
+                val t = interpolator.getInterpolation((elapsed.toFloat()) / 500L)
+                val lng = t * latLng.longitude + (1 - t) * startLatLng!!.longitude
+                val lat = t * latLng.latitude + (1 - t) * startLatLng.latitude
+                Log.d("at-dinhvo", "animateMarker:$lat - $lng")
+                marker.position = LatLng(lat, lng)
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16)
+                } else {
+                    marker.isVisible = !hideMarker
+                }
+                mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), 16f))
+            }
+        })
     }
 }

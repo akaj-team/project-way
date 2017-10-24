@@ -17,7 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_map.map
+import kotlinx.android.synthetic.main.fragment_map.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.utils.LocationUtil
@@ -87,4 +87,12 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
             builder.create().show()
         }
     }
+
+    fun clearAllMarker() {
+        if (mGoogleMap != null) {
+            mGoogleMap!!.clear()
+        }
+    }
+
+    fun getGoogleMap(): GoogleMap? = mGoogleMap
 }
