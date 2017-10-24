@@ -1,16 +1,12 @@
 package vn.asiantech.way.ui.map
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +41,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         val location = LocationUtil(activity).getCurrentLocation()
         if (location != null) {
             drawMaker(location)
-            setOnMylocation(location)
+            setOnMyLocation(location)
         } else {
             activity.toast(getString(R.string.toast_text_location_null))
         }
@@ -94,7 +90,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setOnMylocation(location: Location?) {
+    private fun setOnMyLocation(location: Location?) {
         val myLaLng = location?.latitude?.let { LatLng(it, location.longitude) }
         imgMyLocation.setOnClickListener {
             mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
