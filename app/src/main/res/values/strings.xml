@@ -1,4 +1,7 @@
 <resources>
+    <!--Common -->
+    <string name="current_location">Current location</string>
+    
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
@@ -26,6 +29,10 @@
     <string name="share_textview_text_test_title">You\'re 1 min away</string>
     <string name="share_textview_text_text_test_description_success">Share your live location link:</string>
     <string name="share_textview_text_copied">Copied</string>
+
+    <!--Confirm location screen-->
+    <string name="confirm_move_map">Move map to adjust marker</string>
+    <string name="confirm_location">Confirm Location</string>
 
     <!--Custom floating menu-->
     <string name="custom_floating_menu_calendar_title">Calendar</string>
