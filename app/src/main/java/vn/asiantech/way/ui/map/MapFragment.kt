@@ -94,7 +94,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         val myLaLng = location?.latitude?.let { LatLng(it, location.longitude) }
         imgMyLocation.setOnClickListener {
             mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    myLaLng, 16f))
+                    myLaLng, LEVEL_ZOOM))
         }
     }
 }
