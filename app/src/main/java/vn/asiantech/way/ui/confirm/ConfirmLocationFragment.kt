@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationListener
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -31,8 +32,7 @@ import java.util.*
  * Created by haingoq on 10/10/2017.
  */
 class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
-        LocationSource.OnLocationChangedListener,
-        GoogleMap.OnCameraIdleListener, View.OnClickListener {
+        LocationListener, GoogleMap.OnCameraIdleListener, View.OnClickListener {
     private var mGoogleMap: GoogleMap? = null
     private var mMapFragment: SupportMapFragment? = null
     private var mLatLng: LatLng? = null
@@ -57,6 +57,18 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
 
     override fun onLocationChanged(location: Location?) {
         drawCurrentMaker(location!!)
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+        // No op
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+        // No op
+    }
+
+    override fun onProviderDisabled(p0: String?) {
+        // No op
     }
 
     override fun onCameraIdle() {
