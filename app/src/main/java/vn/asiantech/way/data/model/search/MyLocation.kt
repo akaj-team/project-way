@@ -42,7 +42,7 @@ class MyLocation() : Serializable, Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<MyLocation> {
+    private companion object CREATOR : Parcelable.Creator<MyLocation> {
         override fun createFromParcel(parcel: Parcel): MyLocation {
             return MyLocation(parcel)
         }
@@ -67,7 +67,7 @@ data class Geometry(var location: Coordinates) : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Geometry> {
+    private companion object CREATOR : Parcelable.Creator<Geometry> {
         override fun createFromParcel(parcel: Parcel): Geometry {
             return Geometry(parcel)
         }
@@ -95,7 +95,7 @@ data class Coordinates(var lat: Double, var lng: Double) : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Coordinates> {
+    private companion object CREATOR : Parcelable.Creator<Coordinates> {
         override fun createFromParcel(parcel: Parcel): Coordinates {
             return Coordinates(parcel)
         }
