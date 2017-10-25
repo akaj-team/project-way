@@ -63,6 +63,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mIsoCode: String? = null
     var mTel: String? = null
     var mIsExitPressed = false
+    var mUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,21 +113,26 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onClick(view: View?) {
+        val name: String = edtName.text.toString().trim()
+        val phoneNumber: String = edtPhoneNumber.text.toString().trim()
         when (view?.id) {
             R.id.btnSave -> {
-                val name: String = edtName.text.toString().trim()
-                val phoneNumber: String = edtPhoneNumber.text.toString().trim()
-                if (name.isBlank()) {
-                    edtName.setText(R.string.register_user_name_default)
-                }
-                if (phoneNumber.isBlank()) {
-                    edtPhoneNumber.text = null
-                }
                 createUser(name, phoneNumber)
                 startActivity(Intent(this, HomeActivity::class.java))
             }
             R.id.tvCancel -> {
-                startActivity(Intent(this, HomeActivity::class.java))
+                if (mUser == null) {
+                    if (name.isBlank()) {
+                        edtName.setText(R.string.register_user_name_default)
+                    }
+                    if (phoneNumber.isBlank()) {
+                        edtPhoneNumber.text = null
+                    }
+                    createUser(name, phoneNumber)
+                    startActivity(Intent(this, HomeActivity::class.java))
+                } else {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                }
             }
         }
     }
@@ -163,7 +169,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 .setLookupId(phoneNumber)
 
         // Create new user
-        if (mPreviousPhone?.removeRange(0, 3) != phoneNumber) {
+        if (mUser == null) {
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
@@ -205,6 +211,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun updateView(user: User?) {
+        mUser = user
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 visibleProgressBar(progressBarAvatar)
@@ -221,11 +228,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
         }
         Picasso.with(this)
-                .load(user?.photo)
+                .load(mUser?.photo)
                 .into(target)
         imgAvatar.tag = target
-        edtName.setText(user?.name)
-        val basePhone: List<String>? = user?.phone?.split("/")
+        edtName.setText(mUser?.name)
+        val basePhone: List<String>? = mUser?.phone?.split("/")
         if (basePhone!!.size > 1) {
             // Set isoCode
             mIsoCode = basePhone[0]
@@ -242,13 +249,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         } else {
             edtPhoneNumber.setText(basePhone[0])
         }
-        btnSave.isEnabled = checkUser(user.name, user.phone)
-        mPreviousName = user.name
-        mPreviousPhone = user.phone
+        btnSave.isEnabled = checkUser(mUser?.name, user?.phone)
+        mPreviousName = mUser?.name
+        mPreviousPhone = mUser?.phone
     }
 
-    private fun checkUser(name: String, phone: String): Boolean {
-        if (mPreviousName != name.trim() && mPreviousPhone != phone.trim()) {
+    private fun checkUser(name: String?, phone: String?): Boolean {
+        if (mPreviousName != name?.trim() && mPreviousPhone != phone?.trim()) {
             return true
         }
         return false
