@@ -68,6 +68,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mTel: String? = null
     var mIsExitPressed = false
     var mUser: User? = null
+
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
