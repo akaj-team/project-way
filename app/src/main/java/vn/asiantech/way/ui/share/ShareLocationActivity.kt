@@ -4,76 +4,126 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.GradientDrawable
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.CameraUpdateFactory
+import android.support.v4.content.ContextCompat
+import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import kotlinx.android.synthetic.main.activity_share_location.*
+import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import vn.asiantech.way.R
-import vn.asiantech.way.data.remote.APIUtil
-import vn.asiantech.way.data.model.share.LocationResponse
+import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.BottomButtonCard
+import vn.asiantech.way.ui.custom.RadiusAnimation
+import vn.asiantech.way.ui.search.SearchLocationActivity
+import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
+import java.util.*
 
 /**
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
-    companion object {
-        private const val INVALID_REQUEST = "INVALID_REQUEST"
-    }
+class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
+        LocationSource.OnLocationChangedListener,
+        GoogleMap.OnCameraIdleListener {
 
-    private val service = APIUtil.getService()
-    private var googleMap: GoogleMap? = null
+    private var mGoogleMap: GoogleMap? = null
+    private var mMapFragment: SupportMapFragment? = null
+    private var mLatLng: LatLng? = null
+    private var mDestinationName: String? = null
+    private var mMyLocation: MyLocation? = null
+    private var mAction: String? = null
+    private var mIsConfirm: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_location)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
+        if (intent.extras != null) {
+            mMyLocation = intent.getParcelableExtra(AppConstants.keyLocation)
+            mAction = intent.getStringExtra(AppConstants.keyConfirm)
+        }
+        initMap()
         initializeUIViews()
         onClickButtonSearchLocation()
-        initBottomButtonCard(true)
+        initBottomButtonCard(true, mAction)
+    }
+
+    private fun initMap() {
+        mMapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as? SupportMapFragment
+        mMapFragment?.getMapAsync(this)
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        googleMap = map
+        mGoogleMap = map
         // Add a marker in Sydney and move the camera
-        val myLocation = LocationUtil(this).getCurrentLocation()
-        val myLaLng = myLocation?.latitude?.let { LatLng(it, myLocation.longitude) }
-        if (myLaLng != null) {
-            val cameraMove = CameraUpdateFactory.newLatLngZoom(
-                    myLaLng, 16f)
-            googleMap?.addMarker(myLaLng.let {
-                MarkerOptions().position(it)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_source_place_marker))
-                        .anchor(0.5f, 0.5f)
-            })
-            googleMap?.animateCamera(cameraMove)
-            getLocationAddress("${myLaLng.latitude},${myLaLng.longitude}")
+        val currentLocation = LocationUtil(this).getCurrentLocation()
+        if (currentLocation != null) {
+            drawCurrentMaker(currentLocation)
+        }
+        mGoogleMap?.setOnCameraIdleListener(this)
+        mLatLng = currentLocation?.latitude?.let { LatLng(it, currentLocation.longitude) }
+        if (mMyLocation != null) {
+            mLatLng = LatLng(mMyLocation?.geometry?.location?.lat!!, mMyLocation?.geometry?.location?.lng!!)
+            addDestinationMarker(mLatLng)
+        }
+        if (mAction == AppConstants.keyCurrentLocation) {
+            mLatLng = LatLng(currentLocation?.latitude!!, currentLocation.longitude)
+            addDestinationMarker(mLatLng)
+            getLocationName(mLatLng)
+            mIsConfirm = true
         }
     }
 
+    override fun onLocationChanged(location: Location?) {
+        drawCurrentMaker(location!!)
+    }
+
+    override fun onCameraIdle() {
+        mLatLng = mGoogleMap?.cameraPosition?.target
+        if (!mIsConfirm) {
+            if (mMyLocation == null) {
+                getLocationName(mLatLng)
+            } else {
+                mLatLng = LatLng(mMyLocation?.geometry?.location?.lat!!, mMyLocation?.geometry?.location?.lng!!)
+                getLocationName(mLatLng)
+            }
+        }
+    }
 
     private fun initializeUIViews() {
         bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
             override fun onCloseButtonClick() {
-                // No-op
+                rlBottomCard.visibility = View.GONE
             }
 
             override fun onActionButtonClick() {
-                shareLocation()
+                when (mAction) {
+                    AppConstants.keyConfirm -> {
+                        mAction = AppConstants.keySharing
+                        initBottomButtonCard(true, mAction)
+                        addDestinationMarker(mLatLng)
+                        mIsConfirm = true
+                    }
+                    AppConstants.keySharing, AppConstants.keyCurrentLocation -> {
+                        mAction = AppConstants.keyStartSharing
+                        initBottomButtonCard(true, mAction)
+                    }
+                    else -> shareLocation()
+                }
             }
 
             override fun onCopyButtonClick() {
@@ -84,17 +134,33 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
-    //TODO: will change code logic in future
-    private fun initBottomButtonCard(show: Boolean) {
-        bottomButtonCard?.hideCloseButton()
-        bottomButtonCard?.setDescriptionText("")
-        bottomButtonCard?.actionType = BottomButtonCard.ActionType.SHARE_TRACKING_URL
-        bottomButtonCard?.showTrackingURLLayout()
-        bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
-        bottomButtonCard?.setDescriptionText(getString(R.string.bottom_button_card_description_text))
-        bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
-        bottomButtonCard?.showActionButton()
-        bottomButtonCard?.showTitle()
+    private fun initBottomButtonCard(show: Boolean, action: String?) {
+        when (action) {
+            AppConstants.keyConfirm -> {
+                bottomButtonCard?.hideCloseButton()
+                bottomButtonCard?.hideTvTitle()
+                bottomButtonCard?.setDescriptionText(getString(R.string.confirm_move_map))
+                bottomButtonCard?.setShareButtonText(getString(R.string.confirm_location))
+                bottomButtonCard?.showActionButton()
+            }
+            AppConstants.keySharing, AppConstants.keyCurrentLocation -> {
+                bottomButtonCard?.hideCloseButton()
+                bottomButtonCard?.hideTvDescription()
+                bottomButtonCard?.setTitleText(getString(R.string.share_textview_text_look_good))
+                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
+                bottomButtonCard?.showActionButton()
+            }
+            else -> {
+                bottomButtonCard?.showClosebutton()
+                bottomButtonCard?.actionType = BottomButtonCard.ActionType.SHARE_TRACKING_URL
+                bottomButtonCard?.showTrackingURLLayout()
+                bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
+                bottomButtonCard?.setDescriptionText(getString(R.string.bottom_button_card_description_text))
+                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
+                bottomButtonCard?.showActionButton()
+                bottomButtonCard?.showTitle()
+            }
+        }
         if (show) {
             bottomButtonCard?.showBottomCardLayout()
         }
@@ -108,33 +174,78 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback {
         startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), 200)
     }
 
-    //todo: will update code with base API
-    private fun getLocationAddress(latLng: String) {
-        service?.getAddressLocation(latLng)?.enqueue(object : Callback<LocationResponse> {
-            override fun onResponse(call: Call<LocationResponse>?, response: Response<LocationResponse>?) {
-                response?.isSuccessful?.let {
-                    if (!it) {
-                        return
-                    }
-                }
-                if (INVALID_REQUEST == response?.body()?.status) {
-                    return
-                }
-                val locations = response?.body()?.results
-                val address = locations?.get(0)
-                tvAddress.text = address?.address
-                tvAddress.setTextColor(Color.BLACK)
-            }
-
-            override fun onFailure(call: Call<LocationResponse>?, t: Throwable?) {
-            }
-
-        })
-    }
-
     private fun onClickButtonSearchLocation() {
         rlSearchLocation.setOnClickListener {
-            //TODO:Update event onCLick for Search location
+            startActivity(Intent(this, SearchLocationActivity::class.java))
         }
+        btnBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun addDestinationMarker(latLng: LatLng?) {
+        mGoogleMap?.addMarker(MarkerOptions()
+                .position(latLng!!)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
+                .title(mDestinationName)
+                .anchor(0.5f, 0.5f))
+                ?.showInfoWindow()
+        imgPickLocation.visibility = View.INVISIBLE
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+    }
+
+    private fun drawCurrentMaker(location: Location) {
+        if (mGoogleMap != null) {
+            mGoogleMap?.clear()
+            val currentLocation = LatLng(location.latitude, location.longitude)
+            mGoogleMap?.addMarker(MarkerOptions()
+                    .position(currentLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
+                    .title(getString(R.string.current_location))
+                    .anchor(0.5f, 0.5f))
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+            addPulseRing(currentLocation)
+        }
+    }
+
+    private fun addPulseRing(latLng: LatLng) {
+        val drawable = GradientDrawable()
+        drawable.shape = GradientDrawable.OVAL
+        drawable.setSize(500, 500)
+        drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
+
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
+                .position(latLng, 500f)
+                .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
+        val groundAnimation = RadiusAnimation(groundOverlay)
+        groundAnimation.repeatCount = Animation.INFINITE
+        groundAnimation.duration = 2000
+        mMapFragment?.view?.startAnimation(groundAnimation)
+    }
+
+    private fun getLocationName(latLng: LatLng?) {
+        val geoCoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
+        if (addresses.isNotEmpty()) {
+            val address: Address = addresses[0]
+            tvLocation.text = address.getAddressLine(0)
+            if (!address.subThoroughfare.isNullOrEmpty()) {
+                mDestinationName = address.subThoroughfare.plus(" ").plus(address.thoroughfare)
+            } else {
+                mDestinationName = address.thoroughfare
+            }
+        } else {
+            tvLocation.text = null
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, SearchLocationActivity::class.java))
+        this.finish()
     }
 }

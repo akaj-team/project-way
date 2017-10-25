@@ -75,12 +75,15 @@
         </activity>
         <activity
             android:name=".ui.share.ShareLocationActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.arrived.ArrivedActivity" />
-        <activity android:name=".ui.search.SearchLocationActivity" />
+        <activity
+            android:name=".ui.search.SearchLocationActivity"
+            android:noHistory="true" />
 
         <!-- Register meta-data here -->
         <!--
