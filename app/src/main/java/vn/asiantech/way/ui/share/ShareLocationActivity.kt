@@ -12,7 +12,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.maps.*
@@ -75,27 +74,28 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
             drawCurrentMaker(currentLocation)
         }
         mGoogleMap?.setOnCameraIdleListener(this)
-        mLatLng = currentLocation?.latitude?.let { LatLng(it, currentLocation.longitude) }
-        if (mMyLocation != null) {
-            mLatLng = LatLng(mMyLocation?.geometry?.location?.lat!!, mMyLocation?.geometry?.location?.lng!!)
+        val lat = mMyLocation?.geometry?.location?.lat
+        val lng = mMyLocation?.geometry?.location?.lng
+        if (lat != null && lng != null) {
+            mLatLng = LatLng(lat, lng)
             addDestinationMarker(mLatLng)
         }
         if (mAction == AppConstants.keyCurrentLocation) {
-            mLatLng = LatLng(currentLocation?.latitude!!, currentLocation.longitude)
+            mLatLng = currentLocation?.latitude?.let { LatLng(it, currentLocation.longitude) }
             addDestinationMarker(mLatLng)
             getLocationName(mLatLng)
             mIsConfirm = true
         }
     }
 
-    override fun onLocationChanged(location: Location?) {
-        drawCurrentMaker(location!!)
+    override fun onLocationChanged(location: Location) {
+        drawCurrentMaker(location)
     }
 
     override fun onCameraIdle() {
         mLatLng = mGoogleMap?.cameraPosition?.target
         if (!mIsConfirm) {
-            if (mMyLocation == null) {
+            if (mMyLocation?.geometry?.location == null) {
                 getLocationName(mLatLng)
             } else {
                 mLatLng = LatLng(mMyLocation?.geometry?.location?.lat!!, mMyLocation?.geometry?.location?.lng!!)
@@ -184,14 +184,16 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
     }
 
     private fun addDestinationMarker(latLng: LatLng?) {
-        mGoogleMap?.addMarker(MarkerOptions()
-                .position(latLng!!)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
-                .title(mDestinationName)
-                .anchor(0.5f, 0.5f))
-                ?.showInfoWindow()
-        imgPickLocation.visibility = View.INVISIBLE
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+        if (latLng != null) {
+            mGoogleMap?.addMarker(MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
+                    .title(mDestinationName)
+                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
+                    ?.showInfoWindow()
+            imgPickLocation.visibility = View.INVISIBLE
+            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+        }
     }
 
     private fun drawCurrentMaker(location: Location) {
@@ -202,7 +204,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
                     .title(getString(R.string.current_location))
-                    .anchor(0.5f, 0.5f))
+                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
             addPulseRing(currentLocation)
         }
@@ -211,7 +213,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
     private fun addPulseRing(latLng: LatLng) {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.OVAL
-        drawable.setSize(500, 500)
+        drawable.setSize(AppConstants.keyDrawableSize, AppConstants.keyDrawableSize)
         drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
 
         val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -219,27 +221,29 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, 500f)
+                .position(latLng, AppConstants.keyGroundOverlayPosition)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
         val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
-        groundAnimation.duration = 2000
+        groundAnimation.duration = AppConstants.keyGrAnimationDur
         mMapFragment?.view?.startAnimation(groundAnimation)
     }
 
     private fun getLocationName(latLng: LatLng?) {
-        val geoCoder = Geocoder(this, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
-        if (addresses.isNotEmpty()) {
-            val address: Address = addresses[0]
-            tvLocation.text = address.getAddressLine(0)
-            if (!address.subThoroughfare.isNullOrEmpty()) {
-                mDestinationName = address.subThoroughfare.plus(" ").plus(address.thoroughfare)
+        if (latLng != null) {
+            val geoCoder = Geocoder(this, Locale.getDefault())
+            val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            if (addresses.isNotEmpty()) {
+                val address: Address = addresses[0]
+                tvLocation.text = address.getAddressLine(0)
+                if (!address.subThoroughfare.isNullOrEmpty()) {
+                    mDestinationName = address.subThoroughfare.plus(" ").plus(address.thoroughfare)
+                } else {
+                    mDestinationName = address.thoroughfare
+                }
             } else {
-                mDestinationName = address.thoroughfare
+                tvLocation.text = null
             }
-        } else {
-            tvLocation.text = null
         }
     }
 

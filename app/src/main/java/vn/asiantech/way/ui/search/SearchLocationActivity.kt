@@ -51,12 +51,12 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlYourLocation.setOnClickListener {
-            mIntent!!.putExtra(AppConstants.keyConfirm, AppConstants.keyCurrentLocation)
+            mIntent?.putExtra(AppConstants.keyConfirm, AppConstants.keyCurrentLocation)
             startActivity(mIntent)
         }
 
         rlChooseOnMap.setOnClickListener {
-            mIntent!!.putExtra(AppConstants.keyConfirm, AppConstants.keyConfirm)
+            mIntent?.putExtra(AppConstants.keyConfirm, AppConstants.keyConfirm)
             startActivity(mIntent)
         }
 

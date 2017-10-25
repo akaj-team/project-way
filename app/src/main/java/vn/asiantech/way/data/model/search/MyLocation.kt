@@ -57,8 +57,7 @@ class MyLocation() : Serializable, Parcelable {
  *  Geometry of location
  */
 data class Geometry(var location: Coordinates) : Parcelable {
-    constructor(parcel: Parcel) : this(parcel.readParcelable<Coordinates>(Coordinates::class.java.classLoader)) {
-    }
+    constructor(parcel: Parcel) : this(parcel.readParcelable<Coordinates>(Coordinates::class.java.classLoader))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(location, flags)
@@ -85,8 +84,7 @@ data class Geometry(var location: Coordinates) : Parcelable {
 data class Coordinates(var lat: Double, var lng: Double) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readDouble(),
-            parcel.readDouble()) {
-    }
+            parcel.readDouble())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeDouble(lat)

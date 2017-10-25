@@ -1,4 +1,3 @@
-
 package vn.asiantech.way.utils
 
 /**
@@ -11,4 +10,8 @@ object AppConstants {
     const val keyCurrentLocation = "current_location"
     const val keySharing = "sharing"
     const val keyStartSharing = "start_sharing"
+    const val keyDefaultAnchor = 0.5f
+    const val keyDrawableSize = 500
+    const val keyGroundOverlayPosition = 500f
+    const val keyGrAnimationDur : Long = 2000
 }
