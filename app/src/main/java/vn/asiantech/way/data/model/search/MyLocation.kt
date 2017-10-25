@@ -10,7 +10,6 @@ import java.io.Serializable
  * Created by cuongcaov. on 25/09/2017.
  */
 class MyLocation() : Serializable, Parcelable {
-
     var isHistory: Boolean? = null
     @SerializedName("formattedAddress")
     var formattedAddress: String? = null
