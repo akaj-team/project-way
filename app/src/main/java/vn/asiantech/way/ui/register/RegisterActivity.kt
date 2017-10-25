@@ -2,7 +2,9 @@ package vn.asiantech.way.ui.register
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -54,6 +56,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val INTENT_CODE_SPLASH = 100
         const val INTENT_CODE_HOME = 101
         const val INTENT_REGISTER = "Register"
+        const val SHARED_NAME = "shared"
+        const val KEY_LOGIN = "login"
     }
 
     var mBitmap: Bitmap? = null
@@ -64,6 +68,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mTel: String? = null
     var mIsExitPressed = false
     var mUser: User? = null
+    private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +76,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
+        mSharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
@@ -173,6 +179,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
+                    saveLoginStatus(true)
                     toast(getString(R.string.register_create_user))
                 }
 
@@ -376,5 +383,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun saveLoginStatus(login: Boolean) {
+        val editor = mSharedPreferences.edit()
+        editor.putBoolean(KEY_LOGIN, login)
+        editor.apply()
     }
 }
