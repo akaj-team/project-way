@@ -98,8 +98,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
             if (mMyLocation?.geometry?.location == null) {
                 getLocationName(mLatLng)
             } else {
-                mLatLng = LatLng(mMyLocation?.geometry?.location?.lat!!, mMyLocation?.geometry?.location?.lng!!)
-                getLocationName(mLatLng)
+                val lat = mMyLocation?.geometry?.location?.lat
+                val lng = mMyLocation?.geometry?.location?.lng
+                if (lat != null && lng != null) {
+                    mLatLng = LatLng(lat, lng)
+                    getLocationName(mLatLng)
+                }
             }
         }
     }
@@ -189,7 +193,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                     .title(mDestinationName)
-                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
                     ?.showInfoWindow()
             imgPickLocation.visibility = View.INVISIBLE
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
@@ -204,7 +208,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
                     .title(getString(R.string.current_location))
-                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
             addPulseRing(currentLocation)
         }
@@ -213,7 +217,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
     private fun addPulseRing(latLng: LatLng) {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.OVAL
-        drawable.setSize(AppConstants.keyDrawableSize, AppConstants.keyDrawableSize)
+        drawable.setSize(AppConstants.KEY_DRAWABLE_SIZE, AppConstants.KEY_DRAWABLE_SIZE)
         drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
 
         val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -221,11 +225,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, AppConstants.keyGroundOverlayPosition)
+                .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
         val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
-        groundAnimation.duration = AppConstants.keyGrAnimationDur
+        groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
         mMapFragment?.view?.startAnimation(groundAnimation)
     }
 
