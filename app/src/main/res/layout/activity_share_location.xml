@@ -43,37 +43,36 @@
                 android:background="@color/white">
 
                 <TextView
-                    android:id="@+id/tvTitleAddress"
+                    android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="20dp"
                     android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
                     android:text="@string/share_textview_text_going_somewhere"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
 
                 <TextView
-                    android:id="@+id/tvAddress"
+                    android:id="@+id/tvLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvTitleAddress"
+                    android:layout_below="@id/tvTitle"
+                    android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="50dp"
-                    android:clickable="true"
-                    android:paddingBottom="10dp"
                     android:text="@string/share_textview_text_description"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
+
                 <ImageView
+                    android:id="@+id/imgEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_edit_location"
-                    android:paddingTop="15dp"
-                    android:paddingRight="20dp"
+                    android:layout_alignParentRight="true"
                     android:paddingLeft="15dp"
-                    android:clickable="true"
-                    android:layout_alignParentRight="true"/>
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
+                    android:src="@drawable/ic_edit_location" />
             </RelativeLayout>
-
 
             <com.hypertrack.lib.internal.consumer.view.WrappingViewPager
                 android:id="@+id/view_pager"
@@ -102,8 +101,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/select_expected_place"
                 android:padding="10dp"
+                android:src="@drawable/select_expected_place"
                 android:visibility="gone" />
 
             <TextView
@@ -119,6 +118,13 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/imgPickLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/select_expected_place" />
     </FrameLayout>
 
     <vn.asiantech.way.ui.custom.BottomButtonCard

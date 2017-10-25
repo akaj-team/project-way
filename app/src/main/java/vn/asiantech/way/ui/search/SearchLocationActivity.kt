@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.search
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -13,6 +14,8 @@ import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -30,11 +33,13 @@ class SearchLocationActivity : BaseActivity() {
     private var mAdapter: LocationsAdapter? = null
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
     private var mSharedPreferences: SharedPreferences? = null
+    private var mIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_location)
         mSharedPreferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        mIntent = Intent(applicationContext, ShareLocationActivity::class.java)
         initAdapter()
         locationSearch()
         onClick()
@@ -46,11 +51,13 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlYourLocation.setOnClickListener {
-            // TODO: Call to ShareLocationActivity - atToanNguyen
+            mIntent!!.putExtra(AppConstants.keyConfirm, AppConstants.keyCurrentLocation)
+            startActivity(mIntent)
         }
 
         rlChooseOnMap.setOnClickListener {
-            // TODO: Call to ShareLocationActivity - atToanNguyen
+            mIntent!!.putExtra(AppConstants.keyConfirm, AppConstants.keyConfirm)
+            startActivity(mIntent)
         }
 
     }
@@ -102,9 +109,12 @@ class SearchLocationActivity : BaseActivity() {
         mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
                 saveSearchHistory(myLocation)
-                // TODO: Call to ShareLocationActivity - atToanNguyen
+                val bundle = Bundle()
+                bundle.putParcelable(AppConstants.keyLocation, myLocation)
+                bundle.putString(AppConstants.keyConfirm, AppConstants.keySharing)
+                mIntent?.putExtras(bundle)
+                startActivity(mIntent)
             }
-
         })
         recyclerViewLocations.layoutManager = LinearLayoutManager(this)
         recyclerViewLocations.adapter = mAdapter
