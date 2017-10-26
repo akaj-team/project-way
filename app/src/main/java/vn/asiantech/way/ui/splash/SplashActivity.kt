@@ -28,17 +28,17 @@ class SplashActivity : BaseActivity() {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if ((intent!!.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
-                    intent.action == WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
-                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if ((intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
+                    intent?.action == WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+                val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+                if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     toast(getString(R.string.splash_toast_turn_on_gps))
                 } else {
                     startSwitchScreen()
                 }
             }
 
-            if (intent.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+            if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
                 if (!HyperTrackUtils.isWifiEnabled(context)) {
                     toast(getString(R.string.splash_toast_turn_on_wifi))
                 } else {
