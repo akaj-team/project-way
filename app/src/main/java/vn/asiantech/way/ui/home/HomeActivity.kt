@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -40,6 +41,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
     private var isExit = false
+    private var mIsExpand = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,13 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         initMap()
         initViews()
         fabMenuGroup.setOnMenuItemClickListener(this)
+        frOverlay.setOnClickListener {
+            if (mIsExpand) {
+                fabMenuGroup.collapseMenu()
+                mIsExpand = false
+                setGoneOverLay()
+            }
+        }
         setDataForRecyclerView()
     }
 
@@ -61,6 +70,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         }
     }
 
+    override fun onMenuClick(isShowMenu: Boolean) {
+        frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
+        mIsExpand = isShowMenu
+    }
+
     override fun onShareClick() {
         startActivity(Intent(this, SearchLocationActivity::class.java))
         setGoneOverLay()
@@ -70,10 +84,17 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val intent = Intent(this, RegisterActivity::class.java)
         intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_HOME)
         startActivity(intent)
+        setGoneOverLay()
     }
 
     override fun onCalendarClick() {
+        setGoneOverLay()
         // TODO after completed calendar feature
+    }
+
+    override fun onSearchClick() {
+        startActivity(Intent(this, SearchLocationActivity::class.java))
+        setGoneOverLay()
     }
 
     private fun initViews() {
@@ -90,6 +111,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val size = Point()
         display.getSize(size)
         mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / 3)
+    }
+
+    private fun setGoneOverLay() {
+        frOverlay.visibility = View.GONE
     }
 
     private fun drawMaker(location: android.location.Location) {
