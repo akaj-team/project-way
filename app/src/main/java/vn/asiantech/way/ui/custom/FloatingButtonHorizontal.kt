@@ -22,6 +22,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         imgBtnShare.setOnClickListener(this)
         imgBtnProfile.setOnClickListener(this)
         imgBtnCalendar.setOnClickListener(this)
+        imgBtnSearch.setOnClickListener(this)
     }
 
     private var mOnMenuClickListener: OnMenuClickListener? = null
@@ -33,10 +34,13 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_visible)
                 val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
                 imgBtnMenu.startAnimation(anim)
-                startAnimationFab(animInvisible)
-                if (imgBtnShare.visibility == View.INVISIBLE) {
+                if (rlShare.visibility == View.INVISIBLE) {
                     startAnimationFab(animVisible)
                     visibilityAllChildView(View.VISIBLE)
+                    mOnMenuClickListener?.onMenuClick(true)
+                } else {
+                    startAnimationFab(animInvisible)
+                    mOnMenuClickListener?.onMenuClick(false)
                 }
                 animInvisible.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationRepeat(p0: Animation?) {
@@ -64,19 +68,34 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 visibilityAllChildView(View.INVISIBLE)
                 mOnMenuClickListener?.onCalendarClick()
             }
+            R.id.imgBtnSearch -> {
+                visibilityAllChildView(View.INVISIBLE)
+                mOnMenuClickListener?.onSearchClick()
+            }
         }
     }
 
+    /**
+     * Collapse menu
+     */
+    fun collapseMenu() {
+        val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
+        startAnimationFab(animInvisible)
+        visibilityAllChildView(View.INVISIBLE)
+    }
+
     private fun startAnimationFab(animation: Animation) {
-        imgBtnShare.startAnimation(animation)
-        imgBtnProfile.startAnimation(animation)
-        imgBtnCalendar.startAnimation(animation)
+        rlShare.startAnimation(animation)
+        rlProfile.startAnimation(animation)
+        rlCalendar.startAnimation(animation)
+        rlSearch.startAnimation(animation)
     }
 
     private fun visibilityAllChildView(visibilityState: Int) {
-        imgBtnShare.visibility = visibilityState
-        imgBtnProfile.visibility = visibilityState
-        imgBtnCalendar.visibility = visibilityState
+        rlShare.visibility = visibilityState
+        rlProfile.visibility = visibilityState
+        rlCalendar.visibility = visibilityState
+        rlSearch.visibility = visibilityState
     }
 
     /**
@@ -92,6 +111,10 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
      */
     internal interface OnMenuClickListener {
         /**
+         * Event when button menu clicked
+         */
+        fun onMenuClick(isShowMenu: Boolean)
+        /**
          * Event when button share clicked
          */
         fun onShareClick()
@@ -105,5 +128,10 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
          * Event when button calendar clicked
          */
         fun onCalendarClick()
+
+        /**
+         * Event when button search clicked
+         */
+        fun onSearchClick()
     }
 }
