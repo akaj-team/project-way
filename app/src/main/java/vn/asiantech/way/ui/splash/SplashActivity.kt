@@ -19,12 +19,15 @@ import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.register.RegisterActivity
 
-
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
 class SplashActivity : BaseActivity() {
+
+    companion object {
+        const val DELAY = 3000L
+    }
 
     private lateinit var mSharedPreferences: SharedPreferences
 
@@ -80,7 +83,7 @@ class SplashActivity : BaseActivity() {
                 Handler().postDelayed({
                     startActivity(Intent(this, HomeActivity::class.java))
                     finish()
-                }, 3000)
+                }, DELAY)
 
             } else {
                 Handler().postDelayed({
@@ -88,7 +91,7 @@ class SplashActivity : BaseActivity() {
                     intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
                     startActivity(intent)
                     finish()
-                }, 3000)
+                }, DELAY)
             }
         }
     }
