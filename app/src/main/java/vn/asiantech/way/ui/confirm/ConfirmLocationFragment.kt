@@ -146,10 +146,10 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
             tvLocation.text = address.getAddressLine(0)
-            if (!address.subThoroughfare.isNullOrEmpty()) {
-                mDestinationName = address.subThoroughfare.plus(" ").plus(address.thoroughfare)
+            mDestinationName = if (!address.subThoroughfare.isNullOrEmpty()) {
+                address.subThoroughfare.plus(" ").plus(address.thoroughfare)
             } else {
-                mDestinationName = address.thoroughfare
+                address.thoroughfare
             }
         } else {
             tvLocation.text = null
@@ -164,7 +164,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
                 .anchor(0.5f, 0.5f))
                 ?.showInfoWindow()
         imgPickLocation.visibility = View.INVISIBLE
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
     }
 
     private fun drawCurrentMaker(location: Location) {
