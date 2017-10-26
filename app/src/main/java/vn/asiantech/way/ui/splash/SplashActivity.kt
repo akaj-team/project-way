@@ -1,13 +1,11 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -18,7 +16,9 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.register.RegisterActivity
+
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -26,22 +26,17 @@ import vn.asiantech.way.ui.register.RegisterActivity
  */
 class SplashActivity : BaseActivity() {
 
-    private val broadcastReceiver = object : BroadcastReceiver() {
+    private lateinit var mSharedPreferences: SharedPreferences
+
+    private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if ((intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
                     intent?.action == WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
-                val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
-                if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    toast(getString(R.string.splash_toast_turn_on_gps))
-                } else {
-                    startSwitchScreen()
-                }
+                startSwitchScreen()
             }
 
             if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
-                if (!HyperTrackUtils.isWifiEnabled(context)) {
-                    toast(getString(R.string.splash_toast_turn_on_wifi))
-                } else {
+                if (HyperTrackUtils.isWifiEnabled(context)) {
                     startSwitchScreen()
                 }
             }
@@ -54,25 +49,48 @@ class SplashActivity : BaseActivity() {
         intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
         intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
-        registerReceiver(broadcastReceiver, intentFilter)
+        registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        mSharedPreferences = getSharedPreferences(RegisterActivity.SHARED_NAME, Context.MODE_PRIVATE)
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                }
+            }
+        } else {
+            toast(getString(R.string.splash_toast_turn_on_wifi))
+        }
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
     }
 
     private fun startSwitchScreen() {
-        progressBar.visibility = View.VISIBLE
-        btnEnableLocation.visibility = View.GONE
-        tvAppDescription.visibility = View.GONE
-        val intent = Intent(this, RegisterActivity::class.java)
-        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-        startActivity(intent)
-        finish()
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            progressBar.visibility = View.VISIBLE
+            btnEnableLocation.visibility = View.GONE
+            tvAppDescription.visibility = View.GONE
+            if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                Handler().postDelayed({
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                }, 3000)
+
+            } else {
+                Handler().postDelayed({
+                    val intent = Intent(this, RegisterActivity::class.java)
+                    intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                    startActivity(intent)
+                    finish()
+                }, 3000)
+            }
+        }
     }
 
     private fun setAnimationForBackground() {
@@ -146,5 +164,10 @@ class SplashActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(mBroadcastReceiver)
+        super.onDestroy()
     }
 }
