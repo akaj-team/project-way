@@ -160,13 +160,12 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun initDummyData(locations: ArrayList<Location>) {
-        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school..............."))
-        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........"))
-        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km"))
-        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km"))
-        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
-        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
-        locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............", LatLng(16.0721115, 108.2302225)))
+        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........", LatLng(16.0712047, 108.2193197)))
+        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
+        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
+        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
+        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {

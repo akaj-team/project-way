@@ -1,7 +1,7 @@
 <resources>
     <!--Common -->
     <string name="current_location">Current location</string>
-    
+
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
@@ -57,6 +57,7 @@
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
+    <string name="not_update_current_location">\"Do not update the current location!\"</string>
 
     <!--Arrived screen-->
     <string name="arrived_show_summary">SHOW SUMMARY</string>
@@ -77,5 +78,4 @@
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
-
 </resources>
