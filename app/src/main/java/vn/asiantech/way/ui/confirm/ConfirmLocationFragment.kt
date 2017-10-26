@@ -40,6 +40,9 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         com.google.android.gms.location.LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleMap.OnCameraIdleListener, View.OnClickListener {
+    companion object {
+        private const val INTERVAL = 500L
+    }
 
     private var mGoogleMap: GoogleMap? = null
     private var mMapFragment: SupportMapFragment? = null
@@ -81,8 +84,8 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     private fun initLocationRequest() {
         mLocationRequest = LocationRequest.create()
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest?.interval = 500
-        mLocationRequest?.fastestInterval = 500
+        mLocationRequest?.interval = INTERVAL
+        mLocationRequest?.fastestInterval = INTERVAL
     }
 
     @SuppressLint("MissingPermission")
