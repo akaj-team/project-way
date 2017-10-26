@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
+import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,11 +21,8 @@ import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.register.RegisterActivity
-import vn.asiantech.way.ui.share.ShareLocationActivity
-import vn.asiantech.way.utils.LocationUtil
-import kotlin.collections.ArrayList
-import android.view.WindowManager
 import vn.asiantech.way.ui.search.SearchLocationActivity
+import vn.asiantech.way.utils.LocationUtil
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
