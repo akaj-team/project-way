@@ -61,6 +61,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
         initBottomButtonCard(true, mAction)
     }
 
+
     private fun initMap() {
         mMapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as? SupportMapFragment
         mMapFragment?.getMapAsync(this)
