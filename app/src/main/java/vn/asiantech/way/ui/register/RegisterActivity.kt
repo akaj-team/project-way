@@ -148,7 +148,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        val tel: String = tvTel.text.toString().removeRange(0, 1)
+        var tel: String = ""
+        if (tvTel.text.isNotEmpty()) {
+            tel = tvTel.text.toString().removeRange(0, 1)
+        }
         if ((name.isBlank() && phone.isBlank())
                 || (mPreviousName?.trim() == name
                 && mPreviousPhone?.removeRange(0, 3) == phone
@@ -159,6 +162,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
+
     }
 
     private fun createUser(name: String, phoneNumber: String) {
@@ -240,7 +244,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 if (mIsoCode == mCountries[i].iso) {
                     spinnerNation.setSelection(i)
                     val tel = mCountries[i].tel
-                    tvTel.text = tel
+                    tvTel.text = getString(R.string.register_plus).plus(tel)
                     mTel = tel
                     break
                 }
