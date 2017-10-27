@@ -175,7 +175,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
-
     }
 
     private fun createUser(name: String, phoneNumber: String) {
