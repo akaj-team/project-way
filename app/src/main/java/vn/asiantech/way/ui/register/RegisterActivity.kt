@@ -133,7 +133,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     createUser(name, phoneNumber)
                     startActivity(Intent(this, HomeActivity::class.java))
                 } else {
-                    toast(getString(R.string.register_check_permission))
+                    toast(getString(R.string.register_request_permission))
                 }
             }
             R.id.tvCancel -> {
