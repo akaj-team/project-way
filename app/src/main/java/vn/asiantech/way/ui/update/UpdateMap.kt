@@ -40,7 +40,8 @@ import vn.asiantech.way.utils.LocationUtil
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by at-hoavo on 25/10/2017.
  */
-internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
+internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
+        FloatingButtonHorizontal.OnMenuClickListener {
     companion object {
         private const val PADDING_LEFT = 0
         private const val PADDING_TOP = 0
@@ -49,6 +50,13 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
         private const val TYPE_PROGRESS_MAX = 100
         private const val TYPE_POLYLINE_WIDTH = 7f
         private const val TYPE_ANCHOR = 0.5f
+        private const val TYPE_TIME_DELAY = 3000L
+        private const val UNIT_PADDING_BOTTOM = 3
+        private const val BEGIN_LAT = 16.0721115
+        private const val BEGIN_LONG = 108.2302225
+        private const val DESTINATION_LAT = 16.0712047
+        private const val DESTINATION_LONG = 108.2193197
+
     }
 
     private var mPosition = -1
@@ -150,7 +158,8 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
     }
 
     private fun initMap() {
-        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap) as? SupportMapFragment
+        val supportMapFragment = supportFragmentManager.
+                findFragmentById(R.id.fragmentMap) as? SupportMapFragment
         supportMapFragment?.getMapAsync(this)
     }
 
@@ -158,7 +167,8 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / 3)
+        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT,
+                size.y / UNIT_PADDING_BOTTOM)
     }
 
     private fun setGoneOverLay() {
@@ -172,7 +182,8 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
             addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
-                    .title(resources.getString(R.string.current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point)), currentLocation)
+                    .title(resources.getString(R.string.current_location)).icon(BitmapDescriptorFactory.
+                    fromResource(R.drawable.ic_current_point)), currentLocation)
         } else {
             toast(resources.getString(R.string.toast_text_google_map_null))
         }
@@ -203,9 +214,11 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
         addMarker(setMarkerOption(R.drawable.ic_ht_source_place_marker, mBegin), mBegin)
         if (points.size > 1) {
             if (points[points.size - 1] != mDestination) {
-                addMarker(setMarkerOption(R.drawable.ic_rectangle, points[points.size - 1]), points[points.size - 1])
+                addMarker(setMarkerOption(R.drawable.ic_rectangle, points[points.size - 1]),
+                        points[points.size - 1])
             } else {
-                addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker, points[points.size - 1]), points[points.size - 1])
+                addMarker(setMarkerOption(R.drawable.ic_ht_expected_place_marker,
+                        points[points.size - 1]), points[points.size - 1])
             }
             drawLine(points)
         }
@@ -235,7 +248,8 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
         recycleViewLocation.adapter = mHomeAdapter
     }
 
-    private fun setListToPosition(position: Int): List<LatLng> = (0..position).map { mLocations[it].point }
+    private fun setListToPosition(position: Int): List<LatLng> =
+            (0..position).map { mLocations[it].point }
 
     private fun initDummyData() {
         // Todo : Get list location from in-progress tracking
@@ -250,8 +264,8 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
                 mArrived.latLngs?.add(it)
             }
         }
-        mBegin = LatLng(16.0721115, 108.2302225)
-        mDestination = LatLng(16.0712047, 108.2193197)
+        mBegin = LatLng(BEGIN_LAT, BEGIN_LONG)
+        mDestination = LatLng(DESTINATION_LAT, DESTINATION_LONG)
     }
 
     private fun setArrived() {
@@ -332,7 +346,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback, FloatingButtonHor
         } else {
             toast(resources.getString(R.string.register_double_click_to_exit))
             isExit = true
-            Handler().postDelayed({ isExit = false }, 3 * 1000)
+            Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
     }
 }

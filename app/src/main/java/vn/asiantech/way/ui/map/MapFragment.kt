@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.map
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_map.map
+import kotlinx.android.synthetic.main.fragment_map.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.utils.LocationUtil
@@ -40,6 +41,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         val location = LocationUtil(activity).getCurrentLocation()
         if (location != null) {
             drawMaker(location)
+            setOnMyLocation(location)
         } else {
             activity.toast(getString(R.string.toast_text_location_null))
         }
@@ -85,6 +87,14 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
                         dialogInterface.cancel()
                     }
             builder.create().show()
+        }
+    }
+
+    private fun setOnMyLocation(location: Location?) {
+        val myLaLng = location?.latitude?.let { LatLng(it, location.longitude) }
+        imgMyLocation.setOnClickListener {
+            mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    myLaLng, LEVEL_ZOOM))
         }
     }
 }
