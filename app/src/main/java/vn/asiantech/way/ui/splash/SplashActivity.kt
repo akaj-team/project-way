@@ -1,7 +1,9 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -13,18 +15,30 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.tracking.ProgressLocationActivity
+import vn.asiantech.way.ui.home.HomeActivity
+import vn.asiantech.way.ui.register.RegisterActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-
 class SplashActivity : BaseActivity() {
+
+    private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        mSharedPreferences = getSharedPreferences(RegisterActivity.SHARED_NAME, Context.MODE_PRIVATE)
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                }
+            }
+        } else {
+            toast(getString(R.string.splash_toast_turn_on_wifi))
+        }
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
@@ -89,9 +103,13 @@ class SplashActivity : BaseActivity() {
                     progressBar.visibility = View.VISIBLE
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
-                    //TODO: intent to login screen
-                    startActivity(Intent(this@SplashActivity, ProgressLocationActivity::class.java))
-//                    startActivity(Intent(this, RegisterActivity::class.java))
+                    if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    } else {
+                        val intent = Intent(this, RegisterActivity::class.java)
+                        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                        startActivity(intent)
+                    }
                 } else {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)

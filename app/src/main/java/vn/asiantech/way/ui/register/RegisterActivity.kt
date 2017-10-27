@@ -2,7 +2,9 @@ package vn.asiantech.way.ui.register
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -54,6 +56,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val INTENT_CODE_SPLASH = 100
         const val INTENT_CODE_HOME = 101
         const val INTENT_REGISTER = "Register"
+        const val SHARED_NAME = "shared"
+        const val KEY_LOGIN = "login"
     }
 
     var mBitmap: Bitmap? = null
@@ -63,6 +67,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mIsoCode: String? = null
     var mTel: String? = null
     var mIsExitPressed = false
+    private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +75,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
+        mSharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
         initCountrySpinner()
         setUserInformation()
         frAvatar.setOnClickListener {
@@ -142,7 +148,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        val tel: String = tvTel.text.toString().removeRange(0, 1)
+        var tel: String = ""
+        if (tvTel.text.isNotEmpty()) {
+            tel = tvTel.text.toString().removeRange(0, 1)
+        }
         if ((name.isBlank() && phone.isBlank())
                 || (mPreviousName?.trim() == name
                 && mPreviousPhone?.removeRange(0, 3) == phone
@@ -153,6 +162,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
+
     }
 
     private fun createUser(name: String, phoneNumber: String) {
@@ -167,6 +177,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
+                    saveLoginStatus(true)
                     toast(getString(R.string.register_create_user))
                 }
 
@@ -233,7 +244,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 if (mIsoCode == mCountries[i].iso) {
                     spinnerNation.setSelection(i)
                     val tel = mCountries[i].tel
-                    tvTel.text = tel
+                    tvTel.text = getString(R.string.register_plus).plus(tel)
                     mTel = tel
                     break
                 }
@@ -369,5 +380,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun saveLoginStatus(login: Boolean) {
+        val editor = mSharedPreferences.edit()
+        editor.putBoolean(KEY_LOGIN, login)
+        editor.apply()
     }
 }

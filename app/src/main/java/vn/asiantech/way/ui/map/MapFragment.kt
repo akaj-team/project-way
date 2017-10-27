@@ -1,27 +1,22 @@
 package vn.asiantech.way.ui.map
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
 import android.provider.Settings
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_map.*
 import vn.asiantech.way.R
@@ -39,7 +34,6 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var mGoogleMap: GoogleMap? = null
 
-    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
         MapsInitializer.initialize(activity)
         checkGPS()
@@ -47,6 +41,7 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         val location = LocationUtil(activity).getCurrentLocation()
         if (location != null) {
             drawMaker(location)
+            setOnMyLocation(location)
         } else {
             activity.toast(getString(R.string.toast_text_location_null))
         }
@@ -95,38 +90,11 @@ internal class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    fun drawLocationMarker(location: android.location.Location) {
-        val currentLocation = LatLng(location.latitude, location.longitude)
-        mGoogleMap?.addMarker(MarkerOptions()
-                .position(currentLocation)
-                .draggable(true)
-                .title(getString(R.string.marker_title)))
-                ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, LEVEL_ZOOM))
-    }
-
-    private fun animateMarker(marker: Marker, latLng: LatLng, hideMarker: Boolean) {
-        Log.d("at-dinhvo", "animateMarker")
-        val handler = Handler()
-        val start = SystemClock.uptimeMillis()
-        val projection = mGoogleMap?.projection
-        val startPoint = projection?.toScreenLocation(marker.position)
-        val startLatLng = projection?.fromScreenLocation(startPoint)
-        val interpolator = LinearInterpolator()
-        handler.post(object : Runnable {
-            override fun run() {
-                val elapsed = SystemClock.uptimeMillis() - start
-                val t = interpolator.getInterpolation((elapsed.toFloat()) / 500L)
-                val lng = t * latLng.longitude + (1 - t) * startLatLng!!.longitude
-                val lat = t * latLng.latitude + (1 - t) * startLatLng.latitude
-                Log.d("at-dinhvo", "animateMarker:$lat - $lng")
-                marker.position = LatLng(lat, lng)
-                if (t < 1.0) {
-                    handler.postDelayed(this, 16)
-                } else {
-                    marker.isVisible = !hideMarker
-                }
-            }
-        })
+    private fun setOnMyLocation(location: Location?) {
+        val myLaLng = location?.latitude?.let { LatLng(it, location.longitude) }
+        imgMyLocation.setOnClickListener {
+            mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    myLaLng, LEVEL_ZOOM))
+        }
     }
 }
