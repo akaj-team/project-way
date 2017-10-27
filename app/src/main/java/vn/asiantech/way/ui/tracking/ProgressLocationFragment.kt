@@ -40,6 +40,9 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         private const val ZOOM_SIZE = 16f
+        private const val TIME_CONVERT = 3.6
+        private const val ONE_THOUSAND = 1000L
+        private const val RADIUS = 360.0
     }
 
     private var mGoogleMap: GoogleMap? = null
@@ -48,11 +51,15 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
     private var mIsStopTracking = false
     private var mLocationUpdates: MutableList<LatLng>? = null
     private var mCurrentLocation: HyperTrackLocation? = null
-    private var mHandlerTracking: Handler? = null
+    private lateinit var mHandlerTracking: Handler
     private var mRunnable: Runnable? = null
-    private var mCountTimer = 1000L
+    private var mCountTimer = ONE_THOUSAND
     private lateinit var mDestinationLatLng: LatLng
     private var mDistanceTravel = 0f
+    private var mAverageSpeed = 0f
+    private var mEtaUpdate = 0.0f
+    private var mEtaMaximum = 0.0f
+    private var mCount = 0
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -77,7 +84,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         mGoogleMap = p0
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
-                mCurrentLocation = HyperTrackLocation((p0.responseObject) as Location)
+                mCurrentLocation = HyperTrackLocation((p0.responseObject) as Location?)
                 if (mCurrentLocation != null) {
                     updateUI(mCurrentLocation!!)
                 }
@@ -86,119 +93,175 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
             override fun onError(p0: ErrorResponse) {
             }
         })
-        mDestinationLatLng = LatLng(16.07005, 108.24066)
+        mDestinationLatLng = LatLng(16.07791, 108.23462)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMapsView()
+        mGoogleMap?.clear()
         mLocationUpdates = ArrayList()
-        tracking()
+        handlerProgressTracking()
         addEvents()
     }
 
-    private fun tracking() {
+    private fun handlerProgressTracking() {
         mHandlerTracking = Handler()
         mRunnable = Runnable {
-            if (mLocationUpdates!!.size > 0 && mLocationUpdates!![mLocationUpdates!!.size - 1] == mDestinationLatLng) {
-                Toast.makeText(context, "STOP TRACKING", Toast.LENGTH_SHORT).show()
-                return@Runnable
+            if (mLocationUpdates != null) {
+                if (mLocationUpdates!!.size > 0
+                        && (mLocationUpdates!![mLocationUpdates!!.size - 1] == mDestinationLatLng)) {
+                    mEtaUpdate = 0f
+                    mAverageSpeed = 0f
+                    mCurrentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
+                    mCurrentMarker?.setAnchor(0.5f, 0.5f)
+                    updateCurrentTimeView()
+                    Toast.makeText(context, "DONE!", Toast.LENGTH_SHORT).show()
+                    return@Runnable
+                }
+                requestLocation()
+                requestEta()
+                mCountTimer += ONE_THOUSAND
+                handlerProgressTracking()
             }
-            HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
-                override fun onSuccess(p0: SuccessResponse) {
-                    val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location)
-                    updateUI(hyperTrackLocation)
-                }
-
-                override fun onError(p0: ErrorResponse) {
-                }
-            })
-            val expectedLocation = LatLng(16.07005, 108.24066)
-            HyperTrack.getETA(expectedLocation, VehicleType.MOTORCYCLE, object : HyperTrackCallback() {
-                override fun onSuccess(p0: SuccessResponse) {
-                    val etaResult = (p0.responseObject as Double).toDouble()
-                    Log.d("at-dinhvo", "Result ETA: " + etaResult)
-                }
-
-                override fun onError(p0: ErrorResponse) {
-                    Log.d("at-dinhvo", "ETA: ErrorResponse")
-                }
-            })
-            mCountTimer += 1000
-            tracking()
         }
-        mHandlerTracking!!.postDelayed(mRunnable, 1000)
+        mHandlerTracking.postDelayed(mRunnable, ONE_THOUSAND)
+    }
+
+    private fun requestLocation() {
+        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
+            override fun onSuccess(p0: SuccessResponse) {
+                val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
+                updateUI(hyperTrackLocation)
+            }
+
+            override fun onError(p0: ErrorResponse) {
+                Log.d("at-dinhvo", "ErrorResponse: " + p0.errorMessage)
+            }
+        })
+    }
+
+    private fun requestEta() {
+        HyperTrack.getETA(mDestinationLatLng, VehicleType.MOTORCYCLE, object : HyperTrackCallback() {
+            override fun onSuccess(p0: SuccessResponse) {
+                mEtaUpdate = (p0.responseObject as Double?)!!.toFloat()
+                if (mCount < 1) {
+                    mEtaMaximum = mEtaUpdate
+                }
+                mCount++
+            }
+
+            override fun onError(p0: ErrorResponse) {
+                Log.d("at-dinhvo", "ETA: ErrorResponse " + p0.errorMessage)
+            }
+        })
+    }
+
+    private fun updateCurrentTimeView() {
+        tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
+        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
     }
 
     private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
-        mLocationUpdates?.add(latLng)
-        if (mLocationUpdates!!.size > 1) {
-            mDistanceTravel += getDistance(mLocationUpdates!![mLocationUpdates!!.size - 2]
-                    , mLocationUpdates!![mLocationUpdates!!.size - 1])
+        if (mLocationUpdates != null) {
+            if (latLng != null) {
+                mLocationUpdates?.add(latLng)
+            }
+            if (mLocationUpdates!!.size > 1) {
+                mDistanceTravel += getDistancePerSecond(mLocationUpdates!![mLocationUpdates!!.size - 2]
+                        , mLocationUpdates!![mLocationUpdates!!.size - 1])
+            }
+            updateView(hyperTrackLocation)
+            updateMapView(latLng)
         }
-        Log.d("at-dinhvo", "Location: " + latLng.latitude + " - " + latLng.longitude)
-        updateView(hyperTrackLocation)
-        updateMapView(latLng)
     }
 
     private fun updateView(hyperTrackLocation: HyperTrackLocation) {
         if (!mIsStopTracking) {
             tvActionStatus.text = resources.getString(R.string.leaving)
         }
-        tvTime.text = "ETA unknown"
-        tvDistance.text = "Distance Unknown"
-        /*val destLocation = Location("Point")
-        destLocation.latitude = 16.07005
-        destLocation.longitude = 108.24066
-        val sourceLocation = Location("Point")
-        sourceLocation.latitude = mCurrentLocation!!.latLng.latitude
-        sourceLocation.longitude = mCurrentLocation!!.latLng.longitude
-
-        tvDistance.text = "(${String.format("%.2f", sourceLocation.distanceTo(destLocation) / 1000).plus(" km away")})"*/
-        tvSpeed.text = String.format("%.2f", hyperTrackLocation.speed).plus(" km/h")
+        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
+        tvDistance.text = resources.getString(R.string.open_parentheses)
+                .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
+                .plus(resources.getString(R.string.close_parentheses_distance))
+        tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvElapsedTime.text = formatInterval(mCountTimer)
         tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
     }
 
-    private fun formatInterval(millis: Long): String {
-        return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
-                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
+    private fun getEtaTime(eta: Float): String = when {
+        eta >= 3600 -> String.format(" %02d", (eta / 3600).toInt()).plus(" hour")
+        eta < 60 -> String.format(" %02d", eta.toInt()).plus(" sec")
+        else -> String.format(" %02d", (eta / 60).toInt()).plus(" min")
     }
 
-    private fun directMarker() {
+    private fun formatInterval(millis: Long): String = String.format("%02d:%02d:%02d"
+            , TimeUnit.MILLISECONDS.toHours(millis)
+            , TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
+            , TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
 
+    private fun radians(n: Double) = n * (Math.PI / (RADIUS / 2))
+
+    private fun degrees(n: Double) = n * ((RADIUS / 2) / Math.PI)
+
+    private fun getBearing(startLatLong: LatLng, endLatLong: LatLng): Double {
+        val startLat = radians(startLatLong.latitude)
+        val startLong = radians(startLatLong.longitude)
+        val endLat = radians(endLatLong.latitude)
+        val endLong = radians(endLatLong.longitude)
+        var deltaLong = endLong - startLong
+        val deltaPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / 4.0) / Math.tan(startLat / 2.0 + Math.PI / 4.0))
+        if (Math.abs(deltaLong) > Math.PI) {
+            deltaLong = if (deltaLong > 0.0) {
+                -(2.0 * Math.PI - deltaLong)
+            } else {
+                (2.0 * Math.PI + deltaLong)
+            }
+        }
+        return (degrees(Math.atan2(deltaLong, deltaPhi)) + RADIUS) % RADIUS
     }
 
-    private fun getDistance(source: LatLng, destination: LatLng): Float {
+    private fun getDistancePerSecond(source: LatLng, destination: LatLng): Float {
         val des = Location("Point")
         des.latitude = source.latitude
         des.longitude = source.longitude
         val src = Location("Point")
         src.latitude = destination.latitude
         src.longitude = destination.longitude
-        return src.distanceTo(des) / 1000
+        mAverageSpeed = (src.distanceTo(des) * TIME_CONVERT).toFloat()
+        return src.distanceTo(des) / ONE_THOUSAND
     }
 
     private fun drawLine() {
-        if (mLocationUpdates!!.size >= 2) {
-            mGoogleMap?.addPolyline(PolylineOptions()
-                    .add(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).width(ZOOM_SIZE / 2)
-                    .color(Color.BLACK))
+        if (mLocationUpdates != null) {
+            if (mLocationUpdates!!.size > 1) {
+                mGoogleMap?.addPolyline(PolylineOptions()
+                        .add(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1])
+                        .width(ZOOM_SIZE / 2)
+                        .color(Color.BLACK))
+            }
         }
     }
 
     private fun updateMapView(latLng: LatLng) {
+        var angle = 0.0f
+        if (mLocationUpdates!!.size > 1) {
+            angle = getBearing(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).toFloat()
+        }
         if (mCurrentMarker == null) {
             mCurrentMarker = mGoogleMap?.addMarker(MarkerOptions().
                     position(latLng).
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
                     .anchor(0.5f, 0.5f)
+                    .flat(true)
             )
-            MarkerAnimation.animateMarker(mCurrentMarker, latLng)
+            if (mCurrentMarker != null) {
+                MarkerAnimation.animateMarker(mCurrentMarker, latLng)
+            }
         } else {
             mCurrentMarker!!.position = latLng
+            mCurrentMarker!!.rotation = angle
         }
         drawLine()
         mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_SIZE))
@@ -224,7 +287,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
             }
         }
         rippleShareLink.setOnClickListener {
-
+            Toast.makeText(context, "Size: " + mLocationUpdates!!.size, Toast.LENGTH_SHORT).show()
         }
     }
 }

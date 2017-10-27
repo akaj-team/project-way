@@ -33,6 +33,7 @@
     <string name="confirm_location">Confirm Location</string>
 
     <!--Custom floating menu-->
+    <string name="custom_floating_menu_search_title">Search</string>
     <string name="custom_floating_menu_calendar_title">Calendar</string>
     <string name="custom_floating_menu_profile_title">Profile</string>
     <string name="custom_floating_menu_share_title">Share</string>
@@ -74,6 +75,7 @@
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
+    <string name="dialog_message_fill_in">Please fill in all fields</string>
 
     <!--In-ProgressLocation-->
     <string name="share">SHARE</string>
@@ -84,4 +86,7 @@
     <string name="mask">--</string>
     <string name="travelled">Travelled</string>
     <string name="speed">Speed</string>
+    <string name="eta">ETA</string>
+    <string name="open_parentheses">(</string>
+    <string name="close_parentheses_distance"> km away)</string>
 </resources>

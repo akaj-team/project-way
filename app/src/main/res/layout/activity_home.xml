@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rlHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,6 +27,13 @@
             android:layout_marginRight="@dimen/home_screen_recyclerView_margin"
             android:background="@android:color/transparent" />
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/frOverlay"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorOverlay"/>
 
     <vn.asiantech.way.ui.custom.FloatingButtonHorizontal
         android:id="@+id/fabMenuGroup"

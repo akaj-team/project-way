@@ -5,11 +5,6 @@
     android:layout_height="match_parent"
     tools:context="vn.asiantech.way.ui.tracking.ProgressLocationActivity">
 
-    <!--<FrameLayout
-        android:id="@+id/frMapContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -87,8 +82,8 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <LinearLayout
-                android:id="@+id/llActionDetail"
+            <RelativeLayout
+                android:id="@+id/rlActionDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -97,21 +92,41 @@
                 <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
                     android:id="@+id/circleProgressBar"
                     android:layout_width="@dimen/seekBar_width"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_margin="@dimen/margin_low"
                     android:rotation="90"
                     app:circle_color="@color/progressRestColor"
                     app:circle_progress_color="@color/tracking_experience"
                     app:circle_stroke_width="3dp"
                     app:lock_enabled="true"
+                    android:background="#aaaa"
                     app:max="100"
-                    app:progress="40" />
+                    app:progress="0" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnCall"
+                    android:layout_width="@dimen/phone_icon_size"
+                    android:layout_height="@dimen/phone_icon_size"
+                    android:layout_alignLeft="@+id/circleProgressBar"
+                    android:layout_alignStart="@+id/circleProgressBar"
+                    android:layout_alignTop="@+id/circleProgressBar"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_low"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_phone_icon" />
 
                 <RelativeLayout
                     android:id="@+id/rlCollapse"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/circleProgressBar"
+                    android:layout_toRightOf="@+id/circleProgressBar">
 
                     <TextView
                         android:id="@+id/tvActionStatus"
@@ -170,7 +185,7 @@
 
                     </LinearLayout>
                 </RelativeLayout>
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rlExpandedInfo"

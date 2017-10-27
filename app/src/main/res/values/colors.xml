@@ -16,4 +16,7 @@
     <color name="progressRestColor">#ddd</color>
     <color name="colorGrayLight">#bab9b9</color>
     <color name="colorAccentLight">#ff3add</color>
+    <color name="colorBtnShare">#C6AA00</color>
+    <color name="blue">#664DF9</color>
+    <color name="colorOverlay">#aff5ebeb</color>
 </resources>
