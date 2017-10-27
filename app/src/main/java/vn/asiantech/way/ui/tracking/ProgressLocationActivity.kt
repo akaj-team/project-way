@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import vn.asiantech.way.R
 
 /**
- *
+ * ProgressLocationActivity
  */
 class ProgressLocationActivity : AppCompatActivity() {
 

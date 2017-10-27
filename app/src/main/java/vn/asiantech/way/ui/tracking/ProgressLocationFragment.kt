@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.BatteryManager
 import android.os.Bundle
@@ -30,6 +32,8 @@ import com.hypertrack.lib.models.HyperTrackLocation
 import com.hypertrack.lib.models.SuccessResponse
 import kotlinx.android.synthetic.main.fragment_progress_location.*
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.toast
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -43,6 +47,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         private const val TIME_CONVERT = 3.6
         private const val ONE_THOUSAND = 1000L
         private const val RADIUS = 360.0
+        private const val STEP_ETA = 3
     }
 
     private var mGoogleMap: GoogleMap? = null
@@ -101,6 +106,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         initMapsView()
         mGoogleMap?.clear()
         mLocationUpdates = ArrayList()
+        getLocationName(LatLng(16.07791, 108.23462))
         handlerProgressTracking()
         addEvents()
     }
@@ -157,9 +163,21 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    private fun getLocationName(latLng: LatLng?) {
+        val geoCoder = Geocoder(context, Locale.getDefault())
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
+        if (addresses.isNotEmpty()) {
+            val address: Address = addresses[0]
+            tvDestination.text = address.getAddressLine(0)
+        } else {
+            tvDestination.text = null
+        }
+    }
+
     private fun updateCurrentTimeView() {
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
+        circleProgressBar.progress = 100
     }
 
     private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
@@ -188,6 +206,9 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvElapsedTime.text = formatInterval(mCountTimer)
         tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
+        if (mEtaMaximum - mEtaUpdate > STEP_ETA) {
+            circleProgressBar.progress = (mEtaMaximum - (mEtaUpdate / mEtaMaximum) * 100).toInt()
+        }
     }
 
     private fun getEtaTime(eta: Float): String = when {
@@ -198,14 +219,16 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
 
     private fun formatInterval(millis: Long): String = String.format("%02d:%02d:%02d"
             , TimeUnit.MILLISECONDS.toHours(millis)
-            , TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
-            , TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
+            , TimeUnit.MILLISECONDS.toMinutes(millis)
+            - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
+            , TimeUnit.MILLISECONDS.toSeconds(millis)
+            - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
 
     private fun radians(n: Double) = n * (Math.PI / (RADIUS / 2))
 
     private fun degrees(n: Double) = n * ((RADIUS / 2) / Math.PI)
 
-    private fun getBearing(startLatLong: LatLng, endLatLong: LatLng): Double {
+    private fun getAngleMarker(startLatLong: LatLng, endLatLong: LatLng): Double {
         val startLat = radians(startLatLong.latitude)
         val startLong = radians(startLatLong.longitude)
         val endLat = radians(endLatLong.latitude)
@@ -247,7 +270,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
     private fun updateMapView(latLng: LatLng) {
         var angle = 0.0f
         if (mLocationUpdates!!.size > 1) {
-            angle = getBearing(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).toFloat()
+            angle = getAngleMarker(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).toFloat()
         }
         if (mCurrentMarker == null) {
             mCurrentMarker = mGoogleMap?.addMarker(MarkerOptions().
@@ -280,14 +303,20 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         rippleTrackingToggle.setOnRippleCompleteListener {
             if (rippleTrackingToggle.tag == "stop") {
                 mIsStopTracking = true
-                mHandlerTracking?.removeCallbacks(mRunnable)
-                Toast.makeText(context, "STOP TRACKING", Toast.LENGTH_SHORT).show()
+                mHandlerTracking.removeCallbacks(mRunnable)
+                activity.toast("Stop tracking")
             } else if (rippleTrackingToggle.tag == "summary") {
 
             }
         }
         rippleShareLink.setOnClickListener {
-            Toast.makeText(context, "Size: " + mLocationUpdates!!.size, Toast.LENGTH_SHORT).show()
+            activity.toast("Click rippleShareLink")
+        }
+        imgBtnCall.setOnClickListener {
+            activity.toast("Click button call")
+        }
+        imgBtnBack.setOnClickListener {
+            activity.toast("Click button back")
         }
     }
 }
