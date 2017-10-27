@@ -39,9 +39,7 @@ class SplashActivity : BaseActivity() {
             }
 
             if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
-                if (HyperTrackUtils.isWifiEnabled(context)) {
-                    startSwitchScreen()
-                }
+                startSwitchScreen()
             }
         }
     }
@@ -74,24 +72,25 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun startSwitchScreen() {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as? LocationManager
-        if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            progressBar.visibility = View.VISIBLE
-            btnEnableLocation.visibility = View.GONE
-            tvAppDescription.visibility = View.GONE
-            if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
-                Handler().postDelayed({
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
-                }, DELAY)
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                progressBar.visibility = View.VISIBLE
+                btnEnableLocation.visibility = View.GONE
+                tvAppDescription.visibility = View.GONE
+                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                    Handler().postDelayed({
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }, DELAY)
 
-            } else {
-                Handler().postDelayed({
-                    val intent = Intent(this, RegisterActivity::class.java)
-                    intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-                    startActivity(intent)
-                    finish()
-                }, DELAY)
+                } else {
+                    Handler().postDelayed({
+                        val intent = Intent(this, RegisterActivity::class.java)
+                        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                        startActivity(intent)
+                        finish()
+                    }, DELAY)
+                }
             }
         }
     }
@@ -149,9 +148,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun requestPermission() {
-        if (HyperTrackUtils.isInternetConnected(this) && HyperTrackUtils.isLocationEnabled(this)) {
-            startSwitchScreen()
-        }
+        startSwitchScreen()
         btnEnableLocation.setOnClickListener {
             if (!HyperTrackUtils.isWifiEnabled(this)) {
                 toast(getString(R.string.splash_toast_turn_on_wifi))
