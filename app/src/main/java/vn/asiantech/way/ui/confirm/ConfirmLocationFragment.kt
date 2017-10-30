@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.confirm
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.hypertrack.lib.HyperTrack
+import com.hypertrack.lib.HyperTrackUtils
 import kotlinx.android.synthetic.main.fragment_confirm_location.*
 import kotlinx.android.synthetic.main.view_confirm_location_layout.*
 import kotlinx.android.synthetic.main.view_confirm_location_layout.view.*
@@ -36,22 +38,21 @@ import java.util.*
  * Fragment confirm location
  * Created by haingoq on 10/10/2017.
  */
-class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
-        com.google.android.gms.location.LocationListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleMap.OnCameraIdleListener, View.OnClickListener {
+class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleMap.OnCameraIdleListener, View.OnClickListener {
+
     companion object {
         private const val INTERVAL = 500L
     }
 
-    private var mGoogleMap: GoogleMap? = null
-    private var mMapFragment: SupportMapFragment? = null
-    private var mLatLng: LatLng? = null
-    private var mDestinationName: String? = null
-    private var mGoogleApiClient: GoogleApiClient? = null
-    private var mLocationRequest: LocationRequest? = null
-    private var mMarker: Marker? = null
-    private var mGroundOverlay: GroundOverlay? = null
+    private lateinit var mGoogleMap: GoogleMap
+    private lateinit var mMapFragment: SupportMapFragment
+    private lateinit var mLatLng: LatLng
+    private lateinit var mDestinationName: String
+    private lateinit var mGoogleApiClient: GoogleApiClient
+    private lateinit var mLocationRequest: LocationRequest
+    private lateinit var mMarker: Marker
+    private lateinit var mGroundOverlay: GroundOverlay
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_confirm_location, container, false)
@@ -64,34 +65,43 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
 
     override fun onResume() {
         super.onResume()
-        mGoogleApiClient?.connect()
+        mGoogleApiClient.connect()
     }
 
     override fun onPause() {
         super.onPause()
-        mGoogleApiClient?.disconnect()
+        mGoogleApiClient.disconnect()
     }
 
     private fun initGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = GoogleApiClient.Builder(context)
-                    .addConnectionCallbacks(this)
-                    .addApi(LocationServices.API)
-                    .build()
-        }
+        mGoogleApiClient = GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build()
     }
 
     private fun initLocationRequest() {
         mLocationRequest = LocationRequest.create()
-        mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest?.interval = INTERVAL
-        mLocationRequest?.fastestInterval = INTERVAL
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = INTERVAL
+        mLocationRequest.fastestInterval = INTERVAL
     }
 
-    @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
-        LocationServices.FusedLocationApi
-                .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
+        if (!HyperTrack.checkLocationPermission(activity)) {
+            HyperTrack.requestPermissions(activity)
+        }
+
+        if (!HyperTrack.checkLocationServices(activity)) {
+            HyperTrack.requestLocationServices(activity)
+        }
+
+        if (HyperTrackUtils.isInternetConnected(activity)) {
+            if (HyperTrackUtils.isLocationEnabled(activity)) {
+                LocationServices.FusedLocationApi
+                        .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
+            }
+        }
     }
 
     override fun onConnectionSuspended(p0: Int) {
@@ -99,25 +109,27 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        mGoogleMap = map
+        if(map != null) {
+            mGoogleMap = map
+            mGoogleMap.setOnCameraIdleListener(this)
+        }
         //Get current location
         val currentLocation: Location? = LocationUtil(context).getCurrentLocation()
         if (currentLocation != null) {
             drawCurrentMaker(currentLocation)
         }
-        mGoogleMap?.setOnCameraIdleListener(this)
     }
 
     override fun onLocationChanged(location: Location?) {
-        if (mMarker != null && location != null) {
+        if (location != null) {
             val latLng = LatLng(location.latitude, location.longitude)
-            mMarker?.position = latLng
-            mGroundOverlay?.position = latLng
+            mMarker.position = latLng
+            mGroundOverlay.position = latLng
         }
     }
 
     override fun onCameraIdle() {
-        mLatLng = mGoogleMap?.cameraPosition?.target
+        mLatLng = mGoogleMap.cameraPosition.target
         getLocationName(mLatLng)
     }
 
@@ -126,6 +138,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
             R.id.imgEdit -> {
                 startActivity(Intent(activity, SearchLocationActivity::class.java))
             }
+
             R.id.btnConfirm -> {
                 addDestinationMarker(mLatLng)
                 //TODO handle share location
@@ -139,8 +152,8 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     private fun initMap() {
-        mMapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment?
-        mMapFragment?.getMapAsync(this)
+        mMapFragment = childFragmentManager.findFragmentById(R.id.fragmentConfirmMap) as SupportMapFragment
+        mMapFragment.getMapAsync(this)
     }
 
     private fun getLocationName(latLng: LatLng?) {
@@ -160,28 +173,26 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
     }
 
     private fun addDestinationMarker(latLng: LatLng?) {
-        mGoogleMap?.addMarker(MarkerOptions()
+        mGoogleMap.addMarker(MarkerOptions()
                 .position(latLng!!)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                 .title(mDestinationName)
                 .anchor(0.5f, 0.5f))
                 ?.showInfoWindow()
         imgPickLocation.visibility = View.INVISIBLE
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
     }
 
     private fun drawCurrentMaker(location: Location) {
         val currentLocation = LatLng(location.latitude, location.longitude)
-        if (mGoogleMap != null) {
-            mGoogleMap?.clear()
-            mMarker = mGoogleMap?.addMarker(MarkerOptions()
-                    .position(currentLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-                    .title(getString(R.string.current_location))
-                    .anchor(0.5f, 0.5f))
-            addPulseRing(currentLocation)
-            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
-        }
+        mGoogleMap.clear()
+        mMarker = mGoogleMap.addMarker(MarkerOptions()
+                .position(currentLocation)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
+                .title(getString(R.string.current_location))
+                .anchor(0.5f, 0.5f))
+        addPulseRing(currentLocation)
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
     }
 
     private fun addPulseRing(latLng: LatLng) {
@@ -194,12 +205,12 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback,
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
-        mGroundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
+        mGroundOverlay = mGoogleMap.addGroundOverlay(GroundOverlayOptions()
                 .position(latLng, 500f)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
         val groundAnimation = RadiusAnimation(mGroundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
         groundAnimation.duration = 2000
-        mMapFragment?.view?.startAnimation(groundAnimation)
+        mMapFragment.view?.startAnimation(groundAnimation)
     }
 }
