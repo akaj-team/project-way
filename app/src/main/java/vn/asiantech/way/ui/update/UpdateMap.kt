@@ -42,13 +42,16 @@ import vn.asiantech.way.utils.LocationUtil
  */
 internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         FloatingButtonHorizontal.OnMenuClickListener {
+
+// Todo: Get List LatLng from In-progrees tracking to show on recyclerView and draw polyline on map
+
     companion object {
         private const val PADDING_LEFT = 0
         private const val PADDING_TOP = 0
         private const val PADDING_RIGHT = 0
         private const val ZOOM = 16f
         private const val TYPE_PROGRESS_MAX = 100
-        private const val TYPE_POLYLINE_WIDTH = 7f
+        private const val TYPE_POLYLINE_WIDTH = 5f
         private const val TYPE_ANCHOR = 0.5f
         private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
@@ -120,7 +123,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         if (location != null) {
             drawCurrentMaker(location)
             // Todo: Set arrived screen when current position = destination
-            setArrived()
+//            setArrived()
         } else {
             toast(resources.getString(R.string.not_update_current_location))
         }
@@ -252,7 +255,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
             (0..position).map { mLocations[it].point }
 
     private fun initDummyData() {
-        // Todo : Get list location from in-progress tracking
+        //Todo : Get list location from in-progress tracking
 //        mLocations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............", LatLng(16.0721115, 108.2302225)))
 //        mLocations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
 //        mLocations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
