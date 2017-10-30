@@ -1,7 +1,7 @@
 <resources>
     <!--Common -->
     <string name="current_location">Current location</string>
-    
+
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
@@ -55,6 +55,7 @@
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
+    <string name="register_request_permission">Please turn on Internet and GPS</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
 
