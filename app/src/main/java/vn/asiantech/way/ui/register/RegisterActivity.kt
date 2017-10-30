@@ -27,6 +27,7 @@ import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.hypertrack.lib.HyperTrack
+import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.models.ErrorResponse
 import com.hypertrack.lib.models.SuccessResponse
@@ -68,7 +69,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mTel: String? = null
     var mIsExitPressed = false
     var mUser: User? = null
-
+    var mIsExit = false
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,11 +88,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     override fun onBackPressed() {
         if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
-            if (!mIsExitPressed) {
-                mIsExitPressed = true
+            if (!mIsExit) {
+                mIsExit = true
                 toast(getString(R.string.register_double_click_to_exit))
                 Handler().postDelayed({
-                    mIsExitPressed = false
+                    mIsExit = false
                 }, 1500)
             } else {
                 finishAffinity()
@@ -128,20 +129,29 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 startActivity(Intent(this, HomeActivity::class.java))
             }
             R.id.tvCancel -> {
-                if (mUser == null) {
-                    if (name.isBlank()) {
-                        edtName.setText(R.string.register_user_name_default)
+                if (checkPermission()) {
+                    if (mUser == null) {
+                        if (name.isBlank()) {
+                            edtName.setText(R.string.register_user_name_default)
+                        }
+                        if (phoneNumber.isBlank()) {
+                            edtPhoneNumber.text = null
+                        }
+                        createUser(name, phoneNumber)
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    } else {
+                        createUser(name, phoneNumber)
+                        startActivity(Intent(this, HomeActivity::class.java))
                     }
-                    if (phoneNumber.isBlank()) {
-                        edtPhoneNumber.text = null
-                    }
-                    createUser(name, phoneNumber)
-                    startActivity(Intent(this, HomeActivity::class.java))
                 } else {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    toast(getString(R.string.register_request_permission))
                 }
             }
         }
+    }
+
+    private fun checkPermission(): Boolean {
+        return HyperTrackUtils.isLocationEnabled(this) && HyperTrackUtils.isInternetConnected(this)
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -155,7 +165,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        val tel: String = tvTel.text.toString().removeRange(0, 1)
+        var tel = ""
+        if (tvTel.text.isNotEmpty()) {
+            tel = tvTel.text.toString().removeRange(0, 1)
+        }
         if ((name.isBlank() && phone.isBlank())
                 || (mPreviousName?.trim() == name
                 && mPreviousPhone?.removeRange(0, 3) == phone
@@ -248,7 +261,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 if (mIsoCode == mCountries[i].iso) {
                     spinnerNation.setSelection(i)
                     val tel = mCountries[i].tel
-                    tvTel.text = tel
+                    tvTel.text = getString(R.string.register_plus).plus(tel)
                     mTel = tel
                     break
                 }

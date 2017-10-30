@@ -1,7 +1,7 @@
 <resources>
     <!--Common -->
     <string name="current_location">Current location</string>
-    
+
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
@@ -35,6 +35,7 @@
     <string name="confirm_location">Confirm Location</string>
 
     <!--Custom floating menu-->
+    <string name="custom_floating_menu_search_title">Search</string>
     <string name="custom_floating_menu_calendar_title">Calendar</string>
     <string name="custom_floating_menu_profile_title">Profile</string>
     <string name="custom_floating_menu_share_title">Share</string>
@@ -54,6 +55,7 @@
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
+    <string name="register_request_permission">Please turn on Internet and GPS</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
 
@@ -76,5 +78,6 @@
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
+    <string name="dialog_message_fill_in">Please fill in all fields</string>
 
 </resources>
