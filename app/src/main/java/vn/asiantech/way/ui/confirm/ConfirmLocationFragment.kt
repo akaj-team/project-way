@@ -4,9 +4,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.GradientDrawable
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -25,14 +24,12 @@ import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import kotlinx.android.synthetic.main.fragment_confirm_location.*
-import kotlinx.android.synthetic.main.view_confirm_location_layout.*
 import kotlinx.android.synthetic.main.view_confirm_location_layout.view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseFragment
 import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.LocationUtil
-import java.util.*
 
 /**
  * Fragment confirm location
@@ -47,12 +44,13 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
 
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
-    private lateinit var mLatLng: LatLng
     private lateinit var mDestinationName: String
     private lateinit var mGoogleApiClient: GoogleApiClient
     private lateinit var mLocationRequest: LocationRequest
-    private lateinit var mMarker: Marker
-    private lateinit var mGroundOverlay: GroundOverlay
+    private var mLatLng: LatLng? = null
+    private var mMarker: Marker? = null
+    private var mGroundOverlay: GroundOverlay? = null
+    private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_confirm_location, container, false)
@@ -71,6 +69,12 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
     override fun onPause() {
         super.onPause()
         mGoogleApiClient.disconnect()
+        mLocationAsyncTask.cancel(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mLocationAsyncTask.cancel(true)
     }
 
     private fun initGoogleApiClient() {
@@ -109,7 +113,7 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        if(map != null) {
+        if (map != null) {
             mGoogleMap = map
             mGoogleMap.setOnCameraIdleListener(this)
         }
@@ -121,16 +125,16 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
     }
 
     override fun onLocationChanged(location: Location?) {
-        if (location != null) {
+        if (mMarker != null && mGroundOverlay != null && location != null) {
             val latLng = LatLng(location.latitude, location.longitude)
-            mMarker.position = latLng
-            mGroundOverlay.position = latLng
+            mMarker?.position = latLng
+            mGroundOverlay?.position = latLng
         }
     }
 
     override fun onCameraIdle() {
         mLatLng = mGoogleMap.cameraPosition.target
-        getLocationName(mLatLng)
+        mLocationAsyncTask = LocationNameAsyncTask(this).execute(mLatLng)
     }
 
     override fun onClick(view: View?) {
@@ -156,20 +160,11 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
         mMapFragment.getMapAsync(this)
     }
 
-    private fun getLocationName(latLng: LatLng?) {
-        val geoCoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
-        if (addresses.isNotEmpty()) {
-            val address: Address = addresses[0]
-            tvLocation.text = address.getAddressLine(0)
-            mDestinationName = if (!address.subThoroughfare.isNullOrEmpty()) {
-                address.subThoroughfare.plus(" ").plus(address.thoroughfare)
-            } else {
-                address.thoroughfare
-            }
-        } else {
-            tvLocation.text = null
-        }
+    /**
+     * Set destination name
+     */
+    fun setDestinationName(name: String) {
+        mDestinationName = name
     }
 
     private fun addDestinationMarker(latLng: LatLng?) {
