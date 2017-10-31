@@ -69,12 +69,16 @@ class ConfirmLocationFragment : BaseFragment(), OnMapReadyCallback, LocationList
     override fun onPause() {
         super.onPause()
         mGoogleApiClient.disconnect()
-        mLocationAsyncTask.cancel(true)
+        if(!mLocationAsyncTask.isCancelled) {
+            mLocationAsyncTask.cancel(true)
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        mLocationAsyncTask.cancel(true)
+        if(!mLocationAsyncTask.isCancelled) {
+            mLocationAsyncTask.cancel(true)
+        }
     }
 
     private fun initGoogleApiClient() {
