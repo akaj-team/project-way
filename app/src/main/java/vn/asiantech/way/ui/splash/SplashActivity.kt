@@ -74,22 +74,24 @@ class SplashActivity : BaseActivity() {
     private fun startSwitchScreen() {
         if (HyperTrackUtils.isInternetConnected(this)) {
             if (HyperTrackUtils.isLocationEnabled(this)) {
-                progressBar.visibility = View.VISIBLE
-                btnEnableLocation.visibility = View.GONE
-                tvAppDescription.visibility = View.GONE
-                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
-                    Handler().postDelayed({
-                        startActivity(Intent(this, HomeActivity::class.java))
-                        finish()
-                    }, DELAY)
+                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
+                    progressBar.visibility = View.VISIBLE
+                    btnEnableLocation.visibility = View.GONE
+                    tvAppDescription.visibility = View.GONE
+                    if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                        Handler().postDelayed({
+                            startActivity(Intent(this, HomeActivity::class.java))
+                            finish()
+                        }, DELAY)
 
-                } else {
-                    Handler().postDelayed({
-                        val intent = Intent(this, RegisterActivity::class.java)
-                        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-                        startActivity(intent)
-                        finish()
-                    }, DELAY)
+                    } else {
+                        Handler().postDelayed({
+                            val intent = Intent(this, RegisterActivity::class.java)
+                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                            startActivity(intent)
+                            finish()
+                        }, DELAY)
+                    }
                 }
             }
         }
@@ -154,12 +156,15 @@ class SplashActivity : BaseActivity() {
                 toast(getString(R.string.splash_toast_turn_on_wifi))
             } else {
                 if (!HyperTrackUtils.isLocationEnabled(this)) {
-                    if (!HyperTrack.checkLocationPermission(this)) {
-                        HyperTrack.requestPermissions(this)
-                    }
-
                     if (!HyperTrack.checkLocationServices(this)) {
                         HyperTrack.requestLocationServices(this)
+                    }
+                } else {
+                    if (!HyperTrackUtils.isLocationPermissionAvailable(this)) {
+                        if (!HyperTrack.checkLocationPermission(this)) {
+                            HyperTrack.requestPermissions(this)
+                        }
+
                     }
                 }
             }
