@@ -360,26 +360,31 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE) {
-            val uri: Uri? = data?.data
-            Picasso.with(this)
-                    .load(uri)
-                    .resize(300, 300)
-                    .into(object : Target {
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                            visibleProgressBar(progressBarAvatar)
-                        }
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
+            val uri: Uri? = data.data
+            if (uri != null) {
+                Picasso.with(this)
+                        .load(uri)
+                        .resize(300, 300)
+                        .into(object : Target {
+                            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                                visibleProgressBar(progressBarAvatar)
+                            }
 
-                        override fun onBitmapFailed(errorDrawable: Drawable?) {
-                            // No-op
-                        }
+                            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                                // No-op
+                            }
 
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            invisibleProgressBar(progressBarAvatar)
-                            imgAvatar.setImageBitmap(bitmap)
-                            mBitmap = bitmap
-                        }
-                    })
+                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                                invisibleProgressBar(progressBarAvatar)
+                                imgAvatar.setImageBitmap(bitmap)
+                                mBitmap = bitmap
+                            }
+                        })
+            } else {
+                val bmp = data.extras.get("data") as Bitmap
+                imgAvatar.setImageBitmap(bmp)
+            }
         }
     }
 
