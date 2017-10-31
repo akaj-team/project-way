@@ -11,8 +11,7 @@ import java.util.*
  * Class get location name
  * Created by haingoq on 30/10/2017.
  */
-class LocationNameAsyncTask(private val mFragment: ConfirmLocationFragment)
-    : AsyncTask<LatLng, Void, String>() {
+class LocationNameAsyncTask(private val mFragment: ConfirmLocationFragment) : AsyncTask<LatLng, Void, String>() {
 
     override fun doInBackground(vararg latLng: LatLng?): String {
         val geoCoder = Geocoder(mFragment.context, Locale.getDefault())
