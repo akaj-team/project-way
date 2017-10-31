@@ -36,10 +36,7 @@ import java.util.*
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
-        LocationSource.OnLocationChangedListener,
-        GoogleMap.OnCameraIdleListener {
-
+class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, LocationSource.OnLocationChangedListener, GoogleMap.OnCameraIdleListener {
     private var mGoogleMap: GoogleMap? = null
     private var mMapFragment: SupportMapFragment? = null
     private var mLatLng: LatLng? = null
@@ -194,7 +191,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                     .title(mDestinationName)
-                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
+                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
                     ?.showInfoWindow()
             imgPickLocation.visibility = View.INVISIBLE
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
@@ -209,7 +206,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
                     .position(currentLocation)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
                     .title(getString(R.string.current_location))
-                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
+                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
             addPulseRing(currentLocation)
         }
@@ -218,7 +215,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
     private fun addPulseRing(latLng: LatLng) {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.OVAL
-        drawable.setSize(AppConstants.KEY_DRAWABLE_SIZE, AppConstants.KEY_DRAWABLE_SIZE)
+        drawable.setSize(AppConstants.keyDrawableSize, AppConstants.keyDrawableSize)
         drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
 
         val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -226,11 +223,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback,
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         val groundOverlay = mGoogleMap?.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
+                .position(latLng, AppConstants.keyGroundOverlayPosition)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
         val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
-        groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
+        groundAnimation.duration = AppConstants.keyGrAnimationDur
         mMapFragment?.view?.startAnimation(groundAnimation)
     }
 
