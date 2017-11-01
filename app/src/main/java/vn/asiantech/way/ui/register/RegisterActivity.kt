@@ -257,21 +257,23 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         imgAvatar.tag = target
         edtName.setText(mUser?.name)
         val basePhone: List<String>? = mUser?.phone?.split("/")
-        if (basePhone!!.size > 1) {
-            // Set isoCode
-            mIsoCode = basePhone[0]
-            for (i in 0 until mCountries.size) {
-                if (mIsoCode == mCountries[i].iso) {
-                    spinnerNation.setSelection(i)
-                    val tel = mCountries[i].tel
-                    tvTel.text = getString(R.string.register_plus).plus(tel)
-                    mTel = tel
-                    break
+        if (basePhone != null) {
+            if (basePhone.size > 1) {
+                // Set isoCode
+                mIsoCode = basePhone[0]
+                for (i in 0 until mCountries.size) {
+                    if (mIsoCode == mCountries[i].iso) {
+                        spinnerNation.setSelection(i)
+                        val tel = mCountries[i].tel
+                        tvTel.text = getString(R.string.register_plus).plus(tel)
+                        mTel = tel
+                        break
+                    }
                 }
+                edtPhoneNumber.setText(basePhone[1])
+            } else {
+                edtPhoneNumber.setText(basePhone[0])
             }
-            edtPhoneNumber.setText(basePhone[1])
-        } else {
-            edtPhoneNumber.setText(basePhone[0])
         }
         btnSave.isEnabled = checkUser(mUser?.name, user?.phone)
         mPreviousName = mUser?.name
