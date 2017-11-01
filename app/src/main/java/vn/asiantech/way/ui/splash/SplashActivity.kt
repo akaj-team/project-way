@@ -156,6 +156,10 @@ class SplashActivity : BaseActivity() {
                 toast(getString(R.string.splash_toast_turn_on_wifi))
             } else {
                 if (!HyperTrackUtils.isLocationEnabled(this)) {
+                    if (!HyperTrack.checkLocationPermission(this)) {
+                        HyperTrack.requestPermissions(this)
+                    }
+
                     if (!HyperTrack.checkLocationServices(this)) {
                         HyperTrack.requestLocationServices(this)
                     }
@@ -164,7 +168,6 @@ class SplashActivity : BaseActivity() {
                         if (!HyperTrack.checkLocationPermission(this)) {
                             HyperTrack.requestPermissions(this)
                         }
-
                     }
                 }
             }
