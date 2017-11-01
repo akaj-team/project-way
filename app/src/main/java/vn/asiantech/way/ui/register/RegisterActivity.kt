@@ -61,14 +61,14 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val KEY_LOGIN = "login"
     }
 
-    var mBitmap: Bitmap? = null
-    var mCountries: List<Country> = ArrayList()
-    var mPreviousName: String? = null
-    var mPreviousPhone: String? = null
-    var mIsoCode: String? = null
-    var mTel: String? = null
-    var mUser: User? = null
-    var mIsExit = false
+    private var mUser: User? = null
+    private var mBitmap: Bitmap? = null
+    private var mCountries: List<Country> = ArrayList()
+    private var mPreviousName: String? = null
+    private var mPreviousPhone: String? = null
+    private var mIsoCode: String? = null
+    private var mTel: String? = null
+    private var mIsExit = false
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -370,26 +370,31 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE) {
-            val uri: Uri? = data?.data
-            Picasso.with(this)
-                    .load(uri)
-                    .resize(300, 300)
-                    .into(object : Target {
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                            visibleProgressBar(progressBarAvatar)
-                        }
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
+            val uri: Uri? = data.data
+            if (uri != null) {
+                Picasso.with(this)
+                        .load(uri)
+                        .resize(300, 300)
+                        .into(object : Target {
+                            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                                visibleProgressBar(progressBarAvatar)
+                            }
 
-                        override fun onBitmapFailed(errorDrawable: Drawable?) {
-                            // No-op
-                        }
+                            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                                // No-op
+                            }
 
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            invisibleProgressBar(progressBarAvatar)
-                            imgAvatar.setImageBitmap(bitmap)
-                            mBitmap = bitmap
-                        }
-                    })
+                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                                invisibleProgressBar(progressBarAvatar)
+                                imgAvatar.setImageBitmap(bitmap)
+                                mBitmap = bitmap
+                            }
+                        })
+            } else {
+                val bmp = data.extras.get("data") as Bitmap
+                imgAvatar.setImageBitmap(bmp)
+            }
         }
     }
 
