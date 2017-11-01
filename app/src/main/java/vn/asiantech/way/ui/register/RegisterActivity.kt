@@ -67,7 +67,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     var mPreviousPhone: String? = null
     var mIsoCode: String? = null
     var mTel: String? = null
-    var mIsExitPressed = false
     var mUser: User? = null
     var mIsExit = false
     private lateinit var mSharedPreferences: SharedPreferences
@@ -125,8 +124,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         val phoneNumber: String = edtPhoneNumber.text.toString().trim()
         when (view?.id) {
             R.id.btnSave -> {
-                createUser(name, phoneNumber)
-                startActivity(Intent(this, HomeActivity::class.java))
+                if (checkPermission()) {
+                    createUser(name, phoneNumber)
+                    startActivity(Intent(this, HomeActivity::class.java))
+                } else {
+                    toast(getString(R.string.register_request_permission))
+                }
             }
             R.id.tvCancel -> {
                 if (checkPermission()) {
@@ -197,8 +200,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     toast(getString(R.string.register_create_user))
                 }
 
-                override fun onError(p0: ErrorResponse) {
-                    // No-op
+                override fun onError(error: ErrorResponse) {
+                    toast(error.errorMessage)
                 }
             })
         } else {
@@ -209,8 +212,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     toast(getString(R.string.register_update_user))
                 }
 
-                override fun onError(p0: ErrorResponse) {
-                    // No-op
+                override fun onError(error: ErrorResponse) {
+                    toast(error.errorMessage)
                 }
             })
         }
