@@ -61,6 +61,7 @@ internal class DialogArrived : DialogFragment() {
         v?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
         v?.btnDoneDialog?.setOnClickListener {
             dismiss()
+            // Todo : Back to Confirm screen
         }
         return v
     }
