@@ -61,13 +61,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val KEY_LOGIN = "login"
     }
 
-    var mBitmap: Bitmap? = null
-    var mCountries: List<Country> = ArrayList()
-    var mPreviousName: String? = null
-    var mPreviousPhone: String? = null
-    var mIsoCode: String? = null
-    var mTel: String? = null
-    var mIsExit = false
+    private var mBitmap: Bitmap? = null
+    private var mCountries: List<Country> = ArrayList()
+    private var mPreviousName: String? = null
+    private var mPreviousPhone: String? = null
+    private var mIsoCode: String? = null
+    private var mTel: String? = null
+    private var mIsExit = false
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
