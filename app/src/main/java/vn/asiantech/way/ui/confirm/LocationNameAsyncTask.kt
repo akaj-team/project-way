@@ -4,17 +4,19 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.AsyncTask
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.android.synthetic.main.view_confirm_location_layout.*
+import kotlinx.android.synthetic.main.activity_share_location.*
+import vn.asiantech.way.ui.share.ShareLocationActivity
+import java.lang.ref.WeakReference
 import java.util.*
 
 /**
  * Class get location name
  * Created by haingoq on 30/10/2017.
  */
-class LocationNameAsyncTask(private val mFragment: ConfirmLocationFragment) : AsyncTask<LatLng, Void, String>() {
+class LocationNameAsyncTask(private val mWeakActivity: WeakReference<ShareLocationActivity>) : AsyncTask<LatLng, Void, String>() {
 
     override fun doInBackground(vararg latLng: LatLng?): String {
-        val geoCoder = Geocoder(mFragment.context, Locale.getDefault())
+        val geoCoder = Geocoder(mWeakActivity.get(), Locale.getDefault())
         var addressLine = ""
         val lat = latLng[0]?.latitude
         val lng = latLng[0]?.longitude
@@ -29,7 +31,7 @@ class LocationNameAsyncTask(private val mFragment: ConfirmLocationFragment) : As
                     } else {
                         address.thoroughfare ?: ""
                     }
-                    mFragment.setDestinationName(name)
+                    mWeakActivity.get()?.setDestinationName(name)
                 } else {
                     addressLine = ""
                 }
@@ -42,6 +44,6 @@ class LocationNameAsyncTask(private val mFragment: ConfirmLocationFragment) : As
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        mFragment.tvLocation?.text = result
+        mWeakActivity.get()?.tvLocation?.text = result
     }
 }
