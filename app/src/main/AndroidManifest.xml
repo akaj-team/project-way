@@ -81,9 +81,12 @@
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.arrived.ArrivedActivity" />
+
         <activity
             android:name=".ui.search.SearchLocationActivity"
             android:noHistory="true" />
+
+        <activity android:name=".ui.update.UpdateMap" />
 
         <!-- Register meta-data here -->
         <!--

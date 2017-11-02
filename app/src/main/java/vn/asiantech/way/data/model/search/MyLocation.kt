@@ -8,8 +8,8 @@ import kotlinx.android.parcel.Parcelize
  * Created by cuongcaov. on 25/09/2017.
  */
 @Parcelize
-class MyLocation(val isHistory: Boolean, val formattedAddress: String, val id: String,
-                 val name: String, val placeId: String, val geometry: Geometry) : Parcelable
+class MyLocation(val isHistory: Boolean?, val formattedAddress: String?, val id: String?, val name: String?,
+                      val placeId : String?, val geometry: Geometry?) : Parcelable
 
 /**
  *  Geometry of location
