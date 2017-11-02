@@ -17,7 +17,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -159,7 +158,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun checkPermission(): Boolean {
-        return HyperTrackUtils.isLocationEnabled(this) && HyperTrackUtils.isInternetConnected(this)
+        return HyperTrackUtils.isLocationEnabled(this)
+                && HyperTrackUtils.isInternetConnected(this)
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -296,9 +296,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun checkPermissionGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
+                ActivityCompat.requestPermissions(this
+                        , arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
             }
         } else {
             intentGallery()
