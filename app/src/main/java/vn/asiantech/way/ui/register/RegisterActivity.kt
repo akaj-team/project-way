@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -64,16 +65,20 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private var mUser: User? = null
     private var mBitmap: Bitmap? = null
     private var mCountries: List<Country> = ArrayList()
-    private var mPreviousName: String? = null
-    private var mPreviousPhone: String? = null
     private var mIsoCode: String? = null
     private var mTel: String? = null
     private var mIsExit = false
+    private var mUri: Uri? = null
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        val codeIntentHome = intent.extras[INTENT_REGISTER]
+        if (codeIntentHome == INTENT_CODE_HOME) {
+            btnSave.text = getString(R.string.register_update_profile)
+            tvCancel.visibility = View.GONE
+        }
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
@@ -168,18 +173,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        var tel = ""
-        if (tvTel.text.isNotEmpty()) {
-            tel = tvTel.text.toString().removeRange(0, 1)
-        }
-        if ((name.isBlank() && phone.isBlank())
-                || (mPreviousName?.trim() == name
-                && mPreviousPhone?.removeRange(0, 3) == phone
-                && mTel == tel)) {
+        if (name.isBlank() && phone.isBlank()) {
             tvCancel.text = getString(R.string.register_skip)
             btnSave.isEnabled = false
         } else {
-            tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
     }
@@ -205,17 +202,21 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 }
             })
         } else {
-            // Update user information
-            HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
-                override fun onSuccess(p0: SuccessResponse) {
-                    HyperTrack.startTracking()
-                    toast(getString(R.string.register_update_user))
-                }
+            if (edtName.text.toString() != mUser?.name
+                    || edtPhoneNumber.text.toString() != mUser?.phone?.removeRange(0, 3)
+                    || mUri != null) {
+                // Update user information
+                HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
+                    override fun onSuccess(p0: SuccessResponse) {
+                        HyperTrack.startTracking()
+                        toast(getString(R.string.register_update_user))
+                    }
 
-                override fun onError(error: ErrorResponse) {
-                    toast(error.errorMessage)
-                }
-            })
+                    override fun onError(error: ErrorResponse) {
+                        toast(error.errorMessage)
+                    }
+                })
+            }
         }
     }
 
@@ -275,17 +276,8 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 edtPhoneNumber.setText(basePhone[0])
             }
         }
-        btnSave.isEnabled = checkUser(mUser?.name, user?.phone)
-        mPreviousName = mUser?.name
-        mPreviousPhone = mUser?.phone
     }
 
-    private fun checkUser(name: String?, phone: String?): Boolean {
-        if (mPreviousName != name?.trim() && mPreviousPhone != phone?.trim()) {
-            return true
-        }
-        return false
-    }
 
     private fun intentGallery() {
         // Gallery intent
@@ -371,10 +363,10 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
-            val uri: Uri? = data.data
-            if (uri != null) {
+            mUri = data.data
+            if (mUri != null) {
                 Picasso.with(this)
-                        .load(uri)
+                        .load(mUri)
                         .resize(300, 300)
                         .into(object : Target {
                             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
