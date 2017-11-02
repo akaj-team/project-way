@@ -51,12 +51,12 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlYourLocation.setOnClickListener {
-            mIntent?.putExtra(AppConstants.keyConfirm, AppConstants.keyCurrentLocation)
+            mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CURRENT_LOCATION)
             startActivity(mIntent)
         }
 
         rlChooseOnMap.setOnClickListener {
-            mIntent?.putExtra(AppConstants.keyConfirm, AppConstants.keyConfirm)
+            mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CONFIRM)
             startActivity(mIntent)
         }
 
@@ -110,8 +110,8 @@ class SearchLocationActivity : BaseActivity() {
             override fun onItemClick(myLocation: MyLocation) {
                 saveSearchHistory(myLocation)
                 val bundle = Bundle()
-                bundle.putParcelable(AppConstants.keyLocation, myLocation)
-                bundle.putString(AppConstants.keyConfirm, AppConstants.keySharing)
+                bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
+                bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
                 mIntent?.putExtras(bundle)
                 startActivity(mIntent)
             }

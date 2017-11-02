@@ -68,8 +68,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_location)
         if (intent.extras != null) {
-            mMyLocation = intent.getParcelableExtra(AppConstants.keyLocation)
-            mAction = intent.getStringExtra(AppConstants.keyConfirm)
+            mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
+            mAction = intent.getStringExtra(AppConstants.KEY_CONFIRM)
         }
         initMap()
         initializeUIViews()
@@ -101,7 +101,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mLatLng = LatLng(lat, lng)
             addDestinationMarker(mLatLng)
         }
-        if (mAction == AppConstants.keyCurrentLocation) {
+        if (mAction == AppConstants.KEY_CURRENT_LOCATION) {
             mLatLng = currentLocation?.latitude?.let { LatLng(it, currentLocation.longitude) }
             addDestinationMarker(mLatLng)
             getLocationName(mLatLng)
@@ -141,14 +141,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
             override fun onActionButtonClick() {
                 when (mAction) {
-                    AppConstants.keyConfirm -> {
-                        mAction = AppConstants.keySharing
+                    AppConstants.KEY_CONFIRM -> {
+                        mAction = AppConstants.KEY_SHARING
                         initBottomButtonCard(true, mAction)
                         addDestinationMarker(mLatLng)
                         mIsConfirm = true
                     }
-                    AppConstants.keySharing, AppConstants.keyCurrentLocation -> {
-                        mAction = AppConstants.keyStartSharing
+                    AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
+                        mAction = AppConstants.KEY_START_SHARING
                         initBottomButtonCard(true, mAction)
                     }
                     else -> shareLocation()
@@ -165,14 +165,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun initBottomButtonCard(show: Boolean, action: String?) {
         when (action) {
-            AppConstants.keyConfirm -> {
+            AppConstants.KEY_CONFIRM -> {
                 bottomButtonCard?.hideCloseButton()
                 bottomButtonCard?.hideTvTitle()
                 bottomButtonCard?.setDescriptionText(getString(R.string.confirm_move_map))
                 bottomButtonCard?.setShareButtonText(getString(R.string.confirm_location))
                 bottomButtonCard?.showActionButton()
             }
-            AppConstants.keySharing, AppConstants.keyCurrentLocation -> {
+            AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
                 bottomButtonCard?.hideCloseButton()
                 bottomButtonCard?.hideTvDescription()
                 bottomButtonCard?.setTitleText(getString(R.string.share_textview_text_look_good))
@@ -225,7 +225,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
                     .title(mDestinationName)
-                    .anchor(AppConstants.keyDefaultAnchor, AppConstants.keyDefaultAnchor))
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
                     ?.showInfoWindow()
             imgPickLocation.visibility = View.INVISIBLE
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
@@ -247,7 +247,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private fun addPulseRing(latLng: LatLng) {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.OVAL
-        drawable.setSize(AppConstants.keyDrawableSize, AppConstants.keyDrawableSize)
+        drawable.setSize(AppConstants.KEY_DRAWABLE_SIZE, AppConstants.KEY_DRAWABLE_SIZE)
         drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
 
         val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -255,11 +255,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         val groundOverlay = mGoogleMap.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, AppConstants.keyGroundOverlayPosition)
+                .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
         val groundAnimation = RadiusAnimation(groundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
-        groundAnimation.duration = AppConstants.keyGrAnimationDur
+        groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
         mMapFragment.view?.startAnimation(groundAnimation)
     }
 
@@ -289,14 +289,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     override fun onPause() {
         super.onPause()
         mGoogleApiClient.disconnect()
-        if (mAction == AppConstants.keyConfirm && !mLocationAsyncTask.isCancelled) {
+        if (mAction == AppConstants.KEY_CONFIRM && !mLocationAsyncTask.isCancelled) {
             mLocationAsyncTask.cancel(true)
         }
     }
 
     override fun onStop() {
         super.onStop()
-        if (mAction == AppConstants.keyConfirm && !mLocationAsyncTask.isCancelled) {
+        if (mAction == AppConstants.KEY_CONFIRM && !mLocationAsyncTask.isCancelled) {
             mLocationAsyncTask.cancel(true)
         }
     }
