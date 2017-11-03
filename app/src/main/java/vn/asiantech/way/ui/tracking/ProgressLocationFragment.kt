@@ -108,6 +108,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         initMapsView()
         mGoogleMap?.clear()
         mLocationUpdates = ArrayList()
+        Log.d("zxc","aaa "+mLocationUpdates)
         mLocations = ArrayList()
         getLocationName(LatLng(16.09175, 108.23747))
         handlerProgressTracking()
@@ -118,6 +119,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         mHandlerTracking = Handler()
         mRunnable = Runnable {
             if (mLocationUpdates != null) {
+                Log.d("zxc","aaa "+mLocationUpdates)
                 if (mLocationUpdates!!.size > 0
                         && (mLocationUpdates!![mLocationUpdates!!.size - 1] == mDestinationLatLng)) {
                     mEtaUpdate = 0f
