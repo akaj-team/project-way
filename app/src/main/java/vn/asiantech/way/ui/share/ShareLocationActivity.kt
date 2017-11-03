@@ -13,7 +13,6 @@ import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -28,7 +27,6 @@ import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
-import com.hypertrack.lib.internal.common.logging.HTLog
 import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.*
@@ -174,9 +172,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 if (response.responseObject != null) {
-                    val action = response.responseObject as Action
+                    val action = response.responseObject as? Action
                     HyperTrack.clearServiceNotificationParams()
-                    bottomButtonCard.tvURL.text = action.trackingURL
+                    bottomButtonCard.tvURL.text = action?.trackingURL
                     bottomButtonCard.hideProgress()
                     initBottomButtonCard(true, mAction)
                 }
