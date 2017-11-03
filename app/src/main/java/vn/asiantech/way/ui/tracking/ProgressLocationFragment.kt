@@ -18,7 +18,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -35,6 +34,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 /**
  * Copyright © AsianTech Co., Ltd
@@ -55,6 +55,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
     private var mCurrentMarker: Marker? = null
     private var mIsStopTracking = false
     private var mLocationUpdates: MutableList<LatLng>? = null
+    private var mLocations: MutableList<vn.asiantech.way.data.model.Location>? = null
     private var mCurrentLocation: HyperTrackLocation? = null
     private lateinit var mHandlerTracking: Handler
     private var mRunnable: Runnable? = null
@@ -64,6 +65,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
     private var mAverageSpeed = 0f
     private var mEtaUpdate = 0.0f
     private var mEtaMaximum = 0.0f
+    private var mEtaSpeed = 0.0f
     private var mCount = 0
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -98,7 +100,7 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
             override fun onError(p0: ErrorResponse) {
             }
         })
-        mDestinationLatLng = LatLng(16.07791, 108.23462)
+        mDestinationLatLng = LatLng(16.09175, 108.23747)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -106,7 +108,8 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
         initMapsView()
         mGoogleMap?.clear()
         mLocationUpdates = ArrayList()
-        getLocationName(LatLng(16.07791, 108.23462))
+        mLocations = ArrayList()
+        getLocationName(LatLng(16.09175, 108.23747))
         handlerProgressTracking()
         addEvents()
     }
@@ -200,9 +203,11 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
             tvActionStatus.text = resources.getString(R.string.leaving)
         }
         tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
-        tvDistance.text = resources.getString(R.string.open_parentheses)
-                .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
-                .plus(resources.getString(R.string.close_parentheses_distance))
+        if (hyperTrackLocation.speed != null) {
+            tvDistance.text = resources.getString(R.string.open_parentheses)
+                    .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
+                    .plus(resources.getString(R.string.close_parentheses_distance))
+        }
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvElapsedTime.text = formatInterval(mCountTimer)
         tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
@@ -277,17 +282,13 @@ class ProgressLocationFragment : Fragment(), OnMapReadyCallback {
                     position(latLng).
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
                     .anchor(0.5f, 0.5f)
-                    .flat(true)
-            )
-            if (mCurrentMarker != null) {
-                MarkerAnimation.animateMarker(mCurrentMarker, latLng)
-            }
+                    .flat(true))
         } else {
             mCurrentMarker!!.position = latLng
             mCurrentMarker!!.rotation = angle
         }
         drawLine()
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_SIZE))
+        MarkerAnimation.animateMarker(mCurrentMarker, latLng)
     }
 
     private fun addEvents() {
