@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import at.blogc.android.views.ExpandableTextView
 import kotlinx.android.synthetic.main.item_recyclerview_location.view.*
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.inflate
 import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.extension.inflate
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
