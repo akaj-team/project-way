@@ -23,7 +23,6 @@ import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
-import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 
 /**
@@ -36,6 +35,8 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         const val PADDING_TOP = 0
         const val PADDING_RIGHT = 0
         const val ZOOM = 16f
+        private const val TYPE_TIME_DELAY = 3000L
+        private const val UNIT_PADDING_BOTTOM = 3
     }
 
     private var mPosition = -1
@@ -77,7 +78,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onShareClick() {
-        startActivity(Intent(this, ShareLocationActivity::class.java))
+        startActivity(Intent(this, SearchLocationActivity::class.java))
         setGoneOverLay()
     }
 
@@ -103,7 +104,8 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun initMap() {
-        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap) as? SupportMapFragment
+        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap)
+                as? SupportMapFragment
         supportMapFragment?.getMapAsync(this)
     }
 
@@ -111,7 +113,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / 3)
+        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / UNIT_PADDING_BOTTOM)
     }
 
     private fun setGoneOverLay() {
@@ -160,13 +162,14 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun initDummyData(locations: ArrayList<Location>) {
-        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school..............."))
-        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........"))
-        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km"))
-        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km"))
-        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km"))
-        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km"))
-        locations.add(Location("7:00 PM", "Moto", "40 minutes | 3km"))
+//        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
+//                LatLng(16.0721115, 108.2302225)))
+//        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........",
+//                LatLng(16.0712047, 108.2193197)))
+//        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
+//        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
+//        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
+//        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
@@ -188,7 +191,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         } else {
             toast("Press back again to exit!")
             isExit = true
-            Handler().postDelayed({ isExit = false }, 3 * 1000)
+            Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
     }
 }

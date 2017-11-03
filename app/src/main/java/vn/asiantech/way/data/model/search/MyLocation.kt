@@ -1,28 +1,24 @@
 package vn.asiantech.way.data.model.search
 
-import com.google.gson.annotations.SerializedName
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-class MyLocation {
-    var isHistory: Boolean? = null
-    @SerializedName("formattedAddress")
-    var formattedAddress: String? = null
-    var id: String? = null
-    var name: String? = null
-    @SerializedName("placeId")
-    var placeId: String? = null
-    var geometry: Geometry? = null
-}
+@Parcelize
+class MyLocation(val isHistory: Boolean?, val formattedAddress: String?, val id: String?, val name: String?,
+                      val placeId : String?, val geometry: Geometry?) : Parcelable
 
 /**
  *  Geometry of location
  */
-data class Geometry(var location: Coordinates)
+@Parcelize
+data class Geometry(var location: Coordinates) : Parcelable
 
 /**
  *  Coordinates of location
  */
-data class Coordinates(var lat: Double, var lng: Double)
+@Parcelize
+data class Coordinates(var lat: Double, var lng: Double) : Parcelable

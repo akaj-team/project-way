@@ -1,4 +1,7 @@
 <resources>
+    <!--Common -->
+    <string name="current_location">Current location</string>
+
     <!--Splash screen-->
     <string name="filter_title_track">WAY</string>
     <string name="image_description">image</string>
@@ -10,7 +13,6 @@
     <string name="toast_text_google_map_null">Google map is null</string>
     <string name="dialog_message_enable_gps">App need GPS.Do you want enable your GPS?</string>
     <string name="dialog_button_ok">OK</string>
-    <string name="current_location">Current location</string>
     <string name="dialog_button_cancel">Cancel</string>
     <string name="marker_title">Current location</string>
     <string name="toast_text_location_null">Not update current location!</string>
@@ -53,8 +55,10 @@
     <string name="register_create_user">Create user completed</string>
     <string name="register_update_user">Update user completed</string>
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
+    <string name="register_request_permission">Please turn on Internet and GPS</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
+    <string name="not_update_current_location">\"Do not update the current location!\"</string>
 
     <!--Arrived screen-->
     <string name="arrived_show_summary">SHOW SUMMARY</string>

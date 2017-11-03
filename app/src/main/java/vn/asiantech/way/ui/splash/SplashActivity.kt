@@ -1,10 +1,11 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.location.LocationManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -24,7 +25,33 @@ import vn.asiantech.way.ui.register.RegisterActivity
  */
 class SplashActivity : BaseActivity() {
 
+    companion object {
+        const val DELAY = 3000L
+    }
+
     private lateinit var mSharedPreferences: SharedPreferences
+
+    private val mBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if ((intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
+                    intent?.action == WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+                startSwitchScreen()
+            }
+
+            if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+                startSwitchScreen()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+        registerReceiver(mBroadcastReceiver, intentFilter)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +69,32 @@ class SplashActivity : BaseActivity() {
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
+    }
+
+    private fun startSwitchScreen() {
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
+                    progressBar.visibility = View.VISIBLE
+                    btnEnableLocation.visibility = View.GONE
+                    tvAppDescription.visibility = View.GONE
+                    if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                        Handler().postDelayed({
+                            startActivity(Intent(this, HomeActivity::class.java))
+                            finish()
+                        }, DELAY)
+
+                    } else {
+                        Handler().postDelayed({
+                            val intent = Intent(this, RegisterActivity::class.java)
+                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                            startActivity(intent)
+                            finish()
+                        }, DELAY)
+                    }
+                }
+            }
+        }
     }
 
     private fun setAnimationForBackground() {
@@ -97,20 +150,12 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun requestPermission() {
+        startSwitchScreen()
         btnEnableLocation.setOnClickListener {
-            if (HyperTrackUtils.isInternetConnected(this)) {
-                if (HyperTrackUtils.isLocationEnabled(this)) {
-                    progressBar.visibility = View.VISIBLE
-                    btnEnableLocation.visibility = View.GONE
-                    tvAppDescription.visibility = View.GONE
-                    if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
-                        startActivity(Intent(this, HomeActivity::class.java))
-                    } else {
-                        val intent = Intent(this, RegisterActivity::class.java)
-                        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-                        startActivity(intent)
-                    }
-                } else {
+            if (!HyperTrackUtils.isWifiEnabled(this)) {
+                toast(getString(R.string.splash_toast_turn_on_wifi))
+            } else {
+                if (!HyperTrackUtils.isLocationEnabled(this)) {
                     if (!HyperTrack.checkLocationPermission(this)) {
                         HyperTrack.requestPermissions(this)
                     }
@@ -118,10 +163,19 @@ class SplashActivity : BaseActivity() {
                     if (!HyperTrack.checkLocationServices(this)) {
                         HyperTrack.requestLocationServices(this)
                     }
+                } else {
+                    if (!HyperTrackUtils.isLocationPermissionAvailable(this)) {
+                        if (!HyperTrack.checkLocationPermission(this)) {
+                            HyperTrack.requestPermissions(this)
+                        }
+                    }
                 }
-            } else {
-                toast(getString(R.string.splash_toast_turn_on_wifi))
             }
         }
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(mBroadcastReceiver)
+        super.onDestroy()
     }
 }

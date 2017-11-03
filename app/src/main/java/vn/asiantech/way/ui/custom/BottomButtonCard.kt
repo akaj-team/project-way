@@ -94,6 +94,18 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         btnClose.visibility = View.GONE
     }
 
+    internal fun hideTvTitle() {
+        tvTitle.visibility = View.GONE
+    }
+
+    internal fun hideTvDescription() {
+        tvDescription.visibility = View.GONE
+    }
+
+    internal fun showClosebutton() {
+        btnClose.visibility = View.VISIBLE
+    }
+
     internal fun setShareButtonText(actionText: String) {
         tvStartShare.visibility = View.VISIBLE
         tvStartShare.text = actionText
