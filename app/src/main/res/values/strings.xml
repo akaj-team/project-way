@@ -26,6 +26,7 @@
     <string name="share_textview_text_description">Add a destination</string>
     <string name="share_textview_text_look_good">Look good?</string>
     <string name="share_textview_text_start_sharing">Start Sharing</string>
+    <string name="share_textview_text_share_link">Share Link</string>
     <string name="share_textview_text_test_title">You\'re 1 min away</string>
     <string name="share_textview_text_text_test_description_success">Share your live location link:</string>
     <string name="share_textview_text_copied">Copied</string>

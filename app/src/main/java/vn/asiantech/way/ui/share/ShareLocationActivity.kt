@@ -13,6 +13,7 @@ import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -26,6 +27,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
+import com.hypertrack.lib.callbacks.HyperTrackCallback
+import com.hypertrack.lib.internal.common.logging.HTLog
+import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
@@ -147,9 +151,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         addDestinationMarker(mLatLng)
                         mIsConfirm = true
                     }
+                // Click sharing
                     AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
                         mAction = AppConstants.KEY_START_SHARING
-                        initBottomButtonCard(true, mAction)
+                        bottomButtonCard.startProgress()
+                        getTrackingURL()
                     }
                     else -> shareLocation()
                 }
@@ -161,6 +167,25 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             }
 
         }
+    }
+
+    private fun getTrackingURL() {
+        val builder = ActionParamsBuilder()
+        HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                if (response.responseObject != null) {
+                    val action = response.responseObject as Action
+                    HyperTrack.clearServiceNotificationParams()
+                    bottomButtonCard.tvURL.text = action.trackingURL
+                    bottomButtonCard.hideProgress()
+                    initBottomButtonCard(true, mAction)
+                }
+            }
+
+            override fun onError(errorResponse: ErrorResponse) {
+                // No-op
+            }
+        })
     }
 
     private fun initBottomButtonCard(show: Boolean, action: String?) {
@@ -178,6 +203,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 bottomButtonCard?.setTitleText(getString(R.string.share_textview_text_look_good))
                 bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
                 bottomButtonCard?.showActionButton()
+
             }
             else -> {
                 bottomButtonCard?.showClosebutton()
@@ -185,7 +211,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 bottomButtonCard?.showTrackingURLLayout()
                 bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
                 bottomButtonCard?.setDescriptionText(getString(R.string.bottom_button_card_description_text))
-                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
+                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_share_link))
                 bottomButtonCard?.showActionButton()
                 bottomButtonCard?.showTitle()
             }
