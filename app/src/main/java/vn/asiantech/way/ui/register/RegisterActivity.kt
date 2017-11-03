@@ -15,8 +15,10 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -124,7 +126,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onClick(view: View?) {
-        val name: String = edtName.text.toString().trim()
+        var name: String = edtName.text.toString().trim()
         val phoneNumber: String = edtPhoneNumber.text.toString().trim()
         when (view?.id) {
             R.id.btnSave -> {
@@ -139,13 +141,21 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 if (checkPermission()) {
                     if (mUser == null) {
                         if (name.isBlank()) {
-                            edtName.setText(R.string.register_user_name_default)
+                            name = getString(R.string.register_user_name_default)
                         }
                         if (phoneNumber.isBlank()) {
                             edtPhoneNumber.text = null
                         }
-                        createUser(name, phoneNumber)
-                        startActivity(Intent(this, HomeActivity::class.java))
+                        // Show alert dialog for user
+                        AlertDialog.Builder(this)
+                                .setMessage(getString(R.string.register_message_dialog))
+                                .setPositiveButton(getString(R.string.dialog_button_ok)) { _, _ ->
+                                    createUser(name, phoneNumber)
+                                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
+                                }
+                                .setNegativeButton(getString(R.string.dialog_button_cancel), null)
+                                .show()
+
                     } else {
                         createUser(name, phoneNumber)
                         startActivity(Intent(this, HomeActivity::class.java))
@@ -190,11 +200,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
         // Create new user
         if (mUser == null) {
+            visibleProgressBar(progressBar)
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
                     saveLoginStatus(true)
-                    toast(getString(R.string.register_create_user))
+                    invisibleProgressBar(progressBar)
+                    Log.d("TTTTT", getString(R.string.register_create_user))
                 }
 
                 override fun onError(error: ErrorResponse) {
@@ -205,11 +217,13 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             if (edtName.text.toString() != mUser?.name
                     || edtPhoneNumber.text.toString() != mUser?.phone?.removeRange(0, 3)
                     || mUri != null) {
+                visibleProgressBar(progressBar)
                 // Update user information
                 HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
                     override fun onSuccess(p0: SuccessResponse) {
                         HyperTrack.startTracking()
-                        toast(getString(R.string.register_update_user))
+                        invisibleProgressBar(progressBar)
+                        Log.d("TTTTT", getString(R.string.register_update_user))
                     }
 
                     override fun onError(error: ErrorResponse) {
@@ -240,10 +254,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 visibleProgressBar(progressBarAvatar)
+
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
-                // No-op
+                Log.d("TTTTT", "Fail")
+                invisibleProgressBar(progressBarAvatar)
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -372,7 +388,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                         .resize(300, 300)
                         .into(object : Target {
                             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                                visibleProgressBar(progressBarAvatar)
+                                // No-op
                             }
 
                             override fun onBitmapFailed(errorDrawable: Drawable?) {
@@ -380,7 +396,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                             }
 
                             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                                invisibleProgressBar(progressBarAvatar)
                                 imgAvatar.setImageBitmap(bitmap)
                                 mBitmap = bitmap
                             }
