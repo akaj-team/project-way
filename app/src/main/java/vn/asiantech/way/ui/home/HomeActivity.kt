@@ -23,7 +23,6 @@ import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
-import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 
 /**
@@ -79,7 +78,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onShareClick() {
-        startActivity(Intent(this, ShareLocationActivity::class.java))
+        startActivity(Intent(this, SearchLocationActivity::class.java))
         setGoneOverLay()
     }
 
