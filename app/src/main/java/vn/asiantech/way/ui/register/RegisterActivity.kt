@@ -154,7 +154,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                                 }
                                 .setNegativeButton(getString(R.string.dialog_button_cancel), null)
                                 .show()
-
                     }
                 } else {
                     toast(getString(R.string.register_request_permission))
