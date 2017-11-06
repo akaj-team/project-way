@@ -78,7 +78,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         val codeIntentHome = intent.extras[INTENT_REGISTER]
         if (codeIntentHome == INTENT_CODE_HOME) {
             btnSave.text = getString(R.string.register_update_profile)
-            tvCancel.visibility = View.GONE
         }
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
@@ -148,6 +147,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                         }
                         // Show alert dialog for user
                         AlertDialog.Builder(this)
+                                .setTitle(getString(R.string.register_title_dialog))
                                 .setMessage(getString(R.string.register_message_dialog))
                                 .setPositiveButton(getString(R.string.dialog_button_ok)) { _, _ ->
                                     createUser(name, phoneNumber)
@@ -157,7 +157,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                                 .show()
 
                     } else {
-                        createUser(name, phoneNumber)
                         startActivity(Intent(this, HomeActivity::class.java))
                     }
                 } else {
@@ -187,6 +186,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             tvCancel.text = getString(R.string.register_skip)
             btnSave.isEnabled = false
         } else {
+            tvCancel.text = getString(R.string.register_cancel)
             btnSave.isEnabled = true
         }
     }

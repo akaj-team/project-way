@@ -81,5 +81,6 @@
     <string name="search_location_choose_on_map">Choose on map</string>
     <string name="dialog_message_fill_in">Please fill in all fields</string>
     <string name="register_update_profile">Update Profile</string>
-    <string name="register_message_dialog">Your name user default is user</string>
+    <string name="register_message_dialog">Your default user name is user</string>
+    <string name="register_title_dialog">Information</string>
 </resources>
