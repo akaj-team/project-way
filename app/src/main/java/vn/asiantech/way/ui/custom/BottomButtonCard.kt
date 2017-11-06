@@ -1,7 +1,9 @@
 package vn.asiantech.way.ui.custom
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
@@ -85,11 +87,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    // TODO: Will use in future
-//    fun showCloseButton() {
-//        btnClose.visibility = View.VISIBLE
-//    }
-
     internal fun hideCloseButton() {
         btnClose.visibility = View.GONE
     }
@@ -102,7 +99,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         tvDescription.visibility = View.GONE
     }
 
-    internal fun showClosebutton() {
+    internal fun showCloseButton() {
         btnClose.visibility = View.VISIBLE
     }
 
@@ -116,12 +113,12 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
-    // TODO:Will use in future
 
-//    fun hideBottomCardLayout() {
-//        hideProgress()
-//        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
-//    }
+    fun hideBottomCardLayout() {
+        hideProgress()
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
+    }
+
     // TODO: Will use in future
 //
 //    fun startProgress() {
@@ -152,10 +149,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
     // TODO: Will use in future
 //    fun hideTrackingURLLayout() {
 //        rlLinkShare.visibility = View.GONE
-//    }
-    // TODO: Will use in future
-//    fun hideTitle() {
-//        tvTitle.visibility = View.GONE
 //    }
 
     internal fun showTitle() {
