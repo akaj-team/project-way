@@ -75,8 +75,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        val codeIntentHome = intent.extras[INTENT_REGISTER]
-        if (codeIntentHome == INTENT_CODE_HOME) {
+        if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
             btnSave.text = getString(R.string.register_update_profile)
         }
         initListener()
@@ -136,7 +135,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     toast(getString(R.string.register_request_permission))
                 }
             }
-            R.id.tvCancel -> {
+            R.id.tvSkip -> {
                 if (checkPermission()) {
                     if (mUser == null) {
                         if (name.isBlank()) {
@@ -156,11 +155,20 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                                 .setNegativeButton(getString(R.string.dialog_button_cancel), null)
                                 .show()
 
-                    } else {
-                        startActivity(Intent(this, HomeActivity::class.java))
                     }
                 } else {
                     toast(getString(R.string.register_request_permission))
+                }
+            }
+            R.id.tvCancel -> {
+                if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                } else {
+                    edtName.setText("")
+                    edtPhoneNumber.setText("")
+                    mUri = null
+                    mBitmap = null
+                    Picasso.with(this).load(R.drawable.ic_default_avatar).into(imgAvatar)
                 }
             }
         }
@@ -183,10 +191,12 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
         if (name.isBlank() && phone.isBlank()) {
-            tvCancel.text = getString(R.string.register_skip)
+            tvSkip.visibility = View.VISIBLE
+            tvCancel.visibility = View.GONE
             btnSave.isEnabled = false
         } else {
-            tvCancel.text = getString(R.string.register_cancel)
+            tvCancel.visibility = View.VISIBLE
+            tvSkip.visibility = View.GONE
             btnSave.isEnabled = true
         }
     }
@@ -341,6 +351,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         edtPhoneNumber.addTextChangedListener(this)
         tvTel.addTextChangedListener(this)
         btnSave.setOnClickListener(this)
+        tvSkip.setOnClickListener(this)
         tvCancel.setOnClickListener(this)
     }
 
@@ -398,11 +409,15 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                                 imgAvatar.setImageBitmap(bitmap)
                                 mBitmap = bitmap
+                                tvCancel.visibility = View.VISIBLE
+                                tvSkip.visibility = View.GONE
                             }
                         })
             } else {
                 val bmp = data.extras.get("data") as Bitmap
                 imgAvatar.setImageBitmap(bmp)
+                tvCancel.visibility = View.VISIBLE
+                tvSkip.visibility = View.GONE
             }
         }
     }
