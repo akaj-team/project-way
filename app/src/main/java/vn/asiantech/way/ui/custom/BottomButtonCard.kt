@@ -1,9 +1,7 @@
 package vn.asiantech.way.ui.custom
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
@@ -114,7 +112,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    fun hideBottomCardLayout() {
+    internal fun hideBottomCardLayout() {
         hideProgress()
         AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }

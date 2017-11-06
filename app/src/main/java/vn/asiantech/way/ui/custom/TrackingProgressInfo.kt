@@ -50,12 +50,12 @@ class TrackingProgressInfo @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
-    fun showTrackingProgress() {
+    internal fun showTrackingProgress() {
         llTrackingProgress.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    fun hideTrackingProgress() {
+    internal fun hideTrackingProgress() {
         AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
