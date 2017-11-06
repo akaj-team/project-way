@@ -83,4 +83,5 @@
     <string name="register_update_profile">Update Profile</string>
     <string name="register_message_dialog">Your default user name is user</string>
     <string name="register_title_dialog">Information</string>
+    <string name="register_title_error_dialog">Error</string>
 </resources>

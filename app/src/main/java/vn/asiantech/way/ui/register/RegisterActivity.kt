@@ -130,7 +130,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             R.id.btnSave -> {
                 if (checkPermission()) {
                     createUser(name, phoneNumber)
-                    startActivity(Intent(this, HomeActivity::class.java))
                 } else {
                     toast(getString(R.string.register_request_permission))
                 }
@@ -150,7 +149,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                                 .setMessage(getString(R.string.register_message_dialog))
                                 .setPositiveButton(getString(R.string.dialog_button_ok)) { _, _ ->
                                     createUser(name, phoneNumber)
-                                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                                 }
                                 .setNegativeButton(getString(R.string.dialog_button_cancel), null)
                                 .show()
@@ -215,11 +213,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     HyperTrack.startTracking()
                     saveLoginStatus(true)
                     invisibleProgressBar(progressBar)
+                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                     Log.d("TTTTT", getString(R.string.register_create_user))
                 }
 
                 override fun onError(error: ErrorResponse) {
-                    toast(error.errorMessage)
+                    AlertDialog.Builder(this@RegisterActivity)
+                            .setTitle(getString(R.string.register_title_error_dialog))
+                            .setMessage(error.errorMessage)
+                            .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                            }
+                            .show()
                 }
             })
         } else {
@@ -232,11 +237,18 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     override fun onSuccess(p0: SuccessResponse) {
                         HyperTrack.startTracking()
                         invisibleProgressBar(progressBar)
+                        startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                         Log.d("TTTTT", getString(R.string.register_update_user))
                     }
 
                     override fun onError(error: ErrorResponse) {
-                        toast(error.errorMessage)
+                        AlertDialog.Builder(this@RegisterActivity)
+                                .setTitle(getString(R.string.register_title_error_dialog))
+                                .setMessage(error.errorMessage)
+                                .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                                    dialogInterface.dismiss()
+                                }
+                                .show()
                     }
                 })
             }
