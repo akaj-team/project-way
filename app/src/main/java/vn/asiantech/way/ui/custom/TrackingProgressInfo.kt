@@ -13,8 +13,8 @@ import vn.asiantech.way.R
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 06/11/2017.
  */
-class TrackingProgressInfo @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
-    : RelativeLayout(context, attrs) {
+class TrackingProgressInfo @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+        RelativeLayout(context, attrs) {
 
     var trackingProgressClick: TrackingProgressClick? = null
 
