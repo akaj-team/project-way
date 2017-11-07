@@ -214,7 +214,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                     saveLoginStatus(true)
                     invisibleProgressBar(progressBar)
                     startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
-                    Log.d("TTTTT", getString(R.string.register_create_user))
                 }
 
                 override fun onError(error: ErrorResponse) {
@@ -238,7 +237,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                         HyperTrack.startTracking()
                         invisibleProgressBar(progressBar)
                         startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
-                        Log.d("TTTTT", getString(R.string.register_update_user))
                     }
 
                     override fun onError(error: ErrorResponse) {
@@ -279,7 +277,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
-                Log.d("TTTTT", "Fail")
                 invisibleProgressBar(progressBarAvatar)
             }
 
