@@ -48,6 +48,7 @@ import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -64,6 +65,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         private const val ONE_THOUSAND = 1000L
         private const val RADIUS = 360.0
         private const val STEP_ETA = 3
+
     }
 
     private var mCurrentMarker: Marker? = null
@@ -79,8 +81,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mAverageSpeed = 0f
     private var mEtaUpdate = 0.0f
     private var mEtaMaximum = 0.0f
-    private var mEtaSpeed = 0.0f
+    private var mAngle = 0.0f
     private var mCount = 0
+    private var mCurrentStatus = "STOP"
+    private var mStartStatus = 0L
+    private var mEndStatus = 0L
+    private var mStartPosition = 0
 
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
@@ -162,7 +168,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             getLocationName(mLatLng)
             mIsConfirm = true
         }
-        mDestinationLatLng = LatLng(16.09175, 108.23747)
+        mDestinationLatLng = LatLng(16.08622, 108.24048)
     }
 
     override fun onLocationChanged(location: Location) {
@@ -430,7 +436,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     return@Runnable
                 }
                 requestLocation()
-                requestEta()
+                requestEta(VehicleType.MOTORCYCLE)
                 mCountTimer += ONE_THOUSAND
                 handlerProgressTracking()
             }
@@ -451,8 +457,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         })
     }
 
-    private fun requestEta() {
-        HyperTrack.getETA(mDestinationLatLng, VehicleType.MOTORCYCLE, object : HyperTrackCallback() {
+    private fun requestEta(vehicle: VehicleType) {
+        HyperTrack.getETA(mDestinationLatLng, vehicle, object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
                 mEtaUpdate = (p0.responseObject as Double?)!!.toFloat()
                 if (mCount < 1) {
@@ -467,17 +473,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         })
     }
 
-//    private fun getLocationName(latLng: LatLng?) {
-//        val geoCoder = Geocoder(context, Locale.getDefault())
-//        val addresses: List<Address> = geoCoder.getFromLocation(latLng!!.latitude, latLng.longitude, 1)
-//        if (addresses.isNotEmpty()) {
-//            val address: Address = addresses[0]
-//            tvDestination.text = address.getAddressLine(0)
-//        } else {
-//            tvDestination.text = null
-//        }
-//    }
-
     private fun updateCurrentTimeView() {
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
@@ -489,8 +484,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (mLocationUpdates != null) {
             if (latLng != null) {
                 mLocationUpdates?.add(latLng)
+//                    getListLocation(latLng, mLocationUpdates!!.size - 1)
             }
             if (mLocationUpdates!!.size > 1) {
+                getListLocation(latLng, mLocationUpdates!!.size - 1)
                 mDistanceTravel += getDistancePerSecond(mLocationUpdates!![mLocationUpdates!!.size - 2]
                         , mLocationUpdates!![mLocationUpdates!!.size - 1])
             }
@@ -574,9 +571,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun updateMapView(latLng: LatLng) {
-        var angle = 0.0f
         if (mLocationUpdates!!.size > 1) {
-            angle = getAngleMarker(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).toFloat()
+            mAngle = getAngleMarker(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1]).toFloat()
         }
         if (mCurrentMarker == null) {
             mCurrentMarker = mGoogleMap.addMarker(MarkerOptions().
@@ -586,9 +582,68 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     .flat(true))
         } else {
             mCurrentMarker!!.position = latLng
-            mCurrentMarker!!.rotation = angle
+            mCurrentMarker!!.rotation = mAngle
+            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                    .target(latLng)
+                    .zoom(ZOOM_SIZE)
+                    .build())
+            )
         }
         drawLine()
         MarkerAnimation.animateMarker(mCurrentMarker, latLng)
+    }
+
+    private fun checkStatus(speed: Float): String {
+        return if (speed <= 0.2) {
+            "STOP"
+        } else if (speed > 0.2 && speed <= 15.5) {
+            "MOVING"
+        } else "DRIVER"
+    }
+
+    private fun getTimeDuringStatus(time: Long): String {
+        return when {
+            time in 60..3599 -> (time / 60).toString().plus("min")
+            time < 60 -> time.toString().plus("second")
+            else -> (time / 3600).toString().plus("hour")
+        }
+    }
+
+    private fun getListLocation(latLng: LatLng, position: Int) {
+        val status = checkStatus(mAverageSpeed)
+        if (mCurrentStatus != status) {
+            var description: String? = null
+            if (status == "STOP") {
+                val geoCoder = Geocoder(this, Locale.getDefault())
+                val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                if (addresses.isNotEmpty()) {
+                    val address: Address = addresses[0]
+                    description = address.getAddressLine(0)
+                }
+            } else {
+                mEndStatus = mCountTimer
+                val time = getTimeDuringStatus(mCountTimer - mStartStatus)
+                val distance = (0..(position - 1))
+                        .map {
+                            getDistancePerSecond(mLocationUpdates!![it]
+                                    , mLocationUpdates!![it + 1])
+                        }
+                        .sum()
+                description = time.plus(" | ").plus(distance.toString()).plus("km")
+            }
+            val location = vn.asiantech.way.data.model.Location(getTimeChangeStatus(),
+                    status, description, latLng)
+            mLocations?.add(location)
+            mCurrentStatus = status
+            mStartPosition = position
+        }
+        var timeChangeStatus = getTimeChangeStatus()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getTimeChangeStatus(): String {
+        val currentTime = Calendar.getInstance().time
+        val formatDate = SimpleDateFormat("hh:mm a")
+        return formatDate.format(currentTime)
     }
 }
