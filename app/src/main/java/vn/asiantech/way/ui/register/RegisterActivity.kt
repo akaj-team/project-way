@@ -15,6 +15,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -61,18 +62,21 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val KEY_LOGIN = "login"
     }
 
+    private var mUser: User? = null
     private var mBitmap: Bitmap? = null
     private var mCountries: List<Country> = ArrayList()
-    private var mPreviousName: String? = null
-    private var mPreviousPhone: String? = null
     private var mIsoCode: String? = null
     private var mTel: String? = null
     private var mIsExit = false
+    private var mUri: Uri? = null
     private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+            btnSave.text = getString(R.string.register_update_profile)
+        }
         initListener()
         mCountries = getCountries(readJsonFromDirectory())
         mIsoCode = getString(R.string.register_iso_code_default)
@@ -119,35 +123,56 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     override fun onClick(view: View?) {
+        var name: String = edtName.text.toString().trim()
+        val phoneNumber: String = edtPhoneNumber.text.toString().trim()
         when (view?.id) {
             R.id.btnSave -> {
-                val name: String = edtName.text.toString().trim()
-                val phoneNumber: String = edtPhoneNumber.text.toString().trim()
-                if (name.isBlank()) {
-                    edtName.setText(R.string.register_user_name_default)
-                }
-                if (phoneNumber.isBlank()) {
-                    edtPhoneNumber.text = null
-                }
                 if (checkPermission()) {
                     createUser(name, phoneNumber)
-                    startActivity(Intent(this, HomeActivity::class.java))
+                } else {
+                    toast(getString(R.string.register_request_permission))
+                }
+            }
+            R.id.tvSkip -> {
+                if (checkPermission()) {
+                    if (mUser == null) {
+                        if (name.isBlank()) {
+                            name = getString(R.string.register_user_name_default)
+                        }
+                        if (phoneNumber.isBlank()) {
+                            edtPhoneNumber.text = null
+                        }
+                        // Show alert dialog for user
+                        AlertDialog.Builder(this)
+                                .setTitle(getString(R.string.register_title_dialog))
+                                .setMessage(getString(R.string.register_message_dialog))
+                                .setPositiveButton(getString(R.string.dialog_button_ok)) { _, _ ->
+                                    createUser(name, phoneNumber)
+                                }
+                                .setNegativeButton(getString(R.string.dialog_button_cancel), null)
+                                .show()
+                    }
                 } else {
                     toast(getString(R.string.register_request_permission))
                 }
             }
             R.id.tvCancel -> {
-                if (checkPermission()) {
+                if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
                     startActivity(Intent(this, HomeActivity::class.java))
                 } else {
-                    finishAffinity()
+                    edtName.setText("")
+                    edtPhoneNumber.setText("")
+                    mUri = null
+                    mBitmap = null
+                    Picasso.with(this).load(R.drawable.ic_default_avatar).into(imgAvatar)
                 }
             }
         }
     }
 
     private fun checkPermission(): Boolean {
-        return HyperTrackUtils.isLocationEnabled(this) && HyperTrackUtils.isInternetConnected(this)
+        return HyperTrackUtils.isLocationEnabled(this)
+                && HyperTrackUtils.isInternetConnected(this)
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -161,19 +186,20 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        var tel = ""
-        if (tvTel.text.isNotEmpty()) {
-            tel = tvTel.text.toString().removeRange(0, 1)
-        }
-        if ((name.isBlank() && phone.isBlank())
-                || (mPreviousName?.trim() == name
-                && mPreviousPhone?.removeRange(0, 3) == phone
-                && mTel == tel)) {
-            tvCancel.text = getString(R.string.register_skip)
-            btnSave.isEnabled = false
+        if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+            btnSave.isEnabled = !(name == mUser?.name && phone == mUser?.phone?.removeRange(0, 3))
+            tvCancel.visibility = View.VISIBLE
+            tvSkip.visibility = View.GONE
         } else {
-            tvCancel.text = getString(R.string.register_cancel)
-            btnSave.isEnabled = true
+            if (name.isBlank() && phone.isBlank()) {
+                tvSkip.visibility = View.VISIBLE
+                tvCancel.visibility = View.GONE
+                btnSave.isEnabled = false
+            } else {
+                tvCancel.visibility = View.VISIBLE
+                tvSkip.visibility = View.GONE
+                btnSave.isEnabled = true
+            }
         }
     }
 
@@ -185,30 +211,50 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 .setLookupId(phoneNumber)
 
         // Create new user
-        if (mPreviousPhone?.removeRange(0, 3) != phoneNumber) {
+        if (mUser == null) {
+            visibleProgressBar(progressBar)
             HyperTrack.getOrCreateUser(userParam, object : HyperTrackCallback() {
                 override fun onSuccess(p0: SuccessResponse) {
                     HyperTrack.startTracking()
                     saveLoginStatus(true)
-                    toast(getString(R.string.register_create_user))
+                    invisibleProgressBar(progressBar)
+                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                 }
 
-                override fun onError(p0: ErrorResponse) {
-                    // No-op
+                override fun onError(error: ErrorResponse) {
+                    AlertDialog.Builder(this@RegisterActivity)
+                            .setTitle(getString(R.string.register_title_error_dialog))
+                            .setMessage(error.errorMessage)
+                            .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                            }
+                            .show()
                 }
             })
         } else {
-            // Update user information
-            HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
-                override fun onSuccess(p0: SuccessResponse) {
-                    HyperTrack.startTracking()
-                    toast(getString(R.string.register_update_user))
-                }
+            if (edtName.text.toString() != mUser?.name
+                    || edtPhoneNumber.text.toString() != mUser?.phone?.removeRange(0, 3)
+                    || mUri != null) {
+                visibleProgressBar(progressBar)
+                // Update user information
+                HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
+                    override fun onSuccess(p0: SuccessResponse) {
+                        HyperTrack.startTracking()
+                        invisibleProgressBar(progressBar)
+                        startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
+                    }
 
-                override fun onError(p0: ErrorResponse) {
-                    // No-op
-                }
-            })
+                    override fun onError(error: ErrorResponse) {
+                        AlertDialog.Builder(this@RegisterActivity)
+                                .setTitle(getString(R.string.register_title_error_dialog))
+                                .setMessage(error.errorMessage)
+                                .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                                    dialogInterface.dismiss()
+                                }
+                                .show()
+                    }
+                })
+            }
         }
     }
 
@@ -228,13 +274,15 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun updateView(user: User?) {
+        mUser = user
         val target: Target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 visibleProgressBar(progressBarAvatar)
+
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
-                // No-op
+                invisibleProgressBar(progressBarAvatar)
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -244,38 +292,31 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
             }
         }
         Picasso.with(this)
-                .load(user?.photo)
+                .load(mUser?.photo)
                 .into(target)
         imgAvatar.tag = target
-        edtName.setText(user?.name)
-        val basePhone: List<String>? = user?.phone?.split("/")
-        if (basePhone!!.size > 1) {
-            // Set isoCode
-            mIsoCode = basePhone[0]
-            for (i in 0 until mCountries.size) {
-                if (mIsoCode == mCountries[i].iso) {
-                    spinnerNation.setSelection(i)
-                    val tel = mCountries[i].tel
-                    tvTel.text = getString(R.string.register_plus).plus(tel)
-                    mTel = tel
-                    break
+        edtName.setText(mUser?.name)
+        val basePhone: List<String>? = mUser?.phone?.split("/")
+        if (basePhone != null) {
+            if (basePhone.size > 1) {
+                // Set isoCode
+                mIsoCode = basePhone[0]
+                for (i in 0 until mCountries.size) {
+                    if (mIsoCode == mCountries[i].iso) {
+                        spinnerNation.setSelection(i)
+                        val tel = mCountries[i].tel
+                        tvTel.text = getString(R.string.register_plus).plus(tel)
+                        mTel = tel
+                        break
+                    }
                 }
+                edtPhoneNumber.setText(basePhone[1])
+            } else {
+                edtPhoneNumber.setText(basePhone[0])
             }
-            edtPhoneNumber.setText(basePhone[1])
-        } else {
-            edtPhoneNumber.setText(basePhone[0])
         }
-        btnSave.isEnabled = checkUser(user.name, user.phone)
-        mPreviousName = user.name
-        mPreviousPhone = user.phone
     }
 
-    private fun checkUser(name: String, phone: String): Boolean {
-        if (mPreviousName != name.trim() && mPreviousPhone != phone.trim()) {
-            return true
-        }
-        return false
-    }
 
     private fun intentGallery() {
         // Gallery intent
@@ -294,9 +335,11 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     }
 
     private fun checkPermissionGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
+                ActivityCompat.requestPermissions(this
+                        , arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
             }
         } else {
             intentGallery()
@@ -321,6 +364,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         edtPhoneNumber.addTextChangedListener(this)
         tvTel.addTextChangedListener(this)
         btnSave.setOnClickListener(this)
+        tvSkip.setOnClickListener(this)
         tvCancel.setOnClickListener(this)
     }
 
@@ -361,14 +405,14 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
-            val uri: Uri? = data.data
-            if (uri != null) {
+            mUri = data.data
+            if (mUri != null) {
                 Picasso.with(this)
-                        .load(uri)
+                        .load(mUri)
                         .resize(300, 300)
                         .into(object : Target {
                             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                                visibleProgressBar(progressBarAvatar)
+                                // No-op
                             }
 
                             override fun onBitmapFailed(errorDrawable: Drawable?) {
@@ -376,14 +420,19 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                             }
 
                             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                                invisibleProgressBar(progressBarAvatar)
                                 imgAvatar.setImageBitmap(bitmap)
                                 mBitmap = bitmap
+                                tvCancel.visibility = View.VISIBLE
+                                tvSkip.visibility = View.GONE
+                                btnSave.isEnabled = true
                             }
                         })
             } else {
                 val bmp = data.extras.get("data") as Bitmap
                 imgAvatar.setImageBitmap(bmp)
+                tvCancel.visibility = View.VISIBLE
+                tvSkip.visibility = View.GONE
+                btnSave.isEnabled = true
             }
         }
     }
