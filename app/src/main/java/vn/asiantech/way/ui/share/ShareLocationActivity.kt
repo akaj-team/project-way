@@ -182,8 +182,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 AlertDialog.Builder(this@ShareLocationActivity)
                         .setTitle(getString(R.string.dialog_title_error))
                         .setMessage(errorResponse.errorMessage)
-                        .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface,
-                                                                                   _ ->
+                        .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
                             bottomButtonCard.hideProgress()
                             bottomButtonCard?.setShareButtonText(getString(R.string
                                     .share_textview_text_start_sharing))
