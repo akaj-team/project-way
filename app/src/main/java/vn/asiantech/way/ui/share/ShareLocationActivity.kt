@@ -637,7 +637,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mCurrentStatus = status
             mStartPosition = position
         }
-        var timeChangeStatus = getTimeChangeStatus()
     }
 
     @SuppressLint("SimpleDateFormat")
