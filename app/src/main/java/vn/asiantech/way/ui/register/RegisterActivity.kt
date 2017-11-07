@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -187,14 +186,20 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = edtName.text.toString().trim()
         val phone: String = edtPhoneNumber.text.toString().trim()
-        if (name.isBlank() && phone.isBlank()) {
-            tvSkip.visibility = View.VISIBLE
-            tvCancel.visibility = View.GONE
-            btnSave.isEnabled = false
-        } else {
+        if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+            btnSave.isEnabled = !(name == mUser?.name && phone == mUser?.phone?.removeRange(0, 3))
             tvCancel.visibility = View.VISIBLE
             tvSkip.visibility = View.GONE
-            btnSave.isEnabled = true
+        } else {
+            if (name.isBlank() && phone.isBlank()) {
+                tvSkip.visibility = View.VISIBLE
+                tvCancel.visibility = View.GONE
+                btnSave.isEnabled = false
+            } else {
+                tvCancel.visibility = View.VISIBLE
+                tvSkip.visibility = View.GONE
+                btnSave.isEnabled = true
+            }
         }
     }
 
@@ -419,6 +424,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                                 mBitmap = bitmap
                                 tvCancel.visibility = View.VISIBLE
                                 tvSkip.visibility = View.GONE
+                                btnSave.isEnabled = true
                             }
                         })
             } else {
@@ -426,6 +432,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
                 imgAvatar.setImageBitmap(bmp)
                 tvCancel.visibility = View.VISIBLE
                 tvSkip.visibility = View.GONE
+                btnSave.isEnabled = true
             }
         }
     }
