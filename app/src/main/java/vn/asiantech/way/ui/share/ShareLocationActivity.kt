@@ -1,9 +1,6 @@
 package vn.asiantech.way.ui.share
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.GradientDrawable
@@ -13,6 +10,7 @@ import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -181,7 +179,16 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             }
 
             override fun onError(errorResponse: ErrorResponse) {
-                // No-op
+                AlertDialog.Builder(this@ShareLocationActivity)
+                        .setTitle(getString(R.string.dialog_title_error))
+                        .setMessage(errorResponse.errorMessage)
+                        .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface,
+                                                                                   _ ->
+                            bottomButtonCard.hideProgress()
+                            bottomButtonCard?.setShareButtonText(getString(R.string
+                                    .share_textview_text_start_sharing))
+                            dialogInterface.dismiss()
+                        }
             }
         })
     }
