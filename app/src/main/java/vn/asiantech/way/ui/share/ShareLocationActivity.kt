@@ -484,7 +484,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (mLocationUpdates != null) {
             if (latLng != null) {
                 mLocationUpdates?.add(latLng)
-//                    getListLocation(latLng, mLocationUpdates!!.size - 1)
             }
             if (mLocationUpdates!!.size > 1) {
                 getListLocation(latLng, mLocationUpdates!!.size - 1)
