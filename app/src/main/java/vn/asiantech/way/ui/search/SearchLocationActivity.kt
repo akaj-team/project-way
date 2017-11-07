@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
@@ -43,6 +44,16 @@ class SearchLocationActivity : BaseActivity() {
         initAdapter()
         locationSearch()
         onClick()
+        val task = SearchLocationAsyncTask(object : SearchLocationAsyncTask.SearchLocationListener {
+            override fun onCompleted(myLocations: List<MyLocation>?) {
+                Log.i("tag11", "ok-----" + myLocations?.size)
+                myLocations?.forEach {
+                    Log.i("tag11", it.name)
+                }
+            }
+
+        })
+        task.execute("truong dai hoc bach khoa")
     }
 
     private fun onClick() {
@@ -151,6 +162,6 @@ class SearchLocationActivity : BaseActivity() {
         }
         history.add(myLocation)
         editor?.putString(KEY_HISTORY, gson.toJson(history))
-        editor?.commit()
+        editor?.apply()
     }
 }
