@@ -76,11 +76,10 @@
     <string name="show_average_speed"> kmph </string>
     <string name="arrived_dialog_tag">Dialog Fragment</string>
     <!-- Search Location Screen-->
-    <string name="google_map_api_key">AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U</string>
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
     <string name="dialog_message_fill_in">Please fill in all fields</string>
-    <string name="processing">Đang xử lý...</string>
+    <string name="processing">Đang xử lý.</string>
     <string name="get_detail_error">Xãy ra lỗi. Vui lòng thử lại sau.</string>
 </resources>

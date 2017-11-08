@@ -7,13 +7,13 @@ import retrofit2.Response
 import vn.asiantech.way.data.model.search.AutoCompleteResult
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.data.remote.APIUtil
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-class SearchLocationAsyncTask(private val mAPIKey: String,
-                              private val mListener: SearchLocationListener)
+class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
     : AsyncTask<String, Void, List<MyLocation>>() {
 
     override fun doInBackground(vararg p0: String?): List<MyLocation> {
@@ -22,7 +22,7 @@ class SearchLocationAsyncTask(private val mAPIKey: String,
         val query = p0[0]
         if (query != null) {
             APIUtil.getService()?.searchLocations(query,
-                    mAPIKey)
+                    AppConstants.GOOGLE_MAP_API_KEY)
                     ?.enqueue(object : Callback<AutoCompleteResult> {
                         override fun onFailure(call: Call<AutoCompleteResult>?, t: Throwable?) {
                             check = false

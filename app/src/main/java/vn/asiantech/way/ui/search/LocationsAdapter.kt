@@ -42,7 +42,7 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
          */
         fun onBind() {
             with(mMyLocations[adapterPosition]) {
-                if (isHistory != null) {
+                if (isHistory != null && isHistory == true) {
                     itemView.imgLocationIcon.setImageResource(R.drawable.ic_access_time)
                 } else {
                     itemView.imgLocationIcon.setImageResource(R.drawable.ic_marker_gray)

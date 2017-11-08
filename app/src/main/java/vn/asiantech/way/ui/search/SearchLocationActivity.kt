@@ -78,7 +78,7 @@ class SearchLocationActivity : BaseActivity() {
                     if (mTask != null) {
                         mTask = null
                     }
-                    mTask = SearchLocationAsyncTask(getString(R.string.google_api_key), object : SearchLocationAsyncTask.SearchLocationListener {
+                    mTask = SearchLocationAsyncTask(object : SearchLocationAsyncTask.SearchLocationListener {
                         override fun onCompleted(myLocations: List<MyLocation>) {
                             val thread = Thread({
                                 runOnUiThread({
@@ -122,13 +122,14 @@ class SearchLocationActivity : BaseActivity() {
                     bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
                     mIntent?.putExtras(bundle)
                     startActivity(mIntent)
+                    return
                 }
                 val progressDialog = ProgressDialog(this@SearchLocationActivity)
                 progressDialog.setTitle(R.string.processing)
                 progressDialog.isIndeterminate = true
                 progressDialog.show()
                 APIUtil.getService()?.getLocationDetail(myLocation.placeId,
-                        getString(R.string.google_api_key))
+                        AppConstants.GOOGLE_MAP_API_KEY)
                         ?.enqueue(object : Callback<ResultPlaceDetail> {
                             override fun onFailure(call: Call<ResultPlaceDetail>?, t: Throwable?) {
                                 progressDialog.dismiss()
