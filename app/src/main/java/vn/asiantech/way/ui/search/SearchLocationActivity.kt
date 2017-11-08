@@ -78,7 +78,8 @@ class SearchLocationActivity : BaseActivity() {
                     if (mTask != null) {
                         mTask = null
                     }
-                    mTask = SearchLocationAsyncTask(object : SearchLocationAsyncTask.SearchLocationListener {
+                    mTask = SearchLocationAsyncTask(
+                            object : SearchLocationAsyncTask.SearchLocationListener {
                         override fun onCompleted(myLocations: List<MyLocation>) {
                             val thread = Thread({
                                 runOnUiThread({
@@ -113,7 +114,8 @@ class SearchLocationActivity : BaseActivity() {
         if (history != null) {
             mMyLocations.addAll(history)
         }
-        mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
+        mAdapter = LocationsAdapter(mMyLocations,
+                object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
                 if (myLocation.isHistory != null && myLocation.isHistory == true) {
                     saveSearchHistory(myLocation)
@@ -134,22 +136,26 @@ class SearchLocationActivity : BaseActivity() {
                             override fun onFailure(call: Call<ResultPlaceDetail>?, t: Throwable?) {
                                 progressDialog.dismiss()
                                 Toast.makeText(this@SearchLocationActivity,
-                                        R.string.get_detail_error, Toast.LENGTH_LONG).show()
+                                        R.string.get_detail_error, Toast.LENGTH_LONG)
+                                        .show()
                             }
 
-                            override fun onResponse(call: Call<ResultPlaceDetail>?, response: Response<ResultPlaceDetail>?) {
+                            override fun onResponse(call: Call<ResultPlaceDetail>?,
+                                                    response: Response<ResultPlaceDetail>?) {
                                 val resultLocation = response?.body()?.result
                                 progressDialog.dismiss()
                                 if (resultLocation != null) {
                                     saveSearchHistory(resultLocation)
                                     val bundle = Bundle()
                                     bundle.putParcelable(AppConstants.KEY_LOCATION, resultLocation)
-                                    bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
+                                    bundle.putString(AppConstants.KEY_CONFIRM,
+                                            AppConstants.KEY_SHARING)
                                     mIntent?.putExtras(bundle)
                                     startActivity(mIntent)
                                 } else {
                                     Toast.makeText(this@SearchLocationActivity,
-                                            R.string.get_detail_error, Toast.LENGTH_LONG).show()
+                                            R.string.get_detail_error, Toast.LENGTH_LONG)
+                                            .show()
                                 }
                             }
 
@@ -167,7 +173,10 @@ class SearchLocationActivity : BaseActivity() {
             val history = mSharedPreferences?.getString(KEY_HISTORY, "[]")
             val jsonArray = JSONArray(history)
             (0 until jsonArray.length())
-                    .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), MyLocation::class.java) }
+                    .mapTo(result) {
+                        gson.fromJson(jsonArray.getJSONObject(it).toString()
+                                , MyLocation::class.java)
+                    }
             result
         } catch (e: JsonSyntaxException) {
             null

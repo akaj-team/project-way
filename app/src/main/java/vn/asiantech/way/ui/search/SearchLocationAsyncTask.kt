@@ -28,9 +28,11 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
                             check = false
                         }
 
-                        override fun onResponse(call: Call<AutoCompleteResult>?, response: Response<AutoCompleteResult>?) {
+                        override fun onResponse(call: Call<AutoCompleteResult>?,
+                                                response: Response<AutoCompleteResult>?) {
                             response?.body()?.predictions?.forEach {
-                                myLocations.add(MyLocation(it.id, it.placeId, it.structuredFormatting.mainText, it.description))
+                                myLocations.add(MyLocation(it.id, it.placeId,
+                                        it.structuredFormatting.mainText, it.description))
                             }
                             check = false
                         }

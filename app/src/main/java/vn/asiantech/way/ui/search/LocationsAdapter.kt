@@ -48,7 +48,7 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
                     itemView.imgLocationIcon.setImageResource(R.drawable.ic_marker_gray)
                 }
                 itemView.tvLocationName.text = name
-                itemView.tvFormatAddress.text = formattedAddress
+                itemView.tvFormatAddress.text = formatAddress
             }
 
         }

@@ -8,8 +8,14 @@ import com.google.gson.annotations.SerializedName
  */
 data class AutoCompleteResult(var predictions: List<AutoCompleteLocation>)
 
+/**
+ *  Location return from google map autocomplete api.
+ */
 data class AutoCompleteLocation(var description: String,
                                 @SerializedName("structured_formatting") var structuredFormatting: StructuredFormatting,
                                 var id: String, @SerializedName("place_id") var placeId: String)
 
+/**
+ *  Structured formatting from google map autocomplete api.
+ */
 data class StructuredFormatting(@SerializedName("main_text") var mainText: String)
