@@ -136,13 +136,23 @@
         android:textSize="@dimen/register_screen_save_button_text_size" />
 
     <TextView
-        android:id="@+id/tvCancel"
+        android:id="@+id/tvSkip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnSave"
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="@string/register_skip"
+        android:textSize="@dimen/register_screen_phone_text_size" />
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSave"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/register_cancel"
+        android:visibility="gone"
         android:textSize="@dimen/register_screen_phone_text_size" />
 
     <ProgressBar
