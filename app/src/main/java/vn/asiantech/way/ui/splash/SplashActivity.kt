@@ -18,7 +18,6 @@ import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.register.RegisterActivity
-import vn.asiantech.way.ui.search.SearchLocationActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -57,7 +56,6 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        startActivity(Intent(this, SearchLocationActivity::class.java))
         mSharedPreferences = getSharedPreferences(RegisterActivity.SHARED_NAME, Context.MODE_PRIVATE)
         if (HyperTrackUtils.isInternetConnected(this)) {
             if (HyperTrackUtils.isLocationEnabled(this)) {

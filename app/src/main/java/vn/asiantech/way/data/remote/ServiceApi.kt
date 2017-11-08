@@ -3,7 +3,9 @@ package vn.asiantech.way.data.remote
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import vn.asiantech.way.data.model.search.AutoCompleteResult
 import vn.asiantech.way.data.model.search.ResultLocation
+import vn.asiantech.way.data.model.search.ResultPlaceDetail
 import vn.asiantech.way.data.model.share.LocationResponse
 
 /**
@@ -22,4 +24,12 @@ interface ServiceApi {
      */
     @GET("place/textsearch/json")
     fun getLocation(@Query("query") query: String, @Query("key") key: String): Call<ResultLocation>
+
+    @GET("place/details/json")
+    fun getLocationDetail(@Query("placeid") placeId: String?, @Query("key") key: String): Call<ResultPlaceDetail>
+
+    @GET("place/autocomplete/json")
+    fun searchLocations(@Query("input") input: String, @Query("key") key: String,
+                        @Query("language") language: String = "vi", @Query("sensor") sensor: Boolean = false)
+            : Call<AutoCompleteResult>
 }

@@ -9,8 +9,16 @@ import kotlinx.android.parcel.Parcelize
  * Created by cuongcaov. on 25/09/2017.
  */
 @Parcelize
-class MyLocation(val isHistory: Boolean?, @SerializedName("formatted_address") val formattedAddress: String?, val id: String?, val name: String?,
-                 @SerializedName("place_id") val placeId : String?, val geometry: Geometry?) : Parcelable
+class MyLocation(var isHistory: Boolean?, @SerializedName("formatted_address") val formattedAddress: String?, val id: String?, val name: String?,
+                 @SerializedName("place_id") val placeId: String?, var geometry: Geometry?) : Parcelable {
+    constructor(id: String, placeId: String, name: String, formattedAddress: String)
+            : this(false, formattedAddress, id, name, placeId, null)
+}
+
+/**
+ *  Result of Google map api place detail
+ */
+data class ResultPlaceDetail(val result: MyLocation)
 
 /**
  *  Geometry of location
