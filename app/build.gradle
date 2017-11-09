@@ -55,7 +55,7 @@ android {
         }
     }
 
-    sourceSets{ main.java.srcDirs += 'src/main/kotlin' }
+    sourceSets { main.java.srcDirs += 'src/main/kotlin' }
 
     applicationVariants.all { variant ->
         switch (variant.getName()) {
