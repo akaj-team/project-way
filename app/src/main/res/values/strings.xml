@@ -26,6 +26,7 @@
     <string name="share_textview_text_description">Add a destination</string>
     <string name="share_textview_text_look_good">Look good?</string>
     <string name="share_textview_text_start_sharing">Start Sharing</string>
+    <string name="share_textview_text_share_link">Share Link</string>
     <string name="share_textview_text_test_title">You\'re 1 min away</string>
     <string name="share_textview_text_text_test_description_success">Share your live location link:</string>
     <string name="share_textview_text_copied">Copied</string>
@@ -46,7 +47,7 @@
     <string name="register_toast_image_size">Please choose image with size less than...</string>
     <string name="register_hint_name">Name</string>
     <string name="register_hint_phone">Phone Number</string>
-    <string name="register_button_save_text">Save Profile</string>
+    <string name="register_button_save_text">Register Profile</string>
     <string name="register_plus">+</string>
     <string name="register_user_name_default">User</string>
     <string name="register_iso_code_default">VN</string>
@@ -82,4 +83,9 @@
     <string name="dialog_message_fill_in">Please fill in all fields</string>
     <string name="processing">Đang xử lý.</string>
     <string name="get_detail_error">Xãy ra lỗi. Vui lòng thử lại sau.</string>
+    <string name="dialog_title_error">Error</string>
+    <string name="bottom_button_card_view_text_start_share">Start Sharing</string>
+    <string name="register_update_profile">Update Profile</string>
+    <string name="register_message_dialog">Your default user name is user</string>
+    <string name="register_title_dialog">Information</string>
 </resources>

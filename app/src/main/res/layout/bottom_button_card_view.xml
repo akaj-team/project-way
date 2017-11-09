@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Start Sharing"
+            android:text="@string/bottom_button_card_view_text_start_share"
             android:textColor="#000000"
             android:textSize="@dimen/text_large"
             android:visibility="visible" />
