@@ -1,0 +1,29 @@
+apply plugin: 'deploygate'
+
+import groovy.json.JsonSlurper
+deploygate {
+    userName = System.getenv('DEPLOYGATE_NAME')
+    token = System.getenv('DEPLOYGATE_TOKEN')
+
+    def userName = System.getenv('CIRCLE_PROJECT_USERNAME')
+    def projectRepo = System.getenv('CIRCLE_PROJECT_REPONAME')
+    def tag = System.getenv('CIRCLE_TAG')
+    def githubAccessToken = System.getenv('GITHUB_ACCESS_TOKEN')
+    def headers = [ Authorization: "token ${githubAccessToken}" ]
+
+    def jsonText = new URL( "https://api.github.com/repos/${userName}/${projectRepo}/releases/tags/${tag}" ).getText( requestProperties: headers )
+    def parsedJson = new JsonSlurper().parseText( jsonText ) as Map
+
+    apks {
+        debug {
+            def hash = 'git rev-parse --short HEAD'.execute([], project.rootDir).in.text.trim()
+            // set as build message
+            message = "Version ${tag} at commit ${hash}"
+            // if you are using a distribution page, you can update it simultaneously
+            distributionKey = "1234567890abcdef1234567890abcdef"
+            releaseNote = parsedJson.body
+        }
+    }
+}
+
+
