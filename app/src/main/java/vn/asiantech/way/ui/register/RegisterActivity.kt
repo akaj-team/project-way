@@ -223,7 +223,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
                 override fun onError(error: ErrorResponse) {
                     AlertDialog.Builder(this@RegisterActivity)
-                            .setTitle(getString(R.string.register_title_error_dialog))
+                            .setTitle(getString(R.string.dialog_title_error))
                             .setMessage(error.errorMessage)
                             .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
                                 dialogInterface.dismiss()
@@ -246,7 +246,7 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
 
                     override fun onError(error: ErrorResponse) {
                         AlertDialog.Builder(this@RegisterActivity)
-                                .setTitle(getString(R.string.register_title_error_dialog))
+                                .setTitle(getString(R.string.dialog_title_error))
                                 .setMessage(error.errorMessage)
                                 .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
                                     dialogInterface.dismiss()

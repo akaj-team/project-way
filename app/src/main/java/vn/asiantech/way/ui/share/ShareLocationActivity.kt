@@ -14,6 +14,7 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -32,9 +33,7 @@ import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
-import com.hypertrack.lib.models.ErrorResponse
-import com.hypertrack.lib.models.HyperTrackLocation
-import com.hypertrack.lib.models.SuccessResponse
+import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
@@ -102,7 +101,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mGroundOverlay: GroundOverlay? = null
     private var line: Polyline? = null
     private var line1: Polyline? = null
-
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -112,7 +110,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             tvBattery.text = "${level.toString()}%"
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -221,9 +218,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         mDestinationLatLng = mLatLng!!
                         mIsConfirm = true
                     }
+                // Click sharing
                     AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
                         mAction = AppConstants.KEY_START_SHARING
-                        initBottomButtonCard(true, mAction)
+                        bottomButtonCard.startProgress()
+                        getTrackingURL()
                         mIsStartTracking = true
                         drawCurrentMaker(mCurrentLocation!!)
                         handlerProgressTracking()
@@ -239,6 +238,33 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             }
 
         }
+    }
+
+    private fun getTrackingURL() {
+        val builder = ActionParamsBuilder()
+        HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                if (response.responseObject != null) {
+                    val action = response.responseObject as? Action
+                    HyperTrack.clearServiceNotificationParams()
+                    bottomButtonCard.tvURL.text = action?.trackingURL
+                    bottomButtonCard.hideProgress()
+                    initBottomButtonCard(true, mAction)
+                }
+            }
+
+            override fun onError(errorResponse: ErrorResponse) {
+                AlertDialog.Builder(this@ShareLocationActivity)
+                        .setTitle(getString(R.string.dialog_title_error))
+                        .setMessage(errorResponse.errorMessage)
+                        .setPositiveButton(getString(R.string.dialog_button_ok)) { dialogInterface, _ ->
+                            bottomButtonCard.hideProgress()
+                            bottomButtonCard?.setShareButtonText(getString(R.string
+                                    .share_textview_text_start_sharing))
+                            dialogInterface.dismiss()
+                        }
+            }
+        })
     }
 
     private fun initBottomButtonCard(show: Boolean, action: String?) {
@@ -263,7 +289,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 bottomButtonCard?.showTrackingURLLayout()
                 bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
                 bottomButtonCard?.setDescriptionText(getString(R.string.bottom_button_card_description_text))
-                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
+                bottomButtonCard?.setShareButtonText(getString(R.string.share_textview_text_share_link))
                 bottomButtonCard?.showActionButton()
                 bottomButtonCard?.showTitle()
             }
