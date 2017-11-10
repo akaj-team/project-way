@@ -44,6 +44,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
+import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
@@ -65,14 +66,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         private const val ONE_THOUSAND = 1000L
         private const val RADIUS = 360.0
         private const val STEP_ETA = 3
-
     }
 
     private var mCurrentMarker: Marker? = null
     private var mIsStopTracking = false
     private var mLocationUpdates: MutableList<LatLng>? = null
     private var mLocations: MutableList<vn.asiantech.way.data.model.Location>? = null
-    private var mCurrentLocation: HyperTrackLocation? = null
+    private var mCurrentLocation: Location? = null
     private lateinit var mHandlerTracking: Handler
     private var mRunnable: Runnable? = null
     private var mCountTimer = ONE_THOUSAND
@@ -86,8 +86,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mCurrentStatus = "STOP"
     private var mStartStatus = 0L
     private var mEndStatus = 0L
-    private var mStartPosition = 0
 
+    private var mStartPosition = 0
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
     private lateinit var mGoogleApiClient: GoogleApiClient
@@ -97,8 +97,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mMyLocation: MyLocation? = null
     private var mAction: String? = null
     private var mIsConfirm: Boolean = false
+    private var mIsStartTracking: Boolean = false
     private var mMarker: Marker? = null
     private var mGroundOverlay: GroundOverlay? = null
+    private var line: Polyline? = null
+    private var line1: Polyline? = null
+
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -108,6 +112,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             tvBattery.text = "${level.toString()}%"
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,12 +128,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         initializeUIViews()
         initGoogleApiClient()
         initLocationRequest()
-        // handler tracking progress here
-        handlerProgressTracking()
         onClickButtonSearchLocation()
         initBottomButtonCard(true, mAction)
     }
-
 
     private fun initMap() {
         mMapFragment = supportFragmentManager.findFragmentById(R.id.fgMap) as SupportMapFragment
@@ -140,20 +142,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mGoogleMap = map
             mGoogleMap.setOnCameraIdleListener(this)
         }
-        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
-            override fun onSuccess(p0: SuccessResponse) {
-                mCurrentLocation = HyperTrackLocation((p0.responseObject) as Location?)
-                if (mCurrentLocation != null) {
-                    updateUI(mCurrentLocation!!)
-                }
-            }
-
-            override fun onError(p0: ErrorResponse) {
-            }
-        })
-        val currentLocation = LocationUtil(this).getCurrentLocation()
-        if (currentLocation != null) {
-            drawCurrentMaker(currentLocation)
+        mCurrentLocation = LocationUtil(this).getCurrentLocation()
+        if (mCurrentLocation != null) {
+            drawCurrentMaker(mCurrentLocation!!)
         }
         mGoogleMap.setOnCameraIdleListener(this)
         val lat = mMyLocation?.geometry?.location?.lat
@@ -163,19 +154,23 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             addDestinationMarker(mLatLng)
         }
         if (mAction == AppConstants.KEY_CURRENT_LOCATION) {
-            mLatLng = currentLocation?.latitude?.let { LatLng(it, currentLocation.longitude) }
+            mLatLng = mCurrentLocation?.latitude?.let { LatLng(it, mCurrentLocation!!.longitude) }
             addDestinationMarker(mLatLng)
             getLocationName(mLatLng)
             mIsConfirm = true
         }
-        mDestinationLatLng = LatLng(16.08622, 108.24048)
+        if (mLatLng != null) {
+            mDestinationLatLng = mLatLng!!
+        }
     }
 
     override fun onLocationChanged(location: Location) {
-        if (mMarker != null && mGroundOverlay != null) {
-            val latLng = LatLng(location.latitude, location.longitude)
-            mMarker?.position = latLng
-            mGroundOverlay?.position = latLng
+        if (!mIsStartTracking) {
+            if (mMarker != null && mGroundOverlay != null) {
+                val latLng = LatLng(location.latitude, location.longitude)
+                mMarker?.position = latLng
+                mGroundOverlay?.position = latLng
+            }
         }
     }
 
@@ -223,14 +218,19 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         mAction = AppConstants.KEY_SHARING
                         initBottomButtonCard(true, mAction)
                         addDestinationMarker(mLatLng)
+                        mDestinationLatLng = mLatLng!!
                         mIsConfirm = true
                     }
                     AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
                         mAction = AppConstants.KEY_START_SHARING
                         initBottomButtonCard(true, mAction)
+                        mIsStartTracking = true
+                        drawCurrentMaker(mCurrentLocation!!)
+                        handlerProgressTracking()
                     }
                     else -> shareLocation()
                 }
+                onClickButtonSearchLocation()
             }
 
             override fun onCopyButtonClick() {
@@ -289,6 +289,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun onClickButtonSearchLocation() {
+        if (mAction == AppConstants.KEY_SHARING || mAction == AppConstants.KEY_CURRENT_LOCATION) {
+            rlSearchLocation.isEnabled = false
+        }
         rlSearchLocation.setOnClickListener {
             startActivity(Intent(this, SearchLocationActivity::class.java))
         }
@@ -312,14 +315,19 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun drawCurrentMaker(location: Location) {
         val currentLocation = LatLng(location.latitude, location.longitude)
-        mGoogleMap.clear()
-        mMarker = mGoogleMap.addMarker(MarkerOptions()
-                .position(currentLocation)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-                .title(getString(R.string.current_location))
-                .anchor(0.5f, 0.5f))
-        addPulseRing(currentLocation)
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+        if (!mIsStartTracking) {
+            mGoogleMap.clear()
+            mMarker = mGoogleMap.addMarker(MarkerOptions()
+                    .position(currentLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
+                    .title(getString(R.string.current_location))
+                    .anchor(0.5f, 0.5f))
+            addPulseRing(currentLocation)
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
+
+        } else {
+            mMarker?.remove()
+        }
     }
 
     private fun addPulseRing(latLng: LatLng) {
@@ -332,10 +340,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
-        val groundOverlay = mGoogleMap.addGroundOverlay(GroundOverlayOptions()
+        mGroundOverlay = mGoogleMap.addGroundOverlay(GroundOverlayOptions()
                 .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
                 .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
-        val groundAnimation = RadiusAnimation(groundOverlay)
+        val groundAnimation = RadiusAnimation(mGroundOverlay)
         groundAnimation.repeatCount = Animation.INFINITE
         groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
         mMapFragment.view?.startAnimation(groundAnimation)
@@ -416,7 +424,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this, SearchLocationActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
         this.finish()
     }
 
@@ -424,7 +432,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         mHandlerTracking = Handler()
         mRunnable = Runnable {
             if (mLocationUpdates != null) {
-                Log.d("zxc", "" + (mLocationUpdates == null))
                 if (mLocationUpdates!!.size > 0
                         && (mLocationUpdates!![mLocationUpdates!!.size - 1] == mDestinationLatLng)) {
                     mEtaUpdate = 0f
@@ -511,6 +518,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (mEtaMaximum - mEtaUpdate > STEP_ETA) {
             circleProgressBar.progress = (mEtaMaximum - (mEtaUpdate / mEtaMaximum) * 100).toInt()
         }
+        drawLine()
     }
 
     private fun getEtaTime(eta: Float): String = when {
@@ -561,10 +569,30 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private fun drawLine() {
         if (mLocationUpdates != null) {
             if (mLocationUpdates!!.size > 1) {
-                mGoogleMap.addPolyline(PolylineOptions()
-                        .add(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1])
-                        .width(ZOOM_SIZE / 2)
-                        .color(Color.BLACK))
+                val option = PolylineOptions()
+                        .width(20f)
+                        .geodesic(true)
+                        .color(Color.parseColor("#1976D2"))
+                        .zIndex(8f)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                        .jointType(JointType.BEVEL)
+                val option1 = PolylineOptions()
+                        .width(16f)
+                        .geodesic(true)
+                        .color(Color.parseColor("#2196F3"))
+                        .zIndex(8f)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                        .jointType(JointType.BEVEL)
+                mLocationUpdates?.forEach { option.add(it) }
+                mLocationUpdates?.forEach { option1.add(it) }
+                line?.remove()
+                line = mGoogleMap.addPolyline(option)
+                line?.pattern = null
+                line1?.remove()
+                line1 = mGoogleMap.addPolyline(option1)
+                line1?.pattern = null
             }
         }
     }
@@ -582,13 +610,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         } else {
             mCurrentMarker!!.position = latLng
             mCurrentMarker!!.rotation = mAngle
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+            /*mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
                     .target(latLng)
                     .zoom(ZOOM_SIZE)
                     .build())
-            )
+            )*/
         }
-        drawLine()
         MarkerAnimation.animateMarker(mCurrentMarker, latLng)
     }
 

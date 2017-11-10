@@ -14,11 +14,11 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
-    : RelativeLayout(context, attrs) {
+class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+        RelativeLayout(context, attrs) {
 
     var buttonListener: ButtonListener? = null
-    var actionType: ActionType
+    var actionType: ActionType? = null
 
     // TODO: Will use in future
 //    val isActionTypeConfirmLocation: Boolean
@@ -32,6 +32,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
 //
 //    val isActionTypeShareBackLocation: Boolean
 //        get() = actionType == ActionType.SHARE_BACK_LOCATION
+
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_button_card_view, this, true)
         initiateView()
@@ -45,7 +46,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         START_TRACKING,
         CONFIRM_LOCATION,
         SHARE_TRACKING_URL,
-        SHARE_BACK_LOCATION
+        SHARE_BACK_LOCATION;
     }
 
     private fun initiateView() {
