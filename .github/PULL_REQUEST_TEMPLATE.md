@@ -1,6 +1,6 @@
 #### Related issues (Required)
-Task #
-Bug #
+- Task #
+- Bug #
 
 #### Description (Required)
 - [x] Task 1
