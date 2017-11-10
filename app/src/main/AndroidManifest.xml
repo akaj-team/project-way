@@ -81,7 +81,7 @@
             android:name=".ui.search.SearchLocationActivity"
             android:noHistory="true" />
 
-        <activity android:name=".ui.update.UpdateMap" />
+        <!--<activity android:name=".ui.update.UpdateMap" />-->
 
         <!-- Register meta-data here -->
         <!--
