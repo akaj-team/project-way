@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlueLight"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/edtGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="@string/group_name"
+        android:maxLength="50"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:textSize="@dimen/group_text_size_normal"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/btnCreateGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorAccent"
+        android:text="@string/create_group"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/darker_gray"
+        android:text="@string/back"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/group_text_size_normal" />
+</LinearLayout>

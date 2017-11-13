@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -58,8 +57,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
         const val INTENT_CODE_SPLASH = 100
         const val INTENT_CODE_HOME = 101
         const val INTENT_REGISTER = "Register"
-        const val SHARED_NAME = "shared"
-        const val KEY_LOGIN = "login"
     }
 
     private var mUser: User? = null
@@ -69,7 +66,6 @@ class RegisterActivity : BaseActivity(), TextView.OnEditorActionListener
     private var mTel: String? = null
     private var mIsExit = false
     private var mUri: Uri? = null
-    private lateinit var mSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

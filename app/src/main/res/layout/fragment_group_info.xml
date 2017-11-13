@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/colorBlueLight"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal" />
+
+    <TextView
+        android:id="@+id/tvMembersCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <TextView
+        android:id="@+id/tvCreateAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:text="@string/members_list"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_person_add_deep_purple_a200_36dp" />
+
+        <ImageView
+            android:id="@+id/imgLeave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/imgInvite"
+            android:layout_toRightOf="@id/imgInvite"
+            android:src="@drawable/ic_exit_to_app_deep_purple_a200_36dp" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewMembers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            android:padding="5dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

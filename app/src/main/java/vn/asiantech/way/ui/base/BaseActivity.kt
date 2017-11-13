@@ -1,5 +1,7 @@
 package vn.asiantech.way.ui.base
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
@@ -9,7 +11,16 @@ import android.support.v7.app.AppCompatActivity
  */
 abstract class BaseActivity : AppCompatActivity() {
 
+    companion object {
+        const val SHARED_NAME = "shared"
+        const val KEY_LOGIN = "login"
+        const val KEY_LOCAL_USER = "local_user"
+    }
+
+    lateinit var mSharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
     }
 }
