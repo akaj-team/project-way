@@ -62,7 +62,6 @@ class SearchLocationActivity : BaseActivity() {
         rlChooseOnMap.setOnClickListener {
             mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CONFIRM)
             startActivity(mIntent)
-        }
 
     }
 
@@ -124,7 +123,7 @@ class SearchLocationActivity : BaseActivity() {
         recyclerViewLocations.adapter = mAdapter
     }
 
-    fun getMyLocation(): MyLocation? {
+    internal fun getMyLocation(): MyLocation? {
         return mMyLocation
     }
 
