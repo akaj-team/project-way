@@ -26,6 +26,9 @@ class CreateGroupFragment : BaseFragment() {
     companion object {
         const val KEY_USER = "user"
 
+        /**
+         * get instance with given user.
+         */
         fun getInstance(user: User): CreateGroupFragment {
             val instance = CreateGroupFragment()
             val bundle = Bundle()
@@ -66,8 +69,9 @@ class CreateGroupFragment : BaseFragment() {
                 .enqueue(object : Callback<Group> {
                     override fun onResponse(call: Call<Group>?, response: Response<Group>?) {
                         val group = response?.body()
-                        if (group != null && user != null) {
-                            addUserToGroup(group, user!!.id)
+                        val userId = user?.id
+                        if (group != null && userId != null) {
+                            addUserToGroup(group, userId)
                         }
                     }
 

@@ -11,7 +11,6 @@ import com.hypertrack.lib.models.User
 import kotlinx.android.synthetic.main.item_group_member.view.*
 import vn.asiantech.way.R
 
-
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 10/11/2017
@@ -33,6 +32,7 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
      * This class used to custom item of members list.
      */
     inner class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         init {
             itemView.imgCall.setOnClickListener {
                 val intent = Intent(Intent.ACTION_DIAL)
@@ -42,6 +42,9 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
             }
         }
 
+        /**
+         * Binding data to view.
+         */
         fun onBind() {
             with(members[adapterPosition]) {
                 if (userId != id) {

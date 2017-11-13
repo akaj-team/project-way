@@ -40,6 +40,9 @@ class HypertrackRemote {
             return instance!!
         }
 
+        /**
+         * get Api service
+         */
         fun getApiService(): HypertrackService {
             return getClient().create(HypertrackService::class.java)
         }

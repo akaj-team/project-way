@@ -54,6 +54,8 @@ class GroupActivity : BaseActivity() {
 
                 ACTION_VIEW_INVITES -> {
                     // TODO: Call Invites fragment
+                    Toast.makeText(this@GroupActivity, R.string.comming_soon,
+                            Toast.LENGTH_LONG).show()
                 }
 
                 ACTION_BACK -> {

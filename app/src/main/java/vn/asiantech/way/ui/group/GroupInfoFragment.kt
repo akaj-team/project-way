@@ -31,7 +31,12 @@ class GroupInfoFragment : BaseFragment() {
         const val KEY_GROUP = "group"
         private const val KEY_USER_ID = "user_id"
         private const val KEY_GROUP_ID = "group_id"
+        private const val BEGIN_INDEX = 0
+        private const val SUBSTRING_LENGTH = 10
 
+        /**
+         * Get instance with given user id and group.
+         */
         fun getInstance(userId: String, group: Group): GroupInfoFragment {
             val instance = GroupInfoFragment()
             val bundle = Bundle()
@@ -41,6 +46,9 @@ class GroupInfoFragment : BaseFragment() {
             return instance
         }
 
+        /**
+         * Get instance with given user id and group id.
+         */
         fun getInstance(userId: String, groupId: String): GroupInfoFragment {
             val instance = GroupInfoFragment()
             val bundle = Bundle()
@@ -80,7 +88,8 @@ class GroupInfoFragment : BaseFragment() {
     private fun initView(view: View) {
         if (group != null) {
             view.tvGroupName.text = group?.name
-            view.tvCreateAt.text = getString(R.string.create_at, group?.createAt?.substring(0, 10))
+            view.tvCreateAt.text = getString(R.string.create_at, group?.createAt
+                    ?.substring(BEGIN_INDEX, SUBSTRING_LENGTH))
             loadGroupMemberList(view)
         } else {
             progressDialog.show()
