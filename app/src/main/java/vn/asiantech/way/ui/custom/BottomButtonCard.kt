@@ -117,16 +117,14 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    // TODO: Will use in future
-//
-//    fun startProgress() {
-//        tvStartShare.visibility = View.GONE
-//        imgLoader.visibility = View.VISIBLE
-//        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
-//                R.anim.rotate)
-//        rotationAnim.fillAfter = true
-//        imgLoader.startAnimation(rotationAnim)
-//    }
+    internal fun startProgress() {
+        tvStartShare.visibility = View.GONE
+        imgLoader.visibility = View.VISIBLE
+        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
+                R.anim.rotate)
+        rotationAnim.fillAfter = true
+        imgLoader.startAnimation(rotationAnim)
+    }
     // TODO: Will use in future
 //    fun hideActionButton() {
 //        AnimationUtils.collapse(btnSharing)
@@ -136,7 +134,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         AnimationUtils.expand(btnSharing)
     }
 
-    private fun hideProgress() {
+    internal fun hideProgress() {
         imgLoader.visibility = View.GONE
         imgLoader.clearAnimation()
     }
