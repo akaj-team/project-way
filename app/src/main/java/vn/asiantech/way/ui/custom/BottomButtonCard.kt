@@ -14,8 +14,8 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
-    : RelativeLayout(context, attrs) {
+class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+        RelativeLayout(context, attrs) {
 
     var buttonListener: ButtonListener? = null
     var actionType: ActionType
@@ -85,11 +85,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    // TODO: Will use in future
-//    fun showCloseButton() {
-//        btnClose.visibility = View.VISIBLE
-//    }
-
     internal fun hideCloseButton() {
         btnClose.visibility = View.GONE
     }
@@ -102,7 +97,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         tvDescription.visibility = View.GONE
     }
 
-    internal fun showClosebutton() {
+    internal fun showCloseButton() {
         btnClose.visibility = View.VISIBLE
     }
 
@@ -116,12 +111,12 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
-    // TODO:Will use in future
 
-//    fun hideBottomCardLayout() {
-//        hideProgress()
-//        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
-//    }
+    internal fun hideBottomCardLayout() {
+        hideProgress()
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
+    }
+
     internal fun startProgress() {
         tvStartShare.visibility = View.GONE
         imgLoader.visibility = View.VISIBLE
@@ -150,10 +145,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
     // TODO: Will use in future
 //    fun hideTrackingURLLayout() {
 //        rlLinkShare.visibility = View.GONE
-//    }
-    // TODO: Will use in future
-//    fun hideTitle() {
-//        tvTitle.visibility = View.GONE
 //    }
 
     internal fun showTitle() {

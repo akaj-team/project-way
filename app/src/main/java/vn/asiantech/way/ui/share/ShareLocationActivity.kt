@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.share
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,7 +9,9 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.AsyncTask
+import android.os.BatteryManager
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -27,14 +30,15 @@ import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
-import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
+import kotlinx.android.synthetic.main.tracking_progress_view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
+import vn.asiantech.way.ui.custom.TrackingProgressInfo
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
@@ -49,7 +53,28 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     companion object {
         private const val INTERVAL = 500L
+        private const val ZOOM_SIZE = 16f
+        private const val TIME_CONVERT = 3.6
+        private const val ONE_THOUSAND = 1000L
+        private const val RADIUS = 360.0
+        private const val STEP_ETA = 3
     }
+
+    private var mCurrentMarker: Marker? = null
+    private var mIsStopTracking = false
+    private var mLocationUpdates: MutableList<LatLng>? = null
+    private var mLocations: MutableList<vn.asiantech.way.data.model.Location>? = null
+    private var mCurrentLocation: HyperTrackLocation? = null
+    private lateinit var mHandlerTracking: Handler
+    private var mRunnable: Runnable? = null
+    private var mCountTimer = ONE_THOUSAND
+    private lateinit var mDestinationLatLng: LatLng
+    private var mDistanceTravel = 0f
+    private var mAverageSpeed = 0f
+    private var mEtaUpdate = 0.0f
+    private var mEtaMaximum = 0.0f
+    private var mEtaSpeed = 0.0f
+    private var mCount = 0
 
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
@@ -64,6 +89,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mGroundOverlay: GroundOverlay? = null
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
+    private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val level = p1?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
+            tvBattery.text = "${level.toString()}%"
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_location)
@@ -71,6 +104,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
             mAction = intent.getStringExtra(AppConstants.KEY_CONFIRM)
         }
+        registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        mLocationUpdates = ArrayList()
+        mLocations = ArrayList()
         initMap()
         initializeUIViews()
         initGoogleApiClient()
@@ -135,8 +171,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun initializeUIViews() {
         bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
+
             override fun onCloseButtonClick() {
-                rlBottomCard.visibility = View.GONE
+                bottomButtonCard?.hideBottomCardLayout()
+                trackingProgressIno?.showTrackingProgress()
             }
 
             override fun onActionButtonClick() {
@@ -161,7 +199,24 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
                         ClipData.newPlainText("tracking_url", bottomButtonCard.tvURL.text)
             }
+        }
+        trackingProgressIno?.trackingProgressClick = object : TrackingProgressInfo.TrackingProgressClick {
+            override fun onStopButtonClick() {
+                if (rippleTrackingToggle.tag == "stop") {
+                    mIsStopTracking = true
+                    mHandlerTracking.removeCallbacks(mRunnable)
+                } else if (rippleTrackingToggle.tag == "summary") {
+                }
+            }
 
+            override fun onShareButtonClick() {
+                bottomButtonCard?.showBottomCardLayout()
+                trackingProgressIno?.hideTrackingProgress()
+            }
+
+            override fun onCallButtonClick() {
+                // No-op
+            }
         }
     }
 
@@ -210,7 +265,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
             }
             else -> {
-                bottomButtonCard?.showClosebutton()
+                bottomButtonCard?.showCloseButton()
                 bottomButtonCard?.actionType = BottomButtonCard.ActionType.SHARE_TRACKING_URL
                 bottomButtonCard?.showTrackingURLLayout()
                 bottomButtonCard?.setTitleText(getString(R.string.bottom_button_card_title_text))
@@ -222,6 +277,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
         if (show) {
             bottomButtonCard?.showBottomCardLayout()
+            trackingProgressIno?.hideTrackingProgress()
         }
     }
 
