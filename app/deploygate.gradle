@@ -22,7 +22,8 @@ deploygate {
             debug {
                 def hash = 'git rev-parse --short HEAD'.execute([], project.rootDir).in.text.trim()
                 // set as build message
-                message = "Version ${tag} at commit ${hash}"
+                message = "Version ${tag} at commit ${hash}\n"
+                message = message + parsedJson.body
                 // if you are using a distribution page, you can update it simultaneously
 //                distributionKey = "1234567890abcdef1234567890abcdef"
                 releaseNote = parsedJson.body
