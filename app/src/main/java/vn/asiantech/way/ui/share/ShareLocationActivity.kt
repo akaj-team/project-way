@@ -35,14 +35,15 @@ import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
 import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
-import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
+import kotlinx.android.synthetic.main.tracking_progress_view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
+import vn.asiantech.way.ui.custom.TrackingProgressInfo
 import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.AppConstants
@@ -189,24 +190,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun initializeUIViews() {
         bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
-            override fun onStopButtonClick() {
-                if (rippleTrackingToggle.tag == "stop") {
-                    mIsStopTracking = true
-                    mHandlerTracking.removeCallbacks(mRunnable)
-                } else if (rippleTrackingToggle.tag == "summary") {
-                }
-            }
-
-            override fun onShareButtonClick() {
-                rlBottomCard.visibility = View.VISIBLE
-            }
-
-            override fun onCallButtonClick() {
-                // No-op
-            }
 
             override fun onCloseButtonClick() {
-                rlBottomCard.visibility = View.GONE
+                bottomButtonCard?.hideBottomCardLayout()
+                trackingProgressIno?.showTrackingProgress()
             }
 
             override fun onActionButtonClick() {
@@ -236,7 +223,24 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
                         ClipData.newPlainText("tracking_url", bottomButtonCard.tvURL.text)
             }
+        }
+        trackingProgressIno?.trackingProgressClick = object : TrackingProgressInfo.TrackingProgressClick {
+            override fun onStopButtonClick() {
+                if (rippleTrackingToggle.tag == "stop") {
+                    mIsStopTracking = true
+                    mHandlerTracking.removeCallbacks(mRunnable)
+                } else if (rippleTrackingToggle.tag == "summary") {
+                }
+            }
 
+            override fun onShareButtonClick() {
+                bottomButtonCard?.showBottomCardLayout()
+                trackingProgressIno?.hideTrackingProgress()
+            }
+
+            override fun onCallButtonClick() {
+                // No-op
+            }
         }
     }
 
@@ -296,6 +300,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
         if (show) {
             bottomButtonCard?.showBottomCardLayout()
+            trackingProgressIno?.hideTrackingProgress()
         }
     }
 

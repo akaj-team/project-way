@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/llTrackingProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="@dimen/padding_high">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:id="@+id/rlActionDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
+                    android:id="@+id/circleProgressBar"
+                    android:layout_width="@dimen/seekBar_width"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_low"
+                    android:rotation="90"
+                    app:circle_color="@color/progressRestColor"
+                    app:circle_progress_color="@color/tracking_experience"
+                    app:circle_stroke_width="3dp"
+                    app:lock_enabled="true"
+                    app:max="100"
+                    app:progress="0" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnCall"
+                    android:layout_width="@dimen/phone_icon_size"
+                    android:layout_height="@dimen/phone_icon_size"
+                    android:layout_alignLeft="@+id/circleProgressBar"
+                    android:layout_alignStart="@+id/circleProgressBar"
+                    android:layout_alignTop="@+id/circleProgressBar"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_low"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_phone_icon" />
+
+                <RelativeLayout
+                    android:id="@+id/rlCollapse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/circleProgressBar"
+                    android:layout_toRightOf="@+id/circleProgressBar">
+
+                    <TextView
+                        android:id="@+id/tvActionStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_base"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/text_medium"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="@string/leaving" />
+
+                    <ImageView
+                        android:id="@+id/imgArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tvActionStatus"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/margin_high"
+                        android:layout_marginRight="@dimen/margin_high"
+                        android:layout_marginTop="4dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_keyboard_arrow_right_black_18dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvActionStatus"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/tracking_experience"
+                            android:textSize="@dimen/text_base"
+                            tools:text="--" />
+
+                        <TextView
+                            android:id="@+id/tvDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/margin_base"
+                            android:layout_marginStart="@dimen/margin_base"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/text_base"
+                            tools:text="--" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlExpandedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/white"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_light" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:baselineAligned="false"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvElapsedTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mask"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_low"
+                            android:text="@string/elapse"
+                            android:textColor="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDistanceTravelled"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mask"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_low"
+                            android:text="@string/travelled"
+                            android:textColor="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mask"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_low"
+                            android:text="@string/speed"
+                            android:textColor="@color/gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvBattery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="6dp"
+                            android:text="@string/mask"
+                            android:textColor="@android:color/black" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_battery_icon" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llActionTracking"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ripple_height"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <com.hypertrack.lib.internal.consumer.view.RippleView
+                android:id="@+id/rippleTrackingToggle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:tag="stop"
+                app:rv_centered="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/stop"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/text_medium" />
+            </com.hypertrack.lib.internal.consumer.view.RippleView>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider_light" />
+
+            <com.hypertrack.lib.internal.consumer.view.RippleView
+                android:id="@+id/rippleShareLink"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:rv_centered="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/share"
+                    android:textAllCaps="true"
+                    android:textColor="@color/tracking_experience"
+                    android:textSize="@dimen/text_medium" />
+            </com.hypertrack.lib.internal.consumer.view.RippleView>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

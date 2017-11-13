@@ -69,30 +69,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
                 tvCopyLink?.text = context.getString(R.string.share_textview_text_copied)
             }
         }
-        rlCollapse.setOnClickListener {
-            if (rlExpandedInfo.visibility == View.GONE) {
-                rlExpandedInfo.visibility = View.VISIBLE
-                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
-            } else {
-                rlExpandedInfo.visibility = View.GONE
-                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
-            }
-        }
-        rippleTrackingToggle.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onStopButtonClick()
-            }
-        }
-        rippleShareLink.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onShareButtonClick()
-            }
-        }
-        imgBtnCall.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onCallButtonClick()
-            }
-        }
     }
 
     internal fun setTitleText(title: String) {
@@ -137,34 +113,11 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    fun hideBottomCardLayout() {
+    internal fun hideBottomCardLayout() {
         hideProgress()
-        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlBottomCard)
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    fun showTrackingProgress() {
-        llTrackingProgress.visibility = View.VISIBLE
-    }
-
-    fun hideTrackingProgress() {
-        llTrackingProgress.visibility = View.GONE
-    }
-    // TODO: Will use in future
-//
-//    fun startProgress() {
-//        tvStartShare.visibility = View.GONE
-//        imgLoader.visibility = View.VISIBLE
-//        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
-//                R.anim.rotate)
-//        rotationAnim.fillAfter = true
-//        imgLoader.startAnimation(rotationAnim)
-//    }
-    // TODO:Will use in future
-
-//    fun hideBottomCardLayout() {
-//        hideProgress()
-//        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
-//    }
     internal fun startProgress() {
         tvStartShare.visibility = View.GONE
         imgLoader.visibility = View.VISIBLE
@@ -217,20 +170,5 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
          * Button copy link click listener
          */
         fun onCopyButtonClick()
-
-        /**
-         * Button stop link click listener
-         */
-        fun onStopButtonClick()
-
-        /**
-         * Button share link click listener
-         */
-        fun onShareButtonClick()
-
-        /**
-         * Button call link click listener
-         */
-        fun onCallButtonClick()
     }
 }
