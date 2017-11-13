@@ -63,13 +63,15 @@ jobs:
           command: scripts/saddler.sh
 
   internalDeploy:
-      <<: *defaults
-      steps:
-        - attach_workspace:
-            at: ~/code
-        - run:
-            name: Build and upload deploygate
-            command: ./gradlew :app:uploadDeployGateDebug
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: pwd
+      - run:
+          name: Build and upload deploygate
+          command: ./gradlew :app:uploadDeployGateDebug
 
 
 workflows:
@@ -81,3 +83,5 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
