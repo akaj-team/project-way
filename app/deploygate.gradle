@@ -7,13 +7,15 @@ deploygate {
         userName = System.getenv('DEPLOYGATE_NAME')
         token = System.getenv('DEPLOYGATE_TOKEN')
 
-        def userName = System.getenv('CIRCLE_PROJECT_USERNAME')
+        println(userName)
+        println(token)
+        def gitUserName = System.getenv('CIRCLE_PROJECT_USERNAME')
         def projectRepo = System.getenv('CIRCLE_PROJECT_REPONAME')
         def tag = System.getenv('CIRCLE_TAG')
         def githubAccessToken = System.getenv('GITHUB_ACCESS_TOKEN')
         def headers = [Authorization: "token ${githubAccessToken}"]
 
-        def jsonText = new URL("https://api.github.com/repos/${userName}/${projectRepo}/releases/tags/${tag}").getText(requestProperties: headers)
+        def jsonText = new URL("https://api.github.com/repos/${gitUserName}/${projectRepo}/releases/tags/${tag}").getText(requestProperties: headers)
         def parsedJson = new JsonSlurper().parseText(jsonText) as Map
 
         apks {
@@ -22,7 +24,7 @@ deploygate {
                 // set as build message
                 message = "Version ${tag} at commit ${hash}"
                 // if you are using a distribution page, you can update it simultaneously
-                distributionKey = "1234567890abcdef1234567890abcdef"
+//                distributionKey = "1234567890abcdef1234567890abcdef"
                 releaseNote = parsedJson.body
             }
         }
