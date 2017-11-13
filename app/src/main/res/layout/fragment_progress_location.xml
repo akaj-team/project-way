@@ -1,17 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    tools:context="vn.asiantech.way.ui.tracking.ProgressLocationActivity">
 
-    <LinearLayout
-        android:id="@+id/llTrackingProgress"
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/imgBtnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_back_icon_button"
+        android:contentDescription="@null" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_above="@+id/rlBottomCard"
-        android:paddingTop="@dimen/padding_high">
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/imgBtnBack"
+        android:layout_toRightOf="@+id/imgBtnBack"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tvLocationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/share_textview_text_going_somewhere"
+            tools:ignore="RelativeOverlap" />
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvLocationTitle"
+            android:layout_alignStart="@+id/tvLocationTitle"
+            android:layout_below="@+id/tvLocationTitle"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="5dp"
+            tools:text="location" />
+
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_edit_location_black_24dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -289,126 +348,4 @@
             </com.hypertrack.lib.internal.consumer.view.RippleView>
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlBottomCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPink"
-        android:paddingBottom="@dimen/padding_medium"
-        android:paddingTop="@dimen/padding_high">
-
-        <com.hypertrack.lib.internal.consumer.view.RippleView
-            android:id="@+id/btnClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:paddingBottom="@dimen/padding_medium"
-            android:paddingLeft="@dimen/padding_medium"
-            android:paddingRight="@dimen/padding_medium"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_navigation_close" />
-
-        </com.hypertrack.lib.internal.consumer.view.RippleView>
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_low"
-            android:gravity="center"
-            android:text="@string/bottom_button_card_title_text"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_large"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_huge"
-            android:layout_marginRight="@dimen/margin_huge"
-            android:layout_marginTop="@dimen/margin_base"
-            android:gravity="center"
-            android:text="@string/bottom_button_card_description_text"
-            android:textSize="@dimen/text_medium"
-            android:visibility="visible" />
-
-        <com.hypertrack.lib.internal.consumer.view.RippleView
-            android:id="@+id/btnSharing"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/tvDescription"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/margin_low"
-            android:layout_marginLeft="@dimen/margin_huge"
-            android:layout_marginRight="@dimen/margin_huge"
-            android:layout_marginTop="@dimen/margin_high"
-            android:background="@drawable/custom_bg_button_share">
-
-            <TextView
-                android:id="@+id/tvStartShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="Start Sharing"
-                android:textColor="#000000"
-                android:textSize="@dimen/text_large"
-                android:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/imgLoader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_live_location_loading"
-                android:visibility="gone" />
-        </com.hypertrack.lib.internal.consumer.view.RippleView>
-
-        <RelativeLayout
-            android:id="@+id/rlLinkShare"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/btnSharing"
-            android:layout_marginLeft="@dimen/margin_medium"
-            android:layout_marginRight="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:background="@drawable/custom_bg_link_share_sheet"
-            android:padding="@dimen/padding_very_low"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvURL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin_xxhigh"
-                android:text="@string/bottom_button_card_link_text"
-                android:textColor="@color/white"
-                android:textIsSelectable="true" />
-
-            <TextView
-                android:id="@+id/tvCopyLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/margin_low"
-                android:background="@drawable/custom_bg_button_copy"
-                android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/padding_base"
-                android:text="@string/bottom_button_card_text_copy_link"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textStyle="normal" />
-        </RelativeLayout>
-    </RelativeLayout>
 </RelativeLayout>

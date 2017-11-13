@@ -86,4 +86,18 @@
     <string name="register_update_profile">Update Profile</string>
     <string name="register_message_dialog">Your default user name is user</string>
     <string name="register_title_dialog">Information</string>
+    <string name="register_title_error_dialog">Error</string>
+
+    <!--In-ProgressLocation-->
+    <string name="share">SHARE</string>
+    <string name="stop">STOP</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="leaving">You are leaving now</string>
+    <string name="elapse">Elapsed</string>
+    <string name="mask">--</string>
+    <string name="travelled">Travelled</string>
+    <string name="speed">Speed</string>
+    <string name="eta">ETA</string>
+    <string name="open_parentheses">(</string>
+    <string name="close_parentheses_distance"> km away)</string>
 </resources>

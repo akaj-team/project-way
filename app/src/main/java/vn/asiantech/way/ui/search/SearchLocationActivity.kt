@@ -7,13 +7,16 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
+import kotlinx.android.synthetic.main.activity_share_location.*
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.AppConstants
 
@@ -34,6 +37,7 @@ class SearchLocationActivity : BaseActivity() {
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
     private var mSharedPreferences: SharedPreferences? = null
     private var mIntent: Intent? = null
+    private var mMyLocation: MyLocation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,6 +122,10 @@ class SearchLocationActivity : BaseActivity() {
         })
         recyclerViewLocations.layoutManager = LinearLayoutManager(this)
         recyclerViewLocations.adapter = mAdapter
+    }
+
+    fun getMyLocation(): MyLocation? {
+        return mMyLocation
     }
 
     private fun getSearchHistory(): MutableList<MyLocation>? {
