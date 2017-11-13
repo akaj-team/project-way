@@ -147,3 +147,4 @@ if (googleServicesFile.exists()) {
 }
 
 apply from: "https://raw.githubusercontent.com/tientun/gradle-android-ci-check/master/ci.gradle"
+apply from: "deploygate.gradle"
