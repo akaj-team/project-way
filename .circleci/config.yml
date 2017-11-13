@@ -62,8 +62,22 @@ jobs:
           name: Report github
           command: scripts/saddler.sh
 
+  internalDeploy:
+      <<: *defaults
+      steps:
+        - attach_workspace:
+            at: ~/code
+        - run:
+            name: Build and upload deploygate
+            command: ./gradlew :app:uploadDeployGateDebug
+
+
 workflows:
   version: 2
   check_and_report:
     jobs:
       - build
+      - internalDeploy:
+          filters:
+            tags:
+              only: /.*/
