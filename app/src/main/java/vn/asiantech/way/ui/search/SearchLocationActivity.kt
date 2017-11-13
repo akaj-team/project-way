@@ -124,7 +124,7 @@ class SearchLocationActivity : BaseActivity() {
         recyclerViewLocations.adapter = mAdapter
     }
 
-    fun getMyLocation(): MyLocation? {
+    internal fun getMyLocation(): MyLocation? {
         return mMyLocation
     }
 
