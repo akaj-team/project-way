@@ -7,18 +7,16 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_search_location.*
-import kotlinx.android.synthetic.main.activity_share_location.*
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.AppConstants
+import vn.asiantech.way.utils.Preference
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -37,12 +35,15 @@ class SearchLocationActivity : BaseActivity() {
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
     private var mSharedPreferences: SharedPreferences? = null
     private var mIntent: Intent? = null
-    private var mMyLocation: MyLocation? = null
+    private lateinit var preference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_location)
+        //set context for Preference class
+        Preference.init(this)
         mSharedPreferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        preference = Preference()
         mIntent = Intent(applicationContext, ShareLocationActivity::class.java)
         initAdapter()
         locationSearch()
@@ -55,12 +56,12 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlYourLocation.setOnClickListener {
-            mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CURRENT_LOCATION)
+            preference.setActionType(AppConstants.KEY_CURRENT_LOCATION)
             startActivity(mIntent)
         }
 
         rlChooseOnMap.setOnClickListener {
-            mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CONFIRM)
+            preference.setActionType(AppConstants.KEY_CONFIRM)
             startActivity(mIntent)
         }
 
@@ -113,19 +114,15 @@ class SearchLocationActivity : BaseActivity() {
         mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
                 saveSearchHistory(myLocation)
+                preference.setActionType(AppConstants.KEY_SHARING)
                 val bundle = Bundle()
                 bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
-                bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
                 mIntent?.putExtras(bundle)
                 startActivity(mIntent)
             }
         })
         recyclerViewLocations.layoutManager = LinearLayoutManager(this)
         recyclerViewLocations.adapter = mAdapter
-    }
-
-    internal fun getMyLocation(): MyLocation? {
-        return mMyLocation
     }
 
     private fun getSearchHistory(): MutableList<MyLocation>? {

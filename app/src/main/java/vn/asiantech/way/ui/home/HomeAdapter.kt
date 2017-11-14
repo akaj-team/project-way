@@ -66,11 +66,11 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
 
             itemView.expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
                 override fun onExpand(view: ExpandableTextView) {
-                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
+                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
                 }
 
                 override fun onCollapse(view: ExpandableTextView) {
-                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
+                    itemView.imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
                 }
             }
         }

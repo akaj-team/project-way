@@ -44,14 +44,16 @@ import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.ui.custom.TrackingProgressInfo
-import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
+import vn.asiantech.way.ui.update.UpdateMap
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
+import vn.asiantech.way.utils.Preference
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 /**
  * Copyright © AsianTech Co., Ltd
@@ -117,8 +119,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         setContentView(R.layout.activity_share_location)
         if (intent.extras != null) {
             mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
-            mAction = intent.getStringExtra(AppConstants.KEY_CONFIRM)
         }
+        Preference.init(this)
+        mAction = Preference().getActionType()
         registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         mLocationUpdates = ArrayList()
         mLocations = ArrayList()
@@ -455,7 +458,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, UpdateMap::class.java))
         this.finish()
     }
 
@@ -678,19 +681,25 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     description = address.getAddressLine(0)
                 }
             } else {
-                mEndStatus = mCountTimer
-                val time = getTimeDuringStatus(mCountTimer - mStartStatus)
+                val time = getTimeDuringStatus((mCountTimer - mEndStatus) / 1000)
                 val distance = (0..(position - 1))
                         .map {
                             getDistancePerSecond(mLocationUpdates!![it]
                                     , mLocationUpdates!![it + 1])
                         }
                         .sum()
+                mEndStatus = mCountTimer
                 description = time.plus(" | ").plus(distance.toString()).plus("km")
             }
             val location = vn.asiantech.way.data.model.Location(getTimeChangeStatus(),
                     status, description, latLng)
-            mLocations?.add(location)
+            with(Preference()) {
+                saveTrackingHistory(location)
+                mLocations = getTrackingHistory()
+            }
+            mLocations?.forEach {
+                Log.d("zxc", "location ${it.description} ${it.status} ${it.time} ${it.point} ${it.isChoose}")
+            }
             mCurrentStatus = status
             mStartPosition = position
         }

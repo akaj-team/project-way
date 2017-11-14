@@ -1,6 +1,8 @@
 package vn.asiantech.way.ui.update
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
@@ -8,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -34,7 +37,9 @@ import vn.asiantech.way.ui.home.HomeAdapter
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
+import vn.asiantech.way.utils.Preference
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -70,12 +75,14 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private lateinit var mDestination: LatLng
     private lateinit var mBegin: LatLng
     private var mArrived = Arrived()
-    private var mLocations = mutableListOf<Location>()
+    private var mLocations: MutableList<Location> = mutableListOf()
+    private var mSharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initMap()
+        mSharedPreferences = getSharedPreferences(AppConstants.KEY_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         initViews()
         fabMenuGroup.setOnMenuItemClickListener(this)
         frOverlay.setOnClickListener {
@@ -85,7 +92,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
                 setGoneOverLay()
             }
         }
-        initDummyData()
+        initData()
         setDataForRecyclerView()
         btnShowSummary.setOnClickListener {
             showDialog()
@@ -254,13 +261,9 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private fun setListToPosition(position: Int): List<LatLng> =
             (0..position).map { mLocations[it].point }
 
-    private fun initDummyData() {
-        //Todo : Get list location from in-progress tracking
-//        mLocations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............", LatLng(16.0721115, 108.2302225)))
-//        mLocations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
-//        mLocations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
-//        mLocations.add(Location("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
-//        mLocations.add(Location("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
+    private fun initData() {
+        Preference().getTrackingHistory()?.let { mLocations.addAll(it) }
+        mLocations.forEach { Log.d("zxc", "lllll " + it.description) }
         mArrived.latLngs = mutableListOf()
         mLocations.forEach {
             it.point.let {

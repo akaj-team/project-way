@@ -76,7 +76,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/expTvDescription"
             android:contentDescription="@string/image_description"
-            android:src="@drawable/ic_keyboard_arrow_down_black_18dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_18dp"
             android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>
