@@ -45,5 +45,4 @@ object HypertrackApi {
     fun getApiService(): HypertrackService {
         return getClient().create(HypertrackService::class.java)
     }
-
 }
