@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_non_member.view.*
+import kotlinx.android.synthetic.main.fragment_non_member.*
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -16,19 +16,22 @@ import vn.asiantech.way.ui.base.BaseFragment
 class NonGroupMemberFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_non_member, container, false)
-        onClick(view)
-        return view
+        return inflater.inflate(R.layout.fragment_non_member, container, false)
     }
 
-    private fun onClick(view: View) {
-        view.btnCreateGroup.setOnClickListener {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onClick()
+    }
+
+    private fun onClick() {
+        btnCreateGroup.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_CALL_CREATE_GROUP_FRAGMENT))
         }
-        view.btnViewInvites.setOnClickListener {
+        btnViewInvites.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_VIEW_INVITES))
         }
-        view.btnBack.setOnClickListener {
+        btnBack.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_BACK))
         }
     }

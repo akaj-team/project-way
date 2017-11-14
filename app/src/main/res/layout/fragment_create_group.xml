@@ -14,6 +14,7 @@
         android:background="@color/white"
         android:hint="@string/group_name"
         android:maxLength="50"
+        android:singleLine="true"
         android:maxLines="1"
         android:padding="10dp"
         android:textSize="@dimen/group_text_size_normal"

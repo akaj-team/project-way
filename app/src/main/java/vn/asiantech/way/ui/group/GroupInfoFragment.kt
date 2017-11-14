@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.hypertrack.lib.models.User
-import kotlinx.android.synthetic.main.fragment_group_info.view.*
+import kotlinx.android.synthetic.main.fragment_group_info.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +18,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.BodyAddUserToGroup
 import vn.asiantech.way.data.model.group.Group
 import vn.asiantech.way.data.model.group.UserListResult
-import vn.asiantech.way.data.remote.hypertrackremote.HypertrackRemote
+import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
@@ -77,24 +77,28 @@ class GroupInfoFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         adapter = MemberListAdapter(userId, members)
-        val view = inflater.inflate(R.layout.fragment_group_info, container, false)
-        initView(view)
-        onClick(view)
-        view.recyclerViewMembers.layoutManager = LinearLayoutManager(context)
-        view.recyclerViewMembers.adapter = adapter
-        return view
+        return inflater.inflate(R.layout.fragment_group_info, container, false)
     }
 
-    private fun initView(view: View) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        onClick()
+        recyclerViewMembers.layoutManager = LinearLayoutManager(context)
+        recyclerViewMembers.adapter = adapter
+    }
+
+
+    private fun initView() {
         if (group != null) {
-            view.tvGroupName.text = group?.name
-            view.tvCreateAt.text = getString(R.string.create_at, group?.createAt
+            tvGroupName.text = group?.name
+            tvCreateAt.text = getString(R.string.create_at, group?.createAt
                     ?.substring(BEGIN_INDEX, SUBSTRING_LENGTH))
-            loadGroupMemberList(view)
+            loadGroupMemberList()
         } else {
             progressDialog.show()
             val groupId = arguments.getString(KEY_GROUP_ID)
-            HypertrackRemote.getApiService().getGroupInfo(groupId)
+            HypertrackApi.getApiService().getGroupInfo(groupId)
                     .enqueue(object : Callback<Group> {
                         override fun onFailure(call: Call<Group>?, t: Throwable?) {
                             Toast.makeText(context, R.string.error_message,
@@ -106,41 +110,40 @@ class GroupInfoFragment : BaseFragment() {
                             group = response?.body()
                             progressDialog.dismiss()
                             if (group != null) {
-                                initView(view)
+                                initView()
                                 return
                             }
                             Toast.makeText(context, R.string.error_message,
                                     Toast.LENGTH_LONG).show()
                         }
-
                     })
         }
     }
 
-    private fun loadGroupMemberList(view: View) {
+    private fun loadGroupMemberList() {
         val id = group?.id
         members.clear()
         adapter.notifyDataSetChanged()
         if (id != null) {
-            HypertrackRemote.getApiService().getMembersList(id)
+            HypertrackApi.getApiService().getMembersList(id)
                     .enqueue(object : Callback<UserListResult> {
                         override fun onResponse(call: Call<UserListResult>?,
                                                 response: Response<UserListResult>?) {
                             val result = response?.body()?.results
                             if (result != null) {
                                 members.addAll(result)
-                                view.tvMembersCount.text = getString(R.string.members_count,
+                                tvMembersCount.text = getString(R.string.members_count,
                                         members.size)
                                 adapter.notifyDataSetChanged()
                             }
-                            if (view.swipeRefreshLayout.isRefreshing) {
-                                view.swipeRefreshLayout.isRefreshing = false
+                            if (swipeRefreshLayout.isRefreshing) {
+                                swipeRefreshLayout.isRefreshing = false
                             }
                         }
 
                         override fun onFailure(call: Call<UserListResult>?, t: Throwable?) {
-                            if (view.swipeRefreshLayout.isRefreshing) {
-                                view.swipeRefreshLayout.isRefreshing = false
+                            if (swipeRefreshLayout.isRefreshing) {
+                                swipeRefreshLayout.isRefreshing = false
                             }
                             Toast.makeText(context, R.string.can_not_get_members_list,
                                     Toast.LENGTH_LONG).show()
@@ -150,7 +153,7 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun leaveGroup() {
-        HypertrackRemote.getApiService().removeUserFromGroup(userId,
+        HypertrackApi.getApiService().removeUserFromGroup(userId,
                 BodyAddUserToGroup(null))
                 .enqueue(object : Callback<User> {
                     override fun onFailure(call: Call<User>?, t: Throwable?) {
@@ -173,17 +176,17 @@ class GroupInfoFragment : BaseFragment() {
                 })
     }
 
-    private fun onClick(view: View) {
-        view.imgInvite.setOnClickListener {
+    private fun onClick() {
+        imgInvite.setOnClickListener {
             // TODO: Invite a given person to group
         }
 
-        view.imgLeave.setOnClickListener {
+        imgLeave.setOnClickListener {
             showConfirmDialog()
         }
 
-        view.swipeRefreshLayout.setOnRefreshListener {
-            loadGroupMemberList(view)
+        swipeRefreshLayout.setOnRefreshListener {
+            loadGroupMemberList()
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.widget.Toast
 import com.google.gson.Gson
 import com.hypertrack.lib.HyperTrack
@@ -30,6 +31,7 @@ class GroupActivity : BaseActivity() {
         const val ACTION_VIEW_INVITES = "action_view_invites"
         const val ACTION_BACK = "action_back"
         const val ACTION_LEAVE_GROUP = "action_leave_group"
+        const val ACTION_BACK_TO_HOME = "action_back_to_home"
     }
 
     private lateinit var user: User
@@ -37,9 +39,7 @@ class GroupActivity : BaseActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent) {
             when (p1.action) {
-                ACTION_RELOAD -> {
-                    loadUser()
-                }
+                ACTION_RELOAD -> loadUser()
 
                 ACTION_GROUP_CREATED -> {
                     val group = p1.extras.getSerializable(GroupInfoFragment.KEY_GROUP) as? Group
@@ -48,9 +48,9 @@ class GroupActivity : BaseActivity() {
                     }
                 }
 
-                ACTION_CALL_CREATE_GROUP_FRAGMENT -> {
-                    replaceFragment(CreateGroupFragment.getInstance(user))
-                }
+                ACTION_CALL_CREATE_GROUP_FRAGMENT -> replaceFragment(CreateGroupFragment
+                        .getInstance(user))
+
 
                 ACTION_VIEW_INVITES -> {
                     // TODO: Call Invites fragment
@@ -58,16 +58,12 @@ class GroupActivity : BaseActivity() {
                             Toast.LENGTH_LONG).show()
                 }
 
-                ACTION_BACK -> {
-                    finish()
-                }
+                ACTION_BACK -> finish()
 
-                ACTION_LEAVE_GROUP -> {
-                    replaceFragment(NonGroupMemberFragment())
-                }
+                ACTION_LEAVE_GROUP, ACTION_BACK_TO_HOME -> replaceFragment(NonGroupMemberFragment())
+
             }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +101,6 @@ class GroupActivity : BaseActivity() {
                 replaceFragment(ReloadFragment())
                 progressDialog.dismiss()
             }
-
         })
     }
 
@@ -117,10 +112,11 @@ class GroupActivity : BaseActivity() {
         intentFilter.addAction(ACTION_VIEW_INVITES)
         intentFilter.addAction(ACTION_BACK)
         intentFilter.addAction(ACTION_LEAVE_GROUP)
+        intentFilter.addAction(ACTION_BACK_TO_HOME)
         registerReceiver(receiver, intentFilter)
     }
 
-    private fun replaceFragment(fragment: android.support.v4.app.Fragment) {
+    private fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.flContent, fragment)
         transaction.commit()

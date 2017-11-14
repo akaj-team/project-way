@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.hypertrack.lib.models.User
-import kotlinx.android.synthetic.main.fragment_create_group.view.*
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.BodyAddUserToGroup
 import vn.asiantech.way.data.model.group.Group
-import vn.asiantech.way.data.remote.hypertrackremote.HypertrackRemote
+import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
@@ -27,7 +27,7 @@ class CreateGroupFragment : BaseFragment() {
         const val KEY_USER = "user"
 
         /**
-         * get instance with given user.
+         * Get instance with given user.
          */
         fun getInstance(user: User): CreateGroupFragment {
             val instance = CreateGroupFragment()
@@ -47,25 +47,28 @@ class CreateGroupFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_create_group, container, false)
-        onClick(view)
-        return view
+        return inflater.inflate(R.layout.fragment_create_group, container, false)
     }
 
-    private fun onClick(view: View) {
-        view.btnCreateGroup.setOnClickListener {
-            val groupName = view.edtGroupName.text.toString().trim()
-            if (groupName != "") {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onClick()
+    }
+
+    private fun onClick() {
+        btnCreateGroup.setOnClickListener {
+            val groupName = edtGroupName.text.toString().trim()
+            if (groupName.isNotEmpty()) {
                 createGroup(groupName)
             }
         }
-        view.btnBack.setOnClickListener {
-            activity.finish()
+        btnBack.setOnClickListener {
+            activity.sendBroadcast(Intent(GroupActivity.ACTION_BACK_TO_HOME))
         }
     }
 
     private fun createGroup(name: String) {
-        HypertrackRemote.getApiService().createGroup(name)
+        HypertrackApi.getApiService().createGroup(name)
                 .enqueue(object : Callback<Group> {
                     override fun onResponse(call: Call<Group>?, response: Response<Group>?) {
                         val group = response?.body()
@@ -79,12 +82,11 @@ class CreateGroupFragment : BaseFragment() {
                         Toast.makeText(context, getString(R.string.error_message),
                                 Toast.LENGTH_LONG).show()
                     }
-
                 })
     }
 
     private fun addUserToGroup(group: Group, userId: String) {
-        HypertrackRemote.getApiService().addUserToGroup(userId, BodyAddUserToGroup(group.id))
+        HypertrackApi.getApiService().addUserToGroup(userId, BodyAddUserToGroup(group.id))
                 .enqueue(object : Callback<User> {
                     override fun onResponse(call: Call<User>?, response: Response<User>?) {
                         val user = response?.body()

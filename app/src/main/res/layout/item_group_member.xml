@@ -17,6 +17,7 @@
 
     <TextView
         android:id="@+id/tvName"
+        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -29,5 +30,5 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="@null"
-        android:src="@drawable/ic_phone_forwarded_indigo_200_48dp" />
+        android:src="@drawable/ic_phone_forwarded_blue_a700_48dp" />
 </LinearLayout>

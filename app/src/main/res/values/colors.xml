@@ -22,4 +22,5 @@
     <color name="colorOverlay">#aff5ebeb</color>
     <color name="colorYellow">#fff176</color>
     <color name="colorBlueLight">#64b5f6</color>
+    <color name="colorCyan">#e0f7fa</color>
 </resources>

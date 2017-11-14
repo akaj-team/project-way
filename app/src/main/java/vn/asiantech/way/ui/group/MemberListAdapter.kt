@@ -1,7 +1,9 @@
 package vn.asiantech.way.ui.group
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -47,13 +49,19 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
          */
         fun onBind() {
             with(members[adapterPosition]) {
-                if (userId != id) {
+                if (userId != id && lookupId != null) {
                     itemView.imgCall.visibility = View.VISIBLE
                 } else {
                     itemView.imgCall.visibility = View.GONE
                 }
                 itemView.tvName.text = name
                 Glide.with(itemView.context).load(photo).into(itemView.imgAvatar)
+            }
+            if (adapterPosition % 2 == 0) {
+                itemView.setBackgroundColor(Color.WHITE)
+            } else {
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context,
+                        R.color.colorCyan))
             }
         }
     }
