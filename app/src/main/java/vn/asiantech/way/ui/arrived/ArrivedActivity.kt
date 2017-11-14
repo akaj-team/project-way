@@ -175,7 +175,7 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
     private fun getCurrentLocation() {
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
-                Log.d(TAG, "onSuccess: Current Location Received")
+                Log.d(TAG, "onSuccess: Current TrackingInformation Received")
                 mCurrentLocation = HyperTrackLocation(response.responseObject as? Location)
                 mCurrentLocation?.latLng?.let {
                     mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it,
@@ -191,7 +191,7 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
             }
 
             override fun onError(errorResponse: ErrorResponse) {
-                Log.d(TAG, "onError: Current Location Receiving error")
+                Log.d(TAG, "onError: Current TrackingInformation Receiving error")
                 Log.d(TAG, "onError: " + errorResponse.errorMessage)
             }
         })
@@ -227,8 +227,8 @@ internal class ArrivedActivity : BaseActivity(), OnMapReadyCallback {
     private fun showDialog() {
         val dialog = DialogArrived.newInstance(mArrived.time, mArrived.distance,
                 mArrived.averageSpeed)
-        val fragmentManager = supportFragmentManager
-        dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
+        val supportFragmentManager = supportFragmentManager
+        dialog.show(supportFragmentManager, resources.getString(R.string.arrived_dialog_tag))
     }
 
     private fun showDetailTracking() {

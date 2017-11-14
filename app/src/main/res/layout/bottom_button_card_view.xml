@@ -9,8 +9,8 @@
         android:id="@+id/llTrackingProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_above="@+id/rlBottomCard"
+        android:orientation="vertical"
         android:paddingTop="@dimen/padding_high">
 
         <LinearLayout
@@ -27,11 +27,10 @@
                 android:id="@+id/rlActionDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:orientation="horizontal">
 
                 <com.hypertrack.lib.internal.consumer.view.CircularSeekBar
-                    android:id="@+id/circleProgressBar"
+                    android:id="@+id/circularSeekBar"
                     android:layout_width="@dimen/seekBar_width"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -50,9 +49,9 @@
                     android:id="@+id/imgBtnCall"
                     android:layout_width="@dimen/phone_icon_size"
                     android:layout_height="@dimen/phone_icon_size"
-                    android:layout_alignLeft="@+id/circleProgressBar"
-                    android:layout_alignStart="@+id/circleProgressBar"
-                    android:layout_alignTop="@+id/circleProgressBar"
+                    android:layout_alignLeft="@+id/circularSeekBar"
+                    android:layout_alignStart="@+id/circularSeekBar"
+                    android:layout_alignTop="@+id/circularSeekBar"
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/margin_low"
                     android:background="@android:color/transparent"
@@ -63,8 +62,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/circleProgressBar"
-                    android:layout_toRightOf="@+id/circleProgressBar">
+                    android:layout_toEndOf="@+id/circularSeekBar"
+                    android:layout_toRightOf="@+id/circularSeekBar">
 
                     <TextView
                         android:id="@+id/tvActionStatus"
@@ -77,7 +76,6 @@
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text_medium"
-                        tools:ignore="RelativeOverlap"
                         tools:text="@string/leaving" />
 
                     <ImageView
@@ -146,8 +144,7 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:baselineAligned="false"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -244,8 +241,7 @@
             android:id="@+id/llActionTracking"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ripple_height"
-            android:background="@color/white"
-            android:visibility="visible">
+            android:background="@color/white">
 
             <com.hypertrack.lib.internal.consumer.view.RippleView
                 android:id="@+id/rippleTrackingToggle"
@@ -338,8 +334,7 @@
             android:layout_marginTop="@dimen/margin_base"
             android:gravity="center"
             android:text="@string/bottom_button_card_description_text"
-            android:textSize="@dimen/text_medium"
-            android:visibility="visible" />
+            android:textSize="@dimen/text_medium" />
 
         <com.hypertrack.lib.internal.consumer.view.RippleView
             android:id="@+id/btnSharing"
@@ -361,8 +356,7 @@
                 android:layout_centerVertical="true"
                 android:text="Start Sharing"
                 android:textColor="#000000"
-                android:textSize="@dimen/text_large"
-                android:visibility="visible" />
+                android:textSize="@dimen/text_large" />
 
             <ImageView
                 android:id="@+id/imgLoader"

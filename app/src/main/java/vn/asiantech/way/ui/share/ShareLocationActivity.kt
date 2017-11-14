@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
@@ -46,9 +47,9 @@ import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.AppConstants
+import vn.asiantech.way.utils.DateTimeUtil
 import vn.asiantech.way.utils.LocationUtil
 import java.lang.ref.WeakReference
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -62,19 +63,19 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         private const val INTERVAL = 500L
         private const val ZOOM_SIZE = 16f
         private const val TIME_CONVERT = 3.6
-        private const val ONE_THOUSAND = 1000L
+        private const val SECOND_VALUE = 1000L
         private const val RADIUS = 360.0
         private const val STEP_ETA = 3
     }
 
     private var mCurrentMarker: Marker? = null
     private var mIsStopTracking = false
-    private var mLocationUpdates: MutableList<LatLng>? = null
-    private var mLocations: MutableList<vn.asiantech.way.data.model.Location>? = null
+    private var mLocationUpdates: MutableList<LatLng>? = mutableListOf()
+    private var mLocations: MutableList<TrackingInformation>? = mutableListOf()
     private var mCurrentLocation: Location? = null
     private lateinit var mHandlerTracking: Handler
     private var mRunnable: Runnable? = null
-    private var mCountTimer = ONE_THOUSAND
+    private var mCountTimer = SECOND_VALUE
     private lateinit var mDestinationLatLng: LatLng
     private var mDistanceTravel = 0f
     private var mAverageSpeed = 0f
@@ -99,8 +100,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mIsStartTracking: Boolean = false
     private var mMarker: Marker? = null
     private var mGroundOverlay: GroundOverlay? = null
-    private var line: Polyline? = null
-    private var line1: Polyline? = null
+    private var mLine: Polyline? = null
+    private var mLine1: Polyline? = null
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -188,12 +189,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun initializeUIViews() {
-        bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
+        bottomButtonCard?.onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
             override fun onStopButtonClick() {
                 if (rippleTrackingToggle.tag == "stop") {
                     mIsStopTracking = true
                     mHandlerTracking.removeCallbacks(mRunnable)
                 } else if (rippleTrackingToggle.tag == "summary") {
+                    //TODO : Will update in future
                 }
             }
 
@@ -301,7 +303,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun shareLocation() {
         val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        val message = "My Location is ${bottomButtonCard.tvURL.text}"
+        val message = "My TrackingInformation is ${bottomButtonCard.tvURL.text}"
         sharingIntent.type = "text/plain"
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message)
         startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), 200)
@@ -470,11 +472,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 }
                 requestLocation()
                 requestEta(VehicleType.MOTORCYCLE)
-                mCountTimer += ONE_THOUSAND
+                mCountTimer += SECOND_VALUE
                 handlerProgressTracking()
             }
         }
-        mHandlerTracking.postDelayed(mRunnable, ONE_THOUSAND)
+        mHandlerTracking.postDelayed(mRunnable, SECOND_VALUE)
     }
 
     private fun requestLocation() {
@@ -509,7 +511,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private fun updateCurrentTimeView() {
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
-        circleProgressBar.progress = 100
+        circularSeekBar.progress = 100
     }
 
     private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
@@ -535,14 +537,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
         if (hyperTrackLocation.speed != null) {
             tvDistance.text = resources.getString(R.string.open_parentheses)
-                    .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
+                    .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / SECOND_VALUE))
                     .plus(resources.getString(R.string.close_parentheses_distance))
         }
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvElapsedTime.text = formatInterval(mCountTimer)
         tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
         if (mEtaMaximum - mEtaUpdate > STEP_ETA) {
-            circleProgressBar.progress = (mEtaMaximum - (mEtaUpdate / mEtaMaximum) * 100).toInt()
+            circularSeekBar.progress = (mEtaMaximum - (mEtaUpdate / mEtaMaximum) * 100).toInt()
         }
         drawLine()
     }
@@ -589,7 +591,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         src.latitude = destination.latitude
         src.longitude = destination.longitude
         mAverageSpeed = (src.distanceTo(des) * TIME_CONVERT).toFloat()
-        return src.distanceTo(des) / ONE_THOUSAND
+        return src.distanceTo(des) / SECOND_VALUE
     }
 
     private fun drawLine() {
@@ -613,12 +615,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         .jointType(JointType.BEVEL)
                 mLocationUpdates?.forEach { option.add(it) }
                 mLocationUpdates?.forEach { option1.add(it) }
-                line?.remove()
-                line = mGoogleMap.addPolyline(option)
-                line?.pattern = null
-                line1?.remove()
-                line1 = mGoogleMap.addPolyline(option1)
-                line1?.pattern = null
+                mLine?.remove()
+                mLine = mGoogleMap.addPolyline(option)
+                mLine?.pattern = null
+                mLine1?.remove()
+                mLine1 = mGoogleMap.addPolyline(option1)
+                mLine1?.pattern = null
             }
         }
     }
@@ -683,18 +685,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         .sum()
                 description = time.plus(" | ").plus(distance.toString()).plus("km")
             }
-            val location = vn.asiantech.way.data.model.Location(getTimeChangeStatus(),
+            val location = TrackingInformation(DateTimeUtil().getTimeChangeStatus(),
                     status, description, latLng)
             mLocations?.add(location)
             mCurrentStatus = status
             mStartPosition = position
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getTimeChangeStatus(): String {
-        val currentTime = Calendar.getInstance().time
-        val formatDate = SimpleDateFormat("hh:mm a")
-        return formatDate.format(currentTime)
     }
 }

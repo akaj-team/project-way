@@ -76,7 +76,7 @@
     <string name="show_distance"> km </string>
     <string name="show_average_speed"> kmph </string>
     <string name="arrived_dialog_tag">Dialog Fragment</string>
-    <!-- Search Location Screen-->
+    <!-- SeaTrackingInfomationtion Screen-->
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>

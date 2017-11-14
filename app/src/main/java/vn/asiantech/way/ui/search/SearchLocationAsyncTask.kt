@@ -50,7 +50,7 @@ class SearchLocationAsyncTask(private val mListener: SearchLocationListener)
     }
 
     /**
-     *  listener for Search Location AsyncTask
+     *  listener for Search TrackingInformation AsyncTask
      */
     interface SearchLocationListener {
 

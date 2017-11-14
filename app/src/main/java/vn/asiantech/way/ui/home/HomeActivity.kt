@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
@@ -137,7 +137,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     private fun setDataForRecyclerView() {
         val positions: MutableList<Int> = mutableListOf()
-        val locations = ArrayList<Location>()
+        val locations = ArrayList<TrackingInformation>()
         // TODO: Get data from share function into locations
         initDummyData(locations)
         mHomeAdapter = HomeAdapter(locations) {
@@ -161,15 +161,15 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         recycleViewLocation.adapter = mHomeAdapter
     }
 
-    private fun initDummyData(locations: ArrayList<Location>) {
-//        locations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
+    private fun initDummyData(locations: ArrayList<TrackingInformation>) {
+//        locations.add(TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
 //                LatLng(16.0721115, 108.2302225)))
-//        locations.add(Location("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........",
+//        locations.add(TrackingInformation("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........",
 //                LatLng(16.0712047, 108.2193197)))
-//        locations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
-//        locations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
-//        locations.add(Location("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
-//        locations.add(Location("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
+//        locations.add(TrackingInformation("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
+//        locations.add(TrackingInformation("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
+//        locations.add(TrackingInformation("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
+//        locations.add(TrackingInformation("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {

@@ -17,7 +17,7 @@ import vn.asiantech.way.R
 class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
         RelativeLayout(context, attrs) {
 
-    var buttonListener: ButtonListener? = null
+    var onBottomCardListener: OnBottomCardListener? = null
     var actionType: ActionType
 
     // TODO: Will use in future
@@ -51,20 +51,20 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun initiateView() {
         btnClose.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onCloseButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCloseButtonClick()
             }
         }
 
         btnSharing.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onActionButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onActionButtonClick()
             }
         }
 
         tvCopyLink.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onCopyButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCopyButtonClick()
                 tvCopyLink?.isEnabled = false
                 tvCopyLink?.text = context.getString(R.string.share_textview_text_copied)
             }
@@ -79,18 +79,18 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
         rippleTrackingToggle.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onStopButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onStopButtonClick()
             }
         }
         rippleShareLink.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onShareButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onShareButtonClick()
             }
         }
         imgBtnCall.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onCallButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCallButtonClick()
             }
         }
     }
@@ -202,7 +202,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
     /**
      * Interface create fun onClickListener for BottomButtonCard
      */
-    interface ButtonListener {
+    interface OnBottomCardListener {
         /**
          * Button close click listener
          */
