@@ -51,17 +51,15 @@ class GroupActivity : BaseActivity() {
                 ACTION_CALL_CREATE_GROUP_FRAGMENT -> replaceFragment(CreateGroupFragment
                         .getInstance(user))
 
-
                 ACTION_VIEW_INVITES -> {
                     // TODO: Call Invites fragment
-                    Toast.makeText(this@GroupActivity, R.string.comming_soon,
+                    Toast.makeText(this@GroupActivity, R.string.coming_soon,
                             Toast.LENGTH_LONG).show()
                 }
 
                 ACTION_BACK -> finish()
 
                 ACTION_LEAVE_GROUP, ACTION_BACK_TO_HOME -> replaceFragment(NonGroupMemberFragment())
-
             }
         }
     }

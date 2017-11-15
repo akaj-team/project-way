@@ -37,8 +37,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
+                android:maxLines="1"
                 android:background="#FFFFFF"
                 android:hint="@string/search_location_enter_a_place"
+                android:singleLine="true"
                 android:padding="10dp"
                 android:textSize="@dimen/search_screen_text_size" />
         </LinearLayout>
