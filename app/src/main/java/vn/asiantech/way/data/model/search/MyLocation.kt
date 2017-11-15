@@ -1,6 +1,7 @@
 package vn.asiantech.way.data.model.search
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -8,8 +9,17 @@ import kotlinx.android.parcel.Parcelize
  * Created by cuongcaov. on 25/09/2017.
  */
 @Parcelize
-class MyLocation(val isHistory: Boolean?, val formattedAddress: String?, val id: String?, val name: String?,
-                      val placeId : String?, val geometry: Geometry?) : Parcelable
+class MyLocation(@SerializedName("formatted_address") val formatAddress: String?, val id: String?,
+                 val name: String?, @SerializedName("place_id") val placeId: String?,
+                 var geometry: Geometry?, var isHistory: Boolean?) : Parcelable {
+    constructor(id: String, placeId: String, name: String, formattedAddress: String)
+            : this(formattedAddress, id, name, placeId, null, false)
+}
+
+/**
+ *  Result of Google map api place detail
+ */
+data class ResultPlaceDetail(val result: MyLocation)
 
 /**
  *  Geometry of location

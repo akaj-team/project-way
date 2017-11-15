@@ -81,6 +81,8 @@
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
     <string name="dialog_message_fill_in">Please fill in all fields</string>
+    <string name="processing">Đang xử lý.</string>
+    <string name="get_detail_error">Xãy ra lỗi. Vui lòng thử lại sau.</string>
     <string name="dialog_title_error">Error</string>
     <string name="bottom_button_card_view_text_start_share">Start Sharing</string>
     <string name="register_update_profile">Update Profile</string>
