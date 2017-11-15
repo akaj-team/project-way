@@ -83,7 +83,7 @@ class GroupInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        onClick()
+        initOnclick()
         recyclerViewMembers.layoutManager = LinearLayoutManager(context)
         recyclerViewMembers.adapter = adapter
     }
@@ -176,7 +176,7 @@ class GroupInfoFragment : BaseFragment() {
                 })
     }
 
-    private fun onClick() {
+    private fun initOnclick() {
         imgInvite.setOnClickListener {
             // TODO: Invite a given person to group
         }

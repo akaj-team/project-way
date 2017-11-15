@@ -52,10 +52,10 @@ class CreateGroupFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onClick()
+        initOnClick()
     }
 
-    private fun onClick() {
+    private fun initOnClick() {
         btnCreateGroup.setOnClickListener {
             val groupName = edtGroupName.text.toString().trim()
             if (groupName.isNotEmpty()) {

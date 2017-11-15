@@ -22,10 +22,10 @@ class ReloadFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onClick()
+        initOnclick()
     }
 
-    private fun onClick() {
+    private fun initOnclick() {
         imgReload.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_RELOAD))
         }

@@ -21,10 +21,10 @@ class NonGroupMemberFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onClick()
+        initOnclick()
     }
 
-    private fun onClick() {
+    private fun initOnclick() {
         btnCreateGroup.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_CALL_CREATE_GROUP_FRAGMENT))
         }
