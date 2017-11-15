@@ -1,9 +1,7 @@
 package vn.asiantech.way.ui.search
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -31,7 +29,6 @@ import vn.asiantech.way.utils.AppConstants
 class SearchLocationActivity : BaseActivity() {
 
     companion object {
-        private const val SHARED_PREFERENCES = "shared"
         private const val KEY_HISTORY = "history"
         private const val HISTORY_MAX_SIZE = 10
     }
@@ -39,13 +36,11 @@ class SearchLocationActivity : BaseActivity() {
     private var mTask: SearchLocationAsyncTask? = null
     private var mAdapter: LocationsAdapter? = null
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
-    private var mSharedPreferences: SharedPreferences? = null
     private var mIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_location)
-        mSharedPreferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         mIntent = Intent(applicationContext, ShareLocationActivity::class.java)
         initAdapter()
         locationSearch()
@@ -80,7 +75,7 @@ class SearchLocationActivity : BaseActivity() {
                     }
                     mTask = SearchLocationAsyncTask(
                             object : SearchLocationAsyncTask.SearchLocationListener {
-                        override fun onCompleted(myLocations: List<MyLocation>) {
+                                override fun onCompleted(myLocations: List<MyLocation>) {
                             val thread = Thread({
                                 runOnUiThread({
                                     myLocations.forEach {
@@ -91,7 +86,6 @@ class SearchLocationActivity : BaseActivity() {
                             })
                             thread.start()
                         }
-
                     })
                     mTask?.execute(p0.toString())
                 } else {
@@ -158,7 +152,6 @@ class SearchLocationActivity : BaseActivity() {
                                             .show()
                                 }
                             }
-
                         })
             }
         })
@@ -170,7 +163,7 @@ class SearchLocationActivity : BaseActivity() {
         val gson = Gson()
         val result = mutableListOf<MyLocation>()
         return try {
-            val history = mSharedPreferences?.getString(KEY_HISTORY, "[]")
+            val history = mSharedPreferences.getString(KEY_HISTORY, "[]")
             val jsonArray = JSONArray(history)
             (0 until jsonArray.length())
                     .mapTo(result) {
@@ -185,7 +178,7 @@ class SearchLocationActivity : BaseActivity() {
 
     private fun saveSearchHistory(myLocation: MyLocation) {
         val gson = Gson()
-        val editor = mSharedPreferences?.edit()
+        val editor = mSharedPreferences.edit()
         var history = getSearchHistory()
         if (history == null) {
             history = mutableListOf()

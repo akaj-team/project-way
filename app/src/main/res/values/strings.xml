@@ -40,6 +40,7 @@
     <string name="custom_floating_menu_calendar_title">Calendar</string>
     <string name="custom_floating_menu_profile_title">Profile</string>
     <string name="custom_floating_menu_share_title">Share</string>
+    <string name="custom_floating_menu_group_title">Group</string>
 
     <!--Register screen-->
     <string name="register_description">Add your photo, name and phone so that your friends can see you on a map,and call you when you are on the way</string>
@@ -88,4 +89,24 @@
     <string name="register_update_profile">Update Profile</string>
     <string name="register_message_dialog">Your default user name is user</string>
     <string name="register_title_dialog">Information</string>
+    <!-- Group Screen -->
+    <string name="not_yet_join_to_group">Bạn chưa tham gia vào nhóm.</string>
+    <string name="create_new_group">Tạo nhóm mới</string>
+    <string name="back">Trở về</string>
+    <string name="group_name">Tên nhóm</string>
+    <string name="create_group">Tạo</string>
+    <string name="error_message">Xãy ra lỗi! Vui lòng thử lại sau.</string>
+    <string name="touch_to_reload">Nhấn vào nút dưới để thử lại.</string>
+    <string name="members_count">Tổng số thành viên: %d</string>
+    <string name="create_at">Ngày tạo: %s</string>
+    <string name="members_list">Danh sách thành viên:</string>
+    <string name="can_not_get_members_list">Không thể tải danh sách thành viên.</string>
+    <string name="view_invites">Xem các lời mời</string>
+    <string name="confirm">Xác nhận hành động</string>
+    <string name="confirm_message_leave_group">Bạn chắc chắn muốn rời khỏi group này?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="leave_group_notification">Bạn đã rời khỏi nhóm %s.</string>
+    <string name="call_intent">tel:+84%s</string>
+    <string name="coming_soon">Coming soon</string>
 </resources>

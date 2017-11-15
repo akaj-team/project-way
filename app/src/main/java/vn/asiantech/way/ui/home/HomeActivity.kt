@@ -21,6 +21,7 @@ import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.LocationUtil
@@ -30,6 +31,7 @@ import vn.asiantech.way.utils.LocationUtil
  * Created by atHangTran on 26/09/2017.
  */
 class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
+
     companion object {
         const val PADDING_LEFT = 0
         const val PADDING_TOP = 0
@@ -96,6 +98,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     override fun onSearchClick() {
         startActivity(Intent(this, SearchLocationActivity::class.java))
+        setGoneOverLay()
+    }
+
+    override fun onGroupClick() {
+        startActivity(Intent(this, GroupActivity::class.java))
         setGoneOverLay()
     }
 
