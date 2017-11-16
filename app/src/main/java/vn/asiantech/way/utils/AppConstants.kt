@@ -16,6 +16,7 @@ object AppConstants {
     // Key share preferences
     val KEY_TRACKING_HISTORY = "tracking_history"
     val KEY_ACTION_TYPE = "action_type"
+    val KEY_DESTINATION = "destination"
     val KEY_SHARED_PREFERENCES = "shared"
     val HISTORY_MAX_SIZE: Int = 10
 

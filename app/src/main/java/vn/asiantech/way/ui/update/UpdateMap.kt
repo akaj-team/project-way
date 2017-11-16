@@ -57,10 +57,10 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         private const val TYPE_ANCHOR = 0.5f
         private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
-        private const val BEGIN_LAT = 16.0721115
-        private const val BEGIN_LONG = 108.2302225
-        private const val DESTINATION_LAT = 16.0712047
-        private const val DESTINATION_LONG = 108.2193197
+         const val BEGIN_LAT = 16.0721115
+         const val BEGIN_LONG = 108.2302225
+         const val DESTINATION_LAT = 16.0712047
+         const val DESTINATION_LONG = 108.2193197
 
     }
 
@@ -78,7 +78,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         Preference.init(this)
-        Log.d("zxc", "action type " + Preference().getActionType())
         initMap()
         initViews()
         fabMenuGroup.setOnMenuItemClickListener(this)
@@ -91,33 +90,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         }
         initData()
         setDataForRecyclerView()
-        btnShowSummary.setOnClickListener {
-            showDialog()
-        }
-
-        imgArrowRight.setOnClickListener {
-            showDetailTracking()
-        }
-
-        imgArrowDown.setOnClickListener {
-            setArrowDownClick()
-        }
-
-        imgArrowRightStartItem.setOnClickListener {
-            setArrowRightStartItemClick()
-        }
-
-        imgArrowRightEndItem.setOnClickListener {
-            setArrowRightEndItemClick()
-        }
-
-        imgArrowDropDownStartItem.setOnClickListener {
-            setArrowDropDownStartItemClick()
-        }
-
-        imgArrowDropDownEndItem.setOnClickListener {
-            setArrowDropDownEndItemClick()
-        }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -268,65 +240,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         }
         mBegin = LatLng(BEGIN_LAT, BEGIN_LONG)
         mDestination = LatLng(DESTINATION_LAT, DESTINATION_LONG)
-    }
-
-    private fun setArrived() {
-        recycleViewLocation.visibility = View.GONE
-        rlLayoutArrived.visibility = View.VISIBLE
-        mArrived.latLngs?.toList()?.let {
-            updateMap(it)
-        }
-        btnShowSummary.visibility = View.VISIBLE
-        progressBarCircular.progress = TYPE_PROGRESS_MAX
-        tvTimeTotalArrived.text = mArrived.time.makeDuration(this)
-        tvDistanceArrived.text = mArrived.distance.makeDistance(this)
-    }
-
-    private fun showDialog() {
-        val dialog = DialogArrived.newInstance(mArrived.time, mArrived.distance,
-                mArrived.averageSpeed)
-        val fragmentManager = supportFragmentManager as? FragmentManager
-        dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
-    }
-
-    private fun showDetailTracking() {
-        imgArrowRight.visibility = View.GONE
-        imgArrowDown.visibility = View.VISIBLE
-        cardViewDetailArrived.visibility = View.VISIBLE
-        tvStartTime.text = mArrived.dateTimeFirst
-        tvStartAddress.text = mArrived.firstLocation
-        tvEndTime.text = mArrived.dateTimeEnd
-        tvEndAddress.text = mArrived.endLocation
-    }
-
-    private fun setArrowDownClick() {
-        imgArrowDown.visibility = View.GONE
-        imgArrowRight.visibility = View.VISIBLE
-        cardViewDetailArrived.visibility = View.GONE
-    }
-
-    private fun setArrowRightStartItemClick() {
-        imgArrowRightStartItem.visibility = View.GONE
-        imgArrowDropDownStartItem.visibility = View.VISIBLE
-        tvStartAddress.visibility = View.VISIBLE
-    }
-
-    private fun setArrowDropDownEndItemClick() {
-        imgArrowDropDownEndItem.visibility = View.GONE
-        imgArrowRightEndItem.visibility = View.VISIBLE
-        tvEndAddress.visibility = View.GONE
-    }
-
-    private fun setArrowDropDownStartItemClick() {
-        imgArrowDropDownStartItem.visibility = View.GONE
-        imgArrowRightStartItem.visibility = View.VISIBLE
-        tvStartAddress.visibility = View.GONE
-    }
-
-    private fun setArrowRightEndItemClick() {
-        imgArrowRightEndItem.visibility = View.GONE
-        imgArrowDropDownEndItem.visibility = View.VISIBLE
-        tvEndAddress.visibility = View.VISIBLE
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {

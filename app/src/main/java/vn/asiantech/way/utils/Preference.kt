@@ -3,6 +3,7 @@ package vn.asiantech.way.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import org.json.JSONArray
@@ -31,9 +32,9 @@ class Preference {
         val result = mutableListOf<vn.asiantech.way.data.model.Location>()
         return try {
             val history = mSharedPreferences?.getString(AppConstants.KEY_TRACKING_HISTORY, "[]")
-//            Log.d("zxc", "history " + history)
+            Log.d("zxc", "history " + history)
             val jsonArray = JSONArray(history)
-//            Log.d("zxc", "jsonArray " + jsonArray)
+            Log.d("zxc", "jsonArray " + jsonArray)
             (0 until jsonArray.length())
                     .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), vn.asiantech.way.data.model.Location::class.java) }
 //            Log.d("zxc", "result " + result)
@@ -72,4 +73,19 @@ class Preference {
         editor?.putString(AppConstants.KEY_ACTION_TYPE, actionType)
         editor?.apply()
     }
+
+    internal fun setDestinationLatLng(latLng: LatLng) {
+        val editor = mSharedPreferences?.edit()
+        val result = "${latLng.latitude},${latLng.longitude}"
+        editor?.putString(AppConstants.KEY_DESTINATION, result)
+        editor?.apply()
+    }
+
+    internal fun getDestinationLatLng(): LatLng? {
+        val s = mSharedPreferences?.getString(AppConstants.KEY_DESTINATION, "")
+        val latLng = s?.split(",")
+        val result = latLng?.get(0)?.toDouble()?.let { LatLng(it, latLng[1].toDouble()) }
+        return result
+    }
+
 }

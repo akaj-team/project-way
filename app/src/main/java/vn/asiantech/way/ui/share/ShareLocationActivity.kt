@@ -32,17 +32,26 @@ import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
-import com.hypertrack.lib.models.*
+import com.hypertrack.lib.models.Action
+import com.hypertrack.lib.models.ActionParamsBuilder
+import com.hypertrack.lib.models.ErrorResponse
+import com.hypertrack.lib.models.SuccessResponse
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
+import kotlinx.android.synthetic.main.detail_arrived.*
+import kotlinx.android.synthetic.main.show_arrived.*
 import kotlinx.android.synthetic.main.tracking_progress_view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.arrived.Arrived
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.data.model.share.ResultDistance
 import vn.asiantech.way.data.remote.APIUtil
+import vn.asiantech.way.extension.makeDistance
+import vn.asiantech.way.extension.makeDuration
+import vn.asiantech.way.ui.arrived.DialogArrived
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
@@ -66,6 +75,7 @@ import kotlin.collections.ArrayList
 class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
     companion object {
+        private const val TYPE_PROGRESS_MAX = 100
         private const val INTERVAL = 500L
         private const val ZOOM_SIZE = 16f
         private const val TIME_CONVERT = 3.6
@@ -101,6 +111,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private lateinit var mMapFragment: SupportMapFragment
     private lateinit var mGoogleApiClient: GoogleApiClient
     private lateinit var mLocationRequest: LocationRequest
+    private lateinit var mDestination: LatLng
+    private lateinit var mBegin: LatLng
     private var mDestinationName: String? = null
     private var mLatLng: LatLng? = null
     private var mMyLocation: MyLocation? = null
@@ -111,6 +123,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mGroundOverlay: GroundOverlay? = null
     private var line: Polyline? = null
     private var line1: Polyline? = null
+    private var mArrived = Arrived()
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -131,12 +144,54 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         mAction = Preference().getActionType()
         registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         mLocationUpdates = ArrayList()
-        mLocations = ArrayList()
+        mLocations = mutableListOf()
         initMap()
         initializeUIViews()
         initGoogleApiClient()
         initLocationRequest()
         onClickButtonSearchLocation()
+        //===================
+        Preference().getTrackingHistory()?.let { mLocations?.addAll(it) }
+        mArrived.latLngs = mutableListOf()
+        mLocations?.forEach {
+            it.point.let {
+                mArrived.latLngs?.add(it)
+                mArrived.latLngs?.forEach {
+                    Log.d("zxc", "aaa " + it)
+                }
+            }
+        }
+        mBegin = LatLng(UpdateMap.BEGIN_LAT, UpdateMap.BEGIN_LONG)
+        mDestination = LatLng(UpdateMap.DESTINATION_LAT, UpdateMap.DESTINATION_LONG)
+        btnShowSummary.setOnClickListener {
+            showDialog()
+        }
+
+        imgArrowRight.setOnClickListener {
+            showDetailTracking()
+        }
+
+        imgArrowDown.setOnClickListener {
+            setArrowDownClick()
+        }
+
+        imgArrowRightStartItem.setOnClickListener {
+            setArrowRightStartItemClick()
+        }
+
+        imgArrowRightEndItem.setOnClickListener {
+            setArrowRightEndItemClick()
+        }
+
+        imgArrowDropDownStartItem.setOnClickListener {
+            setArrowDropDownStartItemClick()
+        }
+
+        imgArrowDropDownEndItem.setOnClickListener {
+            setArrowDropDownEndItemClick()
+        }
+
+        //================================
         initBottomButtonCard(true, mAction)
     }
 
@@ -162,6 +217,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (lat != null && lng != null) {
             mLatLng = LatLng(lat, lng)
             addDestinationMarker(mLatLng)
+            mIsConfirm = true
         }
         if (mAction == AppConstants.KEY_CURRENT_LOCATION) {
             mLatLng = mCurrentLocation?.latitude?.let { LatLng(it, mCurrentLocation!!.longitude) }
@@ -171,6 +227,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
         if (mLatLng != null) {
             mDestinationLatLng = mLatLng!!
+            Log.d("zxc", "des " + mDestinationLatLng)
+            Preference().setDestinationLatLng(mDestinationLatLng)
         }
     }
 
@@ -216,6 +274,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         addDestinationMarker(mLatLng)
                         mDestinationLatLng = mLatLng!!
                         mIsConfirm = true
+                        Log.d("zxc", "des " + mDestinationLatLng)
+                        Preference().setDestinationLatLng(mDestinationLatLng)
                     }
                 // Click sharing
                     AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
@@ -484,6 +544,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     mCurrentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
                     mCurrentMarker?.setAnchor(0.5f, 0.5f)
                     updateCurrentTimeView()
+                    setArrived()
                     Toast.makeText(this, "DONE!", Toast.LENGTH_SHORT).show()
                     return@Runnable
                 }
@@ -497,16 +558,18 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun requestLocation() {
-        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
-            override fun onSuccess(p0: SuccessResponse) {
-                val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
-                updateUI(hyperTrackLocation)
-            }
+//        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
+//            override fun onSuccess(p0: SuccessResponse) {
+//                val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
+        val hyperTrackLocation = LocationUtil(this).getCurrentLocation()
+        hyperTrackLocation?.let { updateUI(it) }
+//                updateUI(hyperTrackLocation)
+//            }
 
-            override fun onError(p0: ErrorResponse) {
-                Log.d("at-dinhvo", "ErrorResponse: " + p0.errorMessage)
-            }
-        })
+//            override fun onError(p0: ErrorResponse) {
+//                Log.d("at-dinhvo", "ErrorResponse: " + p0.errorMessage)
+//            }
+//        })
     }
 
 //    private fun requestEta(vehicle: VehicleType) {
@@ -531,8 +594,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         circleProgressBar.progress = 100
     }
 
-    private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
-        val latLng = hyperTrackLocation.geoJSONLocation.latLng
+    private fun updateUI(hyperTrackLocation: Location) {
+        val latLng = LatLng(hyperTrackLocation.latitude, hyperTrackLocation.longitude)
         if (mLocationUpdates != null) {
             if (latLng != null) {
                 mLocationUpdates?.add(latLng)
@@ -542,12 +605,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 mDistanceTravel += getDistancePerSecond(mLocationUpdates!![mLocationUpdates!!.size - 2]
                         , mLocationUpdates!![mLocationUpdates!!.size - 1])
             }
-            updateView(hyperTrackLocation)
+            updateView()
             updateMapView(latLng)
         }
     }
 
-    private fun updateView(hyperTrackLocation: HyperTrackLocation) {
+    private fun updateView() {
         if (!mIsStopTracking) {
             tvActionStatus.text = resources.getString(R.string.leaving)
         }
@@ -742,9 +805,64 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun convertLatLngToString(latLng: LatLng?): String {
-        val lat = latLng?.latitude.toString()
-        val lng = latLng?.longitude.toString()
-        Log.d("zxc", "result $lat,$lng")
-        return "$lat,$lng"
+        return "${latLng?.latitude.toString()},${latLng?.longitude.toString()}"
+    }
+
+    // Show dialog when arrived
+    private fun setArrived() {
+        bottomButtonCard?.hideBottomCardLayout()
+        trackingProgressIno?.hideTrackingProgress()
+        rlLayoutArrived.visibility = View.VISIBLE
+        btnShowSummary.visibility = View.VISIBLE
+        progressBarCircular.progress = TYPE_PROGRESS_MAX
+        tvTimeTotalArrived.text = mArrived.time.makeDuration(this)
+        tvDistanceArrived.text = mArrived.distance.makeDistance(this)
+    }
+
+    private fun showDialog() {
+        val dialog = DialogArrived.newInstance(mArrived.time, mArrived.distance,
+                mArrived.averageSpeed)
+        val fragmentManager = supportFragmentManager
+        dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
+    }
+
+    private fun showDetailTracking() {
+        imgArrowRight.visibility = View.GONE
+        imgArrowDown.visibility = View.VISIBLE
+        cardViewDetailArrived.visibility = View.VISIBLE
+        tvStartTime.text = mArrived.dateTimeFirst
+        tvStartAddress.text = mArrived.firstLocation
+        tvEndTime.text = mArrived.dateTimeEnd
+        tvEndAddress.text = mArrived.endLocation
+    }
+
+    private fun setArrowDownClick() {
+        imgArrowDown.visibility = View.GONE
+        imgArrowRight.visibility = View.VISIBLE
+        cardViewDetailArrived.visibility = View.GONE
+    }
+
+    private fun setArrowRightStartItemClick() {
+        imgArrowRightStartItem.visibility = View.GONE
+        imgArrowDropDownStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.VISIBLE
+    }
+
+    private fun setArrowDropDownEndItemClick() {
+        imgArrowDropDownEndItem.visibility = View.GONE
+        imgArrowRightEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.GONE
+    }
+
+    private fun setArrowDropDownStartItemClick() {
+        imgArrowDropDownStartItem.visibility = View.GONE
+        imgArrowRightStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.GONE
+    }
+
+    private fun setArrowRightEndItemClick() {
+        imgArrowRightEndItem.visibility = View.GONE
+        imgArrowDropDownEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.VISIBLE
     }
 }

@@ -17,10 +17,6 @@
             android:layout_height="match_parent"
             tools:context="vn.asiantech.way.ui.home.HomeActivity" />
 
-        <include
-            layout="@layout/show_arrived"
-            android:visibility="gone" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleViewLocation"
             android:layout_width="match_parent"
