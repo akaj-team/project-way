@@ -1,7 +1,10 @@
 package vn.asiantech.way.ui.splash
 
 import android.animation.ValueAnimator
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -29,8 +32,6 @@ class SplashActivity : BaseActivity() {
         const val DELAY = 3000L
     }
 
-    private lateinit var mSharedPreferences: SharedPreferences
-
     private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if ((intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
@@ -56,10 +57,9 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        mSharedPreferences = getSharedPreferences(RegisterActivity.SHARED_NAME, Context.MODE_PRIVATE)
         if (HyperTrackUtils.isInternetConnected(this)) {
             if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
                     startActivity(Intent(this, HomeActivity::class.java))
                 }
             }
@@ -78,7 +78,7 @@ class SplashActivity : BaseActivity() {
                     progressBar.visibility = View.VISIBLE
                     btnEnableLocation.visibility = View.GONE
                     tvAppDescription.visibility = View.GONE
-                    if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
+                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
                         Handler().postDelayed({
                             startActivity(Intent(this, HomeActivity::class.java))
                             finish()

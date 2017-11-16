@@ -23,6 +23,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         imgBtnProfile.setOnClickListener(this)
         imgBtnCalendar.setOnClickListener(this)
         imgBtnSearch.setOnClickListener(this)
+        imgBtnGroup.setOnClickListener(this)
     }
 
     private var mOnMenuClickListener: OnMenuClickListener? = null
@@ -72,6 +73,10 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
                 visibilityAllChildView(View.INVISIBLE)
                 mOnMenuClickListener?.onSearchClick()
             }
+            R.id.imgBtnGroup -> {
+                visibilityAllChildView(View.INVISIBLE)
+                mOnMenuClickListener?.onGroupClick()
+            }
         }
     }
 
@@ -89,6 +94,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         rlProfile.startAnimation(animation)
         rlCalendar.startAnimation(animation)
         rlSearch.startAnimation(animation)
+        rlGroup.startAnimation(animation)
     }
 
     private fun visibilityAllChildView(visibilityState: Int) {
@@ -96,6 +102,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
         rlProfile.visibility = visibilityState
         rlCalendar.visibility = visibilityState
         rlSearch.visibility = visibilityState
+        rlGroup.visibility = visibilityState
     }
 
     /**
@@ -133,5 +140,10 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
          * Event when button search clicked
          */
         fun onSearchClick()
+
+        /**
+         * Event when button group clicked
+         */
+        fun onGroupClick()
     }
 }

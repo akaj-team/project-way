@@ -30,6 +30,7 @@ import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.arrived.DialogArrived
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.home.HomeAdapter
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
@@ -153,6 +154,11 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
 
     override fun onSearchClick() {
         startActivity(Intent(this, SearchLocationActivity::class.java))
+        setGoneOverLay()
+    }
+
+    override fun onGroupClick() {
+        startActivity(Intent(this, GroupActivity::class.java))
         setGoneOverLay()
     }
 

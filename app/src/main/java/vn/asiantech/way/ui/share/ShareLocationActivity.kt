@@ -303,7 +303,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun shareLocation() {
         val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        val message = "My TrackingInformation is ${bottomButtonCard.tvURL.text}"
+        val message = "My Location is ${bottomButtonCard.tvURL.text}"
         sharingIntent.type = "text/plain"
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message)
         startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), 200)
