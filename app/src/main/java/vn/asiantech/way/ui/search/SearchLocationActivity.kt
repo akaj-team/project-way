@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.search
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -61,7 +62,6 @@ class SearchLocationActivity : BaseActivity() {
             mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CONFIRM)
             startActivity(mIntent)
         }
-
     }
 
     private fun locationSearch() {
@@ -70,9 +70,7 @@ class SearchLocationActivity : BaseActivity() {
                 mMyLocations.clear()
                 mAdapter?.notifyDataSetChanged()
                 if (p0.toString().isNotEmpty()) {
-                    if (mTask != null) {
-                        mTask = null
-                    }
+                    mTask?.cancel(true)
                     mTask = SearchLocationAsyncTask(
                             object : SearchLocationAsyncTask.SearchLocationListener {
                                 override fun onCompleted(myLocations: List<MyLocation>) {
@@ -87,7 +85,7 @@ class SearchLocationActivity : BaseActivity() {
                             thread.start()
                         }
                     })
-                    mTask?.execute(p0.toString())
+                    mTask?.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, p0.toString());
                 } else {
                     val history = getSearchHistory()
                     if (history != null) {

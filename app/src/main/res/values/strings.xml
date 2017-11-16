@@ -109,4 +109,6 @@
     <string name="leave_group_notification">Bạn đã rời khỏi nhóm %s.</string>
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="search_group">Tìm kiếm nhóm</string>
+    <string name="join">Tham Gia</string>
 </resources>

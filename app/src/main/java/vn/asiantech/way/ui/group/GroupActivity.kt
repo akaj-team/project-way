@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.hypertrack.lib.HyperTrack
@@ -14,8 +15,13 @@ import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.models.ErrorResponse
 import com.hypertrack.lib.models.SuccessResponse
 import com.hypertrack.lib.models.User
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.Group
+import vn.asiantech.way.data.model.group.SearchGroupResult
+import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -67,6 +73,66 @@ class GroupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group)
+//        val fb = FirebaseDatabase.getInstance()
+//        val ref = fb.getReference("group")
+//        val x = GsonBuilder().serializeNulls().create()
+//        val a = BodyAddUserToGroup(null)
+//        val b = x.toJson(a)
+//        val c = x.fromJson<BodyAddUserToGroup>(b,BodyAddUserToGroup::class.java)
+//        Log.i("tag11", Gson().toJson(c))
+//
+//
+//        ref.addChildEventListener(object : ChildEventListener {
+//            override fun onCancelled(p0: DatabaseError?) {
+//
+//            }
+//
+//            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+//
+//            }
+//
+//            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+//
+//            }
+//
+//            override fun onChildRemoved(p0: DataSnapshot?) {
+//
+//            }
+//
+//            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+//                Log.i("tag11", Gson().toJson(p0?.value).toString())
+//            }
+//        })
+//        val groupInfo = GroupInfo("group001", "user0001", "Group Demo")
+//        fb.getReference("group/" + groupInfo.groupId + "/info").setValue(groupInfo)
+
+        HypertrackApi.getApiService().searchGroup("WAY")
+                .enqueue(object : Callback<SearchGroupResult> {
+                    override fun onFailure(call: Call<SearchGroupResult>?, t: Throwable?) {
+                        Log.i("tag11", "Fail: " + t?.message)
+                    }
+
+                    override fun onResponse(call: Call<SearchGroupResult>?, response: Response<SearchGroupResult>?) {
+                        response?.body()?.results?.forEach {
+                            Log.i("tag11","Value: " + Gson().toJson(it))
+                        }
+                    }
+
+                })
+        HypertrackApi.getApiService().searchGroup("way")
+                .enqueue(object : Callback<SearchGroupResult> {
+                    override fun onFailure(call: Call<SearchGroupResult>?, t: Throwable?) {
+                        Log.i("tag11", "Fail1: " + t?.message)
+                    }
+
+                    override fun onResponse(call: Call<SearchGroupResult>?, response: Response<SearchGroupResult>?) {
+                        response?.body()?.results?.forEach {
+                            Log.i("tag11","Value1: " + Gson().toJson(it))
+                        }
+                    }
+
+                })
+
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage(getString(R.string.processing))
         progressDialog.setCancelable(false)

@@ -153,8 +153,7 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun leaveGroup() {
-        HypertrackApi.getApiService().removeUserFromGroup(userId,
-                BodyAddUserToGroup(null))
+        HypertrackApi.getApiService().removeUserFromGroup(userId, BodyAddUserToGroup(null))
                 .enqueue(object : Callback<User> {
                     override fun onFailure(call: Call<User>?, t: Throwable?) {
                         Toast.makeText(context, R.string.error_message,

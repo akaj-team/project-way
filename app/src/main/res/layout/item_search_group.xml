@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <View
+        android:id="@+id/viewBreakLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorSearchScreenBackground" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewBreakLine"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvLocationName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:text="askdjhaskjdhsakjdhjksadhkjsahdsjkadhjkskasdh"
+            android:textSize="@dimen/search_screen_text_size"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/tvFormatAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:maxLines="1"
+            android:text="@string/join"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/search_screen_text_size" />
+    </LinearLayout>
+</RelativeLayout>

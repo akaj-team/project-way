@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.splash.SplashActivity">
+        <activity android:name=".ui.search.SearchLocationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,12 +82,10 @@
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.arrived.ArrivedActivity" />
 
-        <activity
-            android:name=".ui.search.SearchLocationActivity"
-            android:noHistory="true" />
+
 
         <activity android:name=".ui.update.UpdateMap" />
-        <activity android:name=".ui.group.GroupActivity" />
+
         <!-- Register meta-data here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
