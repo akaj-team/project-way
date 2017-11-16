@@ -1,8 +1,6 @@
 package vn.asiantech.way.ui.update
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
@@ -37,7 +35,6 @@ import vn.asiantech.way.ui.home.HomeAdapter
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.ui.share.ShareLocationActivity
-import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
 import vn.asiantech.way.utils.Preference
 
@@ -76,13 +73,13 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private lateinit var mBegin: LatLng
     private var mArrived = Arrived()
     private var mLocations: MutableList<Location> = mutableListOf()
-    private var mSharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        Preference.init(this)
+        Log.d("zxc", "action type " + Preference().getActionType())
         initMap()
-        mSharedPreferences = getSharedPreferences(AppConstants.KEY_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         initViews()
         fabMenuGroup.setOnMenuItemClickListener(this)
         frOverlay.setOnClickListener {
@@ -263,7 +260,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
 
     private fun initData() {
         Preference().getTrackingHistory()?.let { mLocations.addAll(it) }
-        mLocations.forEach { Log.d("zxc", "lllll " + it.description) }
         mArrived.latLngs = mutableListOf()
         mLocations.forEach {
             it.point.let {

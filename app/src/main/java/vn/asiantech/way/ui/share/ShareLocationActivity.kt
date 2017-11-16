@@ -31,14 +31,18 @@ import com.google.android.gms.maps.model.*
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.callbacks.HyperTrackCallback
-import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
 import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import kotlinx.android.synthetic.main.tracking_progress_view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.search.MyLocation
+import vn.asiantech.way.data.model.share.ResultDistance
+import vn.asiantech.way.data.remote.APIUtil
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
@@ -68,6 +72,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         private const val ONE_THOUSAND = 1000L
         private const val RADIUS = 360.0
         private const val STEP_ETA = 3
+        private const val API_KEY = "AIzaSyCda9e4fvxwWQyJYj5frzrhcHvXmiquZCk"
     }
 
     private var mCurrentMarker: Marker? = null
@@ -79,6 +84,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mRunnable: Runnable? = null
     private var mCountTimer = ONE_THOUSAND
     private lateinit var mDestinationLatLng: LatLng
+    private var mCurrentLatLng: LatLng? = null
     private var mDistanceTravel = 0f
     private var mAverageSpeed = 0f
     private var mEtaUpdate = 0.0f
@@ -88,6 +94,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mCurrentStatus = "STOP"
     private var mStartStatus = 0L
     private var mEndStatus = 0L
+    private var mEstimatesSpeed: Float? = 0.0f
 
     private var mStartPosition = 0
     private lateinit var mGoogleMap: GoogleMap
@@ -145,6 +152,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
         mCurrentLocation = LocationUtil(this).getCurrentLocation()
         if (mCurrentLocation != null) {
+            mCurrentLatLng = mCurrentLocation?.longitude?.let { mCurrentLocation?.latitude?.let { it1 -> LatLng(it1, it) } }
+            Log.d("zxc", "cutll " + mCurrentLatLng.toString())
             drawCurrentMaker(mCurrentLocation!!)
         }
         mGoogleMap.setOnCameraIdleListener(this)
@@ -210,7 +219,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     }
                 // Click sharing
                     AppConstants.KEY_SHARING, AppConstants.KEY_CURRENT_LOCATION -> {
+                        getLocationDistanceEstimates()
                         mAction = AppConstants.KEY_START_SHARING
+                        Preference().setActionType(AppConstants.KEY_START_SHARING)
                         bottomButtonCard.startProgress()
                         getTrackingURL()
                         mIsStartTracking = true
@@ -477,7 +488,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     return@Runnable
                 }
                 requestLocation()
-                requestEta(VehicleType.MOTORCYCLE)
+//                requestEta(VehicleType.MOTORCYCLE)
                 mCountTimer += ONE_THOUSAND
                 handlerProgressTracking()
             }
@@ -498,25 +509,25 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         })
     }
 
-    private fun requestEta(vehicle: VehicleType) {
-        HyperTrack.getETA(mDestinationLatLng, vehicle, object : HyperTrackCallback() {
-            override fun onSuccess(p0: SuccessResponse) {
-                mEtaUpdate = (p0.responseObject as Double?)!!.toFloat()
-                if (mCount < 1) {
-                    mEtaMaximum = mEtaUpdate
-                }
-                mCount++
-            }
-
-            override fun onError(p0: ErrorResponse) {
-                Log.d("at-dinhvo", "ETA: ErrorResponse " + p0.errorMessage)
-            }
-        })
-    }
+//    private fun requestEta(vehicle: VehicleType) {
+//        HyperTrack.getETA(mDestinationLatLng, vehicle, object : HyperTrackCallback() {
+//            override fun onSuccess(p0: SuccessResponse) {
+//                mEtaUpdate = (p0.responseObject as Double?)!!.toFloat()
+//                if (mCount < 1) {
+//                    mEtaMaximum = mEtaUpdate
+//                }
+//                mCount++
+//            }
+//
+//            override fun onError(p0: ErrorResponse) {
+//                Log.d("at-dinhvo", "ETA: ErrorResponse " + p0.errorMessage)
+//            }
+//        })
+//    }
 
     private fun updateCurrentTimeView() {
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
-        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
+//        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
         circleProgressBar.progress = 100
     }
 
@@ -540,12 +551,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (!mIsStopTracking) {
             tvActionStatus.text = resources.getString(R.string.leaving)
         }
-        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
-        if (hyperTrackLocation.speed != null) {
-            tvDistance.text = resources.getString(R.string.open_parentheses)
-                    .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
-                    .plus(resources.getString(R.string.close_parentheses_distance))
-        }
+//        tvTime.text = resources.getString(R.string.eta).plus(getEtaTime(mEtaUpdate))
+//        if (hyperTrackLocation.speed != null) {
+//            tvDistance.text = resources.getString(R.string.open_parentheses)
+//                    .plus(String.format(" %.2f", (mEtaMaximum * hyperTrackLocation.speed) / ONE_THOUSAND))
+//                    .plus(resources.getString(R.string.close_parentheses_distance))
+//        }
         tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
         tvElapsedTime.text = formatInterval(mCountTimer)
         tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
@@ -555,11 +566,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         drawLine()
     }
 
-    private fun getEtaTime(eta: Float): String = when {
-        eta >= 3600 -> String.format(" %02d", (eta / 3600).toInt()).plus(" hour")
-        eta < 60 -> String.format(" %02d", eta.toInt()).plus(" sec")
-        else -> String.format(" %02d", (eta / 60).toInt()).plus(" min")
-    }
+//    private fun getEtaTime(eta: Float): String = when {
+//        eta >= 3600 -> String.format(" %02d", (eta / 3600).toInt()).plus(" hour")
+//        eta < 60 -> String.format(" %02d", eta.toInt()).plus(" sec")
+//        else -> String.format(" %02d", (eta / 60).toInt()).plus(" min")
+//    }
 
     private fun formatInterval(millis: Long): String = String.format("%02d:%02d:%02d"
             , TimeUnit.MILLISECONDS.toHours(millis)
@@ -697,9 +708,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 saveTrackingHistory(location)
                 mLocations = getTrackingHistory()
             }
-            mLocations?.forEach {
-                Log.d("zxc", "location ${it.description} ${it.status} ${it.time} ${it.point} ${it.isChoose}")
-            }
             mCurrentStatus = status
             mStartPosition = position
         }
@@ -710,5 +718,33 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         val currentTime = Calendar.getInstance().time
         val formatDate = SimpleDateFormat("hh:mm a")
         return formatDate.format(currentTime)
+    }
+
+    private fun getLocationDistanceEstimates() {
+        val apiService = APIUtil.getService()
+        apiService?.getLocationDistance("metric", convertLatLngToString(mCurrentLatLng), convertLatLngToString(mDestinationLatLng), API_KEY)
+                ?.enqueue(object : Callback<ResultDistance> {
+                    override fun onResponse(call: Call<ResultDistance>?, response: Response<ResultDistance>?) {
+                        val result = response?.body()
+                        if (result != null) {
+                            Log.d("zxc", "distance " + result.rows[0].elements[0].distance.text)
+                            val element = result.rows[0].elements[0]
+                            tvTime.text = resources.getString(R.string.eta, element.duration.text)
+                            tvDistance.text = resources.getString(R.string.open_parentheses, element.distance.text)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResultDistance>?, t: Throwable?) {
+                        Log.d("zxc", "fail " + t)
+                    }
+
+                })
+    }
+
+    private fun convertLatLngToString(latLng: LatLng?): String {
+        val lat = latLng?.latitude.toString()
+        val lng = latLng?.longitude.toString()
+        Log.d("zxc", "result $lat,$lng")
+        return "$lat,$lng"
     }
 }

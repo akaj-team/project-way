@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import vn.asiantech.way.data.model.search.ResultLocation
 import vn.asiantech.way.data.model.share.LocationResponse
+import vn.asiantech.way.data.model.share.ResultDistance
 
 /**
  * Copyright © AsianTech Co., Ltd
@@ -22,4 +23,15 @@ interface ServiceApi {
      */
     @GET("place/textsearch/json")
     fun getLocation(@Query("query") query: String, @Query("key") key: String): Call<ResultLocation>
+
+    /**
+     *  This method to get time and distance location
+     *
+     *  @param units the units of return value type
+     *  @param origins the start LatLng
+     *  @param destinations the destinations LatLng
+     *  @param key the api key of google place api
+     */
+    @GET("distancematrix/json")
+    fun getLocationDistance(@Query("units") units: String, @Query("origins") origins: String, @Query("destinations") destinations: String, @Query("key") key: String): Call<ResultDistance>
 }
