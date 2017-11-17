@@ -20,4 +20,7 @@
     <color name="colorBtnShare">#C6AA00</color>
     <color name="blue">#664DF9</color>
     <color name="colorOverlay">#aff5ebeb</color>
+    <color name="colorYellow">#fff176</color>
+    <color name="colorBlueLight">#64b5f6</color>
+    <color name="colorCyan">#e0f7fa</color>
 </resources>
