@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -57,15 +58,6 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                }
-            }
-        } else {
-            toast(getString(R.string.splash_toast_turn_on_wifi))
-        }
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
