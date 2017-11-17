@@ -30,35 +30,31 @@ internal class DialogArrived : DialogFragment() {
          *  @averageSpeed: Double, averageSpeed to show on dialog
          *  @return Dialog to show detail user tracked
          */
-        internal fun newInstance(time: Long, distance: Double, averageSpeed: Double)
+        internal fun newInstance(time: String?, distance: String?)
                 : DialogArrived {
             val dialogShowArrived = DialogArrived()
             val bundle = Bundle()
-            bundle.putLong(TYPE_TIME, time)
-            bundle.putDouble(TYPE_DISTANCE, distance)
-            bundle.putDouble(TYPE_AVERAGE_SPEED, averageSpeed)
+            bundle.putString(TYPE_TIME, time)
+            bundle.putString(TYPE_DISTANCE, distance)
             dialogShowArrived.arguments = bundle
             return dialogShowArrived
         }
     }
 
-    private var mTime: Long? = null
-    private var mDistance: Double? = null
-    private var mAverageSpeed: Double? = null
+    private var mTime: String? = null
+    private var mDistance: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mTime = arguments?.getLong(TYPE_TIME, 0)
-        mDistance = arguments?.getDouble(TYPE_DISTANCE, 0.0)
-        mAverageSpeed = arguments?.getDouble(TYPE_AVERAGE_SPEED, 0.0)
+        mTime = arguments?.getString(TYPE_TIME, "")
+        mDistance = arguments?.getString(TYPE_DISTANCE, "")
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater?.inflate(R.layout.dialog_show_arrived_infor, container, false)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        v?.tvDistance?.text = mDistance?.makeDistance(context)
-        v?.tvTimeTotal?.text = mTime?.makeDuration(context)
-        v?.tvAverageSpeed?.text = mAverageSpeed?.makeAverageSpeed(context)
+        v?.tvDistance?.text = mDistance
+        v?.tvTimeTotal?.text = mTime
         v?.btnDoneDialog?.setOnClickListener {
             dismiss()
             // Todo : Back to Confirm screen

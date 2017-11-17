@@ -18,7 +18,6 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
-import android.widget.Toast
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
@@ -42,12 +41,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.arrived.Arrived
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.data.model.share.ResultDistance
 import vn.asiantech.way.data.remote.APIUtil
-import vn.asiantech.way.extension.makeDistance
-import vn.asiantech.way.extension.makeDuration
 import vn.asiantech.way.ui.arrived.DialogArrived
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
@@ -103,6 +99,12 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mEndStatus = 0L
     private var mEstimatesSpeed: Float? = 0.0f
     private var mIsArrived: Boolean = false
+    private var mIsSetETA: Boolean = false
+    private var mEtaTime: String? = null
+    private var mEtaDistance: String? = null
+    private var mTimeStart: String? = null
+    private var mTimeArrived: String? = null
+    private var mIsShowArrivedInfo = false
 
     private var mStartPosition = 0
     private lateinit var mGoogleMap: GoogleMap
@@ -121,7 +123,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mGroundOverlay: GroundOverlay? = null
     private var line: Polyline? = null
     private var line1: Polyline? = null
-    private var mArrived = Arrived()
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -165,8 +166,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         mCurrentLocation = LocationUtil(this).getCurrentLocation()
         if (mCurrentLocation != null) {
             mCurrentLatLng = mCurrentLocation?.longitude?.let { mCurrentLocation?.latitude?.let { it1 -> LatLng(it1, it) } }
-            Log.d("zxc", "cutll " + mCurrentLatLng.toString())
-            drawCurrentMaker(mCurrentLocation!!)
+            mCurrentLocation?.let { drawCurrentMaker(it) }
         }
         mGoogleMap.setOnCameraIdleListener(this)
         val lat = mMyLocation?.geometry?.location?.lat
@@ -184,7 +184,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
         if (mLatLng != null) {
             mDestinationLatLng = mLatLng!!
-            Log.d("zxc", "des " + mDestinationLatLng)
             Preference().setDestinationLatLng(mDestinationLatLng)
         }
     }
@@ -231,7 +230,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         addDestinationMarker(mLatLng)
                         mDestinationLatLng = mLatLng!!
                         mIsConfirm = true
-                        Log.d("zxc", "des " + mDestinationLatLng)
                         Preference().setDestinationLatLng(mDestinationLatLng)
                     }
                 // Click sharing
@@ -241,6 +239,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         bottomButtonCard.startProgress()
                         getTrackingURL()
                         mIsStartTracking = true
+                        mTimeStart = getCalendarDateTime()
                         drawCurrentMaker(mCurrentLocation!!)
                         handlerProgressTracking()
                     }
@@ -328,7 +327,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 bottomButtonCard?.showTitle()
             }
         }
-        if (show) {
+        if (show && !mIsArrived) {
             bottomButtonCard?.showBottomCardLayout()
             trackingProgressIno?.hideTrackingProgress()
         }
@@ -370,7 +369,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
                     ?.showInfoWindow()
             imgPickLocation.visibility = View.INVISIBLE
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                    .target(latLng)
+                    .zoom(ZOOM_SIZE)
+                    .build()))
         }
     }
 
@@ -384,8 +386,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     .title(getString(R.string.current_location))
                     .anchor(0.5f, 0.5f))
             addPulseRing(currentLocation)
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16f))
-
+            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                    .target(currentLocation)
+                    .zoom(ZOOM_SIZE)
+                    .build()))
         } else {
             mMarker?.remove()
         }
@@ -499,7 +503,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     mCurrentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
                     mCurrentMarker?.setAnchor(0.5f, 0.5f)
                     updateCurrentTimeView()
-                    Toast.makeText(this, "DONE!", Toast.LENGTH_SHORT).show()
                     setArrived()
                     return@Runnable
                 }
@@ -533,7 +536,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
         getLocationDistanceEstimates(latLng, mDestinationLatLng)
         mIsArrived = compareLocation(latLng, mDestinationLatLng)
-        compareLocation(latLng, mDestinationLatLng)
+        mTimeArrived = getCalendarDateTime()
         if (mLocationUpdates != null) {
             if (latLng != null) {
                 mLocationUpdates?.add(latLng)
@@ -644,11 +647,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         } else {
             mCurrentMarker!!.position = latLng
             mCurrentMarker!!.rotation = mAngle
-            /*mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
-                    .target(latLng)
-                    .zoom(ZOOM_SIZE)
-                    .build())
-            )*/
         }
         MarkerAnimation.animateMarker(mCurrentMarker, latLng)
     }
@@ -709,6 +707,17 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         return formatDate.format(currentTime)
     }
 
+    private fun getLocationDesciption(latLng: LatLng): String? {
+        val geoCoder = Geocoder(this, Locale.getDefault())
+        var description: String? = null
+        val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        if (addresses.isNotEmpty()) {
+            val address: Address = addresses[0]
+            description = address.getAddressLine(0)
+        }
+        return description
+    }
+
     private fun getLocationDistanceEstimates(currentLatLng: LatLng, destinationLatLng: LatLng) {
         val apiService = APIUtil.getService()
         apiService?.getLocationDistance("metric", convertLatLngToString(currentLatLng), convertLatLngToString(destinationLatLng), API_KEY)
@@ -719,6 +728,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                             val element = result.rows[0].elements[0]
                             tvTime.text = resources.getString(R.string.eta, element.duration.text)
                             tvDistance.text = resources.getString(R.string.open_parentheses, element.distance.text)
+                            if (!mIsSetETA) {
+                                mEtaTime = element.duration.text
+                                mEtaDistance = element.distance.text
+                                tvTimeTotalArrived.text = mEtaTime
+                                tvDistanceArrived.text = mEtaDistance
+                                mIsSetETA = true
+                            }
                         }
                     }
 
@@ -734,38 +750,29 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     }
 
     private fun compareLocation(currentLatLng: LatLng, destinationLatLng: LatLng): Boolean {
-        val currentLat = String.format("%.4f", currentLatLng.latitude).toFloat()
-        val currentLng = String.format("%.4f", currentLatLng.longitude).toFloat()
-        val destinationLat = String.format("%.4f", destinationLatLng.latitude).toFloat()
-        val destinationLng = String.format("%.4f", destinationLatLng.longitude).toFloat()
-        Log.d("zxc", "lat $currentLat ====== $destinationLat")
-        Log.d("zxc", "lat $currentLng ====== $destinationLng")
+        val currentLat = String.format("%.4f", currentLatLng.latitude)
+        val currentLng = String.format("%.4f", currentLatLng.longitude)
+        val destinationLat = String.format("%.4f", destinationLatLng.latitude)
+        val destinationLng = String.format("%.4f", destinationLatLng.longitude)
         return currentLat == destinationLat && currentLng == destinationLng
     }
 
     private fun initArrivedDialog() {
         Preference().getTrackingHistory()?.let { mLocations?.addAll(it) }
-        mArrived.latLngs = mutableListOf()
-        mLocations?.forEach {
-            it.point.let {
-                mArrived.latLngs?.add(it)
-                mArrived.latLngs?.forEach {
-                    Log.d("zxc", "aaa " + it)
-                }
-            }
-        }
         mBegin = LatLng(UpdateMap.BEGIN_LAT, UpdateMap.BEGIN_LONG)
         mDestination = LatLng(UpdateMap.DESTINATION_LAT, UpdateMap.DESTINATION_LONG)
         btnShowSummary.setOnClickListener {
             showDialog()
         }
 
-        imgArrowRight.setOnClickListener {
-            showDetailTracking()
-        }
-
-        imgArrowDown.setOnClickListener {
-            setArrowDownClick()
+        llShowResult.setOnClickListener {
+            if (mIsShowArrivedInfo) {
+                showDetailTracking()
+                mIsShowArrivedInfo = false
+            } else {
+                setArrowDownClick()
+                mIsShowArrivedInfo = true
+            }
         }
 
         imgArrowRightStartItem.setOnClickListener {
@@ -783,34 +790,44 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         imgArrowDropDownEndItem.setOnClickListener {
             setArrowDropDownEndItemClick()
         }
+
+        imgBtnResetPosition.setOnClickListener {
+            mCurrentLatLng?.let {
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_SIZE))
+            }
+        }
     }
 
     // Show dialog when arrived
     private fun setArrived() {
-        bottomButtonCard?.hideBottomCardLayout()
-        trackingProgressIno?.hideTrackingProgress()
+        bottomButtonCard?.visibility = View.GONE
+        trackingProgressIno?.visibility = View.GONE
         rlLayoutArrived.visibility = View.VISIBLE
         btnShowSummary.visibility = View.VISIBLE
         progressBarCircular.progress = TYPE_PROGRESS_MAX
-        tvTimeTotalArrived.text = mArrived.time.makeDuration(this)
-        tvDistanceArrived.text = mArrived.distance.makeDistance(this)
+        showDialog()
     }
 
     private fun showDialog() {
-        val dialog = DialogArrived.newInstance(mArrived.time, mArrived.distance,
-                mArrived.averageSpeed)
+        val dialog = DialogArrived.newInstance(mEtaTime, mEtaDistance)
         val fragmentManager = supportFragmentManager
         dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
+    }
+
+    private fun getCalendarDateTime(): String {
+        val calendar = Calendar.getInstance().time
+        val simple = SimpleDateFormat("KK:mm a', Th'MM dd", Locale.ENGLISH)
+        return simple.format(calendar)
     }
 
     private fun showDetailTracking() {
         imgArrowRight.visibility = View.GONE
         imgArrowDown.visibility = View.VISIBLE
         cardViewDetailArrived.visibility = View.VISIBLE
-        tvStartTime.text = mArrived.dateTimeFirst
-        tvStartAddress.text = mArrived.firstLocation
-        tvEndTime.text = mArrived.dateTimeEnd
-        tvEndAddress.text = mArrived.endLocation
+        tvStartTime.text = mTimeStart
+        tvStartAddress.text = mCurrentLatLng?.let { getLocationDesciption(it) }
+        tvEndTime.text = mTimeArrived
+        tvEndAddress.text = getLocationDesciption(mDestinationLatLng)
     }
 
     private fun setArrowDownClick() {

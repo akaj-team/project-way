@@ -7,6 +7,20 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent">
 
+    <ImageButton
+        android:id="@+id/imgBtnResetPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llDetailTracking"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_ht_reset_button" />
+
     <LinearLayout
         android:id="@+id/llDetailTracking"
         android:layout_width="match_parent"
@@ -27,8 +41,7 @@
                 android:id="@+id/llShowResult"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/arrived_show_result_height"
-                android:baselineAligned="false"
-                android:visibility="visible">
+                android:baselineAligned="false">
 
                 <RelativeLayout
                     android:layout_width="0dp"

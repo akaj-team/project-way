@@ -6,9 +6,7 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,15 +18,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.detail_arrived.*
-import kotlinx.android.synthetic.main.show_arrived.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Location
-import vn.asiantech.way.data.model.arrived.Arrived
-import vn.asiantech.way.extension.makeDistance
-import vn.asiantech.way.extension.makeDuration
 import vn.asiantech.way.extension.toast
-import vn.asiantech.way.ui.arrived.DialogArrived
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.home.HomeAdapter
@@ -57,10 +49,10 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         private const val TYPE_ANCHOR = 0.5f
         private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
-         const val BEGIN_LAT = 16.0721115
-         const val BEGIN_LONG = 108.2302225
-         const val DESTINATION_LAT = 16.0712047
-         const val DESTINATION_LONG = 108.2193197
+        const val BEGIN_LAT = 16.0721115
+        const val BEGIN_LONG = 108.2302225
+        const val DESTINATION_LAT = 16.0712047
+        const val DESTINATION_LONG = 108.2193197
 
     }
 
@@ -71,7 +63,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private var mIsExpand = false
     private lateinit var mDestination: LatLng
     private lateinit var mBegin: LatLng
-    private var mArrived = Arrived()
     private var mLocations: MutableList<Location> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +86,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     override fun onMapReady(googleMap: GoogleMap?) {
         mGoogleMap = googleMap
         setPaddingGoogleLogo()
+        //================================
         val location = LocationUtil(this).getCurrentLocation()
         if (location != null) {
             drawCurrentMaker(location)
@@ -232,12 +224,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
 
     private fun initData() {
         Preference().getTrackingHistory()?.let { mLocations.addAll(it) }
-        mArrived.latLngs = mutableListOf()
-        mLocations.forEach {
-            it.point.let {
-                mArrived.latLngs?.add(it)
-            }
-        }
         mBegin = LatLng(BEGIN_LAT, BEGIN_LONG)
         mDestination = LatLng(DESTINATION_LAT, DESTINATION_LONG)
     }

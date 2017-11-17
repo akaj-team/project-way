@@ -67,15 +67,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".ui.share.ShareLocationActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait" />-->
 
         <activity android:name=".ui.register.RegisterActivity" />
-        <activity android:name=".ui.share.ShareLocationActivity" />
+
+        <activity
+            android:name=".ui.share.ShareLocationActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.home.HomeActivity" />
-        <activity android:name=".ui.arrived.ArrivedActivity" />
 
         <activity
             android:name=".ui.search.SearchLocationActivity"
