@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.search
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -25,6 +25,9 @@ class GroupListAdapter(val groups: MutableList<Group>, val listener: GroupItemOn
                 .inflate(R.layout.item_search_group, parent, false))
     }
 
+    /**
+     * Custom view item  of groups list.
+     */
     inner class GroupHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.tvJoinGroup.setOnClickListener {

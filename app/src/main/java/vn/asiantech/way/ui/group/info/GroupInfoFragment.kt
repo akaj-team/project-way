@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.info
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -24,6 +24,7 @@ import vn.asiantech.way.data.model.group.GroupInfo
 import vn.asiantech.way.data.model.group.UserListResult
 import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.GroupActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

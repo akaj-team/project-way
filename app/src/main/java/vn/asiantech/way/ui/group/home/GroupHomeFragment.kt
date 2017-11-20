@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_non_member.*
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.GroupActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 11/11/2017
  */
-class NonGroupMemberFragment : BaseFragment() {
+class GroupHomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_non_member, container, false)

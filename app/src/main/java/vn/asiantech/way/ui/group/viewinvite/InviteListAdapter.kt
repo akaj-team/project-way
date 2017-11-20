@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.viewinvite
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -25,6 +25,9 @@ class InviteListAdapter(val invites: MutableList<Invite>, val listener: OnItemCl
 
     override fun getItemCount() = invites.size
 
+    /**
+     * Custom item of invites list.
+     */
     inner class InviteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.tvOk.setOnClickListener {

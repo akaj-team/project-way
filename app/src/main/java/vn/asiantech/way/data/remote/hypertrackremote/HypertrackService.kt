@@ -73,4 +73,12 @@ interface HypertrackService {
      */
     @GET("users/")
     fun searchUser(@Query("name") name: String): Call<UserListResult>
+
+    /**
+     * This method used to get user profile of a given user.
+     *
+     * @param userid - id of given user.
+     */
+    @GET("user/{userId}")
+    fun getUserProfile(@Path("userId") userId: String): Call<User>
 }

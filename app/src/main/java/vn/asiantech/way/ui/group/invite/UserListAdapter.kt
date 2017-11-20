@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.invite
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import vn.asiantech.way.R
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 17/11/2017
  */
-class UserListAdapter(val users: MutableList<User>, val listener: UserListAdapter.OnItemOnclick)
+class UserListAdapter(val users: MutableList<User>, val listener: OnItemOnclick)
     : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         return UserViewHolder(LayoutInflater.from(parent.context)

@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.search
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -23,6 +23,7 @@ import vn.asiantech.way.data.model.group.Invite
 import vn.asiantech.way.data.model.group.SearchGroupResult
 import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.GroupActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

@@ -17,6 +17,13 @@ import com.hypertrack.lib.models.User
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.Group
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.group.create.CreateGroupFragment
+import vn.asiantech.way.ui.group.home.GroupHomeFragment
+import vn.asiantech.way.ui.group.info.GroupInfoFragment
+import vn.asiantech.way.ui.group.invite.InviteFragment
+import vn.asiantech.way.ui.group.viewinvite.ViewInviteFragment
+import vn.asiantech.way.ui.group.reload.ReloadFragment
+import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -61,7 +68,7 @@ class GroupActivity : BaseActivity() {
 
                 ACTION_BACK -> finish()
 
-                ACTION_LEAVE_GROUP, ACTION_BACK_TO_HOME -> replaceFragment(NonGroupMemberFragment())
+                ACTION_LEAVE_GROUP, ACTION_BACK_TO_HOME -> replaceFragment(GroupHomeFragment())
 
                 ACTION_SEARCH_GROUP -> replaceFragment(SearchGroupFragment.getInstance(user))
 
@@ -104,7 +111,7 @@ class GroupActivity : BaseActivity() {
                 user = Gson().fromJson<User>(Gson().toJson(p0.responseObject).toString(),
                         User::class.java)
                 if (user.groupId == null) {
-                    replaceFragment(NonGroupMemberFragment())
+                    replaceFragment(GroupHomeFragment())
                 } else {
                     replaceFragment(GroupInfoFragment.getInstance(user.id, user.groupId))
                 }
