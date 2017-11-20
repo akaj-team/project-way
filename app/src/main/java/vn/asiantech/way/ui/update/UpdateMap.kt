@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.detail_arrived.*
 import kotlinx.android.synthetic.main.show_arrived.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.arrived.Arrived
 import vn.asiantech.way.extension.makeDistance
 import vn.asiantech.way.extension.makeDuration
@@ -71,7 +71,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private lateinit var mDestination: LatLng
     private lateinit var mBegin: LatLng
     private var mArrived = Arrived()
-    private var mLocations = mutableListOf<Location>()
+    private var mLocations = mutableListOf<TrackingInformation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -262,11 +262,11 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
 
     private fun initDummyData() {
         //Todo : Get list location from in-progress tracking
-//        mLocations.add(Location("1:00 PM", "Stop", "30 minutes| You stop at the school...............", LatLng(16.0721115, 108.2302225)))
-//        mLocations.add(Location("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
-//        mLocations.add(Location("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
-//        mLocations.add(Location("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
-//        mLocations.add(Location("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
+//        mLocations.add(TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............", LatLng(16.0721115, 108.2302225)))
+//        mLocations.add(TrackingInformation("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
+//        mLocations.add(TrackingInformation("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
+//        mLocations.add(TrackingInformation("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
+//        mLocations.add(TrackingInformation("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
         mArrived.latLngs = mutableListOf()
         mLocations.forEach {
             it.point.let {

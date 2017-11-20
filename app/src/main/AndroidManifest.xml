@@ -35,6 +35,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <!-- Intent Filter to handle browsable deeplinks -->
             <intent-filter android:label="@string/filter_title_track">
                 <action android:name="android.intent.action.VIEW" />
@@ -75,7 +76,6 @@
         </activity>
         <activity
             android:name=".ui.share.ShareLocationActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.register.RegisterActivity" />
@@ -96,7 +96,7 @@
             You need a different API key for each encryption key, including the release key that is used to
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+       -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
