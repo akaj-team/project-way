@@ -16,8 +16,11 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.home.HomeActivity
 import vn.asiantech.way.ui.register.RegisterActivity
+import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.ui.update.UpdateMap
+import vn.asiantech.way.utils.AppConstants
+import vn.asiantech.way.utils.Preference
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -44,6 +47,7 @@ class SplashActivity : BaseActivity() {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         val intentFilter = IntentFilter()
@@ -57,15 +61,6 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         mSharedPreferences = getSharedPreferences(RegisterActivity.SHARED_NAME, Context.MODE_PRIVATE)
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                }
-            }
-        } else {
-            toast(getString(R.string.splash_toast_turn_on_wifi))
-        }
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
@@ -80,7 +75,7 @@ class SplashActivity : BaseActivity() {
                     tvAppDescription.visibility = View.GONE
                     if (mSharedPreferences.getBoolean(RegisterActivity.KEY_LOGIN, false)) {
                         Handler().postDelayed({
-                            startActivity(Intent(this, HomeActivity::class.java))
+                            fetchingTrackingProgress()
                             finish()
                         }, DELAY)
 
@@ -171,6 +166,16 @@ class SplashActivity : BaseActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun fetchingTrackingProgress() {
+        val actionType = Preference().getActionType()
+        if (actionType == AppConstants.KEY_START_TRACKING) {
+            startActivity(Intent(applicationContext, ShareLocationActivity::class.java))
+        } else {
+            startActivity(Intent(this, UpdateMap::class.java))
+
         }
     }
 

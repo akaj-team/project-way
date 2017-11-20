@@ -61,7 +61,7 @@ class SearchLocationActivity : BaseActivity() {
         }
 
         rlChooseOnMap.setOnClickListener {
-            preference.setActionType(AppConstants.KEY_CONFIRM)
+            preference.setActionType(AppConstants.KEY_CONFIRM_LOCATION)
             startActivity(mIntent)
         }
 
@@ -114,7 +114,7 @@ class SearchLocationActivity : BaseActivity() {
         mAdapter = LocationsAdapter(mMyLocations, object : LocationsAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(myLocation: MyLocation) {
                 saveSearchHistory(myLocation)
-                preference.setActionType(AppConstants.KEY_SHARING)
+                preference.setActionType(AppConstants.KEY_CHOOSE_LOCATION)
                 val bundle = Bundle()
                 bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
                 mIntent?.putExtras(bundle)

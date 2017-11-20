@@ -27,6 +27,7 @@ import vn.asiantech.way.ui.home.HomeAdapter
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.ui.share.ShareLocationActivity
+import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
 import vn.asiantech.way.utils.Preference
 
@@ -36,8 +37,6 @@ import vn.asiantech.way.utils.Preference
  */
 internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         FloatingButtonHorizontal.OnMenuClickListener {
-
-// Todo: Get List LatLng from In-progrees tracking to show on recyclerView and draw polyline on map
 
     companion object {
         private const val PADDING_LEFT = 0
@@ -90,8 +89,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         val location = LocationUtil(this).getCurrentLocation()
         if (location != null) {
             drawCurrentMaker(location)
-            // Todo: Set arrived screen when current position = destination
-//            setArrived()
         } else {
             toast(resources.getString(R.string.not_update_current_location))
         }
@@ -120,7 +117,12 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     }
 
     override fun onSearchClick() {
-        startActivity(Intent(this, SearchLocationActivity::class.java))
+        val actionType = Preference().getActionType()
+        if (actionType == AppConstants.KEY_START_TRACKING) {
+            startActivity(Intent(this, ShareLocationActivity::class.java))
+        } else {
+            startActivity(Intent(this, SearchLocationActivity::class.java))
+        }
         setGoneOverLay()
     }
 

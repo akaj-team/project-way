@@ -8,13 +8,15 @@ object AppConstants {
     val KEY_LOCATION = "location"
 
     // Key Action
-    val KEY_CONFIRM = "confirm"
+    val KEY_CONFIRM_LOCATION = "confirm_location"
     val KEY_CURRENT_LOCATION = "current_location"
-    val KEY_SHARING = "sharing"
-    val KEY_START_SHARING = "start_sharing"
+    val KEY_CHOOSE_LOCATION = "choose_location"
+    val KEY_START_TRACKING = "start_tracking"
+    val KEY_FINISH_TRACKING = "finish_tracking"
 
     // Key share preferences
     val KEY_TRACKING_HISTORY = "tracking_history"
+    val KEY_LOCATION_LAT_LNG = "location_latLng"
     val KEY_ACTION_TYPE = "action_type"
     val KEY_DESTINATION = "destination"
     val KEY_SHARED_PREFERENCES = "shared"

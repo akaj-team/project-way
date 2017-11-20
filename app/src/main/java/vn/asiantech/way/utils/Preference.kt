@@ -2,6 +2,7 @@ package vn.asiantech.way.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -63,7 +64,39 @@ class Preference {
         editor?.apply()
     }
 
+    internal fun getListLocationLatLng(): MutableList<LatLng>? {
+        val string = mSharedPreferences?.getString(AppConstants.KEY_LOCATION_LAT_LNG, "")
+//        Log.d("zxc", "string " + string)
+        val result = mutableListOf<LatLng>()
+        val list = string?.split(" ")
+//        Log.d("zxc", "list " + list)
+        if (list != null) {
+            for (i in 0 until list.size) {
+                if (list[i] != "") {
+                    val latLng = list[i].split(",")
+//                    Log.d("zxc", "latLng " + latLng)
+                    result.add(LatLng(latLng[0].toDouble(), latLng[1].toDouble()))
+                }
+            }
+        }
+        return result
+    }
+
+    internal fun saveListLocationLatLng(listLatLng: MutableList<LatLng>) {
+        val editor = mSharedPreferences?.edit()
+        var s = ""
+        for (i in 0 until listLatLng.size) {
+            val result = "${listLatLng[i].latitude},${listLatLng[i].longitude}"
+//            Log.d("zxc", "result " + result)
+            s += result + " "
+        }
+//        Log.d("zxc", "string " + s)
+        editor?.putString(AppConstants.KEY_LOCATION_LAT_LNG, s)
+        editor?.apply()
+    }
+
     internal fun getActionType(): String? {
+        Log.d("zxc", "action type " + mSharedPreferences?.getString(AppConstants.KEY_ACTION_TYPE, ""))
         return mSharedPreferences?.getString(AppConstants.KEY_ACTION_TYPE, "")
     }
 
@@ -80,11 +113,22 @@ class Preference {
         editor?.apply()
     }
 
-    internal fun getDestinationLatLng(): LatLng? {
+    internal fun getDestinationLatLng(): LatLng {
         val s = mSharedPreferences?.getString(AppConstants.KEY_DESTINATION, "")
         val latLng = s?.split(",")
-        val result = latLng?.get(0)?.toDouble()?.let { LatLng(it, latLng[1].toDouble()) }
-        return result
+        return latLng?.get(0)?.toDouble()?.let { LatLng(it, latLng[1].toDouble()) }!!
     }
 
+    internal fun setCurrentLatLng(latLng: LatLng) {
+        val editor = mSharedPreferences?.edit()
+        val result = "${latLng.latitude},${latLng.longitude}"
+        editor?.putString("ahihi", result)
+        editor?.apply()
+    }
+
+    internal fun getCurrentLatLng(): LatLng {
+        val s = mSharedPreferences?.getString("ahihi", "")
+        val latLng = s?.split(",")
+        return latLng?.get(0)?.toDouble()?.let { LatLng(it, latLng[1].toDouble()) }!!
+    }
 }
