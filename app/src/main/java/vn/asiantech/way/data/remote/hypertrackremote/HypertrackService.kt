@@ -65,4 +65,12 @@ interface HypertrackService {
     @PATCH("users/{userId}/")
     fun removeUserFromGroup(@Path("userId") userId: String,
                             @Body body: BodyAddUserToGroup): Call<User>
+
+    /**
+     * This method used to search users by name.
+     *
+     * @param name - query to search.
+     */
+    @GET("users/")
+    fun searchUser(@Query("name") name: String): Call<UserListResult>
 }

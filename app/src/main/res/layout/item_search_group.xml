@@ -15,13 +15,14 @@
         android:background="@color/colorSearchScreenBackground" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/viewBreakLine"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvLocationName"
+            android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -30,21 +31,23 @@
             android:maxLines="1"
             android:padding="10dp"
             android:singleLine="true"
-            android:text="askdjhaskjdhsakjdhjksadhkjsahdsjkadhjkskasdh"
             android:textSize="@dimen/search_screen_text_size"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/tvFormatAddress"
+        <TextView
+            android:id="@+id/tvJoinGroup"
+            android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
             android:background="@color/colorPrimaryDark"
             android:maxLines="1"
             android:text="@string/join"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/search_screen_text_size" />
+            android:textSize="@dimen/group_text_size_normal" />
     </LinearLayout>
 </RelativeLayout>

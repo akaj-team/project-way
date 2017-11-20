@@ -31,6 +31,9 @@ class NonGroupMemberFragment : BaseFragment() {
         btnViewInvites.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_VIEW_INVITES))
         }
+        btnSearchGroup.setOnClickListener {
+            activity.sendBroadcast(Intent(GroupActivity.ACTION_SEARCH_GROUP))
+        }
         btnBack.setOnClickListener {
             activity.sendBroadcast(Intent(GroupActivity.ACTION_BACK))
         }

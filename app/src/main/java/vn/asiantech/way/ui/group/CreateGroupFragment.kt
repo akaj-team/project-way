@@ -14,6 +14,7 @@ import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.BodyAddUserToGroup
 import vn.asiantech.way.data.model.group.Group
+import vn.asiantech.way.data.model.group.GroupInfo
 import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -75,6 +76,9 @@ class CreateGroupFragment : BaseFragment() {
                         val userId = user?.id
                         if (group != null && userId != null) {
                             addUserToGroup(group, userId)
+                            val groupRef = firebaseDatabase.getReference("group/"
+                                    + group.id + "/info")
+                            groupRef.setValue(GroupInfo(group.id, userId, group.name))
                         }
                     }
 

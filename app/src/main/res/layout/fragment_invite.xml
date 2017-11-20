@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorSearchScreenBackground"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -20,13 +21,13 @@
             android:src="@drawable/ic_back_icon_button" />
 
         <EditText
-            android:id="@+id/edtGroupName"
+            android:id="@+id/edtUserName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:background="#FFFFFF"
-            android:hint="@string/enter_group_name"
+            android:hint="@string/enter_user_name"
             android:maxLines="1"
             android:padding="10dp"
             android:singleLine="true"
@@ -34,7 +35,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewGroups"
+        android:id="@+id/recyclerViewUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp" />
