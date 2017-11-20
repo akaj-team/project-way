@@ -37,6 +37,7 @@ class SearchLocationActivity : BaseActivity() {
     private var mAdapter: LocationsAdapter? = null
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
     private var mIntent: Intent? = null
+    private var mMyLocation: MyLocation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,6 +158,10 @@ class SearchLocationActivity : BaseActivity() {
         })
         recyclerViewLocations.layoutManager = LinearLayoutManager(this)
         recyclerViewLocations.adapter = mAdapter
+    }
+
+    internal fun getMyLocation(): MyLocation? {
+        return mMyLocation
     }
 
     private fun getSearchHistory(): MutableList<MyLocation>? {

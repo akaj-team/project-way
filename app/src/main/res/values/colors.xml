@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorSearchScreenBackground">#DDDDDD</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
-    <!-- Search MyLocationtion Screen-->
-    <color name="colorSearchScreenBackground">#DDDDDD</color>
     <color name="grayLight">#bdbdbd</color>
     <color name="colorPink">#FF82DF</color>
     <color name="colorPinkLight">#f5b0e3</color>
@@ -15,6 +13,7 @@
     <color name="pink">#FF065D</color>
     <color name="grayLowLight">#19d6d6d6</color>
     <color name="grayLow">#19e9e9e9</color>
+    <color name="progressRestColor">#ddd</color>
     <color name="colorGrayLight">#bab9b9</color>
     <color name="colorAccentLight">#ff3add</color>
     <color name="colorBtnShare">#C6AA00</color>
