@@ -57,15 +57,6 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                }
-            }
-        } else {
-            toast(getString(R.string.splash_toast_turn_on_wifi))
-        }
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()

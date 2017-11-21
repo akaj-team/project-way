@@ -14,10 +14,10 @@ import vn.asiantech.way.R
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 27/09/2017.
  */
-class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
-    : RelativeLayout(context, attrs) {
+class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+        RelativeLayout(context, attrs) {
 
-    var buttonListener: ButtonListener? = null
+    var onBottomCardListener: OnBottomCardListener? = null
     var actionType: ActionType
 
     // TODO: Will use in future
@@ -32,6 +32,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
 //
 //    val isActionTypeShareBackLocation: Boolean
 //        get() = actionType == ActionType.SHARE_BACK_LOCATION
+
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_button_card_view, this, true)
         initiateView()
@@ -50,22 +51,46 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun initiateView() {
         btnClose.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onCloseButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCloseButtonClick()
             }
         }
 
         btnSharing.setOnRippleCompleteListener {
-            if (buttonListener != null) {
-                buttonListener?.onActionButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onActionButtonClick()
             }
         }
 
         tvCopyLink.setOnClickListener {
-            if (buttonListener != null) {
-                buttonListener?.onCopyButtonClick()
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCopyButtonClick()
                 tvCopyLink?.isEnabled = false
                 tvCopyLink?.text = context.getString(R.string.share_textview_text_copied)
+            }
+        }
+        rlCollapse.setOnClickListener {
+            if (rlExpandedInfo.visibility == View.GONE) {
+                rlExpandedInfo.visibility = View.VISIBLE
+                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
+            } else {
+                rlExpandedInfo.visibility = View.GONE
+                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
+            }
+        }
+        rippleTrackingToggle.setOnRippleCompleteListener {
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onStopButtonClick()
+            }
+        }
+        rippleShareLink.setOnClickListener {
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onShareButtonClick()
+            }
+        }
+        imgBtnCall.setOnClickListener {
+            if (onBottomCardListener != null) {
+                onBottomCardListener?.onCallButtonClick()
             }
         }
     }
@@ -85,11 +110,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    // TODO: Will use in future
-//    fun showCloseButton() {
-//        btnClose.visibility = View.VISIBLE
-//    }
-
     internal fun hideCloseButton() {
         btnClose.visibility = View.GONE
     }
@@ -102,7 +122,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         tvDescription.visibility = View.GONE
     }
 
-    internal fun showClosebutton() {
+    internal fun showCloseButton() {
         btnClose.visibility = View.VISIBLE
     }
 
@@ -116,6 +136,29 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
         btnSharing.visibility = View.VISIBLE
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
+
+    fun hideBottomCardLayout() {
+        hideProgress()
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlBottomCard)
+    }
+
+    fun showTrackingProgress() {
+        llTrackingProgress.visibility = View.VISIBLE
+    }
+
+    fun hideTrackingProgress() {
+        llTrackingProgress.visibility = View.GONE
+    }
+    // TODO: Will use in future
+//
+//    fun startProgress() {
+//        tvStartShare.visibility = View.GONE
+//        imgLoader.visibility = View.VISIBLE
+//        val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
+//                R.anim.rotate)
+//        rotationAnim.fillAfter = true
+//        imgLoader.startAnimation(rotationAnim)
+//    }
     // TODO:Will use in future
 
 //    fun hideBottomCardLayout() {
@@ -151,10 +194,6 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
 //    fun hideTrackingURLLayout() {
 //        rlLinkShare.visibility = View.GONE
 //    }
-    // TODO: Will use in future
-//    fun hideTitle() {
-//        tvTitle.visibility = View.GONE
-//    }
 
     internal fun showTitle() {
         tvTitle.visibility = View.VISIBLE
@@ -163,7 +202,7 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
     /**
      * Interface create fun onClickListener for BottomButtonCard
      */
-    interface ButtonListener {
+    interface OnBottomCardListener {
         /**
          * Button close click listener
          */
@@ -178,5 +217,20 @@ class BottomButtonCard @JvmOverloads constructor(context: Context, attrs: Attrib
          * Button copy link click listener
          */
         fun onCopyButtonClick()
+
+        /**
+         * Button stop link click listener
+         */
+        fun onStopButtonClick()
+
+        /**
+         * Button share link click listener
+         */
+        fun onShareButtonClick()
+
+        /**
+         * Button call link click listener
+         */
+        fun onCallButtonClick()
     }
 }

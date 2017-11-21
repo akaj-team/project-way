@@ -77,7 +77,7 @@
     <string name="show_distance"> km </string>
     <string name="show_average_speed"> kmph </string>
     <string name="arrived_dialog_tag">Dialog Fragment</string>
-    <!-- Search Location Screen-->
+    <!-- SeaTrackingInfomationtion Screen-->
     <string name="search_location_enter_a_place">Enter a place</string>
     <string name="search_location_your_location">Your Location</string>
     <string name="search_location_choose_on_map">Choose on map</string>
@@ -89,6 +89,20 @@
     <string name="register_update_profile">Update Profile</string>
     <string name="register_message_dialog">Your default user name is user</string>
     <string name="register_title_dialog">Information</string>
+    <string name="register_title_error_dialog">Error</string>
+
+    <!--In-ProgressLocation-->
+    <string name="share">SHARE</string>
+    <string name="stop">STOP</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="leaving">You are leaving now</string>
+    <string name="elapse">Elapsed</string>
+    <string name="mask">--</string>
+    <string name="travelled">Travelled</string>
+    <string name="speed">Speed</string>
+    <string name="eta">ETA</string>
+    <string name="open_parentheses">(</string>
+    <string name="close_parentheses_distance"> km away)</string>
     <!-- Group Screen -->
     <string name="not_yet_join_to_group">Bạn chưa tham gia vào nhóm.</string>
     <string name="create_new_group">Tạo nhóm mới</string>
