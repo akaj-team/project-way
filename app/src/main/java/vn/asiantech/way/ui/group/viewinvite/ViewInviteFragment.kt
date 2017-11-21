@@ -3,7 +3,6 @@ package vn.asiantech.way.ui.group.viewinvite
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +57,6 @@ class ViewInviteFragment : BaseFragment() {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-                Log.i("tag11", "ABC:" + Gson().toJson(p0?.value))
             }
         })
     }
@@ -118,6 +116,7 @@ class ViewInviteFragment : BaseFragment() {
                     currentRequestRef.setValue(invite)
                     val groupRef = firebaseDatabase.getReference("group/" +
                             "${invite.to}/request/$userId")
+                    invite.to = userId
                     groupRef.setValue(invite)
                 }
             }
@@ -142,9 +141,7 @@ class ViewInviteFragment : BaseFragment() {
                 adapter.notifyItemInserted(invites.size - 1)
             }
 
-            override fun onChildRemoved(p0: DataSnapshot?) {
-
-            }
+            override fun onChildRemoved(p0: DataSnapshot?) = Unit
         })
     }
 }

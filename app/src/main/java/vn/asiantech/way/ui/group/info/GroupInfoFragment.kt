@@ -107,8 +107,7 @@ class GroupInfoFragment : BaseFragment() {
             HypertrackApi.getApiService().getGroupInfo(groupId)
                     .enqueue(object : Callback<Group> {
                         override fun onFailure(call: Call<Group>?, t: Throwable?) {
-                            Toast.makeText(context, R.string.error_message,
-                                    Toast.LENGTH_LONG).show()
+                            showToast(R.string.error_message)
                             progressDialog.dismiss()
                         }
 
@@ -120,8 +119,7 @@ class GroupInfoFragment : BaseFragment() {
                                 initView()
                                 return
                             }
-                            Toast.makeText(context, R.string.error_message,
-                                    Toast.LENGTH_LONG).show()
+                            showToast(R.string.error_message)
                         }
                     })
         }
@@ -152,8 +150,7 @@ class GroupInfoFragment : BaseFragment() {
                             if (swipeRefreshLayout.isRefreshing) {
                                 swipeRefreshLayout.isRefreshing = false
                             }
-                            Toast.makeText(context, R.string.can_not_get_members_list,
-                                    Toast.LENGTH_LONG).show()
+                            showToast(R.string.can_not_get_members_list)
                         }
                     })
         }
@@ -197,6 +194,10 @@ class GroupInfoFragment : BaseFragment() {
             showConfirmDialog()
         }
 
+        imgCheckRequest.setOnClickListener {
+            sendBroadcast(GroupActivity.ACTION_VIEW_REQUEST)
+        }
+
         swipeRefreshLayout.setOnRefreshListener {
             loadGroupMemberList()
         }
@@ -229,7 +230,7 @@ class GroupInfoFragment : BaseFragment() {
                         }
                         groupInfo = Gson().fromJson(Gson().toJson(p0?.value),
                                 GroupInfo::class.java)
-                        if (group?.id == groupInfo?.groupId) {
+                        if (userId == groupInfo?.ownerId) {
                             imgCheckRequest.visibility = View.VISIBLE
                         } else {
                             imgCheckRequest.visibility = View.GONE

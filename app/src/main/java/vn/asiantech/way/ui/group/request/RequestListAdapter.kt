@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.hypertrack.lib.models.User
 import kotlinx.android.synthetic.main.item_request.view.*
 import vn.asiantech.way.R
@@ -33,9 +34,13 @@ class RequestListAdapter(val users: MutableList<User>, val listener: OnViewItemC
         init {
             itemView.tvOk.setOnClickListener {
                 listener.onOkClick(users[adapterPosition].id)
+                itemView.tvOk.visibility = View.INVISIBLE
+                itemView.tvCancel.visibility = View.INVISIBLE
             }
             itemView.tvCancel.setOnClickListener {
                 listener.onCancelClick(users[adapterPosition].id)
+                itemView.tvOk.visibility = View.INVISIBLE
+                itemView.tvCancel.visibility = View.INVISIBLE
             }
         }
 
@@ -44,6 +49,7 @@ class RequestListAdapter(val users: MutableList<User>, val listener: OnViewItemC
          */
         fun onBind() {
             itemView.tvName.text = users[adapterPosition].name
+            Glide.with(itemView.context).load(users[adapterPosition].photo).into(itemView.imgAvatar)
         }
     }
 

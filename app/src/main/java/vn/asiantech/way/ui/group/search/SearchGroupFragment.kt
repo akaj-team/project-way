@@ -80,7 +80,7 @@ class SearchGroupFragment : BaseFragment() {
                             + "/request/" + user?.id)
                     groupRef.removeValue()
                 }
-                val invite = Invite(user?.id!!, group.id, group.name, true)
+                val invite = Invite(user?.id!!, user?.id!!, group.name, true)
                 userRef.setValue(invite)
                 firebaseDatabase.getReference("group/" + group.id
                         + "/request/" + user?.id).setValue(invite)

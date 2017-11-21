@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.request
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
-import kotlinx.android.synthetic.main.fragment_view_invites.*
+import kotlinx.android.synthetic.main.fragment_view_requests.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,6 +48,40 @@ class ViewRequestFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        groupId = arguments.getString(KEY_GROUP_ID)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_view_requests, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAdapter()
+        initDatabaseReferences()
+    }
+
+    private fun initAdapter() {
+        adapter = RequestListAdapter(requestUsers, object : RequestListAdapter.OnViewItemClick {
+            override fun onOkClick(userId: String) {
+                addUserToGroup(userId)
+            }
+
+            override fun onCancelClick(userId: String) {
+                val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                        "/request/$userId")
+                requestRef.removeValue()
+                val userRequestRef = firebaseDatabase.getReference("user/$userId" +
+                        "/request")
+                userRequestRef.removeValue()
+            }
+        })
+        recyclerViewRequests.layoutManager = LinearLayoutManager(context)
+        recyclerViewRequests.adapter = adapter
+    }
+
+    private fun initDatabaseReferences() {
         requestsRef = firebaseDatabase.getReference("group/$groupId/request")
         requestsRef.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError?) = Unit
@@ -60,38 +95,19 @@ class ViewRequestFragment : BaseFragment() {
                 HypertrackApi.getApiService().getUserProfile(invite.to)
                         .enqueue(object : retrofit2.Callback<User> {
                             override fun onResponse(call: Call<User>?, response: Response<User>?) {
-
+                                val user = response?.body()
+                                if (user != null) {
+                                    requestUsers.add(user)
+                                    adapter.notifyItemInserted(requestUsers.size - 1)
+                                }
                             }
 
-                            override fun onFailure(call: Call<User>?, t: Throwable?) {
-
-                            }
+                            override fun onFailure(call: Call<User>?, t: Throwable?) = Unit
                         })
             }
 
             override fun onChildRemoved(p0: DataSnapshot?) = Unit
         })
-        groupId = arguments.getString(KEY_GROUP_ID)
-        adapter = RequestListAdapter(requestUsers, object : RequestListAdapter.OnViewItemClick {
-            override fun onOkClick(userId: String) {
-
-            }
-
-            override fun onCancelClick(userId: String) {
-
-            }
-        })
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_view_invites, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        tvTitle.text = getString(R.string.request_list)
-
     }
 
     private fun addUserToGroup(userId: String) {
@@ -107,13 +123,19 @@ class ViewRequestFragment : BaseFragment() {
 
                     override fun onResponse(call: Call<User>?, response: Response<User>?) {
                         if (progressDialog.isShowing) {
-                            progressDialog.show()
+                            progressDialog.dismiss()
                         }
                         val user = response?.body()
                         if (user != null) {
-
-                        } else {
-
+                            val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                                    "/request/$userId")
+                            requestRef.removeValue()
+                            val userRequestRef = firebaseDatabase.getReference("user/$userId" +
+                                    "/request")
+                            userRequestRef.removeValue()
+                            val userGroup = firebaseDatabase.getReference("user/$userId/groupId")
+                            userGroup.setValue(groupId)
+                            showToast(R.string.success)
                         }
                     }
                 })

@@ -110,10 +110,11 @@
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
     <string name="search_group">Search groups.</string>
-    <string name="join">Tham Gia</string>
+    <string name="join">Join</string>
     <string name="enter_group_name">Enter group name</string>
     <string name="enter_user_name">Enter user name</string>
     <string name="invite">Invite</string>
     <string name="invite_list">Invites list</string>
     <string name="request_list">Request list</string>
+    <string name="success">Success</string>
 </resources>

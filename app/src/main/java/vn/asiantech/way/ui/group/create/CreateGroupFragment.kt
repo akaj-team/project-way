@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.hypertrack.lib.models.User
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
@@ -85,8 +84,7 @@ class CreateGroupFragment : BaseFragment() {
                     }
 
                     override fun onFailure(call: Call<Group>?, t: Throwable?) {
-                        Toast.makeText(context, getString(R.string.error_message),
-                                Toast.LENGTH_LONG).show()
+                        showToast(R.string.error_message)
                     }
                 })
     }
@@ -106,8 +104,7 @@ class CreateGroupFragment : BaseFragment() {
                     }
 
                     override fun onFailure(call: Call<User>?, t: Throwable?) {
-                        Toast.makeText(context, getString(R.string.error_message),
-                                Toast.LENGTH_LONG).show()
+                        showToast(R.string.error_message)
                     }
                 })
     }

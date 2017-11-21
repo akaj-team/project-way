@@ -32,6 +32,7 @@ class GroupListAdapter(val groups: MutableList<Group>, val listener: GroupItemOn
         init {
             itemView.tvJoinGroup.setOnClickListener {
                 listener.onJoinGroupClick(groups[adapterPosition])
+                itemView.tvJoinGroup.visibility = View.INVISIBLE
             }
         }
 

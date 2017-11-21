@@ -8,6 +8,10 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.callbacks.HyperTrackCallback
@@ -21,9 +25,10 @@ import vn.asiantech.way.ui.group.create.CreateGroupFragment
 import vn.asiantech.way.ui.group.home.GroupHomeFragment
 import vn.asiantech.way.ui.group.info.GroupInfoFragment
 import vn.asiantech.way.ui.group.invite.InviteFragment
-import vn.asiantech.way.ui.group.viewinvite.ViewInviteFragment
 import vn.asiantech.way.ui.group.reload.ReloadFragment
+import vn.asiantech.way.ui.group.request.ViewRequestFragment
 import vn.asiantech.way.ui.group.search.SearchGroupFragment
+import vn.asiantech.way.ui.group.viewinvite.ViewInviteFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -44,10 +49,12 @@ class GroupActivity : BaseActivity() {
         const val ACTION_SEARCH_GROUP = "action_search_group"
         const val ACTION_CALL_INVITE_FRAGMENT = "action_invite_fragment"
         const val ACTION_JOIN_TO_GROUP = "action_join_to_group"
+        const val ACTION_VIEW_REQUEST = "action_view_request"
     }
 
     private lateinit var user: User
     private lateinit var progressDialog: ProgressDialog
+    private val fbDatabase = FirebaseDatabase.getInstance()
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent) {
             when (p1.action) {
@@ -75,7 +82,8 @@ class GroupActivity : BaseActivity() {
                 ACTION_CALL_INVITE_FRAGMENT -> {
                     val ownerId = p1.getStringExtra(KEY_GROUP_OWNER)
                     val groupName = p1.getStringExtra(KEY_GROUP_NAME)
-                    addFragment(InviteFragment.getInstance(user.id, user.groupId, groupName, ownerId))
+                    addFragment(InviteFragment.getInstance(user.id, user.groupId, groupName,
+                            ownerId))
                 }
 
                 ACTION_JOIN_TO_GROUP -> {
@@ -85,6 +93,8 @@ class GroupActivity : BaseActivity() {
                         replaceFragment(GroupInfoFragment.getInstance(user.id, user.groupId))
                     }
                 }
+
+                ACTION_VIEW_REQUEST -> addFragment(ViewRequestFragment.getInstance(user.groupId))
             }
         }
     }
@@ -115,6 +125,7 @@ class GroupActivity : BaseActivity() {
                 } else {
                     replaceFragment(GroupInfoFragment.getInstance(user.id, user.groupId))
                 }
+                initDatabaseReferences()
                 progressDialog.dismiss()
             }
 
@@ -139,7 +150,21 @@ class GroupActivity : BaseActivity() {
         intentFilter.addAction(ACTION_SEARCH_GROUP)
         intentFilter.addAction(ACTION_CALL_INVITE_FRAGMENT)
         intentFilter.addAction(ACTION_JOIN_TO_GROUP)
+        intentFilter.addAction(ACTION_VIEW_REQUEST)
         registerReceiver(receiver, intentFilter)
+    }
+
+    private fun initDatabaseReferences() {
+        val groupRef = fbDatabase.getReference("user/${user.id}/groupId")
+        groupRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) = Unit
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0?.value != null && p0.value.toString() != user.groupId) {
+                    loadUser()
+                }
+            }
+        })
     }
 
     private fun replaceFragment(fragment: Fragment) {
