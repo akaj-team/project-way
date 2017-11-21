@@ -31,6 +31,9 @@ class ViewRequestFragment : BaseFragment() {
 
         const val KEY_GROUP_ID = "key_group_id"
 
+        /**
+         * Get instance of ViewRequestFragment with a given group.
+         */
         fun getInstance(groupId: String): ViewRequestFragment {
             val instance = ViewRequestFragment()
             val bundle = Bundle()

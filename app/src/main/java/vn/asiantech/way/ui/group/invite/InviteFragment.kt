@@ -29,6 +29,9 @@ class InviteFragment : BaseFragment() {
         private const val KEY_USER = "key_user_id"
         private const val KEY_GROUP = "key_group_id"
 
+        /**
+         * Get instance of InviteFragment
+         */
         fun getInstance(userId: String, groupId: String, groupName: String, ownerId: String)
                 : InviteFragment {
             val instance = InviteFragment()

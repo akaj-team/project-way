@@ -30,6 +30,9 @@ class ViewInviteFragment : BaseFragment() {
 
         private const val KEY_USER_ID = "key_user_id"
 
+        /**
+         * Get instance of ViewInviteFragment with a given user.
+         */
         fun getInstance(userId: String): ViewInviteFragment {
             val instance = ViewInviteFragment()
             val bundle = Bundle()

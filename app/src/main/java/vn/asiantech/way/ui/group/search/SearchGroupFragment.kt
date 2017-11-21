@@ -35,6 +35,9 @@ class SearchGroupFragment : BaseFragment() {
 
         const val KEY_USER = "key_user"
 
+        /**
+         * Get instance of SearchGroupFragemt with a given user.
+         */
         fun getInstance(user: User): SearchGroupFragment {
             val instance = SearchGroupFragment()
             val bundle = Bundle()
