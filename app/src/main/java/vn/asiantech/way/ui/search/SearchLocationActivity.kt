@@ -15,6 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.search.AutoCompleteResult
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.data.model.search.ResultPlaceDetail
 import vn.asiantech.way.data.remote.APIUtil
@@ -33,7 +34,6 @@ class SearchLocationActivity : BaseActivity() {
         private const val HISTORY_MAX_SIZE = 10
     }
 
-    private var mTask: SearchLocationAsyncTask? = null
     private var mAdapter: LocationsAdapter? = null
     private var mMyLocations: MutableList<MyLocation> = mutableListOf()
     private var mIntent: Intent? = null
@@ -62,7 +62,6 @@ class SearchLocationActivity : BaseActivity() {
             mIntent?.putExtra(AppConstants.KEY_CONFIRM, AppConstants.KEY_CONFIRM)
             startActivity(mIntent)
         }
-
     }
 
     private fun locationSearch() {
@@ -71,24 +70,25 @@ class SearchLocationActivity : BaseActivity() {
                 mMyLocations.clear()
                 mAdapter?.notifyDataSetChanged()
                 if (p0.toString().isNotEmpty()) {
-                    if (mTask != null) {
-                        mTask = null
-                    }
-                    mTask = SearchLocationAsyncTask(
-                            object : SearchLocationAsyncTask.SearchLocationListener {
-                                override fun onCompleted(myLocations: List<MyLocation>) {
-                            val thread = Thread({
-                                runOnUiThread({
-                                    myLocations.forEach {
-                                        mMyLocations.add(it)
+                    val query = p0.toString()
+                    APIUtil.getService()?.searchLocations(query,
+                            AppConstants.GOOGLE_MAP_API_KEY)
+                            ?.enqueue(object : Callback<AutoCompleteResult> {
+                                override fun onFailure(call: Call<AutoCompleteResult>?,
+                                                       t: Throwable?) = Unit
+
+                                override fun onResponse(call: Call<AutoCompleteResult>?,
+                                                        response: Response<AutoCompleteResult>?) {
+                                    if (query == edtLocation.text.toString()) {
+                                        val result = response?.body()?.predictions
+                                        result?.forEach {
+                                            mMyLocations.add(MyLocation(it.id, it.placeId,
+                                                    it.structuredFormatting.mainText, it.description))
+                                        }
+                                        mAdapter?.notifyDataSetChanged()
                                     }
-                                    mAdapter?.notifyDataSetChanged()
-                                })
+                                }
                             })
-                            thread.start()
-                        }
-                    })
-                    mTask?.execute(p0.toString())
                 } else {
                     val history = getSearchHistory()
                     if (history != null) {
