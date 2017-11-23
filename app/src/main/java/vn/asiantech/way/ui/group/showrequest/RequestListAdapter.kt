@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group.request
+package vn.asiantech.way.ui.group.showrequest
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

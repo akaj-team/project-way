@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group.request
+package vn.asiantech.way.ui.group.showrequest
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
