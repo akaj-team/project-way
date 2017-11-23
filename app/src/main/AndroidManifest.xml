@@ -84,6 +84,7 @@
 
         <activity android:name=".ui.update.UpdateMap" />
         <activity android:name=".ui.group.GroupActivity" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
 
         <!-- Register meta-data here -->
         <!--

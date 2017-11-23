@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group.viewinvite
+package vn.asiantech.way.ui.group.showinvite
 
 import android.content.Intent
 import android.os.Bundle

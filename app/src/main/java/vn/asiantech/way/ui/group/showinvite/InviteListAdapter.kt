@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group.viewinvite
+package vn.asiantech.way.ui.group.showinvite
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

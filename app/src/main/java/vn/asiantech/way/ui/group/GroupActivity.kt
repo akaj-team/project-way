@@ -28,7 +28,7 @@ import vn.asiantech.way.ui.group.invite.InviteFragment
 import vn.asiantech.way.ui.group.reload.ReloadFragment
 import vn.asiantech.way.ui.group.request.ViewRequestFragment
 import vn.asiantech.way.ui.group.search.SearchGroupFragment
-import vn.asiantech.way.ui.group.viewinvite.ViewInviteFragment
+import vn.asiantech.way.ui.group.showinvite.ViewInviteFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
