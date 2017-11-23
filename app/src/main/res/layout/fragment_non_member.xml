@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/not_yet_join_to_group"
+        android:textColor="@color/black"
+        android:textSize="@dimen/notification_size" />
+
+    <Button
+        android:id="@+id/btnCreateGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/blue"
+        android:text="@string/create_new_group"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <Button
+        android:id="@+id/btnViewInvites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPinkLight"
+        android:text="@string/view_invites"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/group_text_size_normal" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/darker_gray"
+        android:text="@string/back"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/group_text_size_normal" />
+</LinearLayout>

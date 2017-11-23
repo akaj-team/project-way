@@ -19,10 +19,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.home.HomeAdapter
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
@@ -48,11 +49,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         private const val TYPE_ANCHOR = 0.5f
         private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
-        const val BEGIN_LAT = 16.0721115
-        const val BEGIN_LONG = 108.2302225
-        const val DESTINATION_LAT = 16.0712047
-        const val DESTINATION_LONG = 108.2193197
-
     }
 
     private var mPosition = -1
@@ -62,7 +58,7 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     private var mIsExpand = false
     private lateinit var mDestination: LatLng
     private lateinit var mBegin: LatLng
-    private var mLocations: MutableList<Location> = mutableListOf()
+    private var mLocations: MutableList<TrackingInformation> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +81,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
     override fun onMapReady(googleMap: GoogleMap?) {
         mGoogleMap = googleMap
         setPaddingGoogleLogo()
-        //================================
         val location = LocationUtil(this).getCurrentLocation()
         if (location != null) {
             drawCurrentMaker(location)
@@ -123,6 +118,11 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
         } else {
             startActivity(Intent(this, SearchLocationActivity::class.java))
         }
+        setGoneOverLay()
+    }
+
+    override fun onGroupClick() {
+        startActivity(Intent(this, GroupActivity::class.java))
         setGoneOverLay()
     }
 
@@ -226,8 +226,6 @@ internal class UpdateMap : BaseActivity(), OnMapReadyCallback,
 
     private fun initData() {
         Preference().getTrackingHistory()?.let { mLocations.addAll(it) }
-        mBegin = LatLng(BEGIN_LAT, BEGIN_LONG)
-        mDestination = LatLng(DESTINATION_LAT, DESTINATION_LONG)
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {

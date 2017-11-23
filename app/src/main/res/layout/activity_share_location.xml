@@ -113,7 +113,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/margin_high"
                 android:background="@drawable/button_background"
-                android:text="Done"
                 android:textColor="@color/white"
                 android:visibility="gone" />
         </RelativeLayout>
@@ -138,8 +137,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
-
-    <include
-        layout="@layout/show_arrived"
-        android:visibility="gone" />
 </RelativeLayout>

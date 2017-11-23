@@ -34,16 +34,17 @@ import com.hypertrack.lib.internal.consumer.view.MarkerAnimation
 import com.hypertrack.lib.models.*
 import kotlinx.android.synthetic.main.activity_share_location.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
-import kotlinx.android.synthetic.main.detail_arrived.*
-import kotlinx.android.synthetic.main.show_arrived.*
 import kotlinx.android.synthetic.main.tracking_progress_view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.search.MyLocation
 import vn.asiantech.way.data.model.share.ResultDistance
+import vn.asiantech.way.data.model.share.ResultRoad
 import vn.asiantech.way.data.remote.APIUtil
+import vn.asiantech.way.data.remote.RoadClient
 import vn.asiantech.way.ui.arrived.DialogArrived
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
@@ -53,6 +54,7 @@ import vn.asiantech.way.ui.custom.TrackingProgressInfo
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.ui.update.UpdateMap
 import vn.asiantech.way.utils.AppConstants
+import vn.asiantech.way.utils.DateTimeUtil
 import vn.asiantech.way.utils.LocationUtil
 import vn.asiantech.way.utils.Preference
 import java.lang.ref.WeakReference
@@ -72,20 +74,19 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         private const val INTERVAL = 500L
         private const val ZOOM_SIZE = 16f
         private const val TIME_CONVERT = 3.6
-        private const val ONE_THOUSAND = 1000L
+        private const val SECOND_VALUE = 1000L
         private const val RADIUS = 360.0
         private const val STEP_ETA = 3
-        private const val API_KEY = "AIzaSyBIVgts4L31fzok2eVVsLJLLuYv-5YOrMg"
     }
 
     private var mCurrentMarker: Marker? = null
     private var mIsStopTracking = false
-    private var mLocationUpdates: MutableList<LatLng>? = null
-    private var mLocations: MutableList<vn.asiantech.way.data.model.Location>? = null
+    private var mLocationUpdates: MutableList<LatLng>? = mutableListOf()
+    private var mLocations: MutableList<TrackingInformation>? = mutableListOf()
     private var mCurrentLocation: Location? = null
     private lateinit var mHandlerTracking: Handler
     private var mRunnable: Runnable? = null
-    private var mCountTimer = ONE_THOUSAND
+    private var mCountTimer = SECOND_VALUE
     private lateinit var mDestinationLatLng: LatLng
     private var mCurrentLatLng: LatLng? = null
     private var mDistanceTravel = 0f
@@ -101,25 +102,23 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private var mEtaDistance: String? = null
     private var mTimeStart: String? = null
     private var mTimeArrived: String? = null
-    private var mIsShowArrivedInfo = false
 
     private var mStartPosition = 0
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
     private lateinit var mGoogleApiClient: GoogleApiClient
     private lateinit var mLocationRequest: LocationRequest
-    private lateinit var mDestination: LatLng
-    private lateinit var mBegin: LatLng
     private var mDestinationName: String? = null
     private var mLatLng: LatLng? = null
     private var mMyLocation: MyLocation? = null
     private var mAction: String? = null
+    private var mIsReTracking: Boolean = false
     private var mIsConfirm: Boolean = false
     private var mIsStartTracking: Boolean = false
     private var mMarker: Marker? = null
     private var mGroundOverlay: GroundOverlay? = null
-    private var line: Polyline? = null
-    private var line1: Polyline? = null
+    private var mLine: Polyline? = null
+    private var mLine1: Polyline? = null
     private lateinit var mLocationAsyncTask: AsyncTask<LatLng, Void, String>
 
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
@@ -162,6 +161,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         }
 
         mCurrentLocation = LocationUtil(this).getCurrentLocation()
+        mCurrentLatLng = mCurrentLocation?.longitude?.let { mCurrentLocation?.latitude?.let { it1 -> LatLng(it1, it) } }
+        mCurrentLocation?.let { drawCurrentMaker(it) }
 
         mGoogleMap.setOnCameraIdleListener(this)
         val lat = mMyLocation?.geometry?.location?.lat
@@ -169,31 +170,30 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         if (lat != null && lng != null) {
             mLatLng = LatLng(lat, lng)
             addDestinationMarker(mLatLng)
-            mIsConfirm = true
         }
         if (mAction == AppConstants.KEY_CURRENT_LOCATION) {
             mLatLng = mCurrentLocation?.latitude?.let { LatLng(it, mCurrentLocation!!.longitude) }
             addDestinationMarker(mLatLng)
             getLocationName(mLatLng)
             mIsConfirm = true
-            if (mLatLng != null) {
-                mDestinationLatLng = mLatLng!!
-                Preference().setDestinationLatLng(mDestinationLatLng)
-            }
+        }
+        if (mLatLng != null) {
+            mDestinationLatLng = mLatLng!!
+            Preference().setDestinationLatLng(mDestinationLatLng)
         }
 
         mTimeStart = getCalendarDateTime()
-//        // Continue tracking
+        // Continue tracking
         if (mAction == AppConstants.KEY_START_TRACKING) {
             mLatLng = Preference().getCurrentLatLng()
             mLocationUpdates = Preference().getListLocationLatLng()
             mDestinationLatLng = Preference().getDestinationLatLng()
             addDestinationMarker(mDestinationLatLng)
             handlerProgressTracking()
-        } else {
-            mCurrentLatLng = mCurrentLocation?.longitude?.let { mCurrentLocation?.latitude?.let { it1 -> LatLng(it1, it) } }
-            mCurrentLocation?.let { drawCurrentMaker(it) }
-            mCurrentLatLng?.let { Preference().setCurrentLatLng(it) }
+            getLocationName(mDestinationLatLng)
+            mIsConfirm = true
+            mIsReTracking = true
+            mIsStartTracking = true
         }
     }
 
@@ -210,7 +210,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     override fun onCameraIdle() {
         mLatLng = mGoogleMap.cameraPosition?.target
         if (!mIsConfirm) {
-            if (mMyLocation?.geometry?.location == null) {
+            if (mMyLocation?.geometry?.location == null || mAction == AppConstants.KEY_CONFIRM_LOCATION) {
                 mLocationAsyncTask = LocationNameAsyncTask(WeakReference(this)).execute(mLatLng)
             } else {
                 val lat = mMyLocation?.geometry?.location?.lat
@@ -219,13 +219,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     mLatLng = LatLng(lat, lng)
                     mLocationAsyncTask = LocationNameAsyncTask(WeakReference(this)).execute(mLatLng)
                 }
+                mIsConfirm = true
             }
         }
     }
 
     private fun initializeUIViews() {
-        bottomButtonCard?.buttonListener = object : BottomButtonCard.ButtonListener {
-
+        bottomButtonCard?.onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
             override fun onCloseButtonClick() {
                 bottomButtonCard?.hideBottomCardLayout()
                 trackingProgressIno?.showTrackingProgress()
@@ -240,7 +240,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         mDestinationLatLng = mLatLng!!
                         addDestinationMarker(mDestinationLatLng)
                         mIsConfirm = true
-                        Log.d("zxc", "destination " + mDestinationLatLng)
                         Preference().setDestinationLatLng(mDestinationLatLng)
                     }
                 // Click sharing
@@ -266,10 +265,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         trackingProgressIno?.trackingProgressClick = object : TrackingProgressInfo.TrackingProgressClick {
             override fun onStopButtonClick() {
                 if (rippleTrackingToggle.tag == "stop") {
-                    mIsStopTracking = true
-                    mHandlerTracking.removeCallbacks(mRunnable)
-                    Preference().setActionType(AppConstants.KEY_FINISH_TRACKING)
-                } else if (rippleTrackingToggle.tag == "summary") {
+                    confirmStopDialog()
                 }
             }
 
@@ -282,6 +278,22 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 // No-op
             }
         }
+    }
+
+    private fun confirmStopDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.share_textview_text_dialog_title))
+        builder.setMessage(resources.getString(R.string.share_textview_text_dialog_message))
+        builder.setCancelable(true)
+        builder.setNegativeButton("No") { dialog, _ -> dialog?.cancel() }
+        builder.setPositiveButton("Stop") { _, _ ->
+            mIsStopTracking = true
+            mHandlerTracking.removeCallbacks(mRunnable)
+            Preference().setActionType(AppConstants.KEY_FINISH_TRACKING)
+            deleteListTrackingLatLng()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 
     private fun getTrackingURL() {
@@ -328,7 +340,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 bottomButtonCard?.showActionButton()
             }
             else -> {
-                imgPickLocation.visibility = View.GONE
+                imgPickLocation.visibility = View.INVISIBLE
                 bottomButtonCard?.showCloseButton()
                 bottomButtonCard?.actionType = BottomButtonCard.ActionType.SHARE_TRACKING_URL
                 bottomButtonCard?.showTrackingURLLayout()
@@ -398,10 +410,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     .title(getString(R.string.current_location))
                     .anchor(0.5f, 0.5f))
             addPulseRing(currentLocation)
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
-                    .target(currentLocation)
-                    .zoom(ZOOM_SIZE)
-                    .build()))
+            if (mAction == AppConstants.KEY_CONFIRM_LOCATION)
+                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                        .target(currentLocation)
+                        .zoom(ZOOM_SIZE)
+                        .build()))
         } else {
             mMarker?.remove()
         }
@@ -520,14 +533,15 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     mCurrentMarker?.setAnchor(0.5f, 0.5f)
                     updateCurrentTimeView()
                     setArrived()
+                    deleteListTrackingLatLng()
                     return@Runnable
                 }
                 requestLocation()
-                mCountTimer += ONE_THOUSAND
+                mCountTimer += SECOND_VALUE
                 handlerProgressTracking()
             }
         }
-        mHandlerTracking.postDelayed(mRunnable, ONE_THOUSAND)
+        mHandlerTracking.postDelayed(mRunnable, SECOND_VALUE)
     }
 
     private fun requestLocation() {
@@ -550,14 +564,20 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
+        latLng?.let { Preference().setCurrentLatLng(it) }
+        mCurrentLatLng = latLng
         getLocationDistanceEstimates(latLng, mDestinationLatLng)
         mIsArrived = compareLocation(latLng, mDestinationLatLng)
         mTimeArrived = getCalendarDateTime()
         if (mLocationUpdates != null) {
             if (latLng != null) {
-                mLocationUpdates?.add(latLng)
+                if (mIsReTracking && mLatLng != latLng) {
+                    mLatLng?.let { getLocationWhenAppNotWork(it, latLng) }
+                    mIsReTracking = false
+                } else {
+                    mLocationUpdates?.add(latLng)
+                }
                 mLocationUpdates?.let { Preference().saveListLocationLatLng(it) }
-                Preference().getListLocationLatLng()
             }
             if (mLocationUpdates!!.size > 1) {
                 getListLocation(latLng, mLocationUpdates!!.size - 1)
@@ -618,12 +638,18 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         src.latitude = destination.latitude
         src.longitude = destination.longitude
         mAverageSpeed = (src.distanceTo(des) * TIME_CONVERT).toFloat()
-        return src.distanceTo(des) / ONE_THOUSAND
+        return src.distanceTo(des) / SECOND_VALUE
     }
 
     private fun drawLine() {
         if (mLocationUpdates != null) {
             if (mLocationUpdates!!.size > 1) {
+                val dot = Dot()
+                val dash = Dash(AppConstants.PATTERN_DASH_LENGTH_PX)
+                val gap = Gap(AppConstants.PATTERN_GAP_LENGTH_PX)
+                val patternDot: List<PatternItem> = arrayListOf(dot, gap)
+                val patternDash: List<PatternItem> = arrayListOf(dash, gap)
+                val patternMix: List<PatternItem> = arrayListOf(dot, gap, dot, dash, gap)
 
                 val option = PolylineOptions()
                         .width(20f)
@@ -633,6 +659,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         .startCap(RoundCap())
                         .endCap(RoundCap())
                         .jointType(JointType.BEVEL)
+                        .addAll(mLocationUpdates)
                 val option1 = PolylineOptions()
                         .width(16f)
                         .geodesic(true)
@@ -641,14 +668,13 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         .startCap(RoundCap())
                         .endCap(RoundCap())
                         .jointType(JointType.BEVEL)
-                mLocationUpdates?.forEach { option.add(it) }
-                mLocationUpdates?.forEach { option1.add(it) }
-                line?.remove()
-                line = mGoogleMap.addPolyline(option)
-                line?.pattern = null
-                line1?.remove()
-                line1 = mGoogleMap.addPolyline(option1)
-                line1?.pattern = null
+                        .addAll(mLocationUpdates)
+                mLine?.remove()
+                mLine = mGoogleMap.addPolyline(option)
+                mLine?.pattern = patternDash
+                mLine1?.remove()
+                mLine1 = mGoogleMap.addPolyline(option1)
+                mLine1?.pattern = patternDash
             }
         }
     }
@@ -708,7 +734,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 mEndStatus = mCountTimer
                 description = time.plus(" | ").plus(distance.toString()).plus("km")
             }
-            val location = vn.asiantech.way.data.model.Location(getTimeChangeStatus(),
+            val location = TrackingInformation(DateTimeUtil().getTimeChangeStatus(),
                     status, description, latLng)
             with(Preference()) {
                 saveTrackingHistory(location)
@@ -717,13 +743,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mCurrentStatus = status
             mStartPosition = position
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getTimeChangeStatus(): String {
-        val currentTime = Calendar.getInstance().time
-        val formatDate = SimpleDateFormat("hh:mm a")
-        return formatDate.format(currentTime)
     }
 
     private fun getLocationDesciption(latLng: LatLng): String? {
@@ -739,10 +758,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun getLocationDistanceEstimates(currentLatLng: LatLng, destinationLatLng: LatLng) {
         val apiService = APIUtil.getService()
-        apiService?.getLocationDistance("metric", convertLatLngToString(currentLatLng), convertLatLngToString(destinationLatLng), API_KEY)
+        apiService?.getLocationDistance("metric", convertLatLngToString(currentLatLng), convertLatLngToString(destinationLatLng))
                 ?.enqueue(object : Callback<ResultDistance> {
                     override fun onResponse(call: Call<ResultDistance>?, response: Response<ResultDistance>?) {
                         val result = response?.body()
+                        Log.d("zxc", "aa " + result)
                         if (result != null) {
                             val element = result.rows[0].elements[0]
                             tvTime.text = resources.getString(R.string.eta, element.duration.text)
@@ -750,8 +770,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                             if (!mIsSetETA) {
                                 mEtaTime = element.duration.text
                                 mEtaDistance = element.distance.text
-                                tvTimeTotalArrived.text = mEtaTime
-                                tvDistanceArrived.text = mEtaDistance
+//                                tvTimeTotalArrived.text = mEtaTime
+//                                tvDistanceArrived.text = mEtaDistance
                                 mIsSetETA = true
                             }
                         }
@@ -762,6 +782,32 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     }
 
                 })
+    }
+
+    private fun getLocationWhenAppNotWork(currentLatLng: LatLng, destinationLatLng: LatLng) {
+        val path = "${currentLatLng.latitude},${currentLatLng.longitude}|${destinationLatLng.latitude},${destinationLatLng.longitude}"
+        val apiService = RoadClient.getService()
+        apiService?.getListLocation(path, "AIzaSyCZc4PAEpeVC18QnS5fPBt5hk3EFMbFjj8")
+                ?.enqueue(object : Callback<ResultRoad> {
+                    override fun onResponse(call: Call<ResultRoad>?, response: Response<ResultRoad>?) {
+                        val result = response?.body()
+                        if (result != null) {
+                            result.snappedPoints.forEach {
+                                mLocationUpdates?.add(LatLng(it.location.latitude, it.location.longitude))
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResultRoad>?, t: Throwable?) {
+                        Log.d("zxc", "fail " + t)
+                    }
+
+                })
+    }
+
+    private fun deleteListTrackingLatLng() {
+        mLocationUpdates?.clear()
+        mLocationUpdates?.let { Preference().saveListLocationLatLng(it) }
     }
 
     private fun convertLatLngToString(latLng: LatLng?): String {
@@ -778,20 +824,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     private fun initArrivedDialog() {
         Preference().getTrackingHistory()?.let { mLocations?.addAll(it) }
-        mBegin = LatLng(UpdateMap.BEGIN_LAT, UpdateMap.BEGIN_LONG)
-        mDestination = LatLng(UpdateMap.DESTINATION_LAT, UpdateMap.DESTINATION_LONG)
         btnShowSummary.setOnClickListener {
             showDialog()
-        }
-
-        llShowResult.setOnClickListener {
-            mIsShowArrivedInfo = if (mIsShowArrivedInfo) {
-                showDetailTracking()
-                false
-            } else {
-                setArrowDownClick()
-                true
-            }
         }
 
         imgArrowRightStartItem.setOnClickListener {
@@ -810,6 +844,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             setArrowDropDownEndItemClick()
         }
 
+        //todo check button even
         imgBtnResetPosition.setOnClickListener {
             mCurrentLatLng?.let {
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_SIZE))
@@ -819,11 +854,17 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
 
     // Show dialog when arrived
     private fun setArrived() {
-        bottomButtonCard?.visibility = View.GONE
-        trackingProgressIno?.visibility = View.GONE
-        rlLayoutArrived.visibility = View.VISIBLE
-        btnShowSummary.visibility = View.VISIBLE
-        progressBarCircular.progress = TYPE_PROGRESS_MAX
+        bottomButtonCard?.hideBottomCardLayout()
+        trackingProgressIno?.showTrackingProgress()
+        trackingProgressIno?.hideTrackingInfor()
+        trackingProgressIno?.showArrivedInfor()
+        circleProgressBar.progress = TYPE_PROGRESS_MAX
+        circleProgressBar.circleProgressColor = resources.getColor(R.color.violet)
+        tvStartTime.text = mTimeStart
+        tvStartAddress.text = mLatLng?.let { getLocationDesciption(it) }
+        tvEndTime.text = mTimeArrived
+        tvEndAddress.text = getLocationDesciption(mDestinationLatLng)
+        imgBtnCall.setImageDrawable(resources.getDrawable(R.drawable.ic_reached))
         showDialog()
     }
 
@@ -837,22 +878,6 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         val calendar = Calendar.getInstance().time
         val simple = SimpleDateFormat("KK:mm a', Th'MM dd", Locale.ENGLISH)
         return simple.format(calendar)
-    }
-
-    private fun showDetailTracking() {
-        imgArrowRight.visibility = View.GONE
-        imgArrowDown.visibility = View.VISIBLE
-        cardViewDetailArrived.visibility = View.VISIBLE
-        tvStartTime.text = mTimeStart
-        tvStartAddress.text = mLatLng?.let { getLocationDesciption(it) }
-        tvEndTime.text = mTimeArrived
-        tvEndAddress.text = getLocationDesciption(mDestinationLatLng)
-    }
-
-    private fun setArrowDownClick() {
-        imgArrowDown.visibility = View.GONE
-        imgArrowRight.visibility = View.VISIBLE
-        cardViewDetailArrived.visibility = View.GONE
     }
 
     private fun setArrowRightStartItemClick() {
@@ -877,5 +902,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         imgArrowRightEndItem.visibility = View.GONE
         imgArrowDropDownEndItem.visibility = View.VISIBLE
         tvEndAddress.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(mCurrentBatteryReceiver)
     }
 }

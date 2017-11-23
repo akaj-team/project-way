@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import org.json.JSONArray
+import vn.asiantech.way.data.model.TrackingInformation
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -27,24 +28,21 @@ class Preference {
         mSharedPreferences = context?.getSharedPreferences(AppConstants.KEY_SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    internal fun getTrackingHistory(): MutableList<vn.asiantech.way.data.model.Location>? {
+    internal fun getTrackingHistory(): MutableList<TrackingInformation>? {
         val gson = Gson()
-        val result = mutableListOf<vn.asiantech.way.data.model.Location>()
+        val result = mutableListOf<TrackingInformation>()
         return try {
             val history = mSharedPreferences?.getString(AppConstants.KEY_TRACKING_HISTORY, "[]")
-//            Log.d("zxc", "history " + history)
             val jsonArray = JSONArray(history)
-//            Log.d("zxc", "jsonArray " + jsonArray)
             (0 until jsonArray.length())
-                    .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), vn.asiantech.way.data.model.Location::class.java) }
-//            Log.d("zxc", "result " + result)
+                    .mapTo(result) { gson.fromJson(jsonArray.getJSONObject(it).toString(), TrackingInformation::class.java) }
             result
         } catch (e: JsonSyntaxException) {
             null
         }
     }
 
-    internal fun saveTrackingHistory(location: vn.asiantech.way.data.model.Location) {
+    internal fun saveTrackingHistory(location: TrackingInformation) {
         val gson = Gson()
         val editor = mSharedPreferences?.edit()
         var history = getTrackingHistory()
@@ -66,15 +64,12 @@ class Preference {
 
     internal fun getListLocationLatLng(): MutableList<LatLng>? {
         val string = mSharedPreferences?.getString(AppConstants.KEY_LOCATION_LAT_LNG, "")
-//        Log.d("zxc", "string " + string)
         val result = mutableListOf<LatLng>()
         val list = string?.split(" ")
-//        Log.d("zxc", "list " + list)
         if (list != null) {
             for (i in 0 until list.size) {
                 if (list[i] != "") {
                     val latLng = list[i].split(",")
-//                    Log.d("zxc", "latLng " + latLng)
                     result.add(LatLng(latLng[0].toDouble(), latLng[1].toDouble()))
                 }
             }
@@ -83,14 +78,13 @@ class Preference {
     }
 
     internal fun saveListLocationLatLng(listLatLng: MutableList<LatLng>) {
+        Log.d("zxc", "list " + listLatLng)
         val editor = mSharedPreferences?.edit()
         var s = ""
         for (i in 0 until listLatLng.size) {
             val result = "${listLatLng[i].latitude},${listLatLng[i].longitude}"
-//            Log.d("zxc", "result " + result)
             s += result + " "
         }
-//        Log.d("zxc", "string " + s)
         editor?.putString(AppConstants.KEY_LOCATION_LAT_LNG, s)
         editor?.apply()
     }

@@ -39,6 +39,40 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rlGroup"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+        <ImageButton
+            android:id="@+id/imgBtnGroup"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_bg_item_search_button"
+            android:src="@drawable/ic_group_white_24dp" />
+
+        <TextView
+            android:id="@+id/tvGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/imgBtnGroup"
+            android:background="@drawable/custom_bg_item_menu_title"
+            android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:text="@string/custom_floating_menu_group_title"
+            android:textSize="@dimen/custom_menu_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/rlCalendar"
         android:layout_width="150dp"
         android:layout_height="wrap_content"

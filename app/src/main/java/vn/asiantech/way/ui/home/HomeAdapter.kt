@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import at.blogc.android.views.ExpandableTextView
 import kotlinx.android.synthetic.main.item_recyclerview_location.view.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.inflate
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 27/09/2017.
  */
-class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) -> Unit)
+class HomeAdapter(private val locations: List<TrackingInformation>, val onClickItem: (Int) -> Unit)
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): HomeViewHolder {
@@ -34,7 +34,7 @@ class HomeAdapter(private val locations: List<Location>, val onClickItem: (Int) 
      */
     inner class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        internal fun bindHomeViewHolder(location: Location) {
+        internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
                 itemView.tvTime.text = time
                 itemView.tvStatus.text = status

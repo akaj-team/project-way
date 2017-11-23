@@ -59,6 +59,24 @@ class TrackingProgressInfo @JvmOverloads constructor(context: Context, attrs: At
         AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
+    internal fun showTrackingInfor() {
+        llDetailArrived.visibility = View.VISIBLE
+    }
+
+    internal fun hideTrackingInfor() {
+        llDetailArrived.visibility = View.VISIBLE
+    }
+
+    internal fun showArrivedInfor() {
+        llActionTracking.visibility = View.GONE
+        llTrackingInfo.visibility = View.GONE
+        btnShowSummary.visibility = View.VISIBLE
+    }
+
+    internal fun hideArrivedInfor() {
+        llDetailArrived.visibility = View.VISIBLE
+    }
+
     /**
      * Interface create fun onClickListener for BottomButtonCard
      */

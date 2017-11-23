@@ -26,4 +26,9 @@ object AppConstants {
     val KEY_DRAWABLE_SIZE = 500
     val KEY_GROUND_OVERLAY_POSITION = 500f
     val KEY_GR_ANIMATION_DUR: Long = 2000L
+    val GOOGLE_MAP_API_KEY = "AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U"
+
+    // Polyline key
+    val PATTERN_DASH_LENGTH_PX = 50f
+    val PATTERN_GAP_LENGTH_PX = 20f
 }
