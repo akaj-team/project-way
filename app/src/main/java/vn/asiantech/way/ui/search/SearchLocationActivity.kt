@@ -15,10 +15,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.search.AutoCompleteResult
-import vn.asiantech.way.data.model.search.MyLocation
-import vn.asiantech.way.data.model.search.ResultPlaceDetail
-import vn.asiantech.way.data.remote.APIUtil
+import vn.asiantech.way.data.model.AutoCompleteResult
+import vn.asiantech.way.data.model.MyLocation
+import vn.asiantech.way.data.model.ResultPlaceDetail
+import vn.asiantech.way.data.source.remote.core.APIUtil
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.share.ShareLocationActivity
 import vn.asiantech.way.utils.AppConstants
@@ -111,51 +111,51 @@ class SearchLocationActivity : BaseActivity() {
         }
         mAdapter = LocationsAdapter(mMyLocations,
                 object : LocationsAdapter.RecyclerViewOnItemClickListener {
-            override fun onItemClick(myLocation: MyLocation) {
-                if (myLocation.isHistory != null && myLocation.isHistory == true) {
-                    saveSearchHistory(myLocation)
-                    val bundle = Bundle()
-                    bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
-                    bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
-                    mIntent?.putExtras(bundle)
-                    startActivity(mIntent)
-                    return
-                }
-                val progressDialog = ProgressDialog(this@SearchLocationActivity)
-                progressDialog.setTitle(R.string.processing)
-                progressDialog.isIndeterminate = true
-                progressDialog.show()
-                APIUtil.getService()?.getLocationDetail(myLocation.placeId,
-                        AppConstants.GOOGLE_MAP_API_KEY)
-                        ?.enqueue(object : Callback<ResultPlaceDetail> {
-                            override fun onFailure(call: Call<ResultPlaceDetail>?, t: Throwable?) {
-                                progressDialog.dismiss()
-                                Toast.makeText(this@SearchLocationActivity,
-                                        R.string.get_detail_error, Toast.LENGTH_LONG)
-                                        .show()
-                            }
+                    override fun onItemClick(myLocation: MyLocation) {
+                        if (myLocation.isHistory != null && myLocation.isHistory == true) {
+                            saveSearchHistory(myLocation)
+                            val bundle = Bundle()
+                            bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
+                            bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
+                            mIntent?.putExtras(bundle)
+                            startActivity(mIntent)
+                            return
+                        }
+                        val progressDialog = ProgressDialog(this@SearchLocationActivity)
+                        progressDialog.setTitle(R.string.processing)
+                        progressDialog.isIndeterminate = true
+                        progressDialog.show()
+                        APIUtil.getService()?.getLocationDetail(myLocation.placeId,
+                                AppConstants.GOOGLE_MAP_API_KEY)
+                                ?.enqueue(object : Callback<ResultPlaceDetail> {
+                                    override fun onFailure(call: Call<ResultPlaceDetail>?, t: Throwable?) {
+                                        progressDialog.dismiss()
+                                        Toast.makeText(this@SearchLocationActivity,
+                                                R.string.get_detail_error, Toast.LENGTH_LONG)
+                                                .show()
+                                    }
 
-                            override fun onResponse(call: Call<ResultPlaceDetail>?,
-                                                    response: Response<ResultPlaceDetail>?) {
-                                val resultLocation = response?.body()?.result
-                                progressDialog.dismiss()
-                                if (resultLocation != null) {
-                                    saveSearchHistory(resultLocation)
-                                    val bundle = Bundle()
-                                    bundle.putParcelable(AppConstants.KEY_LOCATION, resultLocation)
-                                    bundle.putString(AppConstants.KEY_CONFIRM,
-                                            AppConstants.KEY_SHARING)
-                                    mIntent?.putExtras(bundle)
-                                    startActivity(mIntent)
-                                } else {
-                                    Toast.makeText(this@SearchLocationActivity,
-                                            R.string.get_detail_error, Toast.LENGTH_LONG)
-                                            .show()
-                                }
-                            }
-                        })
-            }
-        })
+                                    override fun onResponse(call: Call<ResultPlaceDetail>?,
+                                                            response: Response<ResultPlaceDetail>?) {
+                                        val resultLocation = response?.body()?.result
+                                        progressDialog.dismiss()
+                                        if (resultLocation != null) {
+                                            saveSearchHistory(resultLocation)
+                                            val bundle = Bundle()
+                                            bundle.putParcelable(AppConstants.KEY_LOCATION, resultLocation)
+                                            bundle.putString(AppConstants.KEY_CONFIRM,
+                                                    AppConstants.KEY_SHARING)
+                                            mIntent?.putExtras(bundle)
+                                            startActivity(mIntent)
+                                        } else {
+                                            Toast.makeText(this@SearchLocationActivity,
+                                                    R.string.get_detail_error, Toast.LENGTH_LONG)
+                                                    .show()
+                                        }
+                                    }
+                                })
+                    }
+                })
         recyclerViewLocations.layoutManager = LinearLayoutManager(this)
         recyclerViewLocations.adapter = mAdapter
     }

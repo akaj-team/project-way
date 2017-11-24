@@ -12,9 +12,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.group.BodyAddUserToGroup
-import vn.asiantech.way.data.model.group.Group
-import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
+import vn.asiantech.way.data.model.BodyAddUserToGroup
+import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**

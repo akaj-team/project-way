@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.model.group
+package vn.asiantech.way.data.model
 
 import com.hypertrack.lib.models.User
 

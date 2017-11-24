@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
-import vn.asiantech.way.data.model.search.MyLocation
+import vn.asiantech.way.data.model.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard

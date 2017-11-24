@@ -1,11 +1,11 @@
-package vn.asiantech.way.data.remote
+package vn.asiantech.way.data.source.remote.core
 
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import vn.asiantech.way.data.model.search.AutoCompleteResult
-import vn.asiantech.way.data.model.search.ResultPlaceDetail
-import vn.asiantech.way.data.model.share.LocationResponse
+import vn.asiantech.way.data.model.AutoCompleteResult
+import vn.asiantech.way.data.model.ResultPlaceDetail
+import vn.asiantech.way.data.source.remote.response.LocationResponse
 
 /**
  * Copyright © AsianTech Co., Ltd

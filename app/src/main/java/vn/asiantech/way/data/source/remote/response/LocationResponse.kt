@@ -1,4 +1,6 @@
-package vn.asiantech.way.data.model.share
+package vn.asiantech.way.data.source.remote.response
+
+import vn.asiantech.way.data.model.LocationAddress
 
 /**
  * Copyright © AsianTech Co., Ltd

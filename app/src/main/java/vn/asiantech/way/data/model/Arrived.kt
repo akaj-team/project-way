@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.model.arrived
+package vn.asiantech.way.data.model
 
 import com.google.android.gms.maps.model.LatLng
 

@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.remote.hypertrackremote
+package vn.asiantech.way.data.source.remote.hypertrackapi
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
