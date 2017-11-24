@@ -78,7 +78,6 @@ class Preference {
     }
 
     internal fun saveListLocationLatLng(listLatLng: MutableList<LatLng>) {
-        Log.d("zxc", "list " + listLatLng)
         val editor = mSharedPreferences?.edit()
         var s = ""
         for (i in 0 until listLatLng.size) {
@@ -116,13 +115,23 @@ class Preference {
     internal fun setCurrentLatLng(latLng: LatLng) {
         val editor = mSharedPreferences?.edit()
         val result = "${latLng.latitude},${latLng.longitude}"
-        editor?.putString("ahihi", result)
+        editor?.putString(AppConstants.KEY_CURRENT_LAT_LNG, result)
         editor?.apply()
     }
 
     internal fun getCurrentLatLng(): LatLng {
-        val s = mSharedPreferences?.getString("ahihi", "")
+        val s = mSharedPreferences?.getString(AppConstants.KEY_CURRENT_LAT_LNG, "")
         val latLng = s?.split(",")
         return latLng?.get(0)?.toDouble()?.let { LatLng(it, latLng[1].toDouble()) }!!
+    }
+
+    internal fun saveCountTimer(countTimer: Long) {
+        val editor = mSharedPreferences?.edit()
+        editor?.putLong(AppConstants.KEY_COUNT_TIMER, countTimer)
+        editor?.apply()
+    }
+
+    internal fun getCountTimer(): Long? {
+        return mSharedPreferences?.getLong(AppConstants.KEY_COUNT_TIMER, 0)
     }
 }

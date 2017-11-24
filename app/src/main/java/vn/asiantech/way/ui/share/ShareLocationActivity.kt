@@ -191,6 +191,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             addDestinationMarker(mDestinationLatLng)
             handlerProgressTracking()
             getLocationName(mDestinationLatLng)
+            Preference().getCountTimer()?.let { mCountTimer = it }
             mIsConfirm = true
             mIsReTracking = true
             mIsStartTracking = true
@@ -396,7 +397,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
                     .target(latLng)
                     .zoom(ZOOM_SIZE)
-                    .build()))
+                    .build()),10, object : GoogleMap.CancelableCallback{
+                override fun onFinish() = Unit
+
+                override fun onCancel() = Unit
+            })
         }
     }
 
@@ -536,8 +541,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                     deleteListTrackingLatLng()
                     return@Runnable
                 }
-                requestLocation()
                 mCountTimer += SECOND_VALUE
+                Preference().saveCountTimer(mCountTimer)
+                requestLocation()
                 handlerProgressTracking()
             }
         }
@@ -641,16 +647,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         return src.distanceTo(des) / SECOND_VALUE
     }
 
+    //todo will update polyline later
     private fun drawLine() {
         if (mLocationUpdates != null) {
             if (mLocationUpdates!!.size > 1) {
-                val dot = Dot()
-                val dash = Dash(AppConstants.PATTERN_DASH_LENGTH_PX)
-                val gap = Gap(AppConstants.PATTERN_GAP_LENGTH_PX)
-                val patternDot: List<PatternItem> = arrayListOf(dot, gap)
-                val patternDash: List<PatternItem> = arrayListOf(dash, gap)
-                val patternMix: List<PatternItem> = arrayListOf(dot, gap, dot, dash, gap)
-
                 val option = PolylineOptions()
                         .width(20f)
                         .geodesic(true)
@@ -671,10 +671,10 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                         .addAll(mLocationUpdates)
                 mLine?.remove()
                 mLine = mGoogleMap.addPolyline(option)
-                mLine?.pattern = patternDash
+                mLine?.pattern = null
                 mLine1?.remove()
                 mLine1 = mGoogleMap.addPolyline(option1)
-                mLine1?.pattern = patternDash
+                mLine1?.pattern = null
             }
         }
     }
@@ -762,8 +762,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 ?.enqueue(object : Callback<ResultDistance> {
                     override fun onResponse(call: Call<ResultDistance>?, response: Response<ResultDistance>?) {
                         val result = response?.body()
-                        Log.d("zxc", "aa " + result)
                         if (result != null) {
+                            Log.d("zxc", "result" + result)
                             val element = result.rows[0].elements[0]
                             tvTime.text = resources.getString(R.string.eta, element.duration.text)
                             tvDistance.text = resources.getString(R.string.open_parentheses, element.distance.text)
@@ -791,7 +791,9 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 ?.enqueue(object : Callback<ResultRoad> {
                     override fun onResponse(call: Call<ResultRoad>?, response: Response<ResultRoad>?) {
                         val result = response?.body()
+                        Log.d("zxc", "aa " + result)
                         if (result != null) {
+                            Log.d("zxc", "aa " + result)
                             result.snappedPoints.forEach {
                                 mLocationUpdates?.add(LatLng(it.location.latitude, it.location.longitude))
                             }
@@ -864,12 +866,14 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         tvStartAddress.text = mLatLng?.let { getLocationDesciption(it) }
         tvEndTime.text = mTimeArrived
         tvEndAddress.text = getLocationDesciption(mDestinationLatLng)
+        tvTime.text = getTimeDuringStatus(mCountTimer / 1000)
+        tvDistance.text = mEtaDistance
         imgBtnCall.setImageDrawable(resources.getDrawable(R.drawable.ic_reached))
         showDialog()
     }
 
     private fun showDialog() {
-        val dialog = DialogArrived.newInstance(mEtaTime, mEtaDistance)
+        val dialog = DialogArrived.newInstance(getTimeDuringStatus(mCountTimer / 1000), mEtaDistance)
         val fragmentManager = supportFragmentManager
         dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
     }

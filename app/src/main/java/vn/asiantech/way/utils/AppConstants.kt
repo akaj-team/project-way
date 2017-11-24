@@ -20,6 +20,8 @@ object AppConstants {
     val KEY_ACTION_TYPE = "action_type"
     val KEY_DESTINATION = "destination"
     val KEY_SHARED_PREFERENCES = "shared"
+    val KEY_CURRENT_LAT_LNG = "current_latLng"
+    val KEY_COUNT_TIMER = "count_timer"
     val HISTORY_MAX_SIZE: Int = 10
 
     val KEY_DEFAULT_ANCHOR = 0.5f
