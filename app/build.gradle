@@ -80,7 +80,9 @@ android {
         lintConfig file('lint.xml')
         xmlOutput file("${buildDir}/reports/lint-results.xml")
     }
-
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 android.applicationVariants.all { variant ->
