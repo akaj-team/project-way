@@ -1,11 +1,11 @@
-package vn.asiantech.way.data.remote.hypertrackremote
+package vn.asiantech.way.data.source.remote.hypertrackapi
 
 import com.hypertrack.lib.models.User
 import retrofit2.Call
 import retrofit2.http.*
-import vn.asiantech.way.data.model.group.BodyAddUserToGroup
-import vn.asiantech.way.data.model.group.Group
-import vn.asiantech.way.data.model.group.UserListResult
+import vn.asiantech.way.data.model.BodyAddUserToGroup
+import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.model.UserListResult
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

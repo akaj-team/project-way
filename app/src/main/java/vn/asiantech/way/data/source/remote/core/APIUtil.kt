@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.remote
+package vn.asiantech.way.data.source.remote.core
 
 /**
  * Copyright © AsianTech Co., Ltd

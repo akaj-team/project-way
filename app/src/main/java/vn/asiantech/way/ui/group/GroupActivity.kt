@@ -15,7 +15,7 @@ import com.hypertrack.lib.models.ErrorResponse
 import com.hypertrack.lib.models.SuccessResponse
 import com.hypertrack.lib.models.User
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.group.Group
+import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**

@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.detail_arrived.*
 import kotlinx.android.synthetic.main.show_arrived.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
-import vn.asiantech.way.data.model.arrived.Arrived
+import vn.asiantech.way.data.model.Arrived
 import vn.asiantech.way.extension.makeDistance
 import vn.asiantech.way.extension.makeDuration
 import vn.asiantech.way.extension.toast

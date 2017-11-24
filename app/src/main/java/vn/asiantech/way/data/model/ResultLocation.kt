@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.model.search
+package vn.asiantech.way.data.model
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

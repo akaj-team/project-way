@@ -31,7 +31,7 @@ import com.hypertrack.lib.models.SuccessResponse
 import kotlinx.android.synthetic.main.activity_arrived.*
 import kotlinx.android.synthetic.main.detail_arrived.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.arrived.Arrived
+import vn.asiantech.way.data.model.Arrived
 import vn.asiantech.way.extension.makeDistance
 import vn.asiantech.way.extension.makeDuration
 import vn.asiantech.way.ui.base.BaseActivity

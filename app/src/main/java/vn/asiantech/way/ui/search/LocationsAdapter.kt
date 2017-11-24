@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_location.view.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.search.MyLocation
+import vn.asiantech.way.data.model.MyLocation
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
