@@ -11,7 +11,12 @@ import vn.asiantech.way.data.source.remote.response.LocationResponse
  * Copyright © 2017 AsianTech inc.
  * Created by vinh.huynh on 11/24/17.
  */
-class WayRemoteDataSource : WayDataSource {
+internal class WayRemoteDataSource : WayDataSource {
+
+    override fun getUser(): Observable<User> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun createUser(userParams: UserParams) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

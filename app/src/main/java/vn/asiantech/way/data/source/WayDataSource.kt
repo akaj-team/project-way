@@ -16,6 +16,8 @@ internal interface WayDataSource {
 
     fun updateUser(userParams:UserParams)
 
+    fun getUser():Observable<User>
+
     fun getAddressLocation(latLng: String): Observable<LocationResponse>
 
     fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail>
