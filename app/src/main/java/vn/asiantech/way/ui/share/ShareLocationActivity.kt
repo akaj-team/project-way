@@ -397,7 +397,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
                     .target(latLng)
                     .zoom(ZOOM_SIZE)
-                    .build()),10, object : GoogleMap.CancelableCallback{
+                    .build()),1000, object : GoogleMap.CancelableCallback{
                 override fun onFinish() = Unit
 
                 override fun onCancel() = Unit
@@ -419,7 +419,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
                 mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
                         .target(currentLocation)
                         .zoom(ZOOM_SIZE)
-                        .build()))
+                        .build()),1000, object : GoogleMap.CancelableCallback{
+                    override fun onFinish() = Unit
+
+                    override fun onCancel() = Unit
+                })
         } else {
             mMarker?.remove()
         }
