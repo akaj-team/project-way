@@ -17,21 +17,21 @@ internal interface WayDataSource {
      *
      *  @param userParams contain user information for Hypertrack to create new user.
      */
-    fun createUser(userParams:UserParams)
+    fun createUser(userParams: UserParams)
 
     /**
      *  This method to update User.
      *
      *  @param userParams: contain user information for Hypertrack to update.
      */
-    fun updateUser(userParams:UserParams)
+    fun updateUser(userParams: UserParams)
 
     /**
      *  Get information user.
      *
      *  @return User object which is Observable.
      */
-    fun getUser():Observable<User>
+    fun getUser(): Observable<User>
 
     /**
      *  Get address at location on Map.
