@@ -10,7 +10,7 @@ import vn.asiantech.way.data.source.remote.response.LocationResponse
  * Copyright © 2017 AsianTech inc.
  * Created by vinh.huynh on 11/24/17.
  */
-interface WayDataSource {
+internal interface WayDataSource {
 
     fun createUser(userParams:UserParams)
 
@@ -34,5 +34,4 @@ interface WayDataSource {
     fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
 
     fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
-
 }
