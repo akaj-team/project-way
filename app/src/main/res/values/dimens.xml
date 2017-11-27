@@ -8,6 +8,10 @@
     <dimen name="splash_buttonEnable_marginButton">20dp</dimen>
     <dimen name="splash_buttonEnableButton_padding">20dp</dimen>
     <dimen name="splash_progressBar_margin_bottom">20dp</dimen>
+    <dimen name="splash_img_location_margin_top">30dp</dimen>
+    <dimen name="splash_tv_app_name_margin_top">30dp</dimen>
+    <dimen name="splash_tv_description_margin_top">40dp</dimen>
+    <dimen name="splash_btn_enable_location_margin_top">30dp</dimen>
     <dimen name="seekBar_width">60dp</dimen>
     <dimen name="phone_icon_size">58dp</dimen>
 
