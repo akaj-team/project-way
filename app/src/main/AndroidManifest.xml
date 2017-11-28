@@ -85,6 +85,9 @@
         <activity
             android:name=".ui.search.SearchLocationActivity"
             android:noHistory="true" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:noHistory="true" />
 
         <activity android:name=".ui.update.UpdateMap" />
         <activity android:name=".ui.group.GroupActivity" />

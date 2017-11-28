@@ -23,6 +23,7 @@ import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.register.RegisterActivity
+import vn.asiantech.way.ui.search.SearchActivity
 import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 
@@ -97,7 +98,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onSearchClick() {
-        startActivity(Intent(this, SearchLocationActivity::class.java))
+        startActivity(Intent(this, SearchActivity::class.java))
         setGoneOverLay()
     }
 
