@@ -5,7 +5,7 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 
 /**
- * ScreenUtil.
+ * ScreenUtil
  *
  * @author at-ToanNguyen
  */
