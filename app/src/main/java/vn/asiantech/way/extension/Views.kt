@@ -13,8 +13,8 @@ import vn.asiantech.way.ui.custom.BottomButtonCard
  * Extension method to hide keyboard.
  */
 fun View.hideKeyboard(context: Context) {
-    val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(this.windowToken, 0)
+    val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    imm?.hideSoftInputFromWindow(this.windowToken, 0)
 }
 
 internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView {

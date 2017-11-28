@@ -163,7 +163,7 @@ class BottomButtonCard(context: Context) :
 
     }
 
-    /**
+    /*
      * Enum define for item type
      */
     enum class ActionType {
@@ -261,7 +261,7 @@ class BottomButtonCard(context: Context) :
         AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
-    fun hideBottomCardLayout() {
+    internal fun hideBottomCardLayout() {
         hideProgress()
         AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlBottomCard)
     }
