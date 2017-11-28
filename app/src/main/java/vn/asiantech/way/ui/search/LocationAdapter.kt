@@ -40,7 +40,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
             return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context, parent,
                     false)).tag as LocationViewHolder
         } catch (e: ClassCastException) {
-            throw RuntimeException(e.message)
+            throw ClassCastException(e.message)
         }
     }
 
