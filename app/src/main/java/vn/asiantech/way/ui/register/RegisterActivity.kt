@@ -24,6 +24,7 @@ class RegisterActivity : BaseActivity() {
                 .setContentView(this)
     }
 
+    // TODO dummy data will remove later
     private fun createCountries(): List<Country> {
         val countries = ArrayList<Country>()
         countries.add(Country("+84", "VN"))

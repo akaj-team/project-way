@@ -31,7 +31,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
         private const val ID_VIEW_LINE = 1007
     }
 
-    internal lateinit var dialog: DialogInterface
+    internal lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
     internal lateinit var progressBarAvatar: ProgressBar
     internal lateinit var imgAvatar: ImageView
@@ -50,10 +50,9 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
             frAvatar = frameLayout {
                 id = ID_FR_AVATAR
 
-                circleImageView {
+                circleImageView(R.drawable.ic_default_avatar) {
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
-                    background = ContextCompat.getDrawable(context, R.drawable.ic_default_avatar)
                     borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dip(dimen(R.dimen.border))
                 }
@@ -64,8 +63,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     gravity = Gravity.CENTER
                 }
 
-                imgAvatar = circleImageView {
-                    background = ContextCompat.getDrawable(context, R.drawable.ic_profile_camera)
+                imgAvatar = circleImageView(R.drawable.ic_profile_camera) {
                     borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dip(dimen(R.dimen.border))
                 }.lparams {
@@ -77,7 +75,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 centerHorizontally()
             }
 
-            textView(resources.getString(R.string.register_description)) {
+            textView(R.string.register_description) {
                 id = ID_TV_DESCRIPTION
                 gravity = Gravity.CENTER
                 textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
@@ -118,17 +116,16 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                         gravity = Gravity.CENTER_VERTICAL
                     }
 
-                    imageView {
-                        backgroundResource = R.drawable.ic_arrow_drop_down
+                    imageView(R.drawable.ic_arrow_drop_down) {
                         onClick {
-                            dialog = alert {
+                            dialogInterface = alert {
                                 customView {
                                     recyclerView {
                                         layoutManager = LinearLayoutManager(context)
                                         adapter = countryAdapter
                                         countryAdapter.onItemClick = { country ->
                                             // TODO Set image to imgFlag and tel to tvTel
-                                            dialog.dismiss()
+                                            dialogInterface.dismiss()
                                         }
                                     }
                                 }
@@ -138,7 +135,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                         gravity = Gravity.CENTER_VERTICAL
                     }
 
-                    tvTel = textView(resources.getString(R.string.register_tel)) {
+                    tvTel = textView(R.string.register_tel) {
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                     }.lparams(dip(dimen(R.dimen.register_screen_tv_tel_width)), matchParent)
@@ -163,7 +160,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 topMargin = margin
             }
 
-            btnRegister = button(resources.getString(R.string.register_button_save_text)) {
+            btnRegister = button(R.string.register_button_save_text) {
                 id = ID_BTN_SAVE
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
@@ -178,7 +175,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 rightMargin = margin
             }
 
-            tvSkip = textView(resources.getString(R.string.register_skip)) {
+            tvSkip = textView(R.string.register_skip) {
                 id = ID_TV_SKIP
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
@@ -187,7 +184,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 topMargin = dip(dimen(R.dimen.register_screen_tv_skip_margin))
             }
 
-            tvCancel = textView(resources.getString(R.string.register_cancel)) {
+            tvCancel = textView(R.string.register_cancel) {
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
                 visibility = View.GONE
