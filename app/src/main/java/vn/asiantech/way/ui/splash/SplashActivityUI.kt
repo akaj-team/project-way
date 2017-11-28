@@ -22,7 +22,6 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
         private const val ID_IMG_LOCATION = 1001
         private const val ID_TV_NAME_APPLICATION = 1002
     }
-
     internal lateinit var imgFrontBackground: ImageView
     internal lateinit var imgBehindBackground: ImageView
     internal lateinit var imgCircle: ImageView
