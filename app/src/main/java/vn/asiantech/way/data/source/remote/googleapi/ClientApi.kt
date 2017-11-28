@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
  */
 object ApiClient {
 
-    private val TIMEOUT = 20_000L
+    private val TIMEOUT = 20_000L //20 seconds
 
     val instance: ApiService by lazy {
         val httpClient = OkHttpClient.Builder()
