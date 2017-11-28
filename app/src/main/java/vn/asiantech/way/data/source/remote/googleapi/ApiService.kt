@@ -12,7 +12,7 @@ import vn.asiantech.way.data.source.remote.response.Response
  * Copyright © AsianTech Co., Ltd
  * Created by toan on 29/09/2017.
  */
-interface ServiceApi {
+interface ApiService {
     @GET("geocode/json")
     fun getAddressLocation(@Query("latlng") latLng: String): Single<Response<MutableList<LocationAddress>>>
 
