@@ -72,7 +72,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.END
                 }
-            }.lparams(wrapContent, wrapContent) {
+            }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
                 centerHorizontally()
             }
@@ -106,7 +106,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 view {
                     id = ID_VIEW_LINE
                     backgroundColor = ContextCompat.getColor(context, R.color.grayLight)
-                }.lparams(matchParent, dip(dimen(R.dimen.border))) {
+                }.lparams(matchParent, dimen(R.dimen.border)) {
                     below(ID_EDT_NAME)
                 }
 
@@ -114,9 +114,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     val padding = dip(dimen(R.dimen.register_screen_ll_phone_padding))
                     leftPadding = padding
                     rightPadding = padding
-                    imgFlag = imageView {
-
-                    }.lparams {
+                    imgFlag = imageView().lparams {
                         gravity = Gravity.CENTER_VERTICAL
                     }
 
@@ -132,7 +130,6 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                                             // TODO Set image to imgFlag and tel to tvTel
                                             dialog.dismiss()
                                         }
-
                                     }
                                 }
                             }.show()
