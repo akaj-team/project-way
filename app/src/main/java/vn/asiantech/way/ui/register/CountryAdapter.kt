@@ -11,24 +11,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Adapter of RecyclerView Country.
  * Created by haingoq on 27/11/2017.
  */
-class CountryAdapter(private val context: Context, private val countries: List<Country>) :
+class CountryAdapter(private val context: Context, private val countries: List<Country>,
+                     private val flagMap: HashMap<String, Bitmap>, private val countryName: String) :
         RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
     companion object {
-        private const val IMG_FLAG_ID = 1001
-        private const val IMG_FLAG_WIDTH = 36
-        private const val IMG_FLAG_HEIGHT = 28
-        private const val TV_TEL_MARGIN = 10
+        private const val ID_IMG_FLAG = 1001
     }
-
-    val mFlags: HashMap<String, Bitmap> = getFlagMap()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemCountryUI()
             .createView(AnkoContext.create(parent.context, parent, false))
@@ -50,16 +48,17 @@ class CountryAdapter(private val context: Context, private val countries: List<C
             val itemView = with(ui) {
                 linearLayout {
                     lparams(matchParent, wrapContent)
-                    padding = dip(TV_TEL_MARGIN)
+                    padding = dip(dimen(R.dimen.register_screen_avatar_margin))
                     gravity = Gravity.START
-                    imgFlag = imageView { id = IMG_FLAG_ID }.
-                            lparams(dip(IMG_FLAG_WIDTH), dip(IMG_FLAG_HEIGHT)) {
+                    imgFlag = imageView { id = ID_IMG_FLAG }.
+                            lparams(dip(dimen(R.dimen.register_screen_img_flag_width)),
+                                    dip(dimen(R.dimen.margin_xxhigh))) {
                                 gravity = Gravity.CENTER_VERTICAL
                             }
                     tvTel = textView {
                         gravity = Gravity.CENTER_VERTICAL
-                    }.lparams(wrapContent, dip(IMG_FLAG_HEIGHT)) {
-                        leftMargin = dip(TV_TEL_MARGIN)
+                    }.lparams(wrapContent, dip(dimen(R.dimen.margin_xxhigh))) {
+                        leftMargin = dip(dimen(R.dimen.register_screen_avatar_margin))
                     }
                 }
             }
@@ -86,26 +85,8 @@ class CountryAdapter(private val context: Context, private val countries: List<C
          */
         fun bindHolder(country: Country) {
             val isoCode = country.iso
-            imgFlag.setImageBitmap(mFlags[isoCode.plus(".png").toLowerCase()])
-            tvTel.text = getCountryName(isoCode.toLowerCase())
+            imgFlag.setImageBitmap(flagMap[isoCode.plus(".png").toLowerCase()])
+            tvTel.text = countryName
         }
-    }
-
-    private fun getCountryName(isoCode: String): String {
-        val locale = Locale(Locale.getDefault().displayLanguage, isoCode)
-        return locale.displayCountry.trim()
-    }
-
-    private fun getFlagMap(): HashMap<String, Bitmap> {
-        val flagMap: HashMap<String, Bitmap> = HashMap()
-        val flagArray = context.assets.list("flags")
-        val flags: MutableList<String> = ArrayList()
-        flags.addAll(flagArray)
-        flags.forEach {
-            val inputStream: InputStream = context.assets.open("flags/".plus(it))
-            val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
-            flagMap.put(it, bitmap)
-        }
-        return flagMap
     }
 }

@@ -22,21 +22,13 @@ import vn.asiantech.way.R
  */
 class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
     companion object {
-        // ID of view
-        private const val FR_AVATAR_ID = 101
-        private const val TV_DESCRIPTION_ID = 102
-        private const val RL_INFORMATION_ID = 103
-        private const val BTN_SAVE_ID = 104
-        private const val TV_SKIP = 105
-        private const val EDT_NAME_ID = 201
-        private const val VIEW_LINE_ID = 202
-
-        // Magic number
-        private const val BORDER_WIDTH = 1
-        private const val LL_PHONE_PADDING = 40
-        private const val TV_TEL_WIDTH = 45
-        private const val BTN_REGISTER_MARGIN = 20
-        private const val TV_SKIP_MARGIN = 15
+        private const val ID_FR_AVATAR = 1001
+        private const val ID_TV_DESCRIPTION = 1002
+        private const val ID_RL_INFORMATION = 1003
+        private const val ID_BTN_SAVE = 1004
+        private const val ID_TV_SKIP = 1005
+        private const val ID_EDT_NAME = 1006
+        private const val ID_VIEW_LINE = 1007
     }
 
     internal lateinit var dialog: DialogInterface
@@ -56,14 +48,14 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
         relativeLayout {
             lparams(matchParent, matchParent)
             frAvatar = frameLayout {
-                id = FR_AVATAR_ID
+                id = ID_FR_AVATAR
 
                 circleImageView {
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
                     background = ContextCompat.getDrawable(context, R.drawable.ic_default_avatar)
                     borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dip(BORDER_WIDTH)
+                    borderWidth = dip(dimen(R.dimen.border))
                 }
 
                 progressBarAvatar = progressBar {
@@ -75,7 +67,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 imgAvatar = circleImageView {
                     background = ContextCompat.getDrawable(context, R.drawable.ic_profile_camera)
                     borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dip(BORDER_WIDTH)
+                    borderWidth = dip(dimen(R.dimen.border))
                 }.lparams {
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.END
@@ -86,11 +78,11 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
             }
 
             textView(resources.getString(R.string.register_description)) {
-                id = TV_DESCRIPTION_ID
+                id = ID_TV_DESCRIPTION
                 gravity = Gravity.CENTER
                 textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
             }.lparams(matchParent, wrapContent) {
-                below(FR_AVATAR_ID)
+                below(ID_FR_AVATAR)
                 val margin = resources.getDimension(R.dimen.margin_xxhigh).toInt()
                 topMargin = margin
                 leftMargin = margin
@@ -98,11 +90,11 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
             }
 
             relativeLayout {
-                id = RL_INFORMATION_ID
+                id = ID_RL_INFORMATION
                 backgroundResource = R.drawable.custom_layout_phone
 
                 edtName = editText {
-                    id = EDT_NAME_ID
+                    id = ID_EDT_NAME
                     backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
                     hint = resources.getString(R.string.register_hint_name)
                     inputType = InputType.TYPE_CLASS_TEXT
@@ -112,15 +104,16 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height))
 
                 view {
-                    id = VIEW_LINE_ID
+                    id = ID_VIEW_LINE
                     backgroundColor = ContextCompat.getColor(context, R.color.grayLight)
-                }.lparams(matchParent, dip(BORDER_WIDTH)) {
-                    below(EDT_NAME_ID)
+                }.lparams(matchParent, dip(dimen(R.dimen.border))) {
+                    below(ID_EDT_NAME)
                 }
 
                 linearLayout {
-                    leftPadding = dip(LL_PHONE_PADDING)
-                    rightPadding = dip(LL_PHONE_PADDING)
+                    val padding = dip(dimen(R.dimen.register_screen_ll_phone_padding))
+                    leftPadding = padding
+                    rightPadding = padding
                     imgFlag = imageView {
 
                     }.lparams {
@@ -151,7 +144,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     tvTel = textView(resources.getString(R.string.register_tel)) {
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
-                    }.lparams(dip(TV_TEL_WIDTH), matchParent)
+                    }.lparams(dip(dimen(R.dimen.register_screen_tv_tel_width)), matchParent)
 
                     edtPhone = editText {
                         backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
@@ -162,10 +155,10 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                         imeOptions = EditorInfo.IME_ACTION_DONE
                     }.lparams(matchParent, matchParent)
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height)) {
-                    below(VIEW_LINE_ID)
+                    below(ID_VIEW_LINE)
                 }
             }.lparams(matchParent, wrapContent) {
-                below(TV_DESCRIPTION_ID)
+                below(ID_TV_DESCRIPTION)
                 val margin = dimen(R.dimen.margin_high)
                 bottomMargin = dimen(R.dimen.margin_huge)
                 leftMargin = margin
@@ -174,26 +167,27 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
             }
 
             btnRegister = button(resources.getString(R.string.register_button_save_text)) {
-                id = BTN_SAVE_ID
+                id = ID_BTN_SAVE
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
                 textColor = ContextCompat.getColor(context, R.color.white)
                 textSize = px2dip(dimen(R.dimen.register_screen_save_button_text_size))
                 isEnabled = false
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
-                below(RL_INFORMATION_ID)
-                leftMargin = dip(BTN_REGISTER_MARGIN)
-                topMargin = dip(BTN_REGISTER_MARGIN)
-                rightMargin = dip(BTN_REGISTER_MARGIN)
+                val margin = dip(dimen(R.dimen.register_screen_btn_register_margin))
+                below(ID_RL_INFORMATION)
+                leftMargin = margin
+                topMargin = margin
+                rightMargin = margin
             }
 
             tvSkip = textView(resources.getString(R.string.register_skip)) {
-                id = TV_SKIP
+                id = ID_TV_SKIP
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
             }.lparams(matchParent, wrapContent) {
-                below(BTN_SAVE_ID)
-                topMargin = dip(TV_SKIP_MARGIN)
+                below(ID_BTN_SAVE)
+                topMargin = dip(dimen(R.dimen.register_screen_tv_skip_margin))
             }
 
             tvCancel = textView(resources.getString(R.string.register_cancel)) {
@@ -201,8 +195,8 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 gravity = Gravity.CENTER
                 visibility = View.GONE
             }.lparams(matchParent, wrapContent) {
-                below(TV_SKIP)
-                topMargin = dip(TV_SKIP_MARGIN)
+                below(ID_TV_SKIP)
+                topMargin = dip(dimen(R.dimen.register_screen_tv_skip_margin))
             }
 
             progressBar = progressBar {

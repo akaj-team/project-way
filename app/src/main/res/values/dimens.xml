@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Common-->
+    <dimen name="border">1dp</dimen>
+
     <!--Splash screen-->
     <dimen name="splash_img_circle_with_high">250dp</dimen>
     <dimen name="splash_size_tv_app_name">25sp</dimen>
@@ -19,6 +22,11 @@
     <dimen name="register_screen_edit_text_height">40dp</dimen>
     <dimen name="register_screen_save_button_height">40dp</dimen>
     <dimen name="register_screen_avatar_margin">10dp</dimen>
+    <dimen name="register_screen_img_flag_width">36dp</dimen>
+    <dimen name="register_screen_ll_phone_padding">40dp</dimen>
+    <dimen name="register_screen_tv_tel_width">45dp</dimen>
+    <dimen name="register_screen_btn_register_margin">20dp</dimen>
+    <dimen name="register_screen_tv_skip_margin">15dp</dimen>
 
     <!--Home screen-->
     <dimen name="toolbar_height">56dp</dimen>
