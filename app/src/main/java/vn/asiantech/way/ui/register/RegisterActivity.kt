@@ -3,7 +3,6 @@ package vn.asiantech.way.ui.register
 import android.graphics.Bitmap
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
-import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.ui.base.BaseActivity
 
