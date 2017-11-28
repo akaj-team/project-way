@@ -4,15 +4,12 @@ import android.content.Context
 import android.view.View
 import android.view.ViewManager
 import android.view.inputmethod.InputMethodManager
-import com.google.android.gms.maps.MapView
+import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.ui.custom.BottomButtonCard
 
 /**
  * Created by haingoq on 12/10/2017.
- */
-
-/**
  * Extension method to hide keyboard.
  */
 fun View.hideKeyboard(context: Context) {
@@ -20,22 +17,9 @@ fun View.hideKeyboard(context: Context) {
     imm.hideSoftInputFromWindow(this.windowToken, 0)
 }
 
-internal fun ViewManager.mapView(init: MapView.() -> Unit): MapView {
-    return ankoView({ MapView(it) }, 0, init)
-}
-
-internal fun ViewManager.rippleView(
-        init: com.hypertrack.lib.internal.consumer.view.RippleView.() -> Unit):
-        com.hypertrack.lib.internal.consumer.view.RippleView {
+internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView {
     return ankoView(
-            { com.hypertrack.lib.internal.consumer.view.RippleView(it, null) }, 0, init)
-}
-
-internal fun ViewManager.wrappingViewPager(
-        init: com.hypertrack.lib.internal.consumer.view.WrappingViewPager.() -> Unit):
-        com.hypertrack.lib.internal.consumer.view.WrappingViewPager {
-    return ankoView(
-            { com.hypertrack.lib.internal.consumer.view.WrappingViewPager(it) }, 0, init)
+            { RippleView(it, null) }, 0, init)
 }
 
 internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {

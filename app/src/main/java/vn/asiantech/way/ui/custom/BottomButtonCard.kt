@@ -3,7 +3,6 @@ package vn.asiantech.way.ui.custom
 import android.content.Context
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
-import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -23,11 +22,11 @@ class BottomButtonCard(context: Context) :
         RelativeLayout(context) {
 
     companion object {
-        const val ID_RL_BOTTOM_CARD = 1
-        const val ID_BTN_CLOSE = 2
-        const val ID_TV_TITLE = 3
-        const val ID_TV_DESCRIPTION = 4
-        const val ID_BTN_SHARING = 5
+        const val ID_RL_BOTTOM_CARD = 1001
+        const val ID_BTN_CLOSE = 1002
+        const val ID_TV_TITLE = 1003
+        const val ID_TV_DESCRIPTION = 1004
+        const val ID_BTN_SHARING = 1005
         const val LAYOUT_HEIGHT = 50
         const val IMAGE_SIZE = 15
     }
@@ -89,7 +88,6 @@ class BottomButtonCard(context: Context) :
                     id = ID_TV_TITLE
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
-                    gravity = Gravity.CENTER
                     typeface = Typeface.DEFAULT_BOLD
                 }.lparams(wrapContent, wrapContent) {
                     centerHorizontally()
@@ -99,7 +97,6 @@ class BottomButtonCard(context: Context) :
                 tvDescription = textView(R.string.bottom_button_card_description_text) {
                     id = ID_TV_DESCRIPTION
                     textSize = px2dip(dimen(R.dimen.text_medium))
-                    gravity = Gravity.CENTER
                 }.lparams(wrapContent, wrapContent) {
                     centerHorizontally()
                     below(ID_TV_TITLE)
@@ -111,16 +108,13 @@ class BottomButtonCard(context: Context) :
                 btnSharing = rippleView {
                     id = ID_BTN_SHARING
                     backgroundResource = R.drawable.custom_bg_button_share
-
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
                         textSize = px2dip(dimen(R.dimen.text_large))
-                        gravity = Gravity.CENTER
                     }.lparams(wrapContent, wrapContent) {
                         centerInParent()
                     }
 
-                    imgLoader = imageView {
-                        imageResource = R.drawable.ic_live_location_loading
+                    imgLoader = imageView(R.drawable.ic_live_location_loading) {
                         visibility = View.GONE
                     }.lparams(wrapContent, wrapContent) {
                         centerInParent()
@@ -151,7 +145,6 @@ class BottomButtonCard(context: Context) :
                         textColor = ContextCompat.getColor(context, R.color.black)
                         backgroundResource = R.drawable.custom_bg_button_copy
                         padding = dimen(R.dimen.padding_base)
-                        setAllCaps(false)
                     }.lparams(wrapContent, wrapContent) {
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
