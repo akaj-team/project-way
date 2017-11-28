@@ -32,7 +32,7 @@ class CountryAdapter(private val context: Context, private val countries: List<C
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemCountryUI()
             .createView(AnkoContext.create(parent.context, parent, false))
-            .tag as CountryHolder
+            .tag as? CountryHolder
 
     override fun onBindViewHolder(holder: CountryHolder?, position: Int) {
         holder?.bindHolder(countries[position])
@@ -70,12 +70,11 @@ class CountryAdapter(private val context: Context, private val countries: List<C
 
     var onItemClick: (Country) -> Unit = {}
 
-
     /**
      * Holder Country
      */
-    inner class CountryHolder(itemView: View, private val imgFlag: ImageView,
-                              private val tvTel: TextView) : RecyclerView.ViewHolder(itemView) {
+    inner class CountryHolder(itemView: View, private val imgFlag: ImageView, private val tvTel: TextView) :
+            RecyclerView.ViewHolder(itemView) {
         init {
             itemView.onClick {
                 onItemClick(countries[adapterPosition])
