@@ -56,7 +56,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui=SplashActivityUI()
+        ui = SplashActivityUI()
         ui.setContentView(this)
         setAnimationForBackground()
         setScaleForCircle()
