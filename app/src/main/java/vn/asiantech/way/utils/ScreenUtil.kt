@@ -9,31 +9,33 @@ import android.view.WindowManager
  *
  * @author at-ToanNguyen on 27/11/2017
  */
-class ScreenUtil {
-    /**
-     * This method is used to get width of screen
-     *
-     * @param context is current context
-     * @return return height screen in pixel
-     */
-    fun getWidthScreen(context: Context): Int {
-        val wm = context
-                .getSystemService(Context.WINDOW_SERVICE) as? WindowManager
-        val dimension = DisplayMetrics()
-        wm?.defaultDisplay?.getMetrics(dimension)
-        return dimension.widthPixels
-    }
+class ScreenUtil private constructor() {
+    companion object {
+        /**
+         * This method is used to get width of screen
+         *
+         * @param context is current context
+         * @return return height screen in pixel
+         */
+        fun getWidthScreen(context: Context): Int {
+            val wm = context
+                    .getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+            val dimension = DisplayMetrics()
+            wm?.defaultDisplay?.getMetrics(dimension)
+            return dimension.widthPixels
+        }
 
-    /**
-     * This method is used to get height of screen
-     *
-     * @param context is current context
-     * @return return height screen in pixel
-     */
-    fun getHeightScreen(context: Context): Int {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
-        val dimension = DisplayMetrics()
-        wm?.defaultDisplay?.getMetrics(dimension)
-        return dimension.heightPixels
+        /**
+         * This method is used to get height of screen
+         *
+         * @param context is current context
+         * @return return height screen in pixel
+         */
+        fun getHeightScreen(context: Context): Int {
+            val wm = context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+            val dimension = DisplayMetrics()
+            wm?.defaultDisplay?.getMetrics(dimension)
+            return dimension.heightPixels
+        }
     }
 }

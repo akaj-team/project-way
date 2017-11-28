@@ -29,13 +29,13 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
         scrollView {
             relativeLayout {
                 frameLayout {
-                    lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
+                    lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
                     imgFrontBackground = imageView {
                         backgroundResource = R.drawable.bg_map
-                    }.lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
+                    }.lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
                     imgBehindBackground = imageView {
                         backgroundResource = R.drawable.bg_map
-                    }.lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
+                    }.lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
                 }
                 verticalLayout {
                     gravity = Gravity.CENTER_HORIZONTAL
