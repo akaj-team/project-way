@@ -19,8 +19,6 @@ import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.home.HomeActivity
-import vn.asiantech.way.ui.register.RegisterActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -64,29 +62,29 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun startSwitchScreen() {
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
-                    ui.progressBar.visibility = View.VISIBLE
-                    ui.btnEnableLocation.visibility = View.GONE
-                    ui.tvAppDescription.visibility = View.GONE
-                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
-                        Handler().postDelayed({
-                            startActivity(Intent(this, HomeActivity::class.java))
-                            finish()
-                        }, DELAY)
-
-                    } else {
-                        Handler().postDelayed({
-                            val intent = Intent(this, RegisterActivity::class.java)
-                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-                            startActivity(intent)
-                            finish()
-                        }, DELAY)
-                    }
-                }
-            }
-        }
+//        if (HyperTrackUtils.isInternetConnected(this)) {
+//            if (HyperTrackUtils.isLocationEnabled(this)) {
+//                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
+//                    ui.progressBar.visibility = View.VISIBLE
+//                    ui.btnEnableLocation.visibility = View.GONE
+//                    ui.tvAppDescription.visibility = View.GONE
+//                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
+//                        Handler().postDelayed({
+//                            startActivity(Intent(this, HomeActivity::class.java))
+//                            finish()
+//                        }, DELAY)
+//
+//                    } else {
+//                        Handler().postDelayed({
+//                            val intent = Intent(this, RegisterActivity::class.java)
+//                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+//                            startActivity(intent)
+//                            finish()
+//                        }, DELAY)
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun setAnimationForBackground() {

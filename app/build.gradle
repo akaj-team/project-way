@@ -18,6 +18,7 @@ android {
         applicationId "vn.asiantech.way"
         minSdkVersion 16
         targetSdkVersion 26
+        multiDexEnabled true
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -80,7 +81,9 @@ android {
         lintConfig file('lint.xml')
         xmlOutput file("${buildDir}/reports/lint-results.xml")
     }
-
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 android.applicationVariants.all { variant ->
@@ -132,6 +135,10 @@ dependencies {
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.3.1'
+
+    //Rxjava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     // Anko Layouts
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
