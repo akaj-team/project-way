@@ -35,13 +35,9 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
         holder?.onBind()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
-        try {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? {
             return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context, parent,
-                    false)).tag as LocationViewHolder
-        } catch (e: ClassCastException) {
-            throw ClassCastException(e.message)
-        }
+                    false)).tag as? LocationViewHolder
     }
 
     /**
