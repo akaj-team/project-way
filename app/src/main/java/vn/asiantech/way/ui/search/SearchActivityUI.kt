@@ -19,17 +19,11 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
     : AnkoComponent<SearchActivity> {
 
     companion object {
-        internal const val ID_LL_HEADER_LAYOUT = 2202
-        internal const val ID_IMG_BTN_BACK = 2203
-        internal const val ID_IMG_YOUR_LOCATION_ICON = 2204
-        internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 2205
-        internal const val ID_RECYCLER_VIEW_LOCATIONS = 2206
-
-        private const val DEFAULT_MARGIN_PADDING = 10
-        private const val SMALL_MARGIN_PADDING = 5
-        private const val BREAK_LINE_VIEW_HEIGHT = 0.5f
-        private const val BREAK_LINE_LEFT_MARGIN = 64
-        private const val BREAK_LINE_TOP_BOT_MARGIN = 2
+        internal const val ID_LL_HEADER_LAYOUT = 1001
+        internal const val ID_IMG_BTN_BACK = 1002
+        internal const val ID_IMG_YOUR_LOCATION_ICON = 1003
+        internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 1004
+        internal const val ID_RECYCLER_VIEW_LOCATIONS = 1005
     }
 
     internal lateinit var edtLocation: EditText
@@ -63,7 +57,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams(wrapContent, wrapContent)
 
                     edtLocation = editText {
-                        padding = dip(DEFAULT_MARGIN_PADDING)
+                        padding = dimen(R.dimen.default_padding_margin)
                         backgroundColor = Color.WHITE
                         singleLine = true
                         hintResource = R.string.search_location_enter_a_place
@@ -78,7 +72,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams {
                         width = matchParent
                         height = matchParent
-                        leftMargin = dip(DEFAULT_MARGIN_PADDING)
+                        leftMargin = dimen(R.dimen.default_padding_margin)
                     }
                 }.lparams(matchParent, wrapContent)
 
@@ -97,17 +91,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
-                            margin = dip(DEFAULT_MARGIN_PADDING)
+                            margin = dimen(R.dimen.default_padding_margin)
                         }
 
                         textView {
-                            padding = dip(SMALL_MARGIN_PADDING)
+                            padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
                             textResource = R.string.your_location
                         }.lparams {
                             width = matchParent
                             height = wrapContent
-                            margin = dip(DEFAULT_MARGIN_PADDING)
+                            margin = dimen(R.dimen.default_padding_margin)
                             rightOf(ID_IMG_YOUR_LOCATION_ICON)
                         }
 
@@ -115,10 +109,10 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             backgroundResource = R.color.colorSearchScreenBackground
                         }.lparams {
                             width = matchParent
-                            height = dip(BREAK_LINE_VIEW_HEIGHT)
-                            leftMargin = dip(BREAK_LINE_LEFT_MARGIN)
-                            topMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
-                            bottomMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
+                            height = dimen(R.dimen.break_line_view_height)
+                            leftMargin = dimen(R.dimen.break_line_left_margin)
+                            topMargin = dimen(R.dimen.break_line_top_bot_margin)
+                            bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
                             below(ID_IMG_YOUR_LOCATION_ICON)
                         }
                     }.lparams(matchParent, wrapContent)
@@ -136,17 +130,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
-                            margin = dip(DEFAULT_MARGIN_PADDING)
+                            margin = dimen(R.dimen.default_padding_margin)
                         }
 
                         textView {
-                            padding = dip(SMALL_MARGIN_PADDING)
+                            padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
                             textResource = R.string.choose_on_map
                         }.lparams {
                             width = matchParent
                             height = wrapContent
-                            margin = dip(DEFAULT_MARGIN_PADDING)
+                            margin = dimen(R.dimen.default_padding_margin)
                             rightOf(ID_IMG_CHOOSE_ON_MAP_ICON)
                         }
                     }.lparams(matchParent, wrapContent)
@@ -159,19 +153,19 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                 }.lparams {
                     width = matchParent
                     height = matchParent
-                    topMargin = dip(DEFAULT_MARGIN_PADDING)
+                    topMargin = dimen(R.dimen.default_padding_margin)
                     below(ID_LL_HEADER_LAYOUT)
                 }
             }.lparams {
                 width = matchParent
                 height = matchParent
-                padding = dip(DEFAULT_MARGIN_PADDING)
+                padding = dimen(R.dimen.default_padding_margin)
             }
         }
     }
 
     /**
-     *
+     * This interface use to handle Text change event of edit text.
      */
     interface TextChangeListener : TextWatcher {
         override fun beforeTextChanged(var1: CharSequence, var2: Int, var3: Int, var4: Int) = Unit

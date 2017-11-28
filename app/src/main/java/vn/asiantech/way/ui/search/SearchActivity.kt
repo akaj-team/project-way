@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.toast
 import vn.asiantech.way.R
@@ -24,7 +23,7 @@ class SearchActivity : BaseActivity() {
             override fun onItemClick(location: MyLocation) {
                 // TODO: 28/11/2017
                 // Dummy data
-                Log.i("tag11", location.name)
+                toast(R.string.coming_soon)
             }
         })
         searchActivityUI = SearchActivityUI(adapter)
@@ -34,7 +33,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Search location by query name.
      */
-    fun searchLocations(query: String) {
+    internal fun searchLocations(query: String) {
         // TODO: 28/11/2017
         // Dummy data
         locations.clear()
@@ -59,7 +58,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Get current location.
      */
-    fun getCurrentLocation() {
+    internal fun getCurrentLocation() {
         // Init later.
         toast(R.string.coming_soon)
     }
@@ -67,7 +66,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Choose location on map.
      */
-    fun chooseOnMap(){
+    internal fun chooseOnMap() {
         // Init later.
         toast(R.string.coming_soon)
     }

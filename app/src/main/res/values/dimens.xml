@@ -52,4 +52,11 @@
     <!--Group-->
     <dimen name="notification_size">24dp</dimen>
     <dimen name="group_text_size_normal">15dp</dimen>
+
+    <!--Search-->
+    <dimen name="default_padding_margin">10dp</dimen>
+    <dimen name="small_padding_margin">5dp</dimen>
+    <dimen name="break_line_view_height">0.5dp</dimen>
+    <dimen name="break_line_left_margin">64dp</dimen>
+    <dimen name="break_line_top_bot_margin">2dp</dimen>
 </resources>
