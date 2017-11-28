@@ -10,18 +10,30 @@ import android.view.WindowManager
  * @author at-ToanNguyen
  */
 object ScreenUtil {
+    /**
+     * This method is used to get width of screen
+     *
+     * @param context is current context
+     * @return return height screen in pixel
+     */
     fun getWidthScreen(context: Context): Int {
         val wm = context
-                .getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                .getSystemService(Context.WINDOW_SERVICE) as? WindowManager
         val dimension = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(dimension)
+        wm?.defaultDisplay?.getMetrics(dimension)
         return dimension.widthPixels
     }
 
+    /**
+     * This method is used to get height of screen
+     *
+     * @param context is current context
+     * @return return height screen in pixel
+     */
     fun getHeightScreen(context: Context): Int {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
         val dimension = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(dimension)
+        wm?.defaultDisplay?.getMetrics(dimension)
         return dimension.heightPixels
     }
 }
