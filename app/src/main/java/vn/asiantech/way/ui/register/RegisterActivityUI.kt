@@ -50,7 +50,8 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
             frAvatar = frameLayout {
                 id = ID_FR_AVATAR
 
-                circleImageView(R.drawable.ic_default_avatar) {
+                circleImageView {
+                    backgroundResource = R.drawable.ic_default_avatar
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
                     borderColor = ContextCompat.getColor(context, R.color.white)
@@ -63,7 +64,8 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     gravity = Gravity.CENTER
                 }
 
-                imgAvatar = circleImageView(R.drawable.ic_profile_camera) {
+                imgAvatar = circleImageView {
+                    backgroundResource = R.drawable.ic_profile_camera
                     borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dip(dimen(R.dimen.border))
                 }.lparams {
@@ -168,20 +170,21 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 textSize = px2dip(dimen(R.dimen.register_screen_save_button_text_size))
                 isEnabled = false
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
-                val margin = dip(dimen(R.dimen.register_screen_btn_register_margin))
+                val margin = dimen(R.dimen.register_screen_btn_register_margin)
                 below(ID_RL_INFORMATION)
                 leftMargin = margin
                 topMargin = margin
                 rightMargin = margin
             }
 
-            tvSkip = textView(R.string.register_skip) {
+            tvSkip = textView {
+                text = resources.getString(R.string.register_skip)
                 id = ID_TV_SKIP
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
             }.lparams(matchParent, wrapContent) {
                 below(ID_BTN_SAVE)
-                topMargin = dip(dimen(R.dimen.register_screen_tv_skip_margin))
+                topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
             tvCancel = textView(R.string.register_cancel) {
@@ -190,7 +193,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 visibility = View.GONE
             }.lparams(matchParent, wrapContent) {
                 below(ID_TV_SKIP)
-                topMargin = dip(dimen(R.dimen.register_screen_tv_skip_margin))
+                topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
             progressBar = progressBar {
