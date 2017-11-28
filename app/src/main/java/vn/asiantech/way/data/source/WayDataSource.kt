@@ -4,7 +4,7 @@ import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.*
-import vn.asiantech.way.data.source.remote.response.LocationResponse
+import vn.asiantech.way.data.source.remote.response.ResponseStatus
 
 /**
  * Copyright © 2017 AsianTech inc.
@@ -15,31 +15,33 @@ internal interface WayDataSource {
     /**
      *  This method to create new User.
      *
-     *  @param userParams contain user information for Hypertrack to create new user.
+     *  @param userParams contain user information for Hypertrack to create new user
+     *  @return ResponseStatus object which is Observable.
      */
-    fun createUser(userParams: UserParams)
+    fun createUser(userParams: UserParams): Observable<ResponseStatus>
 
     /**
      *  This method to update User.
      *
      *  @param userParams: contain user information for Hypertrack to update.
+     *  @return ResponseStatus object which is Observable.
      */
-    fun updateUser(userParams: UserParams)
+    fun updateUser(userParams: UserParams): Observable<ResponseStatus>
 
     /**
      *  Get information user.
-     *
+     *  @param userId of user
      *  @return User object which is Observable.
      */
-    fun getUser(): Observable<User>
+    fun getUser(userId: String): Observable<User>
 
     /**
      *  Get address at location on Map.
      *
      *  @param latLng: information of position.
-     *  @return LocationResponse object which is Observable.
+     *  @return MutableList<LocationAddress> which is Observable.
      */
-    fun getAddressLocation(latLng: String): Observable<LocationResponse>
+    fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>>
 
     /**
      *  This method to get detail of location.
@@ -81,9 +83,9 @@ internal interface WayDataSource {
      *  This method used to get members list of given group.
      *
      *  @param groupId - id of given group.
-     *  @return UserListResult object which is Observable.
+     *  @return MutableList<User> which is Observable.
      */
-    fun getMembersList(groupId: String): Observable<UserListResult>
+    fun getGroupMembers(groupId: String): Observable<MutableList<User>>
 
     /**
      * This method used to add a user to given group.

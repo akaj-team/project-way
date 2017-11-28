@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_location.view.*
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.MyLocation
+import vn.asiantech.way.data.model.Location
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov. on 25/09/2017.
  */
-class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
+class LocationsAdapter(var mLocations: MutableList<Location>,
                        val mListener: RecyclerViewOnItemClickListener)
     : RecyclerView.Adapter<LocationsAdapter.LocationHolder>() {
 
@@ -25,7 +25,7 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
         return LocationHolder(view)
     }
 
-    override fun getItemCount() = mMyLocations.size
+    override fun getItemCount() = mLocations.size
 
     /**
      *  Custom item of location list
@@ -33,7 +33,7 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
     inner class LocationHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.setOnClickListener {
-                mListener.onItemClick(mMyLocations[adapterPosition])
+                mListener.onItemClick(mLocations[adapterPosition])
             }
         }
 
@@ -41,7 +41,7 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
          * bind data to view holder
          */
         fun onBind() {
-            with(mMyLocations[adapterPosition]) {
+            with(mLocations[adapterPosition]) {
                 if (isHistory != null && isHistory == true) {
                     itemView.imgLocationIcon.setImageResource(R.drawable.ic_access_time)
                 } else {
@@ -62,6 +62,6 @@ class LocationsAdapter(var mMyLocations: MutableList<MyLocation>,
         /**
          *  event on item click
          */
-        fun onItemClick(myLocation: MyLocation)
+        fun onItemClick(location: Location)
     }
 }

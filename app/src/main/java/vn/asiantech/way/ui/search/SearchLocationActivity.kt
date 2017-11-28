@@ -16,7 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.AutoCompleteResult
-import vn.asiantech.way.data.model.MyLocation
+import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.data.model.ResultPlaceDetail
 import vn.asiantech.way.data.source.remote.core.APIUtil
 import vn.asiantech.way.ui.base.BaseActivity
@@ -35,9 +35,9 @@ class SearchLocationActivity : BaseActivity() {
     }
 
     private var mAdapter: LocationsAdapter? = null
-    private var mMyLocations: MutableList<MyLocation> = mutableListOf()
+    private var mLocations: MutableList<Location> = mutableListOf()
     private var mIntent: Intent? = null
-    private var mMyLocation: MyLocation? = null
+    private var mLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +67,7 @@ class SearchLocationActivity : BaseActivity() {
     private fun locationSearch() {
         edtLocation.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                mMyLocations.clear()
+                mLocations.clear()
                 mAdapter?.notifyDataSetChanged()
                 if (p0.toString().isNotEmpty()) {
                     val query = p0.toString()
@@ -82,7 +82,7 @@ class SearchLocationActivity : BaseActivity() {
                                     if (query == edtLocation.text.toString()) {
                                         val result = response?.body()?.predictions
                                         result?.forEach {
-                                            mMyLocations.add(MyLocation(it.id, it.placeId,
+                                            mLocations.add(Location(it.id, it.placeId,
                                                     it.structuredFormatting.mainText, it.description))
                                         }
                                         mAdapter?.notifyDataSetChanged()
@@ -92,7 +92,7 @@ class SearchLocationActivity : BaseActivity() {
                 } else {
                     val history = getSearchHistory()
                     if (history != null) {
-                        mMyLocations.addAll(history)
+                        mLocations.addAll(history)
                     }
                 }
             }
@@ -107,15 +107,15 @@ class SearchLocationActivity : BaseActivity() {
     private fun initAdapter() {
         val history = getSearchHistory()
         if (history != null) {
-            mMyLocations.addAll(history)
+            mLocations.addAll(history)
         }
-        mAdapter = LocationsAdapter(mMyLocations,
+        mAdapter = LocationsAdapter(mLocations,
                 object : LocationsAdapter.RecyclerViewOnItemClickListener {
-                    override fun onItemClick(myLocation: MyLocation) {
-                        if (myLocation.isHistory != null && myLocation.isHistory == true) {
-                            saveSearchHistory(myLocation)
+                    override fun onItemClick(location: Location) {
+                        if (location.isHistory != null && location.isHistory == true) {
+                            saveSearchHistory(location)
                             val bundle = Bundle()
-                            bundle.putParcelable(AppConstants.KEY_LOCATION, myLocation)
+                            bundle.putParcelable(AppConstants.KEY_LOCATION, location)
                             bundle.putString(AppConstants.KEY_CONFIRM, AppConstants.KEY_SHARING)
                             mIntent?.putExtras(bundle)
                             startActivity(mIntent)
@@ -125,7 +125,7 @@ class SearchLocationActivity : BaseActivity() {
                         progressDialog.setTitle(R.string.processing)
                         progressDialog.isIndeterminate = true
                         progressDialog.show()
-                        APIUtil.getService()?.getLocationDetail(myLocation.placeId,
+                        APIUtil.getService()?.getLocationDetail(location.placeId,
                                 AppConstants.GOOGLE_MAP_API_KEY)
                                 ?.enqueue(object : Callback<ResultPlaceDetail> {
                                     override fun onFailure(call: Call<ResultPlaceDetail>?, t: Throwable?) {
@@ -160,20 +160,20 @@ class SearchLocationActivity : BaseActivity() {
         recyclerViewLocations.adapter = mAdapter
     }
 
-    internal fun getMyLocation(): MyLocation? {
-        return mMyLocation
+    internal fun getMyLocation(): Location? {
+        return mLocation
     }
 
-    private fun getSearchHistory(): MutableList<MyLocation>? {
+    private fun getSearchHistory(): MutableList<Location>? {
         val gson = Gson()
-        val result = mutableListOf<MyLocation>()
+        val result = mutableListOf<Location>()
         return try {
             val history = mSharedPreferences.getString(KEY_HISTORY, "[]")
             val jsonArray = JSONArray(history)
             (0 until jsonArray.length())
                     .mapTo(result) {
                         gson.fromJson(jsonArray.getJSONObject(it).toString()
-                                , MyLocation::class.java)
+                                , Location::class.java)
                     }
             result
         } catch (e: JsonSyntaxException) {
@@ -181,7 +181,7 @@ class SearchLocationActivity : BaseActivity() {
         }
     }
 
-    private fun saveSearchHistory(myLocation: MyLocation) {
+    private fun saveSearchHistory(location: Location) {
         val gson = Gson()
         val editor = mSharedPreferences.edit()
         var history = getSearchHistory()
@@ -189,10 +189,10 @@ class SearchLocationActivity : BaseActivity() {
             history = mutableListOf()
         }
         history = history.filter {
-            it.id != myLocation.id
+            it.id != location.id
         }.toMutableList()
-        myLocation.isHistory = true
-        history.add(0, myLocation)
+        location.isHistory = true
+        history.add(0, location)
         if (history.size > HISTORY_MAX_SIZE) {
             history.removeAt(HISTORY_MAX_SIZE - 1)
         }

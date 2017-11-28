@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.AsyncTask
 import android.os.BatteryManager
 import android.os.Bundle
@@ -39,7 +38,6 @@ import kotlinx.android.synthetic.main.bottom_button_card_view.*
 import kotlinx.android.synthetic.main.bottom_button_card_view.view.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
-import vn.asiantech.way.data.model.MyLocation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.confirm.LocationNameAsyncTask
 import vn.asiantech.way.ui.custom.BottomButtonCard
@@ -94,7 +92,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     private lateinit var mLocationRequest: LocationRequest
     private var mDestinationName: String? = null
     private var mLatLng: LatLng? = null
-    private var mMyLocation: MyLocation? = null
+    private var mLocation: vn.asiantech.way.data.model.Location? = null
     private var mAction: String? = null
     private var mIsConfirm: Boolean = false
     private var mIsStartTracking: Boolean = false
@@ -116,7 +114,7 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share_location)
         if (intent.extras != null) {
-            mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
+            mLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
             mAction = intent.getStringExtra(AppConstants.KEY_CONFIRM)
         }
         registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -145,8 +143,8 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
             drawCurrentMaker(mCurrentLocation!!)
         }
         mGoogleMap.setOnCameraIdleListener(this)
-        val lat = mMyLocation?.geometry?.location?.lat
-        val lng = mMyLocation?.geometry?.location?.lng
+        val lat = mLocation?.geometry?.location?.lat
+        val lng = mLocation?.geometry?.location?.lng
         if (lat != null && lng != null) {
             mLatLng = LatLng(lat, lng)
             addDestinationMarker(mLatLng)
@@ -175,11 +173,11 @@ class ShareLocationActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCa
     override fun onCameraIdle() {
         mLatLng = mGoogleMap.cameraPosition?.target
         if (!mIsConfirm) {
-            if (mMyLocation?.geometry?.location == null) {
+            if (mLocation?.geometry?.location == null) {
                 mLocationAsyncTask = LocationNameAsyncTask(WeakReference(this)).execute(mLatLng)
             } else {
-                val lat = mMyLocation?.geometry?.location?.lat
-                val lng = mMyLocation?.geometry?.location?.lng
+                val lat = mLocation?.geometry?.location?.lat
+                val lng = mLocation?.geometry?.location?.lng
                 if (lat != null && lng != null) {
                     mLatLng = LatLng(lat, lng)
                     mLocationAsyncTask = LocationNameAsyncTask(WeakReference(this)).execute(mLatLng)

@@ -5,27 +5,26 @@ import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.WayDataSource
-import vn.asiantech.way.data.source.remote.response.LocationResponse
+import vn.asiantech.way.data.source.remote.response.ResponseStatus
 
 /**
  * Copyright © 2017 AsianTech inc.
  * Created by vinh.huynh on 11/24/17.
  */
 internal class WayRemoteDataSource : WayDataSource {
-
-    override fun getUser(): Observable<User> {
+    override fun createUser(userParams: UserParams): Observable<ResponseStatus> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun createUser(userParams: UserParams) {
+    override fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateUser(userParams: UserParams) {
+    override fun getUser(userId: String): Observable<User> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAddressLocation(latLng: String): Observable<LocationResponse> {
+    override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -45,7 +44,7 @@ internal class WayRemoteDataSource : WayDataSource {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getMembersList(groupId: String): Observable<UserListResult> {
+    override fun getGroupMembers(groupId: String): Observable<MutableList<User>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -56,5 +55,4 @@ internal class WayRemoteDataSource : WayDataSource {
     override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }
