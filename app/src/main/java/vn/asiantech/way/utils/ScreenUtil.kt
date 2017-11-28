@@ -9,7 +9,7 @@ import android.view.WindowManager
  *
  * @author at-ToanNguyen on 27/11/2017
  */
-object ScreenUtil {
+class ScreenUtil {
     /**
      * This method is used to get width of screen
      *

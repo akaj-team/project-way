@@ -5,6 +5,10 @@ import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.utils.ScreenUtil
@@ -15,21 +19,27 @@ import vn.asiantech.way.utils.ScreenUtil
  * @author at-ToanNguyen
  */
 class SplashActivityUI : AnkoComponent<SplashActivity> {
+    internal lateinit var imgFrontBackground: ImageView
+    internal lateinit var imgBehindBackground: ImageView
+    internal lateinit var imgCircle: ImageView
+    internal lateinit var tvAppDescription: TextView
+    internal lateinit var progressBar: ProgressBar
+    internal lateinit var btnEnableLocation: Button
     override fun createView(ui: AnkoContext<SplashActivity>): View = with(ui) {
         scrollView {
             relativeLayout {
                 frameLayout {
-                    lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
-                    imageView {
+                    lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
+                    imgFrontBackground = imageView {
                         backgroundResource = R.drawable.bg_map
-                    }.lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
-                    imageView {
+                    }.lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
+                    imgBehindBackground = imageView {
                         backgroundResource = R.drawable.bg_map
-                    }.lparams(ScreenUtil.getWidthScreen(context), ScreenUtil.getHeightScreen(context))
+                    }.lparams(ScreenUtil().getWidthScreen(context), ScreenUtil().getHeightScreen(context))
                 }
                 verticalLayout {
                     gravity = Gravity.CENTER_HORIZONTAL
-                    imageView {
+                    imgCircle = imageView {
                         backgroundResource = R.drawable.ic_location_round
                     }.lparams(dimen(R.dimen.splash_img_circle_with_high)
                             , dimen(R.dimen.splash_img_circle_with_high)) {
@@ -42,7 +52,7 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
                     }.lparams(wrapContent, wrapContent) {
                         topMargin = dimen(R.dimen.splash_tv_app_name_margin_top)
                     }
-                    textView(R.string.splash_description_app) {
+                    tvAppDescription = textView(R.string.splash_description_app) {
                         textColor = Color.BLACK
                         textSize = px2dip(dimen(R.dimen.splash_tv_size_app_description))
                     }.lparams(wrapContent, wrapContent) {
@@ -51,12 +61,12 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
                         rightMargin = dimen(R.dimen.splash_tv_description_margin)
                         gravity = Gravity.CENTER
                     }
-                    progressBar {
+                    progressBar = progressBar {
                         visibility = View.GONE
                     }.lparams(wrapContent, wrapContent) {
                         bottomMargin = dimen(R.dimen.splash_progressBar_margin_bottom)
                     }
-                    button(R.string.splash_button_enable_location) {
+                    btnEnableLocation = button(R.string.splash_button_enable_location) {
                         backgroundResource = R.drawable.common_bg_button_enable_location
                         leftPadding = dimen(R.dimen.splash_buttonEnableButton_padding)
                         rightPadding = dimen(R.dimen.splash_buttonEnableButton_padding)
