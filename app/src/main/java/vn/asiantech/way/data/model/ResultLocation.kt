@@ -5,5 +5,5 @@ package vn.asiantech.way.data.model
  * Created by cuongcaov. on 25/09/2017.
  */
 class ResultLocation {
-    var results: List<MyLocation>? = null
+    var results: List<Location>? = null
 }

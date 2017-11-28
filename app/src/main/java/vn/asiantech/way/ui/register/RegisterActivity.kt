@@ -12,11 +12,6 @@ import vn.asiantech.way.ui.base.BaseActivity
  * Created by haibt on 9/26/17.
  */
 class RegisterActivity : BaseActivity() {
-    companion object {
-        const val INTENT_CODE_SPLASH = 100
-        const val INTENT_CODE_HOME = 101
-        const val INTENT_REGISTER = "Register"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -55,7 +55,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
                     borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dip(dimen(R.dimen.border))
+                    borderWidth = dimen(R.dimen.border)
                 }
 
                 progressBarAvatar = progressBar {
