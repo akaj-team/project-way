@@ -7,7 +7,7 @@ import android.view.WindowManager
 /**
  * ScreenUtil
  *
- * @author at-ToanNguyen
+ * @author at-ToanNguyen on 27/11/2017
  */
 object ScreenUtil {
     /**
