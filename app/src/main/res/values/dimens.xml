@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Splash screen-->
-    <dimen name="splash_img_circle_with_high">250dp</dimen>
+    <dimen name="splash_img_circle_with_high">200dp</dimen>
     <dimen name="splash_size_tv_app_name">25sp</dimen>
     <dimen name="splash_tv_description_margin">50dp</dimen>
     <dimen name="splash_tv_size_app_description">16sp</dimen>
