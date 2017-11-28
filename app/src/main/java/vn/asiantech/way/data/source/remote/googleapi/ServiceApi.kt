@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.source.remote.core
+package vn.asiantech.way.data.source.remote.googleapi
 
 import io.reactivex.Single
 import retrofit2.http.GET
