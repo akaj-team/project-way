@@ -16,11 +16,11 @@ import vn.asiantech.way.R
  */
 class FloatingButtonHorizontalUI : AnkoComponent<ViewGroup> {
     companion object {
-        private const val ID_BUTTON_SEARCH = 9931
-        private const val ID_BUTTON_GROUP = 9932
-        private const val ID_BUTTON_CALENDAR = 9933
-        private const val ID_BUTTON_PROFILE = 9934
-        private const val ID_BUTTON_SHARE = 9935
+        private const val ID_BTN_SEARCH = 1001
+        private const val ID_BTN_GROUP = 1002
+        private const val ID_BTN_CALENDAR = 1003
+        private const val ID_BTN_PROFILE = 1004
+        private const val ID_BTN_SHARE = 1005
     }
 
     internal lateinit var rlSearch: RelativeLayout
@@ -38,124 +38,134 @@ class FloatingButtonHorizontalUI : AnkoComponent<ViewGroup> {
     internal lateinit var rlShare: RelativeLayout
     internal lateinit var imgBtnShare: ImageButton
     internal lateinit var tvShareTitle: TextView
+    internal lateinit var imgBtnMenu: ImageButton
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         verticalLayout {
-            rlSearch = relativeLayout {
-                imgBtnSearch = imageButton {
-                    id = ID_BUTTON_SEARCH
+            lparams(wrapContent, wrapContent)
+            relativeLayout {
+                imageButton {
+                    id = ID_BTN_SEARCH
                     imageResource = R.drawable.ic_search
+                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
-                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }
-                tvSearchTitle = textView(R.string.custom_floating_menu_search_title) {
+                textView(R.string.custom_floating_menu_search_title) {
                     leftPadding = dip(10)
                     rightPadding = dip(10)
                     textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }.lparams(wrapContent, dip(30)) {
                     centerVertically()
                     rightMargin = 10
-                    leftOf(ID_BUTTON_SEARCH)
+                    leftOf(ID_BTN_SEARCH)
                     gravity = Gravity.CENTER
-                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }
             }.lparams(dip(150), wrapContent) {
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
             }
-            rlGroup = relativeLayout {
-                imgBtnGroup = imageButton {
-                    id = ID_BUTTON_GROUP
+            relativeLayout {
+                imageButton {
+                    id = ID_BTN_GROUP
                     imageResource = R.drawable.ic_group_white_24dp
+                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
-                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }
-                tvGroupTitle = textView(R.string.custom_floating_menu_search_title) {
+                textView(R.string.custom_floating_menu_group_title) {
                     leftPadding = dip(10)
                     rightPadding = dip(10)
                     textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }.lparams(wrapContent, dip(30)) {
                     centerVertically()
                     rightMargin = 10
-                    leftOf(ID_BUTTON_GROUP)
+                    leftOf(ID_BTN_GROUP)
                     gravity = Gravity.CENTER
-                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }
             }.lparams(dip(150), wrapContent) {
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
             }
-            rlCalendar = relativeLayout {
-                imgBtnCalendar = imageButton {
-                    id = ID_BUTTON_CALENDAR
+            relativeLayout {
+                imageButton {
+                    id = ID_BTN_CALENDAR
+                    backgroundResource = R.drawable.custom_bg_item_calendar_button
                     imageResource = R.drawable.ic_calendar
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
-                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }
-                tvCalendarTitle = textView(R.string.custom_floating_menu_search_title) {
+                textView(R.string.custom_floating_menu_calendar_title) {
                     leftPadding = dip(10)
                     rightPadding = dip(10)
                     textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }.lparams(wrapContent, dip(30)) {
                     centerVertically()
                     rightMargin = 10
-                    leftOf(ID_BUTTON_CALENDAR)
+                    leftOf(ID_BTN_CALENDAR)
                     gravity = Gravity.CENTER
-                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }
             }.lparams(dip(150), wrapContent) {
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
             }
-            rlProfile = relativeLayout {
-                imgBtnProfile = imageButton {
-                    id = ID_BUTTON_PROFILE
+            relativeLayout {
+                imageButton {
+                    id = ID_BTN_PROFILE
                     imageResource = R.drawable.ic_profile
+                    backgroundResource = R.drawable.custom_bg_item_profile_button
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
-                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }
-                tvProfileTitle = textView(R.string.custom_floating_menu_search_title) {
+                textView(R.string.custom_floating_menu_search_title) {
                     leftPadding = dip(10)
                     rightPadding = dip(10)
                     textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }.lparams(wrapContent, dip(30)) {
                     centerVertically()
                     rightMargin = 10
-                    leftOf(ID_BUTTON_PROFILE)
+                    leftOf(ID_BTN_PROFILE)
                     gravity = Gravity.CENTER
-                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }
             }.lparams(dip(150), wrapContent) {
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
             }
-            rlShare = relativeLayout {
-                imgBtnShare = imageButton {
-                    id = ID_BUTTON_SHARE
+            relativeLayout {
+                imageButton {
+                    id = ID_BTN_SHARE
                     imageResource = R.drawable.ic_share
+                    backgroundResource = R.drawable.custom_bg_item_share_button
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
-                    backgroundResource = R.drawable.custom_bg_item_search_button
                 }
-                tvShareTitle = textView(R.string.custom_floating_menu_search_title) {
+                textView(R.string.custom_floating_menu_search_title) {
                     leftPadding = dip(10)
                     rightPadding = dip(10)
                     textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }.lparams(wrapContent, dip(30)) {
                     centerVertically()
                     rightMargin = 10
-                    leftOf(ID_BUTTON_SHARE)
+                    leftOf(ID_BTN_SHARE)
                     gravity = Gravity.CENTER
-                    backgroundResource = R.drawable.custom_bg_item_menu_title
                 }
             }.lparams(dip(150), wrapContent) {
-                visibility = View.INVISIBLE
+                visibility = View.VISIBLE
             }
-
+            imageButton {
+                imageResource = R.drawable.ic_menu
+                backgroundResource = R.drawable.custom_menu_button
+            }.lparams(dip(60), dip(60)) {
+                gravity = Gravity.END
+                bottomMargin = dip(10)
+                topMargin = dip(10)
+                padding = 10
+            }
 
         }
     }
