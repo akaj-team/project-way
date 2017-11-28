@@ -20,10 +20,9 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
 
     companion object {
         internal const val ID_LL_HEADER_LAYOUT = 1001
-        internal const val ID_IMG_BTN_BACK = 1002
-        internal const val ID_IMG_YOUR_LOCATION_ICON = 1003
-        internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 1004
-        internal const val ID_RECYCLER_VIEW_LOCATIONS = 1005
+        internal const val ID_IMG_YOUR_LOCATION_ICON = 1002
+        internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 1003
+        internal const val ID_RECYCLER_VIEW_LOCATIONS = 1004
     }
 
     internal lateinit var edtLocation: EditText
@@ -36,9 +35,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                 backgroundResource = R.color.colorSearchScreenBackground
             }
 
-            imageView {
-                imageResource = R.drawable.ic_path_icon
-            }.lparams {
+            imageView(R.drawable.ic_path_icon).lparams {
                 width = wrapContent
                 height = wrapContent
                 gravity = Gravity.CENTER
@@ -49,7 +46,6 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     id = ID_LL_HEADER_LAYOUT
 
                     imageButton {
-                        id = ID_IMG_BTN_BACK
                         backgroundResource = R.drawable.ic_back_icon_button
                         onClick {
                             owner.onBackPressed()
@@ -85,19 +81,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             owner.getCurrentLocation()
                         }
 
-                        imageView {
+                        imageView(R.drawable.ic_my_location) {
                             id = ID_IMG_YOUR_LOCATION_ICON
-                            backgroundResource = R.drawable.ic_my_location
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
                             margin = dimen(R.dimen.default_padding_margin)
                         }
 
-                        textView {
+                        textView(R.string.your_location) {
                             padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
-                            textResource = R.string.your_location
                         }.lparams {
                             width = matchParent
                             height = wrapContent
@@ -124,19 +118,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             owner.chooseOnMap()
                         }
 
-                        imageView {
+                        imageView(R.drawable.ic_choose_on_map) {
                             id = ID_IMG_CHOOSE_ON_MAP_ICON
-                            backgroundResource = R.drawable.ic_choose_on_map
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
                             margin = dimen(R.dimen.default_padding_margin)
                         }
 
-                        textView {
+                        textView(R.string.choose_on_map) {
                             padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
-                            textResource = R.string.choose_on_map
                         }.lparams {
                             width = matchParent
                             height = wrapContent
@@ -175,3 +167,4 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
         override fun afterTextChanged(editable: Editable)
     }
 }
+
