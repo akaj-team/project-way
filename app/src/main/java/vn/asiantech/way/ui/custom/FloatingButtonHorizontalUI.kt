@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.custom
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import org.jetbrains.anko.*
@@ -11,43 +12,129 @@ import vn.asiantech.way.R
  * @author at-ToanNguyen
  */
 class FloatingButtonHorizontalUI : AnkoComponent<ViewGroup> {
+    companion object {
+        private const val ID_BUTTONSEARCH = 9931
+    }
+
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         verticalLayout {
             relativeLayout {
-                imageView {
+                imageButton {
+                    id = ID_BUTTONSEARCH
                     imageResource = R.drawable.ic_search
                 }.lparams(dip(50), dip(50)) {
                     alignParentRight()
                     rightMargin = dip(5)
                     backgroundResource = R.drawable.custom_bg_item_search_button
                 }
+                textView(R.string.custom_floating_menu_search_title) {
+                    leftPadding = dip(10)
+                    rightPadding = dip(10)
+                    textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                }.lparams(wrapContent, dip(30)) {
+                    centerVertically()
+                    rightMargin = 10
+                    leftOf(ID_BUTTONSEARCH)
+                    gravity = Gravity.CENTER
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
+                }
+            }.lparams(dip(150), wrapContent) {
+                visibility = View.INVISIBLE
             }
+            relativeLayout {
+                imageButton {
+                    id = ID_BUTTONSEARCH
+                    imageResource = R.drawable.ic_search
+                }.lparams(dip(50), dip(50)) {
+                    alignParentRight()
+                    rightMargin = dip(5)
+                    backgroundResource = R.drawable.custom_bg_item_search_button
+                }
+                textView(R.string.custom_floating_menu_search_title) {
+                    leftPadding = dip(10)
+                    rightPadding = dip(10)
+                    textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                }.lparams(wrapContent, dip(30)) {
+                    centerVertically()
+                    rightMargin = 10
+                    leftOf(ID_BUTTONSEARCH)
+                    gravity = Gravity.CENTER
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
+                }
+            }.lparams(dip(150), wrapContent) {
+                visibility = View.INVISIBLE
+            }
+            relativeLayout {
+                imageButton {
+                    id = ID_BUTTONSEARCH
+                    imageResource = R.drawable.ic_search
+                }.lparams(dip(50), dip(50)) {
+                    alignParentRight()
+                    rightMargin = dip(5)
+                    backgroundResource = R.drawable.custom_bg_item_search_button
+                }
+                textView(R.string.custom_floating_menu_search_title) {
+                    leftPadding = dip(10)
+                    rightPadding = dip(10)
+                    textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                }.lparams(wrapContent, dip(30)) {
+                    centerVertically()
+                    rightMargin = 10
+                    leftOf(ID_BUTTONSEARCH)
+                    gravity = Gravity.CENTER
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
+                }
+            }.lparams(dip(150), wrapContent) {
+                visibility = View.INVISIBLE
+            }
+            relativeLayout {
+                imageButton {
+                    id = ID_BUTTONSEARCH
+                    imageResource = R.drawable.ic_search
+                }.lparams(dip(50), dip(50)) {
+                    alignParentRight()
+                    rightMargin = dip(5)
+                    backgroundResource = R.drawable.custom_bg_item_search_button
+                }
+                textView(R.string.custom_floating_menu_search_title) {
+                    leftPadding = dip(10)
+                    rightPadding = dip(10)
+                    textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                }.lparams(wrapContent, dip(30)) {
+                    centerVertically()
+                    rightMargin = 10
+                    leftOf(ID_BUTTONSEARCH)
+                    gravity = Gravity.CENTER
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
+                }
+            }.lparams(dip(150), wrapContent) {
+                visibility = View.INVISIBLE
+            }
+            relativeLayout {
+                imageButton {
+                    id = ID_BUTTONSEARCH
+                    imageResource = R.drawable.ic_search
+                }.lparams(dip(50), dip(50)) {
+                    alignParentRight()
+                    rightMargin = dip(5)
+                    backgroundResource = R.drawable.custom_bg_item_search_button
+                }
+                textView(R.string.custom_floating_menu_search_title) {
+                    leftPadding = dip(10)
+                    rightPadding = dip(10)
+                    textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
+                }.lparams(wrapContent, dip(30)) {
+                    centerVertically()
+                    rightMargin = 10
+                    leftOf(ID_BUTTONSEARCH)
+                    gravity = Gravity.CENTER
+                    backgroundResource = R.drawable.custom_bg_item_menu_title
+                }
+            }.lparams(dip(150), wrapContent) {
+                visibility = View.INVISIBLE
+            }
+
+
         }
     }
 }
-//<ImageButton
-//android:id="@+id/imgBtnSearch"
-//android:layout_width="50dp"
-//android:layout_height="50dp"
-//android:layout_alignParentRight="true"
-//android:layout_marginEnd="5dp"
-//android:layout_marginRight="5dp"
-//android:background="@drawable/custom_bg_item_search_button"
-//android:src="@drawable/ic_search" />
-//
-//<TextView
-//android:id="@+id/tvSearchTitle"
-//android:layout_width="wrap_content"
-//android:layout_height="30dp"
-//android:layout_centerVertical="true"
-//android:layout_marginEnd="10dp"
-//android:layout_marginRight="10dp"
-//android:layout_toLeftOf="@id/imgBtnSearch"
-//android:background="@drawable/custom_bg_item_menu_title"
-//android:gravity="center"
-//android:paddingEnd="10dp"
-//android:paddingLeft="10dp"
-//android:paddingRight="10dp"
-//android:paddingStart="10dp"
-//android:text="@string/custom_floating_menu_search_title"
-//android:textSize="@dimen/custom_menu_text_size" />
