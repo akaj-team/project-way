@@ -22,6 +22,11 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
         internal const val ID_IMG_LOCATION_ICON = 2203
         internal const val ID_TV_LOCATION_NAME = 2204
         internal const val ID_TV_LOCATION_FORMAT_ADDRESS = 2205
+
+        private const val BREAK_LINE_VIEW_HEIGHT = 0.5f
+        private const val BREAK_LINE_LEFT_MARGIN = 64
+        private const val BREAK_LINE_TOP_BOT_MARGIN = 2
+        private const val DEFAULT_PADDING_MARGIN = 10
     }
 
     override fun getItemCount() = locations.size
@@ -31,14 +36,19 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
-        return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context, parent,
-                false)).tag as LocationViewHolder
+        try {
+            return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context, parent,
+                    false)).tag as LocationViewHolder
+        } catch (e: ClassCastException) {
+            throw RuntimeException(e.message)
+        }
     }
 
     /**
      * View holder of RecyclerView's item.
      */
-    inner class LocationViewHolder(itemView: View, private val imgLocationIcon: ImageView,
+    inner class LocationViewHolder(itemView: View,
+                                   private val imgLocationIcon: ImageView,
                                    private val tvLocationName: TextView,
                                    private val tvLocationAddress: TextView)
         : RecyclerView.ViewHolder(itemView) {
@@ -84,10 +94,10 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                         backgroundResource = R.color.colorSearchScreenBackground
                     }.lparams {
                         width = matchParent
-                        height = dip(0.5f)
-                        bottomMargin = dip(2)
-                        topMargin = dip(2)
-                        leftMargin = dip(64)
+                        height = dip(BREAK_LINE_VIEW_HEIGHT)
+                        bottomMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
+                        topMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
+                        leftMargin = dip(BREAK_LINE_LEFT_MARGIN)
                     }
 
                     imgLocationIcon = imageView {
@@ -95,7 +105,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                     }.lparams {
                         width = wrapContent
                         height = wrapContent
-                        margin = dip(10)
+                        margin = dip(DEFAULT_PADDING_MARGIN)
                         below(ID_VIEW_BREAK_LINE)
                     }
 
@@ -107,7 +117,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                         width = wrapContent
                         height = wrapContent
                         below(ID_VIEW_BREAK_LINE)
-                        leftMargin = dip(10)
+                        leftMargin = dip(DEFAULT_PADDING_MARGIN)
                         rightOf(ID_IMG_LOCATION_ICON)
                     }
 
@@ -119,7 +129,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                         width = wrapContent
                         height = wrapContent
                         below(ID_TV_LOCATION_NAME)
-                        leftMargin = dip(10)
+                        leftMargin = dip(DEFAULT_PADDING_MARGIN)
                         rightOf(ID_IMG_LOCATION_ICON)
                     }
                 }

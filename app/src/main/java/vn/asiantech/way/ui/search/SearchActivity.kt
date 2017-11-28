@@ -31,6 +31,9 @@ class SearchActivity : BaseActivity() {
         searchActivityUI.setContentView(this)
     }
 
+    /**
+     * Search location by query name.
+     */
     fun searchLocations(query: String) {
         // TODO: 28/11/2017
         // Dummy data
@@ -53,11 +56,17 @@ class SearchActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Get current location.
+     */
     fun getCurrentLocation() {
         // Init later.
         toast(R.string.coming_soon)
     }
 
+    /**
+     * Choose location on map.
+     */
     fun chooseOnMap(){
         // Init later.
         toast(R.string.coming_soon)

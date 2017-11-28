@@ -24,6 +24,12 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
         internal const val ID_IMG_YOUR_LOCATION_ICON = 2204
         internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 2205
         internal const val ID_RECYCLER_VIEW_LOCATIONS = 2206
+
+        private const val DEFAULT_MARGIN_PADDING = 10
+        private const val SMALL_MARGIN_PADDING = 5
+        private const val BREAK_LINE_VIEW_HEIGHT = 0.5f
+        private const val BREAK_LINE_LEFT_MARGIN = 64
+        private const val BREAK_LINE_TOP_BOT_MARGIN = 2
     }
 
     internal lateinit var edtLocation: EditText
@@ -57,9 +63,8 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams(wrapContent, wrapContent)
 
                     edtLocation = editText {
-                        padding = dip(10)
+                        padding = dip(DEFAULT_MARGIN_PADDING)
                         backgroundColor = Color.WHITE
-                        maxLines = 1
                         singleLine = true
                         hintResource = R.string.search_location_enter_a_place
                         textSizeDimen = R.dimen.search_screen_text_size
@@ -73,7 +78,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams {
                         width = matchParent
                         height = matchParent
-                        leftMargin = dip(10)
+                        leftMargin = dip(DEFAULT_MARGIN_PADDING)
                     }
                 }.lparams(matchParent, wrapContent)
 
@@ -92,17 +97,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
-                            margin = dip(10)
+                            margin = dip(DEFAULT_MARGIN_PADDING)
                         }
 
                         textView {
-                            padding = dip(5)
+                            padding = dip(SMALL_MARGIN_PADDING)
                             textSizeDimen = R.dimen.search_screen_text_size
                             textResource = R.string.your_location
                         }.lparams {
                             width = matchParent
                             height = wrapContent
-                            margin = dip(10)
+                            margin = dip(DEFAULT_MARGIN_PADDING)
                             rightOf(ID_IMG_YOUR_LOCATION_ICON)
                         }
 
@@ -110,10 +115,10 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             backgroundResource = R.color.colorSearchScreenBackground
                         }.lparams {
                             width = matchParent
-                            height = dip(0.5f)
-                            leftMargin = dip(64)
-                            topMargin = dip(2)
-                            bottomMargin = dip(2)
+                            height = dip(BREAK_LINE_VIEW_HEIGHT)
+                            leftMargin = dip(BREAK_LINE_LEFT_MARGIN)
+                            topMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
+                            bottomMargin = dip(BREAK_LINE_TOP_BOT_MARGIN)
                             below(ID_IMG_YOUR_LOCATION_ICON)
                         }
                     }.lparams(matchParent, wrapContent)
@@ -131,17 +136,17 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }.lparams {
                             width = wrapContent
                             height = wrapContent
-                            margin = dip(10)
+                            margin = dip(DEFAULT_MARGIN_PADDING)
                         }
 
                         textView {
-                            padding = dip(5)
+                            padding = dip(SMALL_MARGIN_PADDING)
                             textSizeDimen = R.dimen.search_screen_text_size
                             textResource = R.string.choose_on_map
                         }.lparams {
                             width = matchParent
                             height = wrapContent
-                            margin = dip(10)
+                            margin = dip(DEFAULT_MARGIN_PADDING)
                             rightOf(ID_IMG_CHOOSE_ON_MAP_ICON)
                         }
                     }.lparams(matchParent, wrapContent)
@@ -154,13 +159,13 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                 }.lparams {
                     width = matchParent
                     height = matchParent
-                    topMargin = dip(10)
+                    topMargin = dip(DEFAULT_MARGIN_PADDING)
                     below(ID_LL_HEADER_LAYOUT)
                 }
             }.lparams {
                 width = matchParent
                 height = matchParent
-                padding = dip(10)
+                padding = dip(DEFAULT_MARGIN_PADDING)
             }
         }
     }
