@@ -24,14 +24,18 @@ internal fun ViewManager.mapView(init: MapView.() -> Unit): MapView {
     return ankoView({ MapView(it) }, 0, init)
 }
 
-internal fun ViewManager.rippleView(init: com.hypertrack.lib.internal.consumer.view.RippleView.() -> Unit):
+internal fun ViewManager.rippleView(
+        init: com.hypertrack.lib.internal.consumer.view.RippleView.() -> Unit):
         com.hypertrack.lib.internal.consumer.view.RippleView {
-    return ankoView({ com.hypertrack.lib.internal.consumer.view.RippleView(it, null) }, 0, init)
+    return ankoView(
+            { com.hypertrack.lib.internal.consumer.view.RippleView(it, null) }, 0, init)
 }
 
-internal fun ViewManager.wrappingViewPager(init: com.hypertrack.lib.internal.consumer.view.WrappingViewPager.() -> Unit):
+internal fun ViewManager.wrappingViewPager(
+        init: com.hypertrack.lib.internal.consumer.view.WrappingViewPager.() -> Unit):
         com.hypertrack.lib.internal.consumer.view.WrappingViewPager {
-    return ankoView({ com.hypertrack.lib.internal.consumer.view.WrappingViewPager(it) }, 0, init)
+    return ankoView(
+            { com.hypertrack.lib.internal.consumer.view.WrappingViewPager(it) }, 0, init)
 }
 
 internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {

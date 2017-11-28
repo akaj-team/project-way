@@ -28,6 +28,8 @@ class BottomButtonCard(context: Context) :
         const val ID_TV_TITLE = 3
         const val ID_TV_DESCRIPTION = 4
         const val ID_BTN_SHARING = 5
+        const val LAYOUT_HEIGHT = 50
+        const val IMAGE_SIZE = 15
     }
 
 
@@ -77,7 +79,7 @@ class BottomButtonCard(context: Context) :
                     rightPadding = dimen(R.dimen.padding_medium)
                     imageView {
                         imageResource = R.drawable.ic_navigation_close
-                    }.lparams(dip(15), dip(15))
+                    }.lparams(dip(IMAGE_SIZE), dip(IMAGE_SIZE))
 
                 }.lparams(wrapContent, wrapContent) {
                     alignParentRight()
@@ -123,7 +125,7 @@ class BottomButtonCard(context: Context) :
                     }.lparams(wrapContent, wrapContent) {
                         centerInParent()
                     }
-                }.lparams(matchParent, dip(50)) {
+                }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
                     centerHorizontally()
                     below(ID_TV_DESCRIPTION)
                     bottomMargin = dimen(R.dimen.margin_low)
@@ -154,7 +156,7 @@ class BottomButtonCard(context: Context) :
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
                     }
-                }.lparams(matchParent, dip(50)) {
+                }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
                     below(ID_BTN_SHARING)
                     leftMargin = dimen(R.dimen.margin_medium)
                     rightMargin = dimen(R.dimen.margin_medium)
