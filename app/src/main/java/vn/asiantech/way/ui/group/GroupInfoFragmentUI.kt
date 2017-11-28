@@ -4,6 +4,8 @@ import android.support.v4.app.ActivityCompat
 import android.view.Gravity
 import android.view.ViewManager
 import org.jetbrains.anko.*
+import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import vn.asiantech.way.R
 
 /**
@@ -11,10 +13,8 @@ import vn.asiantech.way.R
  */
 class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
     companion object {
+        private const val ID_IMG_INVITE = 1001
         private const val MAX_LINES = 1
-        private const val TV_GROUP_NAME_PADDING = 20
-        private const val TV_COUNT_PADDING_LEFT = 10
-        private const val TV_COUNT_PADDING_RIGHT = 5
     }
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
@@ -27,10 +27,11 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
                 maxLines = MAX_LINES
                 textColor = ActivityCompat.getColor(context, R.color.white)
                 textSize = px2dip(dimen(R.dimen.text_size_normal))
-            }.lparams(matchParent, dimen(R.dimen.toolbar_height)) {
-                leftPadding = dip(TV_GROUP_NAME_PADDING)
-                rightPadding = dip(TV_GROUP_NAME_PADDING)
-            }
+                val padding = dimen(R.dimen.group_screen_group_name_padding)
+                leftPadding = padding
+                rightPadding = padding
+            }.lparams(matchParent, dimen(R.dimen.toolbar_height))
+
             textViewInfo()
             textViewInfo()
             textViewInfo(resources.getString(R.string.members_list))
@@ -38,7 +39,27 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
             relativeLayout {
                 lparams(matchParent, wrapContent)
                 padding = dip(10)
+
+                imageView {
+                    id = ID_IMG_INVITE
+                    backgroundResource = R.drawable.ic_person_add_deep_purple_a200_36dp
+                }
+
+                imageView {
+                    backgroundResource = R.drawable.ic_exit_to_app_deep_purple_a200_36dp
+                }.lparams {
+                    leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
+                    rightOf(ID_IMG_INVITE)
+                }
             }
+
+            swipeRefreshLayout {
+                recyclerView {
+                    lparams(matchParent, matchParent)
+                    backgroundColor = ActivityCompat.getColor(context, android.R.color.darker_gray)
+                    padding = dimen(R.dimen.group_screen_recycler_view_padding)
+                }
+            }.lparams(matchParent, matchParent)
         }
     }
 
@@ -46,9 +67,11 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
         text = str
         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
     }.apply {
-        bottomPadding = GroupInfoFragmentUI.TV_COUNT_PADDING_RIGHT
-        rightPadding = GroupInfoFragmentUI.TV_COUNT_PADDING_LEFT
-        leftPadding = GroupInfoFragmentUI.TV_COUNT_PADDING_LEFT
-        topPadding = GroupInfoFragmentUI.TV_COUNT_PADDING_RIGHT
+        val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
+        val paddingRight = dimen(R.dimen.group_screen_tv_count_padding_left)
+        bottomPadding = paddingTop
+        rightPadding = paddingRight
+        leftPadding = paddingRight
+        topPadding = paddingTop
     }
 }
