@@ -16,13 +16,13 @@ import java.io.InputStream
 import java.util.*
 
 /**
- * Adapter of RecyclerView Country
+ * Adapter of RecyclerView Country.
  * Created by haingoq on 27/11/2017.
  */
 class CountryAdapter(private val context: Context, private val countries: List<Country>) :
         RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
     companion object {
-        private const val IMG_FLAG_ID = 1001
+        private const val IMG_FLAG_ID= 1001
         private const val IMG_FLAG_WIDTH = 36
         private const val IMG_FLAG_HEIGHT = 28
         private const val TV_TEL_MARGIN = 10
