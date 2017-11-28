@@ -32,7 +32,8 @@ internal class WayRemoteDataSource : WayDataSource {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun searchLocations(input: String, key: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
+    override fun searchLocations(input: String, key: String, language: String, sensor: Boolean)
+            : Observable<AutoCompleteResult> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
