@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.share
 
 import android.os.Bundle
+import com.google.android.gms.maps.SupportMapFragment
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -9,10 +10,12 @@ import vn.asiantech.way.ui.base.BaseActivity
  * Created by datbuit. on 27/11/2017.
  */
 class ShareActivity : BaseActivity() {
+
     private lateinit var ui: ShareActivityUI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = ShareActivityUI()
         ui.setContentView(this)
+        supportFragmentManager.beginTransaction().replace(ShareActivityUI.ID_MAP, SupportMapFragment()).commit()
     }
 }
