@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.custom
 import android.content.Context
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -95,8 +96,9 @@ class BottomButtonCard(context: Context) :
 
                 tvDescription = textView(R.string.bottom_button_card_description_text) {
                     id = ID_TV_DESCRIPTION
+                    gravity = Gravity.CENTER
                     textSize = px2dip(dimen(R.dimen.text_medium))
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams(matchParent, wrapContent) {
                     centerHorizontally()
                     below(ID_TV_TITLE)
                     leftMargin = dimen(R.dimen.margin_huge)
