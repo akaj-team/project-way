@@ -36,7 +36,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
     override fun createView(ui: AnkoContext<ShareActivity>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
-            frameLayout {
+            relativeLayout() {
                 lparams(matchParent, matchParent)
                 relativeLayout {
                     frMapView = frameLayout {
@@ -104,6 +104,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
 
                 imgChooseMarker = imageView(R.drawable.select_expected_place) {
                 }.lparams(wrapContent, wrapContent) {
+                    centerInParent()
                     bottomMargin = dip(MARGIN_VALUE_SMALL)
                 }
             }

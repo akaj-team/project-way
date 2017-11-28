@@ -31,7 +31,6 @@ class BottomButtonCard(context: Context) :
         const val IMAGE_SIZE = 15
     }
 
-
     internal lateinit var rlBottomCard: RelativeLayout
     internal lateinit var rlLinkShare: RelativeLayout
     internal lateinit var btnClose: RippleView
