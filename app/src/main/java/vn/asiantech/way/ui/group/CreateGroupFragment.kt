@@ -7,11 +7,11 @@ import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
- * Fragment group user
+ * Fragment create group
  * Created by haingoq on 28/11/2017.
  */
-class GroupInfoFragment : BaseFragment() {
+class CreateGroupFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?) = GroupInfoFragmentUI()
+                              savedInstanceState: Bundle?) = CreateGroupFragmentUI()
             .createView(AnkoContext.create(context, this))
 }

@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/fr"
-        android:name="vn.asiantech.way.ui.group.GroupInfoFragment"
+        android:name="vn.asiantech.way.ui.group.ReloadFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
