@@ -100,10 +100,10 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val itemView = ui.apply {
                 mLLItemLocation = linearLayout {
+                    gravity = Gravity.CENTER_VERTICAL
                     lparams(matchParent, wrapContent) {
                         bottomMargin = dimen(R.dimen.home_screen_linearLayout_margin)
                         topMargin = dimen(R.dimen.home_screen_linearLayout_margin)
-                        gravity = Gravity.CENTER_VERTICAL
                         padding = dimen(R.dimen.home_screen_linearLayout_padding)
                     }
 
@@ -112,18 +112,22 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
                     }
 
                     relativeLayout {
+
                         view {
                             backgroundColor = ContextCompat.getColor(context, R.color.colorBlack)
                         }.lparams(dip(1), matchParent) {
                             centerHorizontally()
                         }
 
-                        mImgPoint = imageView {
-                        }.lparams(dimen(R.dimen.home_screen_view_margin), dimen(R.dimen.home_screen_view_margin)) {
+                        mImgPoint = imageView {}.lparams(
+                                dimen(R.dimen.home_screen_view_margin),
+                                dimen(R.dimen.home_screen_view_margin)
+                        ) {
                             centerVertically()
                         }
+
                     }.lparams(wrapContent, matchParent) {
-                        leftMargin = dip(10)
+                        leftMargin = dimen(R.dimen.home_screen_view_margin)
                     }
 
                     imageView {

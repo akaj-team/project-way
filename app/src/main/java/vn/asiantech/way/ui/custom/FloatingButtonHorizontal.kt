@@ -121,6 +121,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
          * Event when button menu clicked
          */
         fun onMenuClick(isShowMenu: Boolean)
+
         /**
          * Event when button share clicked
          */

@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.home
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.view.ViewManager
 import android.widget.FrameLayout
 import org.jetbrains.anko.*
@@ -48,6 +49,7 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
             }
 
             mFrOverplay = frameLayout {
+                visibility = View.GONE
             }.lparams(matchParent, matchParent) {
                 backgroundColor = R.color.colorOverlay
             }

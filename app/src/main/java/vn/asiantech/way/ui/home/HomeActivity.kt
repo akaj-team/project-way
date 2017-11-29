@@ -21,9 +21,7 @@ import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
-import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.register.RegisterActivity
-import vn.asiantech.way.ui.search.SearchLocationActivity
 import vn.asiantech.way.utils.LocationUtil
 
 /**
@@ -82,13 +80,12 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onShareClick() {
-        startActivity(Intent(this, SearchLocationActivity::class.java))
+        // TODO move to Search screen
         setGoneOverLay()
     }
 
     override fun onProfileClick() {
         val intent = Intent(this, RegisterActivity::class.java)
-        intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_HOME)
         startActivity(intent)
         setGoneOverLay()
     }
@@ -99,12 +96,12 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onSearchClick() {
-        startActivity(Intent(this, SearchLocationActivity::class.java))
+        // TODO move to Search screen
         setGoneOverLay()
     }
 
     override fun onGroupClick() {
-        startActivity(Intent(this, GroupActivity::class.java))
+        // TODO to  move to Group screen
         setGoneOverLay()
     }
 
