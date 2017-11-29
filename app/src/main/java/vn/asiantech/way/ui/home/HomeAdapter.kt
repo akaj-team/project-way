@@ -21,7 +21,9 @@ import vn.asiantech.way.data.model.TrackingInformation
  *  Copyright © 2017 AsianTech inc.
  *  Created by at-hoavo on 27/11/2017.
  */
-class HomeAdapter(private val context: Context, private val locations: List<TrackingInformation>, val onClickItem: (Int) -> Unit)
+class HomeAdapter(private val context: Context,
+                  private val locations: List<TrackingInformation>,
+                  val onClickItem: (Int) -> Unit)
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     companion object {
@@ -32,8 +34,7 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeAdapterUI()
             .createView(AnkoContext.create(context, parent, false))
-            .tag as HomeViewHolder
-
+            .tag as? HomeViewHolder
 
     override fun onBindViewHolder(holder: HomeViewHolder?, position: Int) {
         holder?.bindHomeViewHolder(locations[position])
@@ -41,11 +42,18 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
 
     override fun getItemCount(): Int = locations.size
 
-
     /**
      * To save data for items in recyclerView of locations
      */
-    inner class HomeViewHolder(val item: View, val tvTime: TextView, val tvStatus: TextView, val imgArrowDownBlack: ImageView, val expTvDescription: ExpandableTextView, val imgPoint: ImageView, val llItemLocation: LinearLayout) : RecyclerView.ViewHolder(item) {
+    inner class HomeViewHolder(
+            val item: View,
+            val tvTime: TextView,
+            val tvStatus: TextView,
+            val imgArrowDownBlack: ImageView,
+            val expTvDescription: ExpandableTextView,
+            val imgPoint: ImageView,
+            val llItemLocation: LinearLayout
+    ) : RecyclerView.ViewHolder(item) {
 
         internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
@@ -89,6 +97,9 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
         }
     }
 
+    /**
+     * Class to bind ViewHolder with Anko layout
+     */
     inner class HomeAdapterUI : AnkoComponent<ViewGroup> {
         internal lateinit var mTvTime: TextView
         internal lateinit var mTvStatus: TextView
@@ -168,14 +179,24 @@ class HomeAdapter(private val context: Context, private val locations: List<Trac
                     }
                 }
             }.view
-
-            itemView.tag = HomeViewHolder(itemView, mTvTime, mTvStatus, mImgArrowDownBlack, mExpandableTextView, mImgPoint, mLLItemLocation)
+            itemView.tag = HomeViewHolder(
+                    itemView,
+                    mTvTime,
+                    mTvStatus,
+                    mImgArrowDownBlack,
+                    mExpandableTextView,
+                    mImgPoint,
+                    mLLItemLocation
+            )
             return itemView
         }
     }
 
 }
 
+/**
+ * Function to custom expandableTextView
+ */
 inline fun ViewManager.expandableTextView(init: ExpandableTextView.() -> Unit): ExpandableTextView {
     return ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
 }

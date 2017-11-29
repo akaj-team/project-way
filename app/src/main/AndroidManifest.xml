@@ -75,6 +75,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.splash.SplashActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
 
         <!-- Register meta-data here -->

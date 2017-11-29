@@ -63,7 +63,12 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
         }
     }
 
-    inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit): FloatingButtonHorizontal {
-        return ankoView({ FloatingButtonHorizontal(it) }, theme = 0, init = init)
-    }
+}
+
+/**
+ * Function to custom floatingButton
+ */
+inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit)
+        : FloatingButtonHorizontal {
+    return ankoView({ FloatingButtonHorizontal(it) }, theme = 0, init = init)
 }
