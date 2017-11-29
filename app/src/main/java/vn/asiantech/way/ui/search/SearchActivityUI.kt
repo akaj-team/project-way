@@ -29,15 +29,11 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
 
     override fun createView(ui: AnkoContext<SearchActivity>) = with(ui) {
         frameLayout {
-            lparams {
-                width = matchParent
-                height = matchParent
+            lparams(matchParent, matchParent) {
                 backgroundResource = R.color.colorSearchScreenBackground
             }
 
             imageView(R.drawable.ic_path_icon).lparams {
-                width = wrapContent
-                height = wrapContent
                 gravity = Gravity.CENTER
             }
 
@@ -50,7 +46,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         onClick {
                             owner.onBackPressed()
                         }
-                    }.lparams(wrapContent, wrapContent)
+                    }
 
                     edtLocation = editText {
                         padding = dimen(R.dimen.default_padding_margin)
@@ -65,15 +61,12 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                                 }
                             }
                         })
-                    }.lparams {
-                        width = matchParent
-                        height = matchParent
+                    }.lparams(matchParent, matchParent) {
                         leftMargin = dimen(R.dimen.default_padding_margin)
                     }
                 }.lparams(matchParent, wrapContent)
 
                 verticalLayout {
-
                     relativeLayout {
                         gravity = Gravity.CENTER_VERTICAL
                         backgroundColor = Color.WHITE
@@ -84,26 +77,20 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         imageView(R.drawable.ic_my_location) {
                             id = ID_IMG_YOUR_LOCATION_ICON
                         }.lparams {
-                            width = wrapContent
-                            height = wrapContent
                             margin = dimen(R.dimen.default_padding_margin)
                         }
 
                         textView(R.string.your_location) {
                             padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
-                        }.lparams {
-                            width = matchParent
-                            height = wrapContent
+                        }.lparams(matchParent, wrapContent) {
                             margin = dimen(R.dimen.default_padding_margin)
                             rightOf(ID_IMG_YOUR_LOCATION_ICON)
                         }
 
                         view {
                             backgroundResource = R.color.colorSearchScreenBackground
-                        }.lparams {
-                            width = matchParent
-                            height = dimen(R.dimen.break_line_view_height)
+                        }.lparams(matchParent, dimen(R.dimen.break_line_view_height)) {
                             leftMargin = dimen(R.dimen.break_line_left_margin)
                             topMargin = dimen(R.dimen.break_line_top_bot_margin)
                             bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
@@ -121,17 +108,13 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         imageView(R.drawable.ic_choose_on_map) {
                             id = ID_IMG_CHOOSE_ON_MAP_ICON
                         }.lparams {
-                            width = wrapContent
-                            height = wrapContent
                             margin = dimen(R.dimen.default_padding_margin)
                         }
 
                         textView(R.string.choose_on_map) {
                             padding = dimen(R.dimen.small_padding_margin)
                             textSizeDimen = R.dimen.search_screen_text_size
-                        }.lparams {
-                            width = matchParent
-                            height = wrapContent
+                        }.lparams(matchParent, wrapContent) {
                             margin = dimen(R.dimen.default_padding_margin)
                             rightOf(ID_IMG_CHOOSE_ON_MAP_ICON)
                         }
@@ -141,16 +124,15 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         id = ID_RECYCLER_VIEW_LOCATIONS
                         layoutManager = LinearLayoutManager(context)
                         adapter = locationAdapter
+                        locationAdapter.onItemClick = { it ->
+
+                        }
                     }.lparams(matchParent, matchParent)
-                }.lparams {
-                    width = matchParent
-                    height = matchParent
+                }.lparams(matchParent, matchParent) {
                     topMargin = dimen(R.dimen.default_padding_margin)
                     below(ID_LL_HEADER_LAYOUT)
                 }
-            }.lparams {
-                width = matchParent
-                height = matchParent
+            }.lparams(matchParent, matchParent) {
                 padding = dimen(R.dimen.default_padding_margin)
             }
         }

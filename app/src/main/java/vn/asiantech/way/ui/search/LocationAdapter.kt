@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.MyLocation
 
@@ -14,7 +15,7 @@ import vn.asiantech.way.data.model.MyLocation
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 28/11/2017
  */
-class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnItemClick)
+class LocationAdapter(val locations: MutableList<MyLocation>)
     : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {
 
     companion object {
@@ -23,6 +24,8 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
         internal const val ID_TV_LOCATION_NAME = 1003
         internal const val ID_TV_LOCATION_FORMAT_ADDRESS = 1004
     }
+
+    var onItemClick: (location: MyLocation) -> Unit = {}
 
     override fun getItemCount() = locations.size
 
@@ -45,8 +48,8 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
         : RecyclerView.ViewHolder(itemView) {
 
         init {
-            itemView.setOnClickListener {
-                listener.onItemClick(locations[adapterPosition])
+            itemView.onClick {
+                onItemClick(locations[adapterPosition])
             }
         }
 
@@ -83,9 +86,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                     view {
                         id = ID_VIEW_BREAK_LINE
                         backgroundResource = R.color.colorSearchScreenBackground
-                    }.lparams {
-                        width = matchParent
-                        height = dimen(R.dimen.break_line_view_height)
+                    }.lparams(matchParent, dimen(R.dimen.break_line_view_height)) {
                         bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
                         topMargin = dimen(R.dimen.break_line_top_bot_margin)
                         leftMargin = dimen(R.dimen.break_line_left_margin)
@@ -94,8 +95,6 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                     imgLocationIcon = imageView {
                         id = ID_IMG_LOCATION_ICON
                     }.lparams {
-                        width = wrapContent
-                        height = wrapContent
                         margin = dimen(R.dimen.default_padding_margin)
                         below(ID_VIEW_BREAK_LINE)
                     }
@@ -105,8 +104,6 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
                     }.lparams {
-                        width = wrapContent
-                        height = wrapContent
                         below(ID_VIEW_BREAK_LINE)
                         leftMargin = dimen(R.dimen.default_padding_margin)
                         rightOf(ID_IMG_LOCATION_ICON)
@@ -117,8 +114,6 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
                     }.lparams {
-                        width = wrapContent
-                        height = wrapContent
                         below(ID_TV_LOCATION_NAME)
                         leftMargin = dimen(R.dimen.default_padding_margin)
                         rightOf(ID_IMG_LOCATION_ICON)
@@ -128,15 +123,5 @@ class LocationAdapter(val locations: MutableList<MyLocation>, val listener: OnIt
             view.tag = LocationViewHolder(view, imgLocationIcon, tvLocationName, tvLocationAddress)
             return view
         }
-    }
-
-    /**
-     * Listener for item onclick of RecyclerView.
-     */
-    interface OnItemClick {
-        /**
-         *  Event on item click.
-         */
-        fun onItemClick(location: MyLocation)
     }
 }

@@ -19,13 +19,12 @@ class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = LocationAdapter(locations, object : LocationAdapter.OnItemClick {
-            override fun onItemClick(location: MyLocation) {
-                // TODO: 28/11/2017
-                // Dummy data
-                toast(R.string.coming_soon)
-            }
-        })
+        adapter = LocationAdapter(locations)
+        adapter.onItemClick = {
+            // TODO: 28/11/2017
+            // Dummy data
+            toast(R.string.coming_soon)
+        }
         searchActivityUI = SearchActivityUI(adapter)
         searchActivityUI.setContentView(this)
     }
