@@ -7,8 +7,11 @@ import android.view.WindowManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_home.*
+import org.jetbrains.anko.dimen
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
@@ -20,28 +23,25 @@ import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizontal.OnMenuClickListener {
 
     companion object {
-        const val PADDING_LEFT = 0
-        const val PADDING_TOP = 0
-        const val PADDING_RIGHT = 0
         private const val UNIT_PADDING_BOTTOM = 3
     }
 
-    private var mPosition = -1
-    private var mGoogleMap: GoogleMap? = null
-    private lateinit var mHomeAdapter: HomeAdapter
-    private lateinit var mHomeActivityUI: HomeActivityUI
+    private var position = -1
+    private var googleMap: GoogleMap? = null
+    private lateinit var homeAdapter: HomeAdapter
+    private lateinit var homeActivityUI: HomeActivityUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDataForRecyclerView()
-        mHomeActivityUI = HomeActivityUI(mHomeAdapter)
+        homeActivityUI = HomeActivityUI(homeAdapter)
+        homeActivityUI.setContentView(this)
         initViews()
         initMap()
-        mHomeActivityUI.setContentView(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
-        mGoogleMap = googleMap
+        this.googleMap = googleMap
         setPaddingGoogleLogo()
     }
 
@@ -75,15 +75,15 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     private fun initMap() {
         val supportMapFragment = SupportMapFragment()
-        supportFragmentManager.beginTransaction().replace(HomeActivityUI.ID_MAP, SupportMapFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(HomeActivityUI.ID_FR_MAP, SupportMapFragment()).commit()
         supportMapFragment.getMapAsync(this)
     }
 
     private fun setPaddingGoogleLogo() {
-        val display = windowManager.defaultDisplay
         val size = Point()
-        display.getSize(size)
-        mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / UNIT_PADDING_BOTTOM)
+        windowManager.defaultDisplay.getSize(size)
+        val padding = dimen(R.dimen.padding_logo_map)
+        googleMap?.setPadding(padding, padding, padding, size.y / UNIT_PADDING_BOTTOM)
     }
 
     private fun setDataForRecyclerView() {
@@ -91,10 +91,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val locations = ArrayList<TrackingInformation>()
         // TODO: Get data from share function into locations
         initDummyData(locations)
-        mHomeAdapter = HomeAdapter(this, locations) {
-            if (mPosition >= 0) {
-                locations[mPosition].isChoose = false
-                mHomeAdapter.notifyItemChanged(mPosition)
+        homeAdapter = HomeAdapter(this, locations) {
+            if (position >= 0) {
+                locations[position].isChoose = false
+                homeAdapter.notifyItemChanged(position)
             }
             positions.add(it)
             if (positions.size > 1) {
@@ -105,12 +105,13 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
                 }
             }
             locations[it].isChoose = true
-            mHomeAdapter.notifyItemChanged(it)
-            mPosition = it
+            homeAdapter.notifyItemChanged(it)
+            position = it
         }
     }
 
     private fun initDummyData(locations: ArrayList<TrackingInformation>) {
+        // TODO set list WayLocation
 //        locations.add(TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
 //                LatLng(16.0721115, 108.2302225)))
 //        locations.add(TrackingInformation("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........",

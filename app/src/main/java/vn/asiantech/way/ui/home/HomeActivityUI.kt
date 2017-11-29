@@ -18,11 +18,11 @@ import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
 class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeActivity> {
 
     companion object {
-        internal const val ID_MAP = 2
+        internal const val ID_FR_MAP = 1001
     }
 
-    internal lateinit var mFabMenuGroups: FloatingButtonHorizontal
-    internal lateinit var mFrOverplay: FrameLayout
+    internal lateinit var fabMenuGroups: FloatingButtonHorizontal
+    internal lateinit var frOverplay: FrameLayout
 
     override fun createView(ui: AnkoContext<HomeActivity>) = with(ui) {
 
@@ -33,7 +33,7 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
 
                 frameLayout {
                     lparams(matchParent, matchParent)
-                    id = ID_MAP
+                    id = ID_FR_MAP
                 }
 
                 recyclerView {
@@ -48,14 +48,13 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
                 }
             }
 
-            mFrOverplay = frameLayout {
+            frOverplay = frameLayout {
                 visibility = View.GONE
-            }.lparams(matchParent, matchParent) {
-                backgroundColor = R.color.colorOverlay
-            }
+                backgroundResource = R.color.colorOverlay
+            }.lparams(matchParent, matchParent)
 
-            mFabMenuGroups = floatingButton {}
-                    .lparams(wrapContent, wrapContent) {
+            fabMenuGroups = floatingButton {}
+                    .lparams {
                         alignParentBottom()
                         alignParentRight()
                         margin = dimen(R.dimen.home_screen_floating_button_margin)

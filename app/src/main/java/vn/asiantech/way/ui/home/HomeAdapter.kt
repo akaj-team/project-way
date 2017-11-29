@@ -1,8 +1,8 @@
 package vn.asiantech.way.ui.home
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
@@ -14,6 +14,7 @@ import android.widget.TextView
 import at.blogc.android.views.ExpandableTextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
 
@@ -27,9 +28,9 @@ class HomeAdapter(private val context: Context,
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     companion object {
-        internal const val ID_ITEM_TIME = 3
-        internal const val ID_ITEM_STATUS = 3
-        internal const val ID_EXPANDABLE_VIEW = 4
+        internal const val ID_TV_ITEM_TIME = 1001
+        internal const val ID_TV_ITEM_STATUS = 1002
+        internal const val ID_TV_EXPANDABLE_VIEW = 1003
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeAdapterUI()
@@ -67,31 +68,31 @@ class HomeAdapter(private val context: Context,
                         } else {
                             imgArrowDownBlack.visibility = View.GONE
                         }
-                        itemView.setBackgroundResource(R.drawable.bg_item_location_choose)
-                        imgPoint.setBackgroundResource(R.drawable.ic_point_white)
+                        itemView.backgroundResource = R.drawable.bg_item_location_choose
+                        imgPoint.backgroundResource = R.drawable.ic_point_white
                     } else {
-                        itemView.setBackgroundResource(R.drawable.bg_item_location_default)
-                        imgPoint.setBackgroundResource(R.drawable.ic_point_pink)
+                        itemView.backgroundResource = R.drawable.bg_item_location_default
+                        imgPoint.backgroundResource = R.drawable.ic_point_pink
                         imgArrowDownBlack.visibility = View.GONE
                     }
                 }
             }
 
-            llItemLocation.setOnClickListener {
+            llItemLocation.onClick {
                 onClickItem(adapterPosition)
             }
 
-            imgArrowDownBlack.setOnClickListener {
+            imgArrowDownBlack.onClick {
                 expTvDescription.toggle()
             }
 
             expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
                 override fun onExpand(view: ExpandableTextView) {
-                    imgArrowDownBlack.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
+                    imgArrowDownBlack.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
                 }
 
                 override fun onCollapse(view: ExpandableTextView) {
-                    imgArrowDownBlack.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
+                    imgArrowDownBlack.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
                 }
             }
         }
@@ -101,16 +102,16 @@ class HomeAdapter(private val context: Context,
      * Class to bind ViewHolder with Anko layout
      */
     inner class HomeAdapterUI : AnkoComponent<ViewGroup> {
-        internal lateinit var mTvTime: TextView
-        internal lateinit var mTvStatus: TextView
-        internal lateinit var mImgArrowDownBlack: ImageView
-        internal lateinit var mImgPoint: ImageView
-        internal lateinit var mExpandableTextView: ExpandableTextView
-        internal lateinit var mLLItemLocation: LinearLayout
+        internal lateinit var tvTime: TextView
+        internal lateinit var tvStatus: TextView
+        internal lateinit var imgArrowDownBlack: ImageView
+        internal lateinit var imgPoint: ImageView
+        internal lateinit var expandableTextView: ExpandableTextView
+        internal lateinit var llItemLocation: LinearLayout
 
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val itemView = ui.apply {
-                mLLItemLocation = linearLayout {
+                llItemLocation = linearLayout {
                     gravity = Gravity.CENTER_VERTICAL
                     lparams(matchParent, wrapContent) {
                         bottomMargin = dimen(R.dimen.home_screen_linearLayout_margin)
@@ -118,18 +119,18 @@ class HomeAdapter(private val context: Context,
                         padding = dimen(R.dimen.home_screen_linearLayout_padding)
                     }
 
-                    mTvTime = textView {
-                        id = HomeAdapter.ID_ITEM_TIME
+                    tvTime = textView {
+                        id = HomeAdapter.ID_TV_ITEM_TIME
                     }
 
                     relativeLayout {
                         view {
-                            backgroundColor = ContextCompat.getColor(context, R.color.colorBlack)
+                            backgroundColor = Color.BLACK
                         }.lparams(dip(1), matchParent) {
                             centerHorizontally()
                         }
 
-                        mImgPoint = imageView {}.lparams(
+                        imgPoint = imageView().lparams(
                                 dimen(R.dimen.home_screen_view_margin),
                                 dimen(R.dimen.home_screen_view_margin)
                         ) {
@@ -140,9 +141,7 @@ class HomeAdapter(private val context: Context,
                         leftMargin = dimen(R.dimen.home_screen_view_margin)
                     }
 
-                    imageView {
-                        backgroundResource = R.drawable.ic_stop
-                    }.lparams(
+                    imageView(R.drawable.ic_stop).lparams(
                             dimen(R.dimen.home_screen_imgStatus_dimension),
                             dimen(R.dimen.home_screen_imgStatus_dimension)
                     ) {
@@ -152,40 +151,39 @@ class HomeAdapter(private val context: Context,
                     relativeLayout {
                         lparams(matchParent, wrapContent)
 
-                        mTvStatus = textView {
-                            id = HomeAdapter.ID_ITEM_STATUS
+                        tvStatus = textView {
+                            id = HomeAdapter.ID_TV_ITEM_STATUS
                             textSize = px2dip(dimen(R.dimen.home_screen_tvStatus_size))
-                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                            textColor = Color.BLACK
                             typeface = Typeface.DEFAULT_BOLD
                         }
 
-                        mExpandableTextView = expandableTextView {
-                            id = HomeAdapter.ID_EXPANDABLE_VIEW
+                        expandableTextView = expandableTextView {
+                            id = HomeAdapter.ID_TV_EXPANDABLE_VIEW
                             maxLines = 1
                         }.lparams(matchParent, wrapContent) {
                             alignParentLeft()
-                            below(HomeAdapter.ID_ITEM_STATUS)
+                            below(HomeAdapter.ID_TV_ITEM_STATUS)
                             rightMargin = dimen(R.dimen.home_screen_expTv_marginRight)
                             topMargin = dimen(R.dimen.home_screen_view_margin)
                         }
 
-                        mImgArrowDownBlack = imageView {
+                        imgArrowDownBlack = imageView(R.drawable.ic_keyboard_arrow_down_black_18dp) {
                             visibility = View.GONE
-                            backgroundResource = R.drawable.ic_keyboard_arrow_down_black_18dp
                         }.lparams {
-                            topOf(HomeAdapter.ID_EXPANDABLE_VIEW)
+                            topOf(HomeAdapter.ID_TV_EXPANDABLE_VIEW)
                         }
                     }
                 }
             }.view
             itemView.tag = HomeViewHolder(
                     itemView,
-                    mTvTime,
-                    mTvStatus,
-                    mImgArrowDownBlack,
-                    mExpandableTextView,
-                    mImgPoint,
-                    mLLItemLocation
+                    tvTime,
+                    tvStatus,
+                    imgArrowDownBlack,
+                    expandableTextView,
+                    imgPoint,
+                    llItemLocation
             )
             return itemView
         }
