@@ -123,7 +123,6 @@ class HomeAdapter(private val context: Context,
                     }
 
                     relativeLayout {
-
                         view {
                             backgroundColor = ContextCompat.getColor(context, R.color.colorBlack)
                         }.lparams(dip(1), matchParent) {

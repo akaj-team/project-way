@@ -1,28 +1,17 @@
 package vn.asiantech.way.ui.home
 
-import android.content.Intent
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
 import android.view.WindowManager
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.setContentView
-import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
-import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
-import vn.asiantech.way.ui.register.RegisterActivity
-import vn.asiantech.way.utils.LocationUtil
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -34,15 +23,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         const val PADDING_LEFT = 0
         const val PADDING_TOP = 0
         const val PADDING_RIGHT = 0
-        const val ZOOM = 16f
-        private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
     }
 
     private var mPosition = -1
     private var mGoogleMap: GoogleMap? = null
-    private var isExit = false
-    private var mIsExpand = false
     private lateinit var mHomeAdapter: HomeAdapter
     private lateinit var mHomeActivityUI: HomeActivityUI
 
@@ -53,56 +38,35 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         initViews()
         initMap()
         mHomeActivityUI.setContentView(this)
-        mHomeActivityUI.mFabMenuGroups.setOnMenuItemClickListener(this)
-        mHomeActivityUI.mFrOverplay.setOnClickListener {
-            if (mIsExpand) {
-                mHomeActivityUI.mFabMenuGroups.collapseMenu()
-                mIsExpand = false
-                setGoneOverLay()
-            }
-        }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mGoogleMap = googleMap
         setPaddingGoogleLogo()
-        val location = LocationUtil(this).getCurrentLocation()
-        if (location != null) {
-            drawMaker(location)
-        } else {
-            toast(resources.getString(R.string.not_update_current_location))
-        }
     }
 
     override fun onMenuClick(isShowMenu: Boolean) {
-        mHomeActivityUI.mFrOverplay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
-        mIsExpand = isShowMenu
+        //TODO handel when fabMenuGroups click
     }
 
     override fun onShareClick() {
         // TODO move to Search screen
-        setGoneOverLay()
     }
 
     override fun onProfileClick() {
-        val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
-        setGoneOverLay()
+        // TODO move to Register screen
     }
 
     override fun onCalendarClick() {
-        setGoneOverLay()
         // TODO after completed calendar feature
     }
 
     override fun onSearchClick() {
         // TODO move to Search screen
-        setGoneOverLay()
     }
 
     override fun onGroupClick() {
         // TODO to  move to Group screen
-        setGoneOverLay()
     }
 
     private fun initViews() {
@@ -120,25 +84,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val size = Point()
         display.getSize(size)
         mGoogleMap?.setPadding(PADDING_LEFT, PADDING_TOP, PADDING_RIGHT, size.y / UNIT_PADDING_BOTTOM)
-    }
-
-    private fun setGoneOverLay() {
-        mHomeActivityUI.mFrOverplay.visibility = View.GONE
-    }
-
-    private fun drawMaker(location: android.location.Location) {
-        if (mGoogleMap != null) {
-            mGoogleMap?.clear()
-            val currentLocation = LatLng(location.latitude, location.longitude)
-            mGoogleMap?.addMarker(MarkerOptions()
-                    .position(currentLocation)
-                    .draggable(true)
-                    .title(resources.getString(R.string.current_location)))
-                    ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-            mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, ZOOM))
-        } else {
-            toast(resources.getString(R.string.toast_text_google_map_null))
-        }
     }
 
     private fun setDataForRecyclerView() {
@@ -183,19 +128,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
             } else {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             }
-        }
-    }
-
-    override fun onBackPressed() {
-        if (isExit) {
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_HOME)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        } else {
-            toast(resources.getString(R.string.register_double_click_to_exit))
-            isExit = true
-            Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
     }
 }
