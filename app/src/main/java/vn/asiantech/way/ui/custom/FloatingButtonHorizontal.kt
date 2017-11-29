@@ -7,6 +7,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.custom_floating_button_menu_horizontal.view.*
+import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.R
 
 /**
@@ -16,7 +17,10 @@ import vn.asiantech.way.R
 class FloatingButtonHorizontal @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null) :
         LinearLayout(context, attrs), View.OnClickListener {
+    private lateinit var ui: FloatingButtonHorizontalUI
+
     init {
+        ui= FloatingButtonHorizontalUI()
         inflate(context, R.layout.custom_floating_button_menu_horizontal, this)
         imgBtnMenu.setOnClickListener(this)
         imgBtnShare.setOnClickListener(this)
@@ -121,6 +125,7 @@ class FloatingButtonHorizontal @JvmOverloads constructor(
          * Event when button menu clicked
          */
         fun onMenuClick(isShowMenu: Boolean)
+
         /**
          * Event when button share clicked
          */
