@@ -22,7 +22,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
         internal const val ID_LL_HEADER_LAYOUT = 1001
         internal const val ID_IMG_YOUR_LOCATION_ICON = 1002
         internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 1003
-        internal const val ID_RECYCLER_VIEW_LOCATIONS = 1004
+        internal const val ID_RECYCLER_VIEW_LOCATION = 1004
     }
 
     internal lateinit var edtLocation: EditText
@@ -121,7 +121,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams(matchParent, wrapContent)
 
                     recyclerView {
-                        id = ID_RECYCLER_VIEW_LOCATIONS
+                        id = ID_RECYCLER_VIEW_LOCATION
                         layoutManager = LinearLayoutManager(context)
                         adapter = locationAdapter
                     }.lparams(matchParent, matchParent)
