@@ -47,10 +47,9 @@ class ItemGroupMemberUI : AnkoComponent<ViewGroup> {
                 weight = WEIGHT
             }
 
-            imgCall = imageView {
-                backgroundResource = R.drawable.ic_phone_forwarded_blue_a700_48dp
-            }.lparams(dimen(R.dimen.group_screen_avatar_width),
-                    dimen(R.dimen.group_screen_avatar_width))
+            imgCall = imageView(R.drawable.ic_phone_forwarded_blue_a700_48dp)
+                    .lparams(dimen(R.dimen.group_screen_avatar_width),
+                            dimen(R.dimen.group_screen_avatar_width))
         }
     }
 

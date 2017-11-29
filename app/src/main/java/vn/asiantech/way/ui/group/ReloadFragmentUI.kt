@@ -25,9 +25,7 @@ class ReloadFragmentUI : AnkoComponent<ReloadFragment> {
                 gravity = Gravity.CENTER
             }
 
-            imgReload = imageView {
-                backgroundResource = R.drawable.ic_replay_indigo_300_48dp
-            }.lparams {
+            imgReload = imageView(R.drawable.ic_replay_indigo_300_48dp).lparams {
                 topMargin = dimen((R.dimen.group_screen_group_name_padding))
             }
         }

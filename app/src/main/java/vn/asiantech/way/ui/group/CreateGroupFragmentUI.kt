@@ -28,7 +28,7 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
     override fun createView(ui: AnkoContext<CreateGroupFragment>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
-            backgroundColor = ActivityCompat.getColor(context, R.color.colorBlueLight)
+            backgroundResource = R.color.colorBlueLight
             gravity = Gravity.CENTER
             padding = dimen(R.dimen.group_screen_group_name_padding)
 
@@ -47,6 +47,7 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
                     }
+
             btnBack = buttonCreateGroup(R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)

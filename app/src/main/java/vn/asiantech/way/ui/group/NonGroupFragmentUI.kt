@@ -14,7 +14,7 @@ import vn.asiantech.way.R
  */
 class NonGroupFragmentUI : AnkoComponent<NonGroupFragment> {
     internal lateinit var btnCreateGroup: Button
-    internal lateinit var btnViewInvites: Button
+    internal lateinit var btnViewInvite: Button
     internal lateinit var btnBack: Button
 
     override fun createView(ui: AnkoContext<NonGroupFragment>) = with(ui) {
@@ -35,7 +35,7 @@ class NonGroupFragmentUI : AnkoComponent<NonGroupFragment> {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
                     }
 
-            btnViewInvites = buttonNonGroup(R.string.view_invites, R.color.colorPinkLight)
+            btnViewInvite = buttonNonGroup(R.string.view_invites, R.color.colorPinkLight)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
                     }
