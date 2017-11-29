@@ -5,7 +5,6 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -16,6 +15,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
+import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.toast
@@ -42,25 +42,27 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private var mPosition = -1
-    private lateinit var mHomeAdapter: HomeAdapter
     private var mGoogleMap: GoogleMap? = null
     private var isExit = false
     private var mIsExpand = false
+    private lateinit var mHomeAdapter: HomeAdapter
+    private lateinit var mHomeActivityUI: HomeActivityUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-        initMap()
+        setDataForRecyclerView()
+        mHomeActivityUI = HomeActivityUI(mHomeAdapter)
         initViews()
-        fabMenuGroup.setOnMenuItemClickListener(this)
-        frOverlay.setOnClickListener {
+        initMap()
+        mHomeActivityUI.setContentView(this)
+        mHomeActivityUI.mFabMenuGroups.setOnMenuItemClickListener(this)
+        mHomeActivityUI.mFrOverplay.setOnClickListener {
             if (mIsExpand) {
-                fabMenuGroup.collapseMenu()
+                mHomeActivityUI.mFabMenuGroups.collapseMenu()
                 mIsExpand = false
                 setGoneOverLay()
             }
         }
-        setDataForRecyclerView()
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -75,7 +77,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onMenuClick(isShowMenu: Boolean) {
-        frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
+        mHomeActivityUI.mFrOverplay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
         mIsExpand = isShowMenu
     }
 
@@ -111,9 +113,9 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun initMap() {
-        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.fragmentMap)
-                as? SupportMapFragment
-        supportMapFragment?.getMapAsync(this)
+        val supportMapFragment = SupportMapFragment()
+        supportFragmentManager.beginTransaction().replace(HomeActivityUI.ID_MAP, SupportMapFragment()).commit()
+        supportMapFragment.getMapAsync(this)
     }
 
     private fun setPaddingGoogleLogo() {
@@ -124,7 +126,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     private fun setGoneOverLay() {
-        frOverlay.visibility = View.GONE
+        mHomeActivityUI.mFrOverplay.visibility = View.GONE
     }
 
     private fun drawMaker(location: android.location.Location) {
@@ -147,7 +149,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         val locations = ArrayList<TrackingInformation>()
         // TODO: Get data from share function into locations
         initDummyData(locations)
-        mHomeAdapter = HomeAdapter(locations) {
+        mHomeAdapter = HomeAdapter(this, locations) {
             if (mPosition >= 0) {
                 locations[mPosition].isChoose = false
                 mHomeAdapter.notifyItemChanged(mPosition)
@@ -164,8 +166,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
             mHomeAdapter.notifyItemChanged(it)
             mPosition = it
         }
-        recycleViewLocation.layoutManager = LinearLayoutManager(this)
-        recycleViewLocation.adapter = mHomeAdapter
     }
 
     private fun initDummyData(locations: ArrayList<TrackingInformation>) {

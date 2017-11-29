@@ -24,12 +24,12 @@
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="home_screen_linearLayout_margin">10dp</dimen>
     <dimen name="home_screen_linearLayout_padding">5dp</dimen>
-    <dimen name="home_screen_view_margin">10dp</dimen>
+    <dimen name="home_screen_view_margin">4dp</dimen>
     <dimen name="home_screen_line_with">1dp</dimen>
     <dimen name="home_screen_imgStatus_dimension">50dp</dimen>
     <dimen name="home_screen_tvStatus_size">15sp</dimen>
     <dimen name="home_screen_recyclerView_height">200dp</dimen>
-    <dimen name="home_screen_recyclerView_margin">20dp</dimen>
+    <dimen name="home_screen_recyclerView_margin">10dp</dimen>
     <dimen name="home_screen_expTv_marginRight">25dp</dimen>
 
     <!--Arrived screen-->
@@ -52,4 +52,5 @@
     <!--Group-->
     <dimen name="notification_size">24dp</dimen>
     <dimen name="group_text_size_normal">15dp</dimen>
+    <dimen name="home_screen_floating_button_margin">20dp</dimen>
 </resources>
