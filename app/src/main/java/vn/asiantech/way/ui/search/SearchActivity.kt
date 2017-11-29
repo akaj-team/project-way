@@ -30,7 +30,7 @@ class SearchActivity : BaseActivity() {
     }
 
     /**
-     * Search location by query name.
+     * Search location by name.
      */
     internal fun searchLocations(query: String) {
         // TODO: 28/11/2017
