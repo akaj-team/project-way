@@ -72,7 +72,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         if (location != null) {
             drawMaker(location)
         } else {
-            toast("Do not update the current location!")
+            toast(resources.getString(R.string.not_update_current_location))
         }
     }
 
@@ -136,11 +136,11 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
             mGoogleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
-                    .title("Current location"))
+                    .title(resources.getString(R.string.current_location)))
                     ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
             mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, ZOOM))
         } else {
-            toast("Google map is null")
+            toast(resources.getString(R.string.toast_text_google_map_null))
         }
     }
 
@@ -196,7 +196,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
-            toast("Press back again to exit!")
+            toast(resources.getString(R.string.register_double_click_to_exit))
             isExit = true
             Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
