@@ -34,24 +34,7 @@ class SearchActivity : BaseActivity() {
      */
     internal fun searchLocations(query: String) {
         // TODO: 28/11/2017
-        // Dummy data
-        locations.clear()
-        adapter.notifyDataSetChanged()
-        if (query == searchActivityUI.edtLocation.text.toString().trim()) {
-            locations.add(Location("aaa1", "sss1", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            locations.add(Location("aaa2", "sss2", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            locations.add(Location("aaa3", "sss3", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            locations.add(Location("aaa4", "sss4", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            locations.add(Location("aaa5", "sss5", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            locations.add(Location("aaa6", "sss6", "Binh Dao",
-                    "Binh Dao Thang Binh"))
-            adapter.notifyDataSetChanged()
-        }
+        // Init later.
     }
 
     /**
