@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group
 
 import android.graphics.Color
-import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
