@@ -11,11 +11,11 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class ShareActivity : BaseActivity() {
 
-    private lateinit var ui: ShareActivityUI
+    private lateinit var shareActivityUI: ShareActivityUI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = ShareActivityUI()
-        ui.setContentView(this)
+        shareActivityUI = ShareActivityUI()
+        shareActivityUI.setContentView(this)
         supportFragmentManager.beginTransaction().replace(ShareActivityUI.ID_MAP, SupportMapFragment()).commit()
     }
 }

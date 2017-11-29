@@ -109,7 +109,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                 }
             }
 
-            bottomCard {}
+           bottomCard {}
         }
     }
 }

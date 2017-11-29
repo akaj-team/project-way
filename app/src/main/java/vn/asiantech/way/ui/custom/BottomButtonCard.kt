@@ -12,6 +12,7 @@ import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.rippleView
 
@@ -43,8 +44,11 @@ class BottomButtonCard(context: Context) :
     internal lateinit var tvCopyLink: TextView
     internal lateinit var imgLoader: ImageView
 
-    var onBottomCardListener: OnBottomCardListener? = null
     var actionType: ActionType
+
+    val onCloseButtonClick: () -> Unit = {}
+    val onActionButtonClick: () -> Unit = {}
+    val onCopyButtonClick: () -> Unit = {}
 
     // TODO: Will use in future
 //    val isActionTypeConfirmLocation: Boolean
@@ -76,6 +80,11 @@ class BottomButtonCard(context: Context) :
                     bottomPadding = dimen(R.dimen.padding_medium)
                     leftPadding = dimen(R.dimen.padding_medium)
                     rightPadding = dimen(R.dimen.padding_medium)
+
+                    setOnRippleCompleteListener {
+                        onCloseButtonClick
+                    }
+
                     imageView {
                         imageResource = R.drawable.ic_navigation_close
                     }.lparams(dip(IMAGE_SIZE), dip(IMAGE_SIZE))
@@ -109,6 +118,11 @@ class BottomButtonCard(context: Context) :
                 btnSharing = rippleView {
                     id = ID_BTN_SHARING
                     backgroundResource = R.drawable.custom_bg_button_share
+
+                    setOnRippleCompleteListener {
+                        onActionButtonClick
+                    }
+
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
                         textSize = px2dip(dimen(R.dimen.text_large))
                     }.lparams(wrapContent, wrapContent) {
@@ -146,6 +160,14 @@ class BottomButtonCard(context: Context) :
                         textColor = ContextCompat.getColor(context, R.color.black)
                         backgroundResource = R.drawable.custom_bg_button_copy
                         padding = dimen(R.dimen.padding_base)
+
+                        onClick {
+                            onCopyButtonClick
+                            tvCopyLink.isEnabled = false
+                            tvCopyLink.text = context.getString(R.string.share_textview_text_copied)
+
+                        }
+
                     }.lparams(wrapContent, wrapContent) {
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
@@ -158,9 +180,6 @@ class BottomButtonCard(context: Context) :
                 }
             }
         }
-
-        initiateView()
-
     }
 
     /*
@@ -173,58 +192,13 @@ class BottomButtonCard(context: Context) :
         SHARE_BACK_LOCATION
     }
 
-    private fun initiateView() {
-        btnClose.setOnRippleCompleteListener {
-            if (onBottomCardListener != null) {
-                onBottomCardListener?.onCloseButtonClick()
-            }
-        }
-
-        btnSharing.setOnRippleCompleteListener {
-            if (onBottomCardListener != null) {
-                onBottomCardListener?.onActionButtonClick()
-            }
-        }
-
-        tvCopyLink.setOnClickListener {
-            if (onBottomCardListener != null) {
-                onBottomCardListener?.onCopyButtonClick()
-                tvCopyLink?.isEnabled = false
-                tvCopyLink?.text = context.getString(R.string.share_textview_text_copied)
-            }
-        }
-//        rlCollapse.setOnClickListener {
-//            if (rlExpandedInfo.visibility == View.GONE) {
-//                rlExpandedInfo.visibility = View.VISIBLE
-//                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
-//            } else {
-//                rlExpandedInfo.visibility = View.GONE
-//                imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
-//            }
-//        }
-//        rippleTrackingToggle.setOnRippleCompleteListener {
-//            if (onBottomCardListener != null) {
-//                onBottomCardListener?.onStopButtonClick()
-//            }
-//        }
-//        rippleShareLink.setOnClickListener {
-//            if (onBottomCardListener != null) {
-//                onBottomCardListener?.onShareButtonClick()
-//            }
-//        }
-//        imgBtnCall.setOnClickListener {
-//            if (onBottomCardListener != null) {
-//                onBottomCardListener?.onCallButtonClick()
-//            }
-//        }
-    }
-
-    internal fun setTitleText(title: String) {
+    internal fun setTitleText(title: String): BottomButtonCard {
         tvTitle.text = title
         tvTitle.visibility = View.VISIBLE
+        return this
     }
 
-    internal fun setDescriptionText(description: String) {
+    internal fun setDescriptionText(description: String): BottomButtonCard {
         if (HTTextUtils.isEmpty(description)) {
             tvDescription.text = ""
             tvDescription.visibility = View.GONE
@@ -232,27 +206,33 @@ class BottomButtonCard(context: Context) :
             tvDescription.text = description
             tvDescription.visibility = View.VISIBLE
         }
+        return this
     }
 
-    internal fun hideCloseButton() {
+    internal fun hideCloseButton(): BottomButtonCard {
         btnClose.visibility = View.GONE
+        return this
     }
 
-    internal fun hideTvTitle() {
+    internal fun hideTvTitle(): BottomButtonCard {
         tvTitle.visibility = View.GONE
+        return this
     }
 
-    internal fun hideTvDescription() {
+    internal fun hideTvDescription(): BottomButtonCard {
         tvDescription.visibility = View.GONE
+        return this
     }
 
-    internal fun showCloseButton() {
+    internal fun showCloseButton(): BottomButtonCard {
         btnClose.visibility = View.VISIBLE
+        return this
     }
 
-    internal fun setShareButtonText(actionText: String) {
+    internal fun setShareButtonText(actionText: String): BottomButtonCard {
         tvStartShare.visibility = View.VISIBLE
         tvStartShare.text = actionText
+        return this
     }
 
     internal fun showBottomCardLayout() {
@@ -289,13 +269,14 @@ class BottomButtonCard(context: Context) :
 //        hideProgress()
 //        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlLinkShare)
 //    }
-    internal fun startProgress() {
+    internal fun startProgress(): BottomButtonCard {
         tvStartShare.visibility = View.GONE
         imgLoader.visibility = View.VISIBLE
         val rotationAnim = android.view.animation.AnimationUtils.loadAnimation(context,
                 R.anim.rotate)
         rotationAnim.fillAfter = true
         imgLoader.startAnimation(rotationAnim)
+        return this
     }
     // TODO: Will use in future
 //    fun hideActionButton() {
@@ -306,9 +287,10 @@ class BottomButtonCard(context: Context) :
         AnimationUtils.expand(btnSharing)
     }
 
-    internal fun hideProgress() {
+    internal fun hideProgress(): BottomButtonCard {
         imgLoader.visibility = View.GONE
         imgLoader.clearAnimation()
+        return this
     }
 
     internal fun showTrackingURLLayout() {
@@ -319,42 +301,8 @@ class BottomButtonCard(context: Context) :
 //        rlLinkShare.visibility = View.GONE
 //    }
 
-    internal fun showTitle() {
+    internal fun showTitle(): BottomButtonCard {
         tvTitle.visibility = View.VISIBLE
-    }
-
-    /**
-     * Interface create fun onClickListener for BottomButtonCard
-     */
-    interface OnBottomCardListener {
-        /**
-         * Button close click listener
-         */
-        fun onCloseButtonClick()
-
-        /**
-         * Button share click listener
-         */
-        fun onActionButtonClick()
-
-        /**
-         * Button copy link click listener
-         */
-        fun onCopyButtonClick()
-
-        /**
-         * Button stop link click listener
-         */
-        fun onStopButtonClick()
-
-        /**
-         * Button share link click listener
-         */
-        fun onShareButtonClick()
-
-        /**
-         * Button call link click listener
-         */
-        fun onCallButtonClick()
+        return this
     }
 }
