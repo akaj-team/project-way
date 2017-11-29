@@ -7,7 +7,6 @@ import android.view.WindowManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.setContentView
