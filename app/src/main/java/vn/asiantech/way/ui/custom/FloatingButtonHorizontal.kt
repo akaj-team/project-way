@@ -7,14 +7,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.custom_floating_button_menu_horizontal.view.*
-import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.R
 
 /**
  * Custom floating button menu
  * Created by haingoq on 29/09/2017.
  */
-class FloatingButtonHorizontal @JvmOverloads constructor(
+class FloatingButtonHorizontal(
         context: Context, attrs: AttributeSet? = null) :
         LinearLayout(context, attrs), View.OnClickListener {
     private lateinit var ui: FloatingButtonHorizontalUI
