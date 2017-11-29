@@ -15,23 +15,21 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
-import kotlinx.android.synthetic.main.activity_splash.*
+import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.home.HomeActivity
-import vn.asiantech.way.ui.register.RegisterActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
 class SplashActivity : BaseActivity() {
-
     companion object {
         const val DELAY = 3000L
     }
 
+    private lateinit var ui: SplashActivityUI
     private val mBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if ((intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION ||
@@ -56,36 +54,37 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        ui = SplashActivityUI()
+        ui.setContentView(this)
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
     }
 
     private fun startSwitchScreen() {
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
-                    progressBar.visibility = View.VISIBLE
-                    btnEnableLocation.visibility = View.GONE
-                    tvAppDescription.visibility = View.GONE
-                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
-                        Handler().postDelayed({
-                            startActivity(Intent(this, HomeActivity::class.java))
-                            finish()
-                        }, DELAY)
-
-                    } else {
-                        Handler().postDelayed({
-                            val intent = Intent(this, RegisterActivity::class.java)
-                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-                            startActivity(intent)
-                            finish()
-                        }, DELAY)
-                    }
-                }
-            }
-        }
+//        if (HyperTrackUtils.isInternetConnected(this)) {
+//            if (HyperTrackUtils.isLocationEnabled(this)) {
+//                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
+//                    ui.progressBar.visibility = View.VISIBLE
+//                    ui.btnEnableLocation.visibility = View.GONE
+//                    ui.tvAppDescription.visibility = View.GONE
+//                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
+//                        Handler().postDelayed({
+//                            startActivity(Intent(this, HomeActivity::class.java))
+//                            finish()
+//                        }, DELAY)
+//
+//                    } else {
+//                        Handler().postDelayed({
+//                            val intent = Intent(this, RegisterActivity::class.java)
+//                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+//                            startActivity(intent)
+//                            finish()
+//                        }, DELAY)
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun setAnimationForBackground() {
@@ -95,10 +94,10 @@ class SplashActivity : BaseActivity() {
         transAnim.duration = 10000L
         transAnim.addUpdateListener { animation ->
             val progress = animation.animatedValue as Float
-            val width = imgFrontBackground.width
+            val width = ui.imgFrontBackground.width
             val translationX = width * progress
-            imgFrontBackground.translationX = translationX
-            imgBehindBackground.translationX = translationX - width
+            ui.imgFrontBackground.translationX = translationX
+            ui.imgBehindBackground.translationX = translationX - width
         }
         transAnim.start()
     }
@@ -114,7 +113,7 @@ class SplashActivity : BaseActivity() {
         growAnim.duration = 800
         shrinkAnim.duration = 800
 
-        imgCircle.animation = growAnim
+        ui.imgCircle.animation = growAnim
         growAnim.start()
 
         growAnim.setAnimationListener(object : Animation.AnimationListener {
@@ -123,7 +122,7 @@ class SplashActivity : BaseActivity() {
             override fun onAnimationRepeat(animation: Animation) {}
 
             override fun onAnimationEnd(animation: Animation) {
-                imgCircle.animation = shrinkAnim
+                ui.imgCircle.animation = shrinkAnim
                 shrinkAnim.start()
             }
         })
@@ -134,7 +133,7 @@ class SplashActivity : BaseActivity() {
             override fun onAnimationRepeat(animation: Animation) {}
 
             override fun onAnimationEnd(animation: Animation) {
-                imgCircle.animation = growAnim
+                ui.imgCircle.animation = growAnim
                 growAnim.start()
             }
         })
@@ -142,7 +141,7 @@ class SplashActivity : BaseActivity() {
 
     private fun requestPermission() {
         startSwitchScreen()
-        btnEnableLocation.setOnClickListener {
+        ui.btnEnableLocation.setOnClickListener {
             if (!HyperTrackUtils.isWifiEnabled(this)) {
                 toast(getString(R.string.splash_toast_turn_on_wifi))
             } else {

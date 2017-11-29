@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Common-->
+    <dimen name="border">1dp</dimen>
+
     <!--Splash screen-->
-    <dimen name="splash_img_circle_with_high">250dp</dimen>
+    <dimen name="splash_img_circle_with_high">200dp</dimen>
     <dimen name="splash_size_tv_app_name">25sp</dimen>
     <dimen name="splash_tv_description_margin">50dp</dimen>
     <dimen name="splash_tv_size_app_description">16sp</dimen>
     <dimen name="splash_buttonEnable_marginButton">20dp</dimen>
     <dimen name="splash_buttonEnableButton_padding">20dp</dimen>
-    <dimen name="splash_progressBar_margin_bottom">20dp</dimen>
+    <dimen name="splash_progressBar_margin_bottom">30dp</dimen>
+    <dimen name="splash_img_location_margin_top">30dp</dimen>
+    <dimen name="splash_tv_app_name_margin_top">30dp</dimen>
+    <dimen name="splash_tv_description_margin_top">30dp</dimen>
+    <dimen name="splash_btn_enable_location_margin_top">30dp</dimen>
     <dimen name="seekBar_width">60dp</dimen>
     <dimen name="phone_icon_size">58dp</dimen>
 
@@ -19,6 +26,11 @@
     <dimen name="register_screen_edit_text_height">40dp</dimen>
     <dimen name="register_screen_save_button_height">40dp</dimen>
     <dimen name="register_screen_avatar_margin">10dp</dimen>
+    <dimen name="register_screen_img_flag_width">36dp</dimen>
+    <dimen name="register_screen_ll_phone_padding">40dp</dimen>
+    <dimen name="register_screen_tv_tel_width">45dp</dimen>
+    <dimen name="register_screen_btn_register_margin">20dp</dimen>
+    <dimen name="register_screen_tv_skip_margin">15dp</dimen>
 
     <!--Home screen-->
     <dimen name="toolbar_height">56dp</dimen>

@@ -4,7 +4,7 @@ import android.os.Bundle
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.toast
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.MyLocation
+import vn.asiantech.way.data.model.Location
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -15,7 +15,7 @@ class SearchActivity : BaseActivity() {
 
     private lateinit var searchActivityUI: SearchActivityUI
     private lateinit var adapter: LocationAdapter
-    private var locations = mutableListOf<MyLocation>()
+    private var locations = mutableListOf<Location>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,17 +38,17 @@ class SearchActivity : BaseActivity() {
         locations.clear()
         adapter.notifyDataSetChanged()
         if (query == searchActivityUI.edtLocation.text.toString().trim()) {
-            locations.add(MyLocation("aaa1", "sss1", "Binh Dao",
+            locations.add(Location("aaa1", "sss1", "Binh Dao",
                     "Binh Dao Thang Binh"))
-            locations.add(MyLocation("aaa2", "sss2", "Binh Dao",
+            locations.add(Location("aaa2", "sss2", "Binh Dao",
                     "Binh Dao Thang Binh"))
-            locations.add(MyLocation("aaa3", "sss3", "Binh Dao",
+            locations.add(Location("aaa3", "sss3", "Binh Dao",
                     "Binh Dao Thang Binh"))
-            locations.add(MyLocation("aaa4", "sss4", "Binh Dao",
+            locations.add(Location("aaa4", "sss4", "Binh Dao",
                     "Binh Dao Thang Binh"))
-            locations.add(MyLocation("aaa5", "sss5", "Binh Dao",
+            locations.add(Location("aaa5", "sss5", "Binh Dao",
                     "Binh Dao Thang Binh"))
-            locations.add(MyLocation("aaa6", "sss6", "Binh Dao",
+            locations.add(Location("aaa6", "sss6", "Binh Dao",
                     "Binh Dao Thang Binh"))
             adapter.notifyDataSetChanged()
         }

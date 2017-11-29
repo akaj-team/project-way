@@ -9,13 +9,13 @@ import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.MyLocation
+import vn.asiantech.way.data.model.Location
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 28/11/2017
  */
-class LocationAdapter(val locations: MutableList<MyLocation>)
+class LocationAdapter(val locations: MutableList<Location>)
     : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {
 
     companion object {
@@ -25,7 +25,7 @@ class LocationAdapter(val locations: MutableList<MyLocation>)
         internal const val ID_TV_LOCATION_FORMAT_ADDRESS = 1004
     }
 
-    var onItemClick: (location: MyLocation) -> Unit = {}
+    var onItemClick: (location: Location) -> Unit = {}
 
     override fun getItemCount() = locations.size
 
@@ -34,8 +34,8 @@ class LocationAdapter(val locations: MutableList<MyLocation>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? {
-            return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context, parent,
-                    false)).tag as? LocationViewHolder
+        return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context,
+                parent, false)).tag as? LocationViewHolder
     }
 
     /**
