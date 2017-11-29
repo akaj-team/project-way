@@ -292,7 +292,10 @@ class FloatingButtonHorizontal(
     }
 }
 
+/**
+ * Init custom view
+ */
 inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit):
-        FloatingButtonHorizontal {
-    return ankoView({ FloatingButtonHorizontal(it, null) }, theme = 0, init = init)
-}
+        FloatingButtonHorizontal = ankoView({ FloatingButtonHorizontal(it, null) }
+        , theme = 0, init = init)
+
