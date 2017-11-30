@@ -25,4 +25,7 @@
     <item name="bottom_button_card_tv_description" type="id" />
     <item name="bottom_button_card_btn_sharing" type="id" />
 
+    <!-- id views on class CountryAdapter -->
+    <item name="country_adapter_tv_tel" type="id" />
+    <item name="country_adapter_img_flag" type="id" />
 </resources>
