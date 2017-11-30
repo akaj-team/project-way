@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.register
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import com.hypertrack.lib.models.UserParams
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.ui.base.BaseActivity
@@ -24,10 +25,16 @@ class RegisterActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         addDisposables(registerViewModel.getCountries()
-                .subscribe({ data ->
-                    countries.clear()
-                    countries.addAll(data)
-                    ui.countryAdapter.notifyDataSetChanged()
-                }))
+                .subscribe(this::getCountries))
+    }
+
+    private fun getCountries(data: List<Country>) {
+        countries.clear()
+        countries.addAll(data)
+        ui.countryAdapter.notifyDataSetChanged()
+    }
+
+    private fun createUser(userParams: UserParams) {
+
     }
 }
