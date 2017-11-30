@@ -68,6 +68,10 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         // TODO to  move to Group screen
     }
 
+    override fun onBindViewModel() {
+        // TODO to bind with ViewModel
+    }
+
     private fun initViews() {
         setStatusBarTranslucent(true)
     }
