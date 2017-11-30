@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.register
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.data.model.Country
@@ -17,17 +16,19 @@ class RegisterActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = RegisterActivityUI(CountryAdapter(countries, HashMap<String, Bitmap>(), "VietNam"))
+        ui = RegisterActivityUI(CountryAdapter(this, countries))
         ui.setContentView(this)
         registerViewModel = RegisterViewModel(this)
     }
 
     override fun onBindViewModel() {
         addDisposables(registerViewModel.getCountries()
-                .subscribe({ data ->
-                    countries.clear()
-                    countries.addAll(data)
-                    ui.countryAdapter.notifyDataSetChanged()
-                }))
+                .subscribe(this::showCountryList))
+    }
+
+    private fun showCountryList(data: List<Country>) {
+        countries.clear()
+        countries.addAll(data)
+        ui.countryAdapter.notifyDataSetChanged()
     }
 }
