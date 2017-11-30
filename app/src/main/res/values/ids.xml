@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home Screen -->
+    <item name="home_activity_fr_map" type="id" />
+    <item name="home_adapter_tv_time" type="id" />
+    <item name="home_adapter_tv_status" type="id" />
+    <item name="home_adapter_tv_expandable_description" type="id" />
+    <item name="home_adapter_img_arrow_down" type="id" />
+    <item name="home_adapter_img_point" type="id" />
+    <item name="home_adapter_ll_location" type="id" />
+</resources>

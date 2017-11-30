@@ -28,13 +28,13 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     private var position = -1
     private var googleMap: GoogleMap? = null
     private lateinit var homeAdapter: HomeAdapter
-    private lateinit var homeActivityUI: HomeActivityUI
+    private lateinit var ui: HomeActivityUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDataForRecyclerView()
-        homeActivityUI = HomeActivityUI(homeAdapter)
-        homeActivityUI.setContentView(this)
+        ui = HomeActivityUI(homeAdapter)
+        ui.setContentView(this)
         initViews()
         initMap()
     }
@@ -74,7 +74,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     private fun initMap() {
         val supportMapFragment = SupportMapFragment()
-        supportFragmentManager.beginTransaction().replace(HomeActivityUI.ID_FR_MAP, SupportMapFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.home_activity_fr_map, SupportMapFragment()).commit()
         supportMapFragment.getMapAsync(this)
     }
 

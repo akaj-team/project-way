@@ -17,10 +17,6 @@ import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
  */
 class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeActivity> {
 
-    companion object {
-        internal const val ID_FR_MAP = 1001
-    }
-
     internal lateinit var fabMenuGroups: FloatingButtonHorizontal
     internal lateinit var frOverplay: FrameLayout
 
@@ -33,7 +29,7 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
 
                 frameLayout {
                     lparams(matchParent, matchParent)
-                    id = ID_FR_MAP
+                    id = R.id.home_activity_fr_map
                 }
 
                 recyclerView {

@@ -27,12 +27,6 @@ class HomeAdapter(private val context: Context,
                   val onClickItem: (Int) -> Unit)
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
-    companion object {
-        internal const val ID_TV_ITEM_TIME = 1001
-        internal const val ID_TV_ITEM_STATUS = 1002
-        internal const val ID_TV_EXPANDABLE_VIEW = 1003
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeAdapterUI()
             .createView(AnkoContext.create(context, parent, false))
             .tag as? HomeViewHolder
@@ -46,15 +40,23 @@ class HomeAdapter(private val context: Context,
     /**
      * To save data for items in recyclerView of locations
      */
-    inner class HomeViewHolder(
-            val item: View,
-            val tvTime: TextView,
-            val tvStatus: TextView,
-            val imgArrowDownBlack: ImageView,
-            val expTvDescription: ExpandableTextView,
-            val imgPoint: ImageView,
-            val llItemLocation: LinearLayout
-    ) : RecyclerView.ViewHolder(item) {
+    inner class HomeViewHolder(val item: View) : RecyclerView.ViewHolder(item) {
+
+        var tvTime: TextView
+        var tvStatus: TextView
+        var imgArrowDown: ImageView
+        var expTvDescription: ExpandableTextView
+        val imgPoint: ImageView
+        val llItemLocation: LinearLayout
+
+        init {
+            tvTime = item.find(R.id.home_adapter_tv_time)
+            tvStatus = item.find(R.id.home_adapter_tv_status)
+            imgArrowDown = item.find(R.id.home_adapter_img_arrow_down)
+            expTvDescription = item.find(R.id.home_adapter_tv_expandable_description)
+            imgPoint = item.find(R.id.home_adapter_img_point)
+            llItemLocation = item.find(R.id.home_adapter_ll_location)
+        }
 
         internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
@@ -64,16 +66,16 @@ class HomeAdapter(private val context: Context,
                 expTvDescription.post {
                     if (location.isChoose) {
                         if (expTvDescription.lineCount > 1) {
-                            imgArrowDownBlack.visibility = View.VISIBLE
+                            imgArrowDown.visibility = View.VISIBLE
                         } else {
-                            imgArrowDownBlack.visibility = View.GONE
+                            imgArrowDown.visibility = View.GONE
                         }
                         itemView.backgroundResource = R.drawable.bg_item_location_choose
                         imgPoint.backgroundResource = R.drawable.ic_point_white
                     } else {
                         itemView.backgroundResource = R.drawable.bg_item_location_default
                         imgPoint.backgroundResource = R.drawable.ic_point_pink
-                        imgArrowDownBlack.visibility = View.GONE
+                        imgArrowDown.visibility = View.GONE
                     }
                 }
             }
@@ -82,17 +84,17 @@ class HomeAdapter(private val context: Context,
                 onClickItem(adapterPosition)
             }
 
-            imgArrowDownBlack.onClick {
+            imgArrowDown.onClick {
                 expTvDescription.toggle()
             }
 
             expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
                 override fun onExpand(view: ExpandableTextView) {
-                    imgArrowDownBlack.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
                 }
 
                 override fun onCollapse(view: ExpandableTextView) {
-                    imgArrowDownBlack.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
                 }
             }
         }
@@ -102,16 +104,11 @@ class HomeAdapter(private val context: Context,
      * Class to bind ViewHolder with Anko layout
      */
     inner class HomeAdapterUI : AnkoComponent<ViewGroup> {
-        internal lateinit var tvTime: TextView
-        internal lateinit var tvStatus: TextView
-        internal lateinit var imgArrowDownBlack: ImageView
-        internal lateinit var imgPoint: ImageView
-        internal lateinit var expandableTextView: ExpandableTextView
-        internal lateinit var llItemLocation: LinearLayout
 
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val itemView = ui.apply {
-                llItemLocation = linearLayout {
+                linearLayout {
+                    id = R.id.home_adapter_ll_location
                     gravity = Gravity.CENTER_VERTICAL
                     lparams(matchParent, wrapContent) {
                         bottomMargin = dimen(R.dimen.home_screen_linearLayout_margin)
@@ -119,8 +116,8 @@ class HomeAdapter(private val context: Context,
                         padding = dimen(R.dimen.home_screen_linearLayout_padding)
                     }
 
-                    tvTime = textView {
-                        id = HomeAdapter.ID_TV_ITEM_TIME
+                    textView {
+                        id = R.id.home_adapter_tv_time
                     }
 
                     relativeLayout {
@@ -130,7 +127,9 @@ class HomeAdapter(private val context: Context,
                             centerHorizontally()
                         }
 
-                        imgPoint = imageView().lparams(
+                        imageView {
+                            id = R.id.home_adapter_img_point
+                        }.lparams(
                                 dimen(R.dimen.home_screen_view_margin),
                                 dimen(R.dimen.home_screen_view_margin)
                         ) {
@@ -151,40 +150,33 @@ class HomeAdapter(private val context: Context,
                     relativeLayout {
                         lparams(matchParent, wrapContent)
 
-                        tvStatus = textView {
-                            id = HomeAdapter.ID_TV_ITEM_STATUS
+                        textView {
+                            id = R.id.home_adapter_tv_status
                             textSize = px2dip(dimen(R.dimen.home_screen_tvStatus_size))
                             textColor = Color.BLACK
                             typeface = Typeface.DEFAULT_BOLD
                         }
 
-                        expandableTextView = expandableTextView {
-                            id = HomeAdapter.ID_TV_EXPANDABLE_VIEW
+                        expandableTextView {
+                            id = R.id.home_adapter_tv_expandable_description
                             maxLines = 1
                         }.lparams(matchParent, wrapContent) {
                             alignParentLeft()
-                            below(HomeAdapter.ID_TV_ITEM_STATUS)
+                            below(R.id.home_adapter_tv_status)
                             rightMargin = dimen(R.dimen.home_screen_expTv_marginRight)
                             topMargin = dimen(R.dimen.home_screen_view_margin)
                         }
 
-                        imgArrowDownBlack = imageView(R.drawable.ic_keyboard_arrow_down_black_18dp) {
+                        imageView(R.drawable.ic_keyboard_arrow_down_black_18dp) {
                             visibility = View.GONE
+                            id = R.id.home_adapter_img_arrow_down
                         }.lparams {
-                            topOf(HomeAdapter.ID_TV_EXPANDABLE_VIEW)
+                            topOf(R.id.home_adapter_tv_expandable_description)
                         }
                     }
                 }
             }.view
-            itemView.tag = HomeViewHolder(
-                    itemView,
-                    tvTime,
-                    tvStatus,
-                    imgArrowDownBlack,
-                    expandableTextView,
-                    imgPoint,
-                    llItemLocation
-            )
+            itemView.tag = HomeViewHolder(itemView)
             return itemView
         }
     }
