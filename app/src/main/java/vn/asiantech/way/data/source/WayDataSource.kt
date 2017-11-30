@@ -33,7 +33,7 @@ internal interface WayDataSource {
      *  @param userId of user
      *  @return User object which is Observable.
      */
-    fun getUser(userId: String): Observable<User>
+    fun getUser(): Observable<User>
 
     /**
      *  Get address at location on Map.

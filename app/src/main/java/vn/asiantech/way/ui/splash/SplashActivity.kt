@@ -8,15 +8,18 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
+import com.hypertrack.lib.models.UserParams
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
+import vn.asiantech.way.data.source.remote.WayRemoteDataSource
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -59,6 +62,15 @@ class SplashActivity : BaseActivity() {
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
+        val subscription = CompositeDisposable()
+        subscription.add(WayRemoteDataSource().createGroup("aaaaa")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    toast("Sucess")
+                }, {
+                    toast("Fail")
+                }))
     }
 
     private fun startSwitchScreen() {
