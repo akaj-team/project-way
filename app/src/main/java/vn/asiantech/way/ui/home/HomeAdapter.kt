@@ -42,12 +42,12 @@ class HomeAdapter(private val context: Context,
      */
     inner class HomeViewHolder(val item: View) : RecyclerView.ViewHolder(item) {
 
-        var tvTime: TextView
-        var tvStatus: TextView
-        var imgArrowDown: ImageView
-        var expTvDescription: ExpandableTextView
-        val imgPoint: ImageView
-        val llItemLocation: LinearLayout
+        private var tvTime: TextView
+        private var tvStatus: TextView
+        private var imgArrowDown: ImageView
+        private var expTvDescription: ExpandableTextView
+        private val imgPoint: ImageView
+        private val llItemLocation: LinearLayout
 
         init {
             tvTime = item.find(R.id.home_adapter_tv_time)
@@ -180,7 +180,6 @@ class HomeAdapter(private val context: Context,
             return itemView
         }
     }
-
 }
 
 /**

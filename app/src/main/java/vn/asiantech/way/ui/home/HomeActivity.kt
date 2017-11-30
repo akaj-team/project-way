@@ -45,7 +45,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
     }
 
     override fun onMenuClick(isShowMenu: Boolean) {
-        //TODO handel when fabMenuGroups click
+        //TODO handel when fabMenuGroup click
     }
 
     override fun onShareClick() {

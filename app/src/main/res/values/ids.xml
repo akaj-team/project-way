@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Home Screen -->
+    <!-- View ids for HomeAdapter -->
     <item name="home_activity_fr_map" type="id" />
     <item name="home_adapter_tv_time" type="id" />
     <item name="home_adapter_tv_status" type="id" />
