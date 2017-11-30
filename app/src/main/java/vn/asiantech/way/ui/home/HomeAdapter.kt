@@ -42,21 +42,12 @@ class HomeAdapter(private val context: Context,
      */
     inner class HomeViewHolder(val item: View) : RecyclerView.ViewHolder(item) {
 
-        private var tvTime: TextView
-        private var tvStatus: TextView
-        private var imgArrowDown: ImageView
-        private var expTvDescription: ExpandableTextView
-        private val imgPoint: ImageView
-        private val llItemLocation: LinearLayout
-
-        init {
-            tvTime = item.find(R.id.home_adapter_tv_time)
-            tvStatus = item.find(R.id.home_adapter_tv_status)
-            imgArrowDown = item.find(R.id.home_adapter_img_arrow_down)
-            expTvDescription = item.find(R.id.home_adapter_tv_expandable_description)
-            imgPoint = item.find(R.id.home_adapter_img_point)
-            llItemLocation = item.find(R.id.home_adapter_ll_location)
-        }
+        private val tvTime: TextView = item.find(R.id.home_adapter_tv_time)
+        private var tvStatus: TextView = item.find(R.id.home_adapter_tv_status)
+        private var imgArrowDown: ImageView = item.find(R.id.home_adapter_img_arrow_down)
+        private var expTvDescription: ExpandableTextView = item.find(R.id.home_adapter_tv_expandable_description)
+        private val imgPoint: ImageView = item.find(R.id.home_adapter_img_point)
+        private val llItemLocation: LinearLayout = item.find(R.id.home_adapter_ll_location)
 
         internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
