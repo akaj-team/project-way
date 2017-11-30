@@ -1,23 +1,24 @@
 package vn.asiantech.way.ui.register
 
-import android.graphics.Bitmap
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
+import java.util.*
 
 /**
  * Adapter of RecyclerView Country.
  * Created by haingoq on 27/11/2017.
  */
-class CountryAdapter(private val countries: List<Country>,
-                     private val flagMap: HashMap<String, Bitmap>, private val countryName: String) :
+class CountryAdapter(val context: Context, private val countries: List<Country>) :
         RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
     companion object {
         private const val ID_IMG_FLAG = 1001
@@ -79,9 +80,8 @@ class CountryAdapter(private val countries: List<Country>,
          * Bind country
          */
         fun bindHolder(country: Country) {
-            val isoCode = country.iso
-            imgFlag.setImageBitmap(flagMap[isoCode.plus(".png").toLowerCase()])
-            tvTel.text = countryName
+            Picasso.with(context).load(country.flagFilePath).into(imgFlag)
+            tvTel.text = country.countryName
         }
     }
 }

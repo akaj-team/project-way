@@ -20,7 +20,7 @@ import vn.asiantech.way.R
  * Anko layout for RegisterActivity
  * Created by haingoq on 27/11/2017.
  */
-class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
+class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
     companion object {
         private const val ID_FR_AVATAR = 1001
         private const val ID_TV_DESCRIPTION = 1002
@@ -67,7 +67,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 imgAvatar = circleImageView {
                     backgroundResource = R.drawable.ic_profile_camera
                     borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dip(dimen(R.dimen.border))
+                    borderWidth = dimen(R.dimen.border)
                 }.lparams {
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.END
@@ -111,7 +111,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                 }
 
                 linearLayout {
-                    val padding = dip(dimen(R.dimen.register_screen_ll_phone_padding))
+                    val padding = dimen(R.dimen.register_screen_ll_phone_padding)
                     leftPadding = padding
                     rightPadding = padding
                     imgFlag = imageView().lparams {
@@ -140,7 +140,7 @@ class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoCompo
                     tvTel = textView(R.string.register_tel) {
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
-                    }.lparams(dip(dimen(R.dimen.register_screen_tv_tel_width)), matchParent)
+                    }.lparams(dimen(R.dimen.register_screen_tv_tel_width), matchParent)
 
                     edtPhone = editText {
                         backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)

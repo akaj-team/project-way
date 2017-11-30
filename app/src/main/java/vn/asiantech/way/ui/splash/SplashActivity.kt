@@ -8,8 +8,6 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
@@ -43,6 +41,9 @@ class SplashActivity : BaseActivity() {
         }
     }
 
+    override fun onBindViewModel() {
+    }
+
     override fun onResume() {
         super.onResume()
         val intentFilter = IntentFilter()
@@ -68,7 +69,7 @@ class SplashActivity : BaseActivity() {
 //                    ui.progressBar.visibility = View.VISIBLE
 //                    ui.btnEnableLocation.visibility = View.GONE
 //                    ui.tvAppDescription.visibility = View.GONE
-//                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
+//                    if (prefs.getBoolean(KEY_LOGIN, false)) {
 //                        Handler().postDelayed({
 //                            startActivity(Intent(this, HomeActivity::class.java))
 //                            finish()

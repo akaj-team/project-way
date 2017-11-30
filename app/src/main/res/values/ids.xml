@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--GroupInfoFragmentUI-->
+    <item name="group_info_id_img_invite" type="id" />
+</resources>

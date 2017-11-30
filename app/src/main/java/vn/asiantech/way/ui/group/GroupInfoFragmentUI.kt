@@ -17,11 +17,6 @@ import vn.asiantech.way.R
  * Created by haingoq on 28/11/2017.
  */
 class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
-    companion object {
-        private const val ID_IMG_INVITE = 1001
-        private const val MAX_LINES = 1
-    }
-
     internal lateinit var tvGroupName: TextView
     internal lateinit var tvMembersCount: TextView
     internal lateinit var tvCreateAt: TextView
@@ -36,7 +31,7 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
             tvGroupName = textView {
                 backgroundResource = R.color.colorBlueLight
                 gravity = Gravity.CENTER_VERTICAL
-                maxLines = MAX_LINES
+                maxLines = 1
                 textColor = Color.WHITE
                 textSize = px2dip(dimen(R.dimen.text_size_normal))
                 val padding = dimen(R.dimen.group_screen_group_name_padding)
@@ -53,13 +48,13 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
                 padding = dimen(R.dimen.group_screen_tv_count_padding_left)
 
                 imgInvite = imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
-                    id = ID_IMG_INVITE
+                    id = R.id.group_info_id_img_invite
                 }
 
                 imgLeave = imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp)
                         .lparams {
                             leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
-                            rightOf(ID_IMG_INVITE)
+                            rightOf(R.id.group_info_id_img_invite)
                         }
             }
 
