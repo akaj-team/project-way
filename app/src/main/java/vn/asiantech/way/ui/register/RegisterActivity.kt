@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.hypertrack.lib.models.UserParams
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.data.model.Country
+import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -34,7 +35,7 @@ class RegisterActivity : BaseActivity() {
         ui.countryAdapter.notifyDataSetChanged()
     }
 
-    private fun createUser(userParams: UserParams) {
+    private fun createUser(responseStatus: ResponseStatus) {
 
     }
 }
