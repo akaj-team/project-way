@@ -27,7 +27,6 @@ class SearchActivity : BaseActivity() {
         // Init later.
     }
 
-
     /**
      * Search location by name.
      */
