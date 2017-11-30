@@ -24,13 +24,6 @@ import vn.asiantech.way.R
 class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListener,
                                context: Context, attrs: AttributeSet? = null) :
         LinearLayout(context, attrs) {
-    companion object {
-        private const val ID_BTN_SEARCH = 1001
-        private const val ID_BTN_GROUP = 1002
-        private const val ID_BTN_CALENDAR = 1003
-        private const val ID_BTN_PROFILE = 1004
-        private const val ID_BTN_SHARE = 1005
-    }
 
     private lateinit var rlSearch: RelativeLayout
     private lateinit var imgBtnSearch: ImageButton
@@ -48,37 +41,42 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
         AnkoContext.createDelegate(this).apply {
             verticalLayout {
                 lparams(wrapContent, wrapContent)
-                rlSearch = itemFloatingButton(ID_BTN_SEARCH, R.drawable.custom_bg_item_search_button
-                        , R.drawable.ic_share, R.string.custom_floating_menu_search_title)
-                imgBtnSearch = rlSearch.find(ID_BTN_SEARCH)
+                rlSearch = itemFloatingButton(R.id.floating_btn_menu_img_btn_search
+                        , R.drawable.custom_bg_item_search_button
+                        , R.drawable.ic_search, R.string.custom_floating_menu_search_title)
+                imgBtnSearch = rlSearch.find(R.id.floating_btn_menu_img_btn_search)
                 imgBtnSearch.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onSearchClick()
                 }
-                rlGroup = itemFloatingButton(ID_BTN_GROUP, R.drawable.custom_bg_item_group_button
+                rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group
+                        , R.drawable.custom_bg_item_group_button
                         , R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title)
-                imgBtnGroup = rlGroup.find(ID_BTN_GROUP)
+                imgBtnGroup = rlGroup.find(R.id.floating_btn_menu_img_btn_group)
                 imgBtnGroup.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onGroupClick()
                 }
-                rlCalendar = itemFloatingButton(ID_BTN_CALENDAR, R.drawable.custom_bg_item_calendar_button
+                rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar
+                        , R.drawable.custom_bg_item_calendar_button
                         , R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title)
-                imgBtnCalendar = rlCalendar.find(ID_BTN_CALENDAR)
+                imgBtnCalendar = rlCalendar.find(R.id.floating_btn_menu_img_btn_calendar)
                 imgBtnCalendar.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onCalendarClick()
                 }
-                rlProfile = itemFloatingButton(ID_BTN_PROFILE, R.drawable.custom_bg_item_profile_button
+                rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile
+                        , R.drawable.custom_bg_item_profile_button
                         , R.drawable.ic_profile, R.string.custom_floating_menu_profile_title)
-                imgBtnProfile = rlProfile.find(ID_BTN_PROFILE)
+                imgBtnProfile = rlProfile.find(R.id.floating_btn_menu_img_btn_profile)
                 imgBtnProfile.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onProfileClick()
                 }
-                rlShare = itemFloatingButton(ID_BTN_SHARE, R.drawable.custom_bg_item_share_button
+                rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share
+                        , R.drawable.custom_bg_item_share_button
                         , R.drawable.ic_share, R.string.custom_floating_menu_share_title)
-                imgBtnShare = rlShare.find(ID_BTN_SHARE)
+                imgBtnShare = rlShare.find(R.id.floating_btn_menu_img_btn_share)
                 imgBtnShare.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onShareClick()

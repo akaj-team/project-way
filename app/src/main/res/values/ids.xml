@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="floating_btn_menu_img_btn_search" type="id" />
+    <item name="floating_btn_menu_img_btn_group" type="id" />
+    <item name="floating_btn_menu_img_btn_profile" type="id" />
+    <item name="floating_btn_menu_img_btn_calendar" type="id" />
+    <item name="floating_btn_menu_img_btn_share" type="id" />
+</resources>
