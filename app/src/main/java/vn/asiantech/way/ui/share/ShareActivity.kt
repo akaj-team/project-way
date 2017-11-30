@@ -18,4 +18,8 @@ class ShareActivity : BaseActivity() {
         shareActivityUI.setContentView(this)
         supportFragmentManager.beginTransaction().replace(ShareActivityUI.ID_MAP, SupportMapFragment()).commit()
     }
+
+    override fun onBindViewModel() {
+
+    }
 }
