@@ -28,4 +28,15 @@
     <!-- View ids for CountryAdapter -->
     <item name="country_adapter_tv_tel" type="id" />
     <item name="country_adapter_img_flag" type="id" />
+    <!-- View ids on class LocationAdapterUI -->
+    <item name="location_adapter_ui_view_break_line" type="id" />
+    <item name="location_adapter_ui_img_location_icon" type="id" />
+    <item name="location_adapter_ui_tv_location_name" type="id" />
+    <item name="location_adapter_ui_tv_location_format_address" type="id" />
+
+    <!-- View ids on class SearchActivityUI -->
+    <item name="search_activity_ui_ll_header_layout" type="id" />
+    <item name="search_activity_ui_img_your_location_icon" type="id" />
+    <item name="search_activity_ui_tv_choose_on_map_icon" type="id" />
+    <item name="search_activity_ui_recycler_view_location" type="id" />
 </resources>
