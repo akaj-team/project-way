@@ -16,6 +16,9 @@ object HyperTrackServiceFactory : BaseServiceFactory() {
     private const val BASE_URL = "https://api.hypertrack.com/api/v1/"
     private const val API_TOKEN = "sk_test_3b4f98fbf6b58eb9d6f710c98c7fcb7a52d2acb6"
 
+    /**
+     * get instance API services
+     */
     fun getHyperTrackService(): HyperTrackService {
         okHttpBuilder.addInterceptor(makeLoggingInterceptor())
         return makeHyperTrackService(okHttpBuilder.build(), makeGson())
@@ -31,22 +34,25 @@ object HyperTrackServiceFactory : BaseServiceFactory() {
         return retrofit.create(HyperTrackService::class.java)
     }
 
+    /**
+     * Request header to api
+     */
     val okHttpBuilder: OkHttpClient.Builder
         get() {
             // Create http client
-        val httpClient = OkHttpClient.Builder()
-                .addInterceptor(Interceptor { chain ->
-                    val original = chain.request()
+            val httpClient = OkHttpClient.Builder()
+                    .addInterceptor(Interceptor { chain ->
+                        val original = chain.request()
 
-                    // Header
-                    val request = original.newBuilder()
-                            .header("Authorization",
-                                    "token $API_TOKEN")
-                            .method(original.method(), original.body())
-                            .build()
+                        // Header
+                        val request = original.newBuilder()
+                                .header("Authorization",
+                                        "token $API_TOKEN")
+                                .method(original.method(), original.body())
+                                .build()
 
-                    return@Interceptor chain.proceed(request)
-                })
+                        return@Interceptor chain.proceed(request)
+                    })
             return httpClient
-    }
+        }
 }

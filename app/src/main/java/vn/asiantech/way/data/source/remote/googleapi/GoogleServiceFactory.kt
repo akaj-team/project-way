@@ -18,6 +18,9 @@ object GoogleServiceFactory : BaseServiceFactory() {
 
     private const val BASE_URL = "https://maps.googleapis.com/maps/api/"
 
+    /**
+     * get instance API Google services
+     */
     fun getGoogleService(): GoogleService {
         val okHttpClient = makeOkHttpClient(makeLoggingInterceptor())
         return makeGoogleService(okHttpClient, makeGson())
