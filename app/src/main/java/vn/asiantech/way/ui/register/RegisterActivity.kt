@@ -23,10 +23,12 @@ class RegisterActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         addDisposables(registerViewModel.getCountries()
-                .subscribe({ data ->
-                    countries.clear()
-                    countries.addAll(data)
-                    ui.countryAdapter.notifyDataSetChanged()
-                }))
+                .subscribe(this::showCountryList))
+    }
+
+    private fun showCountryList(data: List<Country>) {
+        countries.clear()
+        countries.addAll(data)
+        ui.countryAdapter.notifyDataSetChanged()
     }
 }
