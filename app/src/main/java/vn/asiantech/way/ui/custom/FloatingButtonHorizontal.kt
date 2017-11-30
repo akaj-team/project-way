@@ -48,7 +48,7 @@ class FloatingButtonHorizontal(
     private lateinit var tvShareTitle: TextView
     private lateinit var imgBtnMenu: ImageButton
 
-    private var mOnMenuClickListener: OnMenuClickListener? = null
+    private var onMenuClickListener: OnMenuClickListener? = null
 
     init {
         AnkoContext.createDelegate(this).apply {
@@ -61,7 +61,7 @@ class FloatingButtonHorizontal(
                         backgroundResource = R.drawable.custom_bg_item_search_button
                         onClick {
                             visibilityAllChildView(View.INVISIBLE)
-                            mOnMenuClickListener?.onSearchClick()
+                            onMenuClickListener?.onSearchClick()
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button), dimen(R.dimen.width_height_image_button)) {
                         alignParentRight()
@@ -83,7 +83,7 @@ class FloatingButtonHorizontal(
                         backgroundResource = R.drawable.custom_bg_item_search_button
                         onClick {
                             visibilityAllChildView(View.INVISIBLE)
-                            mOnMenuClickListener?.onGroupClick()
+                            onMenuClickListener?.onGroupClick()
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button), dimen(R.dimen.width_height_image_button)) {
                         alignParentRight()
@@ -105,7 +105,7 @@ class FloatingButtonHorizontal(
                         imageResource = R.drawable.ic_calendar
                         onClick {
                             visibilityAllChildView(View.INVISIBLE)
-                            mOnMenuClickListener?.onCalendarClick()
+                            onMenuClickListener?.onCalendarClick()
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button), dimen(R.dimen.width_height_image_button)) {
                         alignParentRight()
@@ -128,7 +128,7 @@ class FloatingButtonHorizontal(
                         backgroundResource = R.drawable.custom_bg_item_profile_button
                         onClick {
                             visibilityAllChildView(View.INVISIBLE)
-                            mOnMenuClickListener?.onProfileClick()
+                            onMenuClickListener?.onProfileClick()
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button), dimen(R.dimen.width_height_image_button)) {
                         alignParentRight()
@@ -150,7 +150,7 @@ class FloatingButtonHorizontal(
                         backgroundResource = R.drawable.custom_bg_item_share_button
                         onClick {
                             visibilityAllChildView(View.INVISIBLE)
-                            mOnMenuClickListener?.onShareClick()
+                            onMenuClickListener?.onShareClick()
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button), dimen(R.dimen.width_height_image_button)) {
                         alignParentRight()
@@ -212,10 +212,10 @@ class FloatingButtonHorizontal(
         if (rlShare.visibility == View.INVISIBLE) {
             startAnimationFab(animVisible)
             visibilityAllChildView(View.VISIBLE)
-            mOnMenuClickListener?.onMenuClick(true)
+            onMenuClickListener?.onMenuClick(true)
         } else {
             startAnimationFab(animInvisible)
-            mOnMenuClickListener?.onMenuClick(false)
+            onMenuClickListener?.onMenuClick(false)
         }
         animInvisible.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(p0: Animation?) {
@@ -253,7 +253,7 @@ class FloatingButtonHorizontal(
      * @param listener: OnMenuClickListener
      */
     internal fun setOnMenuItemClickListener(listener: OnMenuClickListener) {
-        mOnMenuClickListener = listener
+        onMenuClickListener = listener
     }
 
     /**
@@ -298,4 +298,3 @@ class FloatingButtonHorizontal(
 inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit):
         FloatingButtonHorizontal = ankoView({ FloatingButtonHorizontal(it, null) }
         , theme = 0, init = init)
-
