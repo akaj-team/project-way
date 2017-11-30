@@ -66,4 +66,8 @@
     <dimen name="group_text_size_normal">15dp</dimen>
     <dimen name="home_screen_floating_button_margin">20dp</dimen>
     <dimen name="padding_logo_map">0dp</dimen>
+
+    <!--BottomButtonCard-->
+    <dimen name="layout_height">50dp</dimen>
+    <dimen name="image_size">15dp</dimen>
 </resources>

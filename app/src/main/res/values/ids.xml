@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- View ids for SplashActivityUI -->
+    <item name="splash_activity_img_location" type="id" />
+    <item name="splash_activity_tv_application_name" type="id" />
+
     <!-- View ids for HomeAdapter -->
     <item name="home_activity_fr_map" type="id" />
     <item name="home_adapter_tv_time" type="id" />
@@ -8,4 +12,29 @@
     <item name="home_adapter_img_arrow_down" type="id" />
     <item name="home_adapter_img_point" type="id" />
     <item name="home_adapter_ll_location" type="id" />
+
+    <!-- id views on class ShareActivityUI -->
+    <item name="share_activity_map" type="id" />
+    <item name="share_activity_btn_back" type="id" />
+    <item name="share_activity_tv_title" type="id" />
+
+    <!-- View ids for RegisterActivityUI -->
+    <item name="share_activity_fr_avatar" type="id" />
+    <item name="share_activity_tv_description" type="id" />
+    <item name="share_activity_rl_information" type="id" />
+    <item name="share_activity_btn_save" type="id" />
+    <item name="share_activity_tv_skip" type="id" />
+    <item name="share_activity_edt_name" type="id" />
+    <item name="share_activity_view_line" type="id" />
+
+    <!-- View ids for BottomButtonCard -->
+    <item name="bottom_button_card_rl_bottom_card" type="id" />
+    <item name="bottom_button_card_btn_close" type="id" />
+    <item name="bottom_button_card_tv_title" type="id" />
+    <item name="bottom_button_card_tv_description" type="id" />
+    <item name="bottom_button_card_btn_sharing" type="id" />
+
+    <!-- View ids for CountryAdapter -->
+    <item name="country_adapter_tv_tel" type="id" />
+    <item name="country_adapter_img_flag" type="id" />
 </resources>
