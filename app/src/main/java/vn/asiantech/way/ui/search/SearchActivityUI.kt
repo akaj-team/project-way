@@ -116,7 +116,7 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                     }.lparams(matchParent, wrapContent)
 
                     recyclerView {
-                        id = R.id.search_activity_ui_tv_recycler_view_location
+                        id = R.id.search_activity_ui_recycler_view_location
                         locationAdapter.onItemClick = {
                             owner.onItemClick(it)
                         }

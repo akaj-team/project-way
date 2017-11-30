@@ -64,10 +64,6 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
      */
     inner class LocationAdapterUI : AnkoComponent<ViewGroup> {
 
-        private lateinit var imgLocationIcon: ImageView
-        private lateinit var tvLocationName: TextView
-        private lateinit var tvLocationAddress: TextView
-
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val view = with(ui) {
                 relativeLayout {
@@ -82,14 +78,14 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
                         leftMargin = dimen(R.dimen.break_line_left_margin)
                     }
 
-                    imgLocationIcon = imageView {
+                    imageView {
                         id = R.id.location_adapter_ui_img_location_icon
                     }.lparams {
                         margin = dimen(R.dimen.default_padding_margin)
                         below(R.id.location_adapter_ui_view_break_line)
                     }
 
-                    tvLocationName = textView {
+                    textView {
                         id = R.id.location_adapter_ui_tv_location_name
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
@@ -99,7 +95,7 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
                         rightOf(R.id.location_adapter_ui_img_location_icon)
                     }
 
-                    tvLocationAddress = textView {
+                    textView {
                         id = R.id.location_adapter_ui_tv_location_format_address
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
