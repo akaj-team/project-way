@@ -18,10 +18,7 @@ import vn.asiantech.way.R
  * @author at-ToanNguyen
  */
 class SplashActivityUI : AnkoComponent<SplashActivity> {
-    companion object {
-        private const val ID_IMG_LOCATION = 1001
-        private const val ID_TV_NAME_APPLICATION = 1002
-    }
+
     internal lateinit var imgFrontBackground: ImageView
     internal lateinit var imgBehindBackground: ImageView
     internal lateinit var imgCircle: ImageView
@@ -43,7 +40,7 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
             relativeLayout {
                 lparams(matchParent, matchParent)
                 imgCircle = imageView {
-                    id = ID_IMG_LOCATION
+                    id = R.id.splash_activity_img_location
                     backgroundResource = R.drawable.ic_location_round
                 }.lparams(dimen(R.dimen.splash_img_circle_with_high), dimen(R.dimen.splash_img_circle_with_high)) {
                     centerHorizontally()
@@ -51,13 +48,13 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
                 }
                 textView(R.string.splash_name_application)
                 {
-                    id = ID_TV_NAME_APPLICATION
+                    id = R.id.splash_activity_tv_application_name
                     gravity = Gravity.CENTER
                     textSize = px2dip(dimen(R.dimen.splash_size_tv_app_name))
                     typeface = Typeface.DEFAULT_BOLD
                     textColor = Color.BLACK
                 }.lparams(matchParent, wrapContent) {
-                    below(ID_IMG_LOCATION)
+                    below(R.id.splash_activity_img_location)
                     topMargin = dimen(R.dimen.splash_tv_app_name_margin_top)
                 }
                 tvAppDescription = textView(R.string.splash_description_app) {
@@ -65,7 +62,7 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
                     textColor = Color.BLACK
                     textSize = px2dip(dimen(R.dimen.splash_tv_size_app_description))
                 }.lparams(matchParent, wrapContent) {
-                    below(ID_TV_NAME_APPLICATION)
+                    below(R.id.splash_activity_tv_application_name)
                     topMargin = dimen(R.dimen.splash_tv_description_margin_top)
                     leftMargin = dimen(R.dimen.splash_tv_description_margin)
                     rightMargin = dimen(R.dimen.splash_tv_description_margin)

@@ -24,11 +24,6 @@ class BottomButtonCard(context: Context) :
         RelativeLayout(context) {
 
     companion object {
-        const val ID_RL_BOTTOM_CARD = 1001
-        const val ID_BTN_CLOSE = 1002
-        const val ID_TV_TITLE = 1003
-        const val ID_TV_DESCRIPTION = 1004
-        const val ID_BTN_SHARING = 1005
         const val LAYOUT_HEIGHT = 50
         const val IMAGE_SIZE = 15
     }
@@ -68,7 +63,7 @@ class BottomButtonCard(context: Context) :
 
         AnkoContext.createDelegate(this).apply {
             rlBottomCard = relativeLayout {
-                id = ID_RL_BOTTOM_CARD
+                id = R.id.bottom_button_card_rl_bottom_card
                 backgroundResource = R.color.colorPink
                 bottomPadding = dimen(R.dimen.padding_medium)
                 topPadding = dimen(R.dimen.padding_high)
@@ -76,7 +71,7 @@ class BottomButtonCard(context: Context) :
                     alignParentBottom()
                 }
                 btnClose = rippleView {
-                    id = ID_BTN_CLOSE
+                    id = R.id.bottom_button_card_btn_close
                     bottomPadding = dimen(R.dimen.padding_medium)
                     leftPadding = dimen(R.dimen.padding_medium)
                     rightPadding = dimen(R.dimen.padding_medium)
@@ -94,7 +89,7 @@ class BottomButtonCard(context: Context) :
                 }
 
                 tvTitle = textView(R.string.bottom_button_card_title_text) {
-                    id = ID_TV_TITLE
+                    id = R.id.bottom_button_card_tv_title
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
                     typeface = Typeface.DEFAULT_BOLD
@@ -104,19 +99,19 @@ class BottomButtonCard(context: Context) :
                 }
 
                 tvDescription = textView(R.string.bottom_button_card_description_text) {
-                    id = ID_TV_DESCRIPTION
+                    id = R.id.bottom_button_card_tv_description
                     gravity = Gravity.CENTER
                     textSize = px2dip(dimen(R.dimen.text_medium))
                 }.lparams(matchParent, wrapContent) {
                     centerHorizontally()
-                    below(ID_TV_TITLE)
+                    below(R.id.bottom_button_card_tv_title)
                     leftMargin = dimen(R.dimen.margin_huge)
                     rightMargin = dimen(R.dimen.margin_huge)
                     topMargin = dimen(R.dimen.margin_base)
                 }
 
                 btnSharing = rippleView {
-                    id = ID_BTN_SHARING
+                    id = R.id.bottom_button_card_btn_sharing
                     backgroundResource = R.drawable.custom_bg_button_share
 
                     setOnRippleCompleteListener {
@@ -136,7 +131,7 @@ class BottomButtonCard(context: Context) :
                     }
                 }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
                     centerHorizontally()
-                    below(ID_TV_DESCRIPTION)
+                    below(R.id.bottom_button_card_tv_description)
                     bottomMargin = dimen(R.dimen.margin_low)
                     leftMargin = dimen(R.dimen.margin_huge)
                     rightMargin = dimen(R.dimen.margin_huge)
@@ -173,7 +168,7 @@ class BottomButtonCard(context: Context) :
                         margin = dimen(R.dimen.margin_low)
                     }
                 }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
-                    below(ID_BTN_SHARING)
+                    below(R.id.bottom_button_card_btn_sharing)
                     leftMargin = dimen(R.dimen.margin_medium)
                     rightMargin = dimen(R.dimen.margin_medium)
                     topMargin = dimen(R.dimen.margin_medium)
