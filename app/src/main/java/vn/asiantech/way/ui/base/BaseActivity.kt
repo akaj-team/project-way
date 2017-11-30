@@ -19,10 +19,10 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private val subscription: CompositeDisposable = CompositeDisposable()
-    lateinit protected var prefs: SharedPreferences
+    protected lateinit var prefs: SharedPreferences
 
     protected fun addDisposables(vararg ds: Disposable) {
-        subscription.addAll(*ds)
+        ds.forEach { subscription.add(it) }
     }
 
     override fun onPause() {
@@ -40,5 +40,8 @@ abstract class BaseActivity : AppCompatActivity() {
         prefs = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
     }
 
+    /**
+     * This function is used to define subscription
+     */
     abstract fun onBindViewModel()
 }
