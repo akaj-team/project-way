@@ -11,7 +11,7 @@ import vn.asiantech.way.data.source.remote.response.Response
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 09/11/2017
  */
-interface HypertrackService {
+interface HyperTrackService {
 
     /**
      * This method used to call api create group.
