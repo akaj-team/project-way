@@ -17,21 +17,6 @@ import vn.asiantech.way.extension.circularSeekBar
  */
 class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
     companion object {
-        const val ID_LL_TRACKING_PROGRESS = 1001
-        const val ID_LL_TRACKING_INFO = 1002
-        const val ID_CIRCLE_PROGRESS_BAR = 1003
-        const val ID_TV_ACTION_STATUS = 1004
-        const val ID_TV_ELAPSE_TIME = 1005
-        const val ID_TV_DISTANCE_TRAVELLED = 1006
-        const val ID_TV_SPEED = 1007
-        const val ID_TV_BATTERY = 1008
-        const val ID_TV_START_TIME = 1009
-        const val ID_TV_END_TIME = 1010
-        const val ID_TV_START_ADDRESS = 1011
-        const val ID_IMG_START_POINT = 1012
-        const val ID_IMG_END_POINT = 1013
-        const val ID_IMG_ARROW_RIGHT_START_ITEM = 1014
-        const val ID_IMG_ARROW_RIGHT_END_ITEM = 1015
         const val LAYOUT_HEIGHT = 50
         const val IMAGE_SIZE = 15
     }
@@ -79,12 +64,12 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                 }.lparams(dip(48), dip(48)) {
                     alignParentEnd()
                     alignParentRight()
-                    above(ID_LL_TRACKING_PROGRESS)
+                    above(R.id.tracking_progress_info_ll_tracking_progress)
                     rightMargin = 10
                 }
 
                 llTrackingProgress = verticalLayout {
-                    id = ID_LL_TRACKING_PROGRESS
+                    id = R.id.tracking_progress_info_ll_tracking_progress
                     topPadding = dimen(R.dimen.padding_high)
 
                     verticalLayout {
@@ -109,31 +94,32 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                     rotation = 90f
                                 }
 
-                                id = ID_CIRCLE_PROGRESS_BAR
+                                id = R.id.tracking_progress_info_circle_progress_bar
                                 circleColor = ContextCompat.getColor(context, R.color.progressRestColor)
                                 circleProgressColor = ContextCompat.getColor(context, R.color.tracking_experience)
                                 max = 100
                                 progress = 0
-
+                                isLockEnabled = true
                             }
 
-                            imgBtnCall = imageView(R.drawable.ic_phone_icon) {}
-                                    .lparams(dimen(R.dimen.phone_icon_size), dimen(R.dimen.phone_icon_size)) {
-                                        centerVertically()
-                                        margin = dimen(R.dimen.margin_low)
-                                        alignStart(ID_CIRCLE_PROGRESS_BAR)
-                                        alignParentTop()
-                                    }
+                            imgBtnCall = imageView(R.drawable.ic_phone_icon) {
+                                padding = 30
+                            }.lparams(dimen(R.dimen.phone_icon_size), dimen(R.dimen.phone_icon_size)) {
+                                centerVertically()
+                                alignStart(R.id.tracking_progress_info_circle_progress_bar)
+                                bottomOf(circleProgressBar)
+                                margin = dimen(R.dimen.margin_very_low)
+                            }
 
                             rlCollapse = relativeLayout {
                                 lparams(wrapContent, wrapContent) {
                                     centerVertically()
-                                    rightOf(ID_CIRCLE_PROGRESS_BAR)
+                                    rightOf(R.id.tracking_progress_info_circle_progress_bar)
                                 }
                                 //                                visibility = View.GONE
 
                                 tvActionStatus = textView(R.string.leaving) {
-                                    id = ID_TV_ACTION_STATUS
+                                    id = R.id.tracking_progress_info_tv_action_status
                                     maxLines = 1
                                     textColor = ContextCompat.getColor(context, R.color.colorBlack)
                                     textSize = px2dip(dimen(R.dimen.text_medium))
@@ -147,7 +133,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 }.lparams(wrapContent, wrapContent) {
                                     alignParentEnd()
                                     alignParentRight()
-                                    bottomOf(ID_TV_ACTION_STATUS)
+                                    bottomOf(R.id.tracking_progress_info_tv_action_status)
                                     rightMargin = dimen(R.dimen.margin_high)
                                     topMargin = dip(4)
                                 }
@@ -191,34 +177,34 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         bottomMargin = dimen(R.dimen.margin_medium)
                                         topMargin = dimen(R.dimen.margin_medium)
                                     }
-                                    id = ID_LL_TRACKING_INFO
+                                    id = R.id.tracking_progress_info_ll_tracking_info
                                     isBaselineAligned = false
 
-                                    val llElapseTime = llItemTrackingInfo(ID_TV_ELAPSE_TIME,
+                                    val llElapseTime = llItemTrackingInfo(R.id.tracking_progress_info_tv_elapse_time,
                                             resources.getString(R.string.mask),
                                             resources.getString(R.string.elapse))
                                             .lparams(0, matchParent, 1f)
-                                    val llDistanceTravelled = llItemTrackingInfo(ID_TV_DISTANCE_TRAVELLED,
+                                    val llDistanceTravelled = llItemTrackingInfo(R.id.tracking_progress_info_tv_distance_travelled,
                                             resources.getString(R.string.mask),
                                             resources.getString(R.string.travelled))
                                             .lparams(0, matchParent, 1f)
-                                    val llSpeed = llItemTrackingInfo(ID_TV_SPEED,
+                                    val llSpeed = llItemTrackingInfo(R.id.tracking_progress_info_tv_speed,
                                             resources.getString(R.string.mask),
                                             resources.getString(R.string.speed))
                                             .lparams(0, matchParent, 1f)
                                     verticalLayout {
                                         tvBattery = textViewTrackingInfo(resources.getString(R
                                                 .string.mask),
-                                                ID_TV_BATTERY)
+                                                R.id.tracking_progress_info_tv_battery)
                                                 .lparams(matchParent, wrapContent)
                                         imageView(R.drawable.ic_battery_icon) {}
                                                 .lparams(wrapContent, wrapContent) {
                                                     gravity = Gravity.CENTER
                                                 }
                                     }.lparams(0, matchParent, 1f)
-                                    tvElapsedTime = llElapseTime.find(ID_TV_ELAPSE_TIME)
-                                    tvDistanceTravelled = llDistanceTravelled.find(ID_TV_DISTANCE_TRAVELLED)
-                                    tvSpeed = llSpeed.find(ID_TV_SPEED)
+                                    tvElapsedTime = llElapseTime.find(R.id.tracking_progress_info_tv_elapse_time)
+                                    tvDistanceTravelled = llDistanceTravelled.find(R.id.tracking_progress_info_tv_distance_travelled)
+                                    tvSpeed = llSpeed.find(R.id.tracking_progress_info_tv_speed)
                                 }
 
                                 llDetailArrived = linearLayout {
@@ -233,7 +219,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                                         imgStartPoint = imageView(R.drawable
                                                 .ic_ht_source_place_marker) {
-                                            id = ID_IMG_START_POINT
+                                            id = R.id.tracking_progress_info_img_start_point
                                         }.lparams(wrapContent, wrapContent) {
                                             alignParentLeft()
                                             leftMargin = dip(30)
@@ -242,9 +228,9 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         tvLineStartEnd = textView {
                                             backgroundColor = ContextCompat.getColor(context, R.color.colorBlack)
                                         }.lparams(dip(2), wrapContent) {
-                                            alignStart(ID_IMG_START_POINT)
-                                            below(ID_IMG_START_POINT)
-                                            topOf(ID_IMG_END_POINT)
+                                            alignStart(R.id.tracking_progress_info_img_start_point)
+                                            below(R.id.tracking_progress_info_img_start_point)
+                                            topOf(R.id.tracking_progress_info_img_end_point)
                                             bottomMargin = dip(-4.5f)
                                             leftMargin = dip(10.5f)
                                             topMargin = dip(-5.5f)
@@ -252,48 +238,48 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                                         imgEndPoint = imageView(R.drawable
                                                 .ic_ht_expected_place_marker) {
-                                            id = ID_IMG_END_POINT
+                                            id = R.id.tracking_progress_info_img_end_point
                                         }
                                                 .lparams(wrapContent, wrapContent) {
-                                                    alignStart(ID_IMG_START_POINT)
-                                                    bottomOf(ID_TV_END_TIME)
+                                                    alignStart(R.id.tracking_progress_info_img_start_point)
+                                                    bottomOf(R.id.tracking_progress_info_tv_end_time)
                                                 }
 
                                         tvStartTime = textView("3:08 CH, th 10, 2017") {
-                                            id = ID_TV_START_TIME
+                                            id = R.id.tracking_progress_info_tv_start_time
                                         }
                                                 .lparams(wrapContent, wrapContent) {
                                                     bottomMargin = dip(10)
                                                     leftMargin = dip(20)
-                                                    leftOf(ID_IMG_ARROW_RIGHT_START_ITEM)
-                                                    rightOf(ID_IMG_START_POINT)
+                                                    leftOf(R.id.tracking_progress_info_img_arrow_right_start_item)
+                                                    rightOf(R.id.tracking_progress_info_img_start_point)
                                                 }
 
                                         tvStartAddress = textView("An Hai Bac An Hai Bac An Hai " +
                                                 "Bac An Hai " +
                                                 "Bac") {
-                                            id = ID_TV_START_ADDRESS
+                                            id = R.id.tracking_progress_info_tv_start_address
                                             textColor = ContextCompat.getColor(context, R.color.colorBlack)
                                         }.lparams(wrapContent, wrapContent) {
                                             bottomMargin = dip(20)
-                                            alignStart(ID_TV_START_TIME)
-                                            below(ID_TV_START_TIME)
+                                            alignStart(R.id.tracking_progress_info_tv_start_time)
+                                            below(R.id.tracking_progress_info_tv_start_time)
                                         }
 
                                         imgArrowRightStartItem = imageView(R.drawable.ic_keyboard_arrow_right_black_18dp) {
-                                            id = ID_IMG_ARROW_RIGHT_START_ITEM
+                                            id = R.id.tracking_progress_info_img_arrow_right_start_item
                                         }.lparams(wrapContent, wrapContent) {
                                             alignParentRight()
-                                            bottomOf(ID_TV_START_TIME)
+                                            bottomOf(R.id.tracking_progress_info_tv_start_time)
                                             rightMargin = dip(20)
                                         }
 
                                         imgArrowRightEndItem = imageView(R.drawable.ic_keyboard_arrow_right_black_18dp) {
-                                            id = ID_IMG_ARROW_RIGHT_END_ITEM
+                                            id = R.id.tracking_progress_info_img_arrow_right_end_item
                                         }.lparams(wrapContent, wrapContent) {
                                             alignParentRight()
                                             alignParentEnd()
-                                            bottomOf(ID_TV_END_TIME)
+                                            bottomOf(R.id.tracking_progress_info_tv_end_time)
                                             rightMargin = dip(20)
                                         }
 
@@ -301,7 +287,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             visibility = View.GONE
                                         }.lparams(wrapContent, wrapContent) {
                                             alignParentRight()
-                                            bottomOf(ID_TV_START_TIME)
+                                            bottomOf(R.id.tracking_progress_info_tv_start_time)
                                             rightMargin = dip(20)
                                         }
 
@@ -309,17 +295,17 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             visibility = View.GONE
                                         }.lparams(wrapContent, wrapContent) {
                                             alignParentRight()
-                                            bottomOf(ID_TV_END_TIME)
+                                            bottomOf(R.id.tracking_progress_info_tv_end_time)
                                             rightMargin = dip(20)
                                         }
 
                                         tvEndTime = textView("3:08 CH, th 10, 2017") {
-                                            id = ID_TV_END_TIME
+                                            id = R.id.tracking_progress_info_tv_end_time
                                         }.lparams(wrapContent, wrapContent) {
                                             bottomMargin = dip(10)
-                                            alignStart(ID_TV_START_ADDRESS)
-                                            below(ID_TV_START_ADDRESS)
-                                            leftOf(ID_IMG_ARROW_RIGHT_END_ITEM)
+                                            alignStart(R.id.tracking_progress_info_tv_start_address)
+                                            below(R.id.tracking_progress_info_tv_start_address)
+                                            leftOf(R.id.tracking_progress_info_img_arrow_right_end_item)
                                         }
 
                                         tvEndAddress = textView("An Hai Bac An Hai Bac An Hai " +
@@ -327,19 +313,19 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             textColor = ContextCompat.getColor(context, R.color.colorBlack)
                                         }.lparams(wrapContent, wrapContent) {
                                             bottomMargin = dip(30)
-                                            alignStart(ID_TV_END_TIME)
-                                            below(ID_TV_END_TIME)
+                                            alignStart(R.id.tracking_progress_info_tv_end_time)
+                                            below(R.id.tracking_progress_info_tv_end_time)
                                         }
                                     }
                                 }.lparams {
-                                    below(ID_LL_TRACKING_INFO)
+                                    below(R.id.tracking_progress_info_ll_tracking_info)
                                 }
                             }
-
                         }
                     }
 
                     llActionTracking = linearLayout {
+                        visibility = View.GONE
                         lparams(matchParent, dimen(R.dimen.ripple_height))
                         backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
 
