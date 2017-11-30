@@ -43,9 +43,9 @@ class HomeAdapter(private val context: Context,
     inner class HomeViewHolder(val item: View) : RecyclerView.ViewHolder(item) {
 
         private val tvTime: TextView = item.find(R.id.home_adapter_tv_time)
-        private var tvStatus: TextView = item.find(R.id.home_adapter_tv_status)
-        private var imgArrowDown: ImageView = item.find(R.id.home_adapter_img_arrow_down)
-        private var expTvDescription: ExpandableTextView = item.find(R.id.home_adapter_tv_expandable_description)
+        private val tvStatus: TextView = item.find(R.id.home_adapter_tv_status)
+        private val imgArrowDown: ImageView = item.find(R.id.home_adapter_img_arrow_down)
+        private val expTvDescription: ExpandableTextView = item.find(R.id.home_adapter_tv_expandable_description)
         private val imgPoint: ImageView = item.find(R.id.home_adapter_img_point)
         private val llItemLocation: LinearLayout = item.find(R.id.home_adapter_ll_location)
 
