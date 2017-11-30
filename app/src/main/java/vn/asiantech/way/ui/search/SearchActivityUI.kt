@@ -10,22 +10,17 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.WayLocation
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 27/11/2017
  */
-class SearchActivityUI(private val locationAdapter: LocationAdapter)
+class SearchActivityUI(private val locations: MutableList<WayLocation>)
     : AnkoComponent<SearchActivity> {
 
-    companion object {
-        internal const val ID_LL_HEADER_LAYOUT = 1001
-        internal const val ID_IMG_YOUR_LOCATION_ICON = 1002
-        internal const val ID_IMG_CHOOSE_ON_MAP_ICON = 1003
-        internal const val ID_RECYCLER_VIEW_LOCATION = 1004
-    }
-
     internal lateinit var edtLocation: EditText
+    internal val locationAdapter = LocationAdapter(locations)
 
     override fun createView(ui: AnkoContext<SearchActivity>) = with(ui) {
         frameLayout {
@@ -39,7 +34,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
 
             relativeLayout {
                 linearLayout {
-                    id = ID_LL_HEADER_LAYOUT
+                    id = R.id.search_activity_ui_ll_header_layout
 
                     imageButton {
                         backgroundResource = R.drawable.ic_back_icon_button
@@ -75,7 +70,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }
 
                         imageView(R.drawable.ic_my_location) {
-                            id = ID_IMG_YOUR_LOCATION_ICON
+                            id = R.id.search_activity_ui_img_your_location_icon
                         }.lparams {
                             margin = dimen(R.dimen.default_padding_margin)
                         }
@@ -85,7 +80,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             textSizeDimen = R.dimen.search_screen_text_size
                         }.lparams(matchParent, wrapContent) {
                             margin = dimen(R.dimen.default_padding_margin)
-                            rightOf(ID_IMG_YOUR_LOCATION_ICON)
+                            rightOf(R.id.search_activity_ui_img_your_location_icon)
                         }
 
                         view {
@@ -94,7 +89,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             leftMargin = dimen(R.dimen.break_line_left_margin)
                             topMargin = dimen(R.dimen.break_line_top_bot_margin)
                             bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
-                            below(ID_IMG_YOUR_LOCATION_ICON)
+                            below(R.id.search_activity_ui_img_your_location_icon)
                         }
                     }.lparams(matchParent, wrapContent)
 
@@ -106,7 +101,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                         }
 
                         imageView(R.drawable.ic_choose_on_map) {
-                            id = ID_IMG_CHOOSE_ON_MAP_ICON
+                            id = R.id.search_activity_ui_tv_choose_on_map_icon
                         }.lparams {
                             margin = dimen(R.dimen.default_padding_margin)
                         }
@@ -116,12 +111,12 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                             textSizeDimen = R.dimen.search_screen_text_size
                         }.lparams(matchParent, wrapContent) {
                             margin = dimen(R.dimen.default_padding_margin)
-                            rightOf(ID_IMG_CHOOSE_ON_MAP_ICON)
+                            rightOf(R.id.search_activity_ui_tv_choose_on_map_icon)
                         }
                     }.lparams(matchParent, wrapContent)
 
                     recyclerView {
-                        id = ID_RECYCLER_VIEW_LOCATION
+                        id = R.id.search_activity_ui_tv_recycler_view_location
                         locationAdapter.onItemClick = {
                             owner.onItemClick(it)
                         }
@@ -130,7 +125,7 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
                     }.lparams(matchParent, matchParent)
                 }.lparams(matchParent, matchParent) {
                     topMargin = dimen(R.dimen.default_padding_margin)
-                    below(ID_LL_HEADER_LAYOUT)
+                    below(R.id.search_activity_ui_ll_header_layout)
                 }
             }.lparams(matchParent, matchParent) {
                 padding = dimen(R.dimen.default_padding_margin)

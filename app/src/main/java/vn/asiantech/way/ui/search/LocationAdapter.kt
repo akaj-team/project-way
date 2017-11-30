@@ -18,13 +18,6 @@ import vn.asiantech.way.data.model.WayLocation
 class LocationAdapter(val locations: MutableList<WayLocation>)
     : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {
 
-    companion object {
-        internal const val ID_VIEW_BREAK_LINE = 1001
-        internal const val ID_IMG_LOCATION_ICON = 1002
-        internal const val ID_TV_LOCATION_NAME = 1003
-        internal const val ID_TV_LOCATION_FORMAT_ADDRESS = 1004
-    }
-
     var onItemClick: (location: WayLocation) -> Unit = {}
 
     override fun getItemCount() = locations.size
@@ -41,12 +34,13 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
     /**
      * View holder of RecyclerView's item.
      */
-    inner class LocationViewHolder(itemView: View,
-                                   private val imgLocationIcon: ImageView,
-                                   private val tvLocationName: TextView,
-                                   private val tvLocationAddress: TextView)
-        : RecyclerView.ViewHolder(itemView) {
-
+    inner class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val imgLocationIcon: ImageView
+                = itemView.find(R.id.location_adapter_ui_img_location_icon)
+        private val tvLocationName: TextView
+                = itemView.find(R.id.location_adapter_ui_tv_location_name)
+        private val tvLocationAddress: TextView
+                = itemView.find(R.id.location_adapter_ui_tv_location_format_address)
         init {
             itemView.onClick {
                 onItemClick(locations[adapterPosition])
@@ -58,11 +52,7 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
          */
         fun onBind() {
             with(locations[adapterPosition]) {
-                if (isHistory != null && isHistory == true) {
-                    imgLocationIcon.setImageResource(R.drawable.ic_access_time)
-                } else {
-                    imgLocationIcon.setImageResource(R.drawable.ic_marker_gray)
-                }
+                imgLocationIcon.setImageResource(locationIcon)
                 tvLocationName.text = name
                 tvLocationAddress.text = formatAddress
             }
@@ -84,7 +74,7 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
                     lparams(matchParent, wrapContent)
                     backgroundColor = Color.WHITE
                     view {
-                        id = ID_VIEW_BREAK_LINE
+                        id = R.id.location_adapter_ui_view_break_line
                         backgroundResource = R.color.colorSearchScreenBackground
                     }.lparams(matchParent, dimen(R.dimen.break_line_view_height)) {
                         bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
@@ -93,34 +83,34 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
                     }
 
                     imgLocationIcon = imageView {
-                        id = ID_IMG_LOCATION_ICON
+                        id = R.id.location_adapter_ui_img_location_icon
                     }.lparams {
                         margin = dimen(R.dimen.default_padding_margin)
-                        below(ID_VIEW_BREAK_LINE)
+                        below(R.id.location_adapter_ui_view_break_line)
                     }
 
                     tvLocationName = textView {
-                        id = ID_TV_LOCATION_NAME
+                        id = R.id.location_adapter_ui_tv_location_name
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
                     }.lparams {
-                        below(ID_VIEW_BREAK_LINE)
+                        below(R.id.location_adapter_ui_view_break_line)
                         leftMargin = dimen(R.dimen.default_padding_margin)
-                        rightOf(ID_IMG_LOCATION_ICON)
+                        rightOf(R.id.location_adapter_ui_img_location_icon)
                     }
 
                     tvLocationAddress = textView {
-                        id = ID_TV_LOCATION_FORMAT_ADDRESS
+                        id = R.id.location_adapter_ui_tv_location_format_address
                         singleLine = true
                         textSizeDimen = R.dimen.search_screen_text_size
                     }.lparams {
-                        below(ID_TV_LOCATION_NAME)
+                        below(R.id.location_adapter_ui_tv_location_name)
                         leftMargin = dimen(R.dimen.default_padding_margin)
-                        rightOf(ID_IMG_LOCATION_ICON)
+                        rightOf(R.id.location_adapter_ui_img_location_icon)
                     }
                 }
             }
-            view.tag = LocationViewHolder(view, imgLocationIcon, tvLocationName, tvLocationAddress)
+            view.tag = LocationViewHolder(view)
             return view
         }
     }

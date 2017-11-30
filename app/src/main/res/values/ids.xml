@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- id view on class LocationAdapterUI -->
+    <item name="location_adapter_ui_view_break_line" type="id" />
+    <item name="location_adapter_ui_img_location_icon" type="id" />
+    <item name="location_adapter_ui_tv_location_name" type="id" />
+    <item name="location_adapter_ui_tv_location_format_address" type="id" />
+
+    <!-- id view on class SearchActivityUI -->
+    <item name="search_activity_ui_ll_header_layout" type="id" />
+    <item name="search_activity_ui_img_your_location_icon" type="id" />
+    <item name="search_activity_ui_tv_choose_on_map_icon" type="id" />
+    <item name="search_activity_ui_tv_recycler_view_location" type="id" />
+</resources>

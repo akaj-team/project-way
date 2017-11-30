@@ -13,16 +13,20 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class SearchActivity : BaseActivity() {
 
-    private lateinit var searchActivityUI: SearchActivityUI
-    private lateinit var adapter: LocationAdapter
+    private lateinit var ui: SearchActivityUI
     private var locations = mutableListOf<WayLocation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = LocationAdapter(locations)
-        searchActivityUI = SearchActivityUI(adapter)
-        searchActivityUI.setContentView(this)
+        ui = SearchActivityUI(locations)
+        ui.setContentView(this)
     }
+
+    override fun onBindViewModel() {
+        // TODO: 30/11/2017
+        // Init later.
+    }
+
 
     /**
      * Search location by name.
@@ -55,5 +59,12 @@ class SearchActivity : BaseActivity() {
         // TODO: 28/11/2017
         // Dummy data
         toast(R.string.coming_soon)
+    }
+
+    // Will use in the future.
+    private fun updateRecyclerViewLocation(data: List<WayLocation>) {
+        locations.clear()
+        locations.addAll(data)
+        ui.locationAdapter.notifyDataSetChanged()
     }
 }
