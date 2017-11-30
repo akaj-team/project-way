@@ -20,7 +20,7 @@ import vn.asiantech.way.R
  * Anko layout for RegisterActivity
  * Created by haingoq on 27/11/2017.
  */
-class RegisterActivityUI(private val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
+class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
     companion object {
         private const val ID_FR_AVATAR = 1001
         private const val ID_TV_DESCRIPTION = 1002
