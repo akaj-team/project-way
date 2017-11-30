@@ -122,6 +122,9 @@ class SearchActivityUI(private val locationAdapter: LocationAdapter)
 
                     recyclerView {
                         id = ID_RECYCLER_VIEW_LOCATION
+                        locationAdapter.onItemClick = {
+                            owner.onItemClick(it)
+                        }
                         layoutManager = LinearLayoutManager(context)
                         adapter = locationAdapter
                     }.lparams(matchParent, matchParent)

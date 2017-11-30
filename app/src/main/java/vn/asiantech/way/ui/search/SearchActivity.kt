@@ -20,11 +20,6 @@ class SearchActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = LocationAdapter(locations)
-        adapter.onItemClick = {
-            // TODO: 28/11/2017
-            // Dummy data
-            toast(R.string.coming_soon)
-        }
         searchActivityUI = SearchActivityUI(adapter)
         searchActivityUI.setContentView(this)
     }
@@ -50,6 +45,15 @@ class SearchActivity : BaseActivity() {
      */
     internal fun chooseOnMap() {
         // Init later.
+        toast(R.string.coming_soon)
+    }
+
+    /**
+     * On item of  RecyclerView click.
+     */
+    internal fun onItemClick(location: Location) {
+        // TODO: 28/11/2017
+        // Dummy data
         toast(R.string.coming_soon)
     }
 }
