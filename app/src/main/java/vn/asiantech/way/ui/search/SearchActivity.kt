@@ -4,7 +4,7 @@ import android.os.Bundle
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.toast
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.Location
+import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -15,7 +15,7 @@ class SearchActivity : BaseActivity() {
 
     private lateinit var searchActivityUI: SearchActivityUI
     private lateinit var adapter: LocationAdapter
-    private var locations = mutableListOf<Location>()
+    private var locations = mutableListOf<WayLocation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,7 @@ class SearchActivity : BaseActivity() {
     /**
      * On item of  RecyclerView click.
      */
-    internal fun onItemClick(location: Location) {
+    internal fun onItemClick(location: WayLocation) {
         // TODO: 28/11/2017
         // Dummy data
         toast(R.string.coming_soon)
