@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.share
 import android.os.Bundle
 import com.google.android.gms.maps.SupportMapFragment
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -16,7 +17,7 @@ class ShareActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         shareActivityUI = ShareActivityUI()
         shareActivityUI.setContentView(this)
-        supportFragmentManager.beginTransaction().replace(ShareActivityUI.ID_MAP, SupportMapFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.share_activity_map, SupportMapFragment()).commit()
     }
 
     override fun onBindViewModel() {
