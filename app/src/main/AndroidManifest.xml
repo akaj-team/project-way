@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.register.RegisterActivity">
+        <activity android:name=".ui.share.ShareActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
