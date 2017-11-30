@@ -11,22 +11,23 @@ import vn.asiantech.way.ui.base.BaseActivity
  * Created by haibt on 9/26/17.
  */
 class RegisterActivity : BaseActivity() {
+    private var countries = MutableList(0, { Country("", "") })
+    private lateinit var registerViewModel: RegisterViewModel
+    private lateinit var ui: RegisterActivityUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RegisterActivityUI(CountryAdapter(createCountries(), HashMap<String, Bitmap>(), "VietNam"))
-                .setContentView(this)
+        ui = RegisterActivityUI(CountryAdapter(countries, HashMap<String, Bitmap>(), "VietNam"))
+        ui.setContentView(this)
+        registerViewModel = RegisterViewModel(this)
     }
 
-    // TODO dummy data will remove later
-    private fun createCountries(): List<Country> {
-        val countries = ArrayList<Country>()
-        countries.add(Country("+84", "VN"))
-        countries.add(Country("+84", "VN"))
-        countries.add(Country("+84", "VN"))
-        countries.add(Country("+84", "VN"))
-        countries.add(Country("+84", "VN"))
-        countries.add(Country("+84", "VN"))
-        return countries
+    override fun onBindViewModel() {
+        addDisposables(registerViewModel.getCountries()
+                .subscribe({ data ->
+                    countries.clear()
+                    countries.addAll(data)
+                    ui.countryAdapter.notifyDataSetChanged()
+                }))
     }
 }
