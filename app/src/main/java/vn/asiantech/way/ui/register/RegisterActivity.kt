@@ -35,7 +35,7 @@ class RegisterActivity : BaseActivity() {
         ui.countryAdapter.notifyDataSetChanged()
     }
 
-    private fun createUser(responseStatus: ResponseStatus) {
+    private fun createUser(userParams: UserParams) {
 
     }
 }
