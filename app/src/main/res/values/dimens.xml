@@ -64,4 +64,8 @@
     <!--Group-->
     <dimen name="notification_size">24dp</dimen>
     <dimen name="group_text_size_normal">15dp</dimen>
+
+    <!--BottomButtonCard-->
+    <dimen name="layout_height">50dp</dimen>
+    <dimen name="image_size">15dp</dimen>
 </resources>

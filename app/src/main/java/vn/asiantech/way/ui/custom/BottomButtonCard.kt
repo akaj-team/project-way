@@ -23,11 +23,6 @@ import vn.asiantech.way.extension.rippleView
 class BottomButtonCard(context: Context) :
         RelativeLayout(context) {
 
-    companion object {
-        const val LAYOUT_HEIGHT = 50
-        const val IMAGE_SIZE = 15
-    }
-
     internal lateinit var rlBottomCard: RelativeLayout
     internal lateinit var rlLinkShare: RelativeLayout
     internal lateinit var btnClose: RippleView
@@ -82,7 +77,7 @@ class BottomButtonCard(context: Context) :
 
                     imageView {
                         imageResource = R.drawable.ic_navigation_close
-                    }.lparams(dip(IMAGE_SIZE), dip(IMAGE_SIZE))
+                    }.lparams(dimen(R.dimen.image_size), dimen(R.dimen.image_size))
 
                 }.lparams(wrapContent, wrapContent) {
                     alignParentRight()
@@ -129,7 +124,7 @@ class BottomButtonCard(context: Context) :
                     }.lparams(wrapContent, wrapContent) {
                         centerInParent()
                     }
-                }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
+                }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     centerHorizontally()
                     below(R.id.bottom_button_card_tv_description)
                     bottomMargin = dimen(R.dimen.margin_low)
@@ -167,7 +162,7 @@ class BottomButtonCard(context: Context) :
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
                     }
-                }.lparams(matchParent, dip(LAYOUT_HEIGHT)) {
+                }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     below(R.id.bottom_button_card_btn_sharing)
                     leftMargin = dimen(R.dimen.margin_medium)
                     rightMargin = dimen(R.dimen.margin_medium)

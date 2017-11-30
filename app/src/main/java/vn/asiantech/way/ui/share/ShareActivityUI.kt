@@ -33,7 +33,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
     override fun createView(ui: AnkoContext<ShareActivity>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
-            relativeLayout() {
+            relativeLayout {
                 lparams(matchParent, matchParent)
                 relativeLayout {
                     frMapView = frameLayout {
