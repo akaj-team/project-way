@@ -13,9 +13,14 @@ import vn.asiantech.way.ui.base.BaseFragment
  */
 class ReloadFragment : BaseFragment() {
     private lateinit var ui: ReloadFragmentUI
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         ui = ReloadFragmentUI()
         return ui.createView(AnkoContext.create(context, this))
+    }
+
+    override fun onBindViewModel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

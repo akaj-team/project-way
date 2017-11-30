@@ -14,4 +14,8 @@ class CreateGroupFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?) = CreateGroupFragmentUI()
             .createView(AnkoContext.create(context, this))
+
+    override fun onBindViewModel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
