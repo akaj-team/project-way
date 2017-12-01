@@ -8,15 +8,15 @@ import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
- * Fragment group user
- * Created by haingoq on 28/11/2017.
+ *
+ * Created by haingoq on 29/11/2017.
  */
-class GroupInfoFragment : BaseFragment() {
-    private lateinit var ui: GroupInfoFragmentUI
+class NonGroupFragment : BaseFragment() {
+    private lateinit var ui: NonGroupFragmentUI
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = GroupInfoFragmentUI()
+        ui = NonGroupFragmentUI()
         return ui.createView(AnkoContext.create(context, this))
     }
 

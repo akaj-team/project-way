@@ -12,37 +12,29 @@ import retrofit2.converter.gson.GsonConverterFactory
 object HypertrackApi {
     private const val BASE_URL = "https://api.hypertrack.com/api/v1/"
     private const val TOKEN = "token sk_test_3b4f98fbf6b58eb9d6f710c98c7fcb7a52d2acb6"
-    private var instance: Retrofit? = null
+//    private var instance: Retrofit? = null
 
-    private fun getClient(): Retrofit {
-        if (instance == null) {
-            val httpClientBuilder = OkHttpClient.Builder()
-            httpClientBuilder.interceptors().add(Interceptor { chain ->
-                val original = chain.request()
-                // Request customization: add request headers
-                val requestBuilder = original.newBuilder()
-                        .header("Authorization", TOKEN)
-                        .header("Content-Type", "application/json")
-                        .method(original.method(), original.body())
 
-                val request = requestBuilder.build()
-                chain.proceed(request)
-            })
+    val instance: HypertrackService by lazy {
+        val httpClientBuilder = OkHttpClient.Builder()
+        httpClientBuilder.interceptors().add(Interceptor { chain ->
+            val original = chain.request()
+            // Request customization: add request headers
+            val requestBuilder = original.newBuilder()
+                    .header("Authorization", TOKEN)
+                    .header("Content-Type", "application/json")
+                    .method(original.method(), original.body())
 
-            val client = httpClientBuilder.build()
-            instance = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(client)
-                    .build()
-        }
-        return instance!!
-    }
+            val request = requestBuilder.build()
+            chain.proceed(request)
+        })
 
-    /**
-     * Get Api service
-     */
-    fun getApiService(): HypertrackService {
-        return getClient().create(HypertrackService::class.java)
+        val client = httpClientBuilder.build()
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+        retrofit.create(HypertrackService::class.java)
     }
 }

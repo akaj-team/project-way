@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- View ids for FloatingButtonHorizontal -->
+    <item name="floating_btn_menu_img_btn_search" type="id" />
+    <item name="floating_btn_menu_img_btn_group" type="id" />
+    <item name="floating_btn_menu_img_btn_profile" type="id" />
+    <item name="floating_btn_menu_img_btn_calendar" type="id" />
+    <item name="floating_btn_menu_img_btn_share" type="id" />
+
+    <!--View ids for GroupInfoFragmentUI-->
+    <item name="group_info_id_img_invite" type="id" />
+
+    <!-- View ids for SplashActivityUI -->
+    <item name="splash_activity_img_location" type="id" />
+    <item name="splash_activity_tv_application_name" type="id" />
+
+    <!-- id views on class ShareActivityUI -->
+    <item name="share_activity_map" type="id" />
+    <item name="share_activity_btn_back" type="id" />
+    <item name="share_activity_tv_title" type="id" />
+
+    <!-- View ids for RegisterActivityUI -->
+    <item name="share_activity_fr_avatar" type="id" />
+    <item name="share_activity_tv_description" type="id" />
+    <item name="share_activity_rl_information" type="id" />
+    <item name="share_activity_btn_save" type="id" />
+    <item name="share_activity_tv_skip" type="id" />
+    <item name="share_activity_edt_name" type="id" />
+    <item name="share_activity_view_line" type="id" />
+
+    <!-- View ids for BottomButtonCard -->
+    <item name="bottom_button_card_rl_bottom_card" type="id" />
+    <item name="bottom_button_card_btn_close" type="id" />
+    <item name="bottom_button_card_tv_title" type="id" />
+    <item name="bottom_button_card_tv_description" type="id" />
+    <item name="bottom_button_card_btn_sharing" type="id" />
+
+    <!-- View ids for CountryAdapter -->
+    <item name="country_adapter_tv_tel" type="id" />
+    <item name="country_adapter_img_flag" type="id" />
+
+    <!-- View ids on class LocationAdapterUI -->
+    <item name="location_adapter_ui_view_break_line" type="id" />
+    <item name="location_adapter_ui_img_location_icon" type="id" />
+    <item name="location_adapter_ui_tv_location_name" type="id" />
+    <item name="location_adapter_ui_tv_location_format_address" type="id" />
+
+    <!-- View ids on class SearchActivityUI -->
+    <item name="search_activity_ui_ll_header_layout" type="id" />
+    <item name="search_activity_ui_img_your_location_icon" type="id" />
+    <item name="search_activity_ui_tv_choose_on_map_icon" type="id" />
+    <item name="search_activity_ui_recycler_view_location" type="id" />
+</resources>

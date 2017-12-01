@@ -1,33 +1,26 @@
 package vn.asiantech.way.ui.group
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_reload.*
-import vn.asiantech.way.R
+import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
- * Copyright © 2017 Asian Tech Co., Ltd.
- * Created by cuongcaov on 11/11/2017
+ *
+ * Created by haingoq on 29/11/2017.
  */
 class ReloadFragment : BaseFragment() {
+    private lateinit var ui: ReloadFragmentUI
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_reload, container, false)
+        ui = ReloadFragmentUI()
+        return ui.createView(AnkoContext.create(context, this))
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initOnclick()
-    }
-
-    private fun initOnclick() {
-        imgReload.setOnClickListener {
-            activity.sendBroadcast(Intent(GroupActivity.ACTION_RELOAD))
-        }
+    override fun onBindViewModel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

@@ -58,6 +58,7 @@
     <string name="register_update_user">Update user completed</string>
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <string name="register_request_permission">Please turn on Internet and GPS</string>
+    <string name="register_tel">+84</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
     <string name="not_update_current_location">\"Do not update the current location!\"</string>
