@@ -3,21 +3,21 @@ package vn.asiantech.way.ui.home
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.view.ViewManager
 import android.widget.FrameLayout
 import org.jetbrains.anko.*
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import vn.asiantech.way.R
-import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.custom.FloatingMenuButton
+import vn.asiantech.way.ui.custom.floatingButton
 
 /**
  * Created at 11 / 2017
  * Created by at-hoavo on 27/11/2017.
  */
-class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeActivity> {
+class HomeActivityUI(private val homeAdapter: HomeAdapter,
+                     private var onMenuClick: FloatingMenuButton.OnMenuClickListener) : AnkoComponent<HomeActivity> {
 
-    internal lateinit var fabMenuGroup: FloatingButtonHorizontal
+    internal lateinit var fabMenuGroup: FloatingMenuButton
     internal lateinit var frOverlay: FrameLayout
 
     override fun createView(ui: AnkoContext<HomeActivity>) = with(ui) {
@@ -49,7 +49,7 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
                 backgroundResource = R.color.colorOverlay
             }.lparams(matchParent, matchParent)
 
-            fabMenuGroup = floatingButton {}
+            fabMenuGroup = floatingButton(onMenuClick) {}
                     .lparams {
                         alignParentBottom()
                         alignParentRight()
@@ -59,10 +59,3 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
     }
 }
 
-/**
- * Function to custom floatingButton
- */
-inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit)
-        : FloatingButtonHorizontal {
-    return ankoView({ FloatingButtonHorizontal(it) }, theme = 0, init = init)
-}

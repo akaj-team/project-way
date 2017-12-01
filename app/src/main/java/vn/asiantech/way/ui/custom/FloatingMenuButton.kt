@@ -47,7 +47,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         R.drawable.ic_search, R.string.custom_floating_menu_search_title)
                 imgBtnSearch = rlSearch.find(R.id.floating_btn_menu_img_btn_search)
                 imgBtnSearch.onClick {
-                    visibilityAllChildView(View.VISIBLE)
+                    visibilityAllChildView(View.INVISIBLE)
                     onMenuClickListener.onSearchClick()
                 }
                 rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group,
@@ -55,7 +55,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title)
                 imgBtnGroup = rlGroup.find(R.id.floating_btn_menu_img_btn_group)
                 imgBtnGroup.onClick {
-                    visibilityAllChildView(View.VISIBLE)
+                    visibilityAllChildView(View.INVISIBLE)
                     onMenuClickListener.onGroupClick()
                 }
                 rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar,
@@ -63,7 +63,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title)
                 imgBtnCalendar = rlCalendar.find(R.id.floating_btn_menu_img_btn_calendar)
                 imgBtnCalendar.onClick {
-                    visibilityAllChildView(View.VISIBLE)
+                    visibilityAllChildView(View.INVISIBLE)
                     onMenuClickListener.onCalendarClick()
                 }
                 rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile,
@@ -71,7 +71,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         R.drawable.ic_profile, R.string.custom_floating_menu_profile_title)
                 imgBtnProfile = rlProfile.find(R.id.floating_btn_menu_img_btn_profile)
                 imgBtnProfile.onClick {
-                    visibilityAllChildView(View.VISIBLE)
+                    visibilityAllChildView(View.INVISIBLE)
                     onMenuClickListener.onProfileClick()
                 }
                 rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share,
@@ -79,7 +79,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         R.drawable.ic_share, R.string.custom_floating_menu_share_title)
                 imgBtnShare = rlShare.find(R.id.floating_btn_menu_img_btn_share)
                 imgBtnShare.onClick {
-                    visibilityAllChildView(View.VISIBLE)
+                    visibilityAllChildView(View.INVISIBLE)
                     onMenuClickListener.onShareClick()
                 }
                 imgBtnMenu = imageButton {
@@ -143,7 +143,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
         val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_visible)
         val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
         imgBtnMenu.startAnimation(anim)
-        if (rlShare.visibility == View.INVISIBLE) {
+        if (checkItemViewVisibility()) {
             startAnimationFab(animVisible)
             visibilityAllChildView(View.VISIBLE)
             onMenuClickListener.onMenuClick(true)
@@ -180,6 +180,14 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
         rlCalendar.visibility = visibilityState
         rlSearch.visibility = visibilityState
         rlGroup.visibility = visibilityState
+    }
+
+    private fun checkItemViewVisibility(): Boolean {
+        return rlShare.visibility == View.INVISIBLE ||
+                rlProfile.visibility == View.INVISIBLE ||
+                rlCalendar.visibility == View.INVISIBLE ||
+                rlSearch.visibility == View.INVISIBLE ||
+                rlGroup.visibility == View.INVISIBLE
     }
 
     /**
