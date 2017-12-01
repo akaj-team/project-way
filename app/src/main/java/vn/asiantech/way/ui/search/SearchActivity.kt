@@ -6,13 +6,13 @@ import android.os.Bundle
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.setContentView
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.AutoCompleteLocation
 import vn.asiantech.way.data.model.WayLocation
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.share.ShareActivity
@@ -45,8 +45,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         addDisposables(searchObservable
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .subscribe({
@@ -56,8 +55,7 @@ class SearchActivity : BaseActivity() {
                             .subscribe(this::updateRecyclerViewLocation)
                 }),
                 searchViewModel.progressBarStatus
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOnUiThread()
                         .subscribe(this::updateProgressBarStatus))
     }
 

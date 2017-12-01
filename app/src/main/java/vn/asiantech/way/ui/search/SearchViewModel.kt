@@ -1,12 +1,11 @@
 package vn.asiantech.way.ui.search
 
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.AutoCompleteLocation
 import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.data.source.WayRepository
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
 
 /**
@@ -22,16 +21,14 @@ class SearchViewModel {
         progressBarStatus.onNext(true)
         return wayRepository
                 .searchLocations(query, AppConstants.GOOGLE_MAP_API_KEY, language, sensor)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOnUiThread()
                 .doOnNext { progressBarStatus.onNext(false) }
                 .map { it.predictions }
     }
 
     internal fun getLocationDetail(placeId: String): Observable<WayLocation> {
         return wayRepository.getLocationDetail(placeId, AppConstants.GOOGLE_MAP_API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOnUiThread()
                 .map { it.result }
     }
 }
