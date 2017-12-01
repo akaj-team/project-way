@@ -3,6 +3,7 @@
     <!-- id views on class TrackingProgressInfo -->
     <item name="tracking_progress_info_ll_tracking_progress" type="id" />
     <item name="tracking_progress_info_ll_tracking_info" type="id" />
+    <item name="tracking_progress_info_rl_collapse" type="id" />
     <item name="tracking_progress_info_circle_progress_bar" type="id" />
     <item name="tracking_progress_info_tv_action_status" type="id" />
     <item name="tracking_progress_info_tv_elapse_time" type="id" />
@@ -12,6 +13,7 @@
     <item name="tracking_progress_info_tv_start_time" type="id" />
     <item name="tracking_progress_info_tv_end_time" type="id" />
     <item name="tracking_progress_info_tv_start_address" type="id" />
+    <item name="tracking_progress_info_tv_end_address" type="id" />
     <item name="tracking_progress_info_img_start_point" type="id" />
     <item name="tracking_progress_info_img_end_point" type="id" />
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
