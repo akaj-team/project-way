@@ -46,6 +46,9 @@ class SplashActivity : BaseActivity() {
         }
     }
 
+    override fun onBindViewModel() {
+    }
+
     override fun onResume() {
         super.onResume()
         val intentFilter = IntentFilter()
@@ -80,7 +83,7 @@ class SplashActivity : BaseActivity() {
 //                    ui.progressBar.visibility = View.VISIBLE
 //                    ui.btnEnableLocation.visibility = View.GONE
 //                    ui.tvAppDescription.visibility = View.GONE
-//                    if (mSharedPreferences.getBoolean(KEY_LOGIN, false)) {
+//                    if (prefs.getBoolean(KEY_LOGIN, false)) {
 //                        Handler().postDelayed({
 //                            startActivity(Intent(this, HomeActivity::class.java))
 //                            finish()

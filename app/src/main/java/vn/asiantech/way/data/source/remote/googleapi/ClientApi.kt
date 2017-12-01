@@ -28,7 +28,7 @@ object ApiClient {
 
         httpClient.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
         httpClient.writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-        httpClient.connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+        httpClient.connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/maps/api/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
