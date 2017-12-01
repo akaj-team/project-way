@@ -15,13 +15,13 @@ import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 
 /**
+ *
  * Created by tien.hoang on 11/29/17.
  */
 class RegisterViewModel(val context: Context) {
     private val assetDataRepository = AssetDataRepository(context)
     internal val progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val wayRepository = WayRepository()
-    private var intent: Intent? = null
 
     internal fun getCountries(): Observable<List<Country>> {
         return assetDataRepository.getCountries()
@@ -49,18 +49,12 @@ class RegisterViewModel(val context: Context) {
                 .doOnNext { progressBarStatus.onNext(false) }
     }
 
-    internal fun selectAvatar(): Observable<Intent> {
+    internal fun selectAvatar(intent: Intent): Observable<Intent> {
         val result = AsyncSubject.create<Intent>()
-        if (intent != null) {
-            result.onNext(intent!!)
-            result.onComplete()
-            result.observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-        }
+        result.onNext(intent)
+        result.onComplete()
+        result.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
         return result
-    }
-
-    internal fun setIntent(intentData: Intent){
-        intent = intentData
     }
 }
