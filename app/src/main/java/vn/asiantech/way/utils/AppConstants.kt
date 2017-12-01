@@ -15,4 +15,8 @@ object AppConstants {
     val KEY_GROUND_OVERLAY_POSITION = 500f
     val KEY_GR_ANIMATION_DUR: Long = 2000L
     val GOOGLE_MAP_API_KEY = "AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U"
+    val KEY_SEARCH_SCREEN_WAY_LOCATION_HISTORY = "key_history"
+    val SEARCH_SCREEN_HISTORY_MAX_SIZE = 10
+    val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
+    val ACTION_CURRENT_LOCATION = ""
 }
