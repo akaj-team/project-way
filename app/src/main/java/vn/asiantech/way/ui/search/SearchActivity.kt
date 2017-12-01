@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.search
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log.d
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.setContentView
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 class SearchActivity : BaseActivity() {
 
     private lateinit var ui: SearchActivityUI
-    private val searchViewModel = SearchViewModel()
+    private lateinit var searchViewModel: SearchViewModel
     private var locations = mutableListOf<WayLocation>()
     private val searchObservable = PublishSubject.create<String>()
     private lateinit var startShareActivityIntent: Intent
@@ -40,7 +41,7 @@ class SearchActivity : BaseActivity() {
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setMessage(getString(R.string.processing))
-        loadSearchHistory()
+        searchViewModel = SearchViewModel(this)
     }
 
     override fun onBindViewModel() {
@@ -54,9 +55,20 @@ class SearchActivity : BaseActivity() {
                             .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::updateRecyclerViewLocation)
                 }),
+
                 searchViewModel.progressBarStatus
                         .observeOnUiThread()
-                        .subscribe(this::updateProgressBarStatus))
+                        .subscribe(this::updateProgressBarStatus),
+
+                searchViewModel.loadSearchHistories()
+                        .observeOnUiThread()
+                        .subscribe(this::onLoadSearchHistoriesComplete))
+    }
+
+    internal fun loadSearchHistory() {
+        addDisposables(searchViewModel.loadSearchHistories()
+                .observeOnUiThread()
+                .subscribe(this::onLoadSearchHistoriesComplete))
     }
 
     /**
@@ -99,15 +111,16 @@ class SearchActivity : BaseActivity() {
         }
     }
 
+
     /**
      * Load search history from shared references.
      */
-    internal fun loadSearchHistory() {
+    private fun onLoadSearchHistoriesComplete(histories: List<WayLocation>?) {
         locations.clear()
-        val histories = prefs.getSearchHistory()
         if (histories != null) {
             locations.addAll(histories)
         }
+        d("xxx", locations.size.toString())
         ui.locationAdapter.notifyDataSetChanged()
     }
 
@@ -130,7 +143,7 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun startSharedActivity(location: WayLocation) {
-        prefs.saveSearchHistory(location)
+        searchViewModel.saveSearchHistories(location)
         val bundle = Bundle()
         bundle.putParcelable(AppConstants.KEY_LOCATION, location)
         bundle.putString(AppConstants.KEY_CONFIRM,
