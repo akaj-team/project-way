@@ -64,6 +64,7 @@
     <!--Group-->
     <dimen name="notification_size">24dp</dimen>
     <dimen name="group_text_size_normal">15dp</dimen>
+
     <!--Floating Button Horizontal-->
     <dimen name="width_height_image_button">50dp</dimen>
     <dimen name="width_relative_layout">150dp</dimen>
@@ -73,4 +74,15 @@
     <dimen name="width_height_image_button_menu">60dp</dimen>
     <dimen name="top_bot_margin_image_button_menu">10dp</dimen>
     <dimen name="padding_floating">10dp</dimen>
+
+    <!--BottomButtonCard-->
+    <dimen name="layout_height">50dp</dimen>
+    <dimen name="image_size">15dp</dimen>
+
+    <!--Search-->
+    <dimen name="default_padding_margin">10dp</dimen>
+    <dimen name="small_padding_margin">5dp</dimen>
+    <dimen name="break_line_view_height">0.5dp</dimen>
+    <dimen name="break_line_left_margin">64dp</dimen>
+    <dimen name="break_line_top_bot_margin">2dp</dimen>
 </resources>
