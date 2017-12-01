@@ -41,41 +41,41 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
         AnkoContext.createDelegate(this).apply {
             verticalLayout {
                 lparams(wrapContent, wrapContent)
-                rlSearch = itemFloatingButton(R.id.floating_btn_menu_img_btn_search
-                        , R.drawable.custom_bg_item_search_button
-                        , R.drawable.ic_search, R.string.custom_floating_menu_search_title)
+                rlSearch = itemFloatingButton(R.id.floating_btn_menu_img_btn_search,
+                        R.drawable.custom_bg_item_search_button,
+                        R.drawable.ic_search, R.string.custom_floating_menu_search_title)
                 imgBtnSearch = rlSearch.find(R.id.floating_btn_menu_img_btn_search)
                 imgBtnSearch.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onSearchClick()
                 }
-                rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group
-                        , R.drawable.custom_bg_item_group_button
-                        , R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title)
+                rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group,
+                        R.drawable.custom_bg_item_group_button,
+                        R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title)
                 imgBtnGroup = rlGroup.find(R.id.floating_btn_menu_img_btn_group)
                 imgBtnGroup.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onGroupClick()
                 }
-                rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar
-                        , R.drawable.custom_bg_item_calendar_button
-                        , R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title)
+                rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar,
+                        R.drawable.custom_bg_item_calendar_button,
+                        R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title)
                 imgBtnCalendar = rlCalendar.find(R.id.floating_btn_menu_img_btn_calendar)
                 imgBtnCalendar.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onCalendarClick()
                 }
-                rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile
-                        , R.drawable.custom_bg_item_profile_button
-                        , R.drawable.ic_profile, R.string.custom_floating_menu_profile_title)
+                rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile,
+                        R.drawable.custom_bg_item_profile_button,
+                        R.drawable.ic_profile, R.string.custom_floating_menu_profile_title)
                 imgBtnProfile = rlProfile.find(R.id.floating_btn_menu_img_btn_profile)
                 imgBtnProfile.onClick {
                     visibilityAllChildView(View.VISIBLE)
                     onMenuClickListener.onProfileClick()
                 }
-                rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share
-                        , R.drawable.custom_bg_item_share_button
-                        , R.drawable.ic_share, R.string.custom_floating_menu_share_title)
+                rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share,
+                        R.drawable.custom_bg_item_share_button,
+                        R.drawable.ic_share, R.string.custom_floating_menu_share_title)
                 imgBtnShare = rlShare.find(R.id.floating_btn_menu_img_btn_share)
                 imgBtnShare.onClick {
                     visibilityAllChildView(View.VISIBLE)
@@ -87,8 +87,8 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
                     onClick {
                         onClickMenu()
                     }
-                }.lparams(dimen(R.dimen.width_height_image_button_menu)
-                        , dimen(R.dimen.width_height_image_button_menu)) {
+                }.lparams(dimen(R.dimen.width_height_image_button_menu),
+                        dimen(R.dimen.width_height_image_button_menu)) {
                     gravity = Gravity.END
                     bottomMargin = dimen(R.dimen.top_bot_margin_image_button_menu)
                     topMargin = dimen(R.dimen.top_bot_margin_image_button_menu)
@@ -220,7 +220,7 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
 /**
  * Init custom view
  */
-inline fun ViewManager.floatingButton(onMenuClickListener: FloatingButtonHorizontal.OnMenuClickListener
-                                      , init: FloatingButtonHorizontal.() -> Unit):
-        FloatingButtonHorizontal = ankoView({ FloatingButtonHorizontal(onMenuClickListener, it, null) }
-        , theme = 0, init = init)
+inline fun ViewManager.floatingButton(onMenuClickListener: FloatingButtonHorizontal.OnMenuClickListener,
+                                      init: FloatingButtonHorizontal.() -> Unit):
+        FloatingButtonHorizontal = ankoView({ FloatingButtonHorizontal(onMenuClickListener, it, null) },
+        theme = 0, init = init)
