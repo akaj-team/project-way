@@ -21,11 +21,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
     companion object {
         const val ROTATION_VALUE = 90f
         const val LAYOUT_WEIGHT = 1f
-        const val LEFT_MARGIN_TV = 10.5f
-        const val RIGHT_MARGIN_TV = -5.5f
-        const val BOTTOM_MARGIN_TV = -4.5f
         const val PROGRESS_BAR_MAX = 100
-        const val MARGIN_BTN_CALL = 3
     }
 
     internal lateinit var llTrackingProgress: LinearLayout
@@ -120,7 +116,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 padding = dimen(R.dimen.track_margin_value_high)
                             }.lparams(dimen(R.dimen.phone_icon_size), dimen(R.dimen.phone_icon_size)) {
                                 alignStart(R.id.tracking_progress_info_circle_progress_bar)
-                                margin = dip(MARGIN_BTN_CALL)
+                                margin = dimen(R.dimen.track_btn_call_margin)
                             }
 
                             rlCollapse = relativeLayout {
@@ -257,9 +253,9 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             alignStart(R.id.tracking_progress_info_img_start_point)
                                             below(R.id.tracking_progress_info_img_start_point)
                                             topOf(R.id.tracking_progress_info_img_end_point)
-                                            bottomMargin = dip(BOTTOM_MARGIN_TV)
-                                            leftMargin = dip(LEFT_MARGIN_TV)
-                                            topMargin = dip(RIGHT_MARGIN_TV)
+                                            bottomMargin = dimen(R.dimen.track_tv_bottom_margin)
+                                            leftMargin = dimen(R.dimen.track_tv_left_margin)
+                                            topMargin = dimen(R.dimen.track_tv_top_margin)
                                         }
 
                                         imgEndPoint = imageView(R.drawable

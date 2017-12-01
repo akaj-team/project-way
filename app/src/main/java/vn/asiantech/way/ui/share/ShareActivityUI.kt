@@ -16,9 +16,6 @@ import vn.asiantech.way.extension.trackingProgress
  */
 class ShareActivityUI : AnkoComponent<ShareActivity> {
     companion object {
-        const val ID_MAP = 1001
-        const val ID_BTN_BACK = 1002
-        const val ID_TV_TITLE = 1003
         const val MARGIN_VALUE_VERY_SMALL = 5
         const val MARGIN_VALUE_SMALL = 10
         const val MARGIN_VALUE_MEDIUM = 15
@@ -36,15 +33,15 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
     override fun createView(ui: AnkoContext<ShareActivity>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
-            relativeLayout() {
+            relativeLayout {
                 lparams(matchParent, matchParent)
                 relativeLayout {
                     frMapView = frameLayout {
-                        id = ID_MAP
+                        id = R.id.share_activity_map
                     }.lparams(matchParent, matchParent)
 
                     rippleView {
-                        id = ID_BTN_BACK
+                        id = R.id.share_activity_btn_back
                         imageView(R.drawable.ic_back_icon_button) {
                         }.lparams(wrapContent, wrapContent)
                     }.lparams(wrapContent, wrapContent) {
@@ -55,7 +52,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
 
                         tvTitle = textView(R.string.going_somewhere) {
-                            id = ID_TV_TITLE
+                            id = R.id.share_activity_tv_title
                             textSize = px2dip(dimen(R.dimen.text_small))
                             leftPadding = dip(MARGIN_VALUE_LARGE)
                             topPadding = dip(MARGIN_VALUE_LARGE)
@@ -68,7 +65,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                             rightPadding = dip(MARGIN_VALUE_VERY_LARGE)
                             bottomPadding = dip(MARGIN_VALUE_SMALL)
                         }.lparams(matchParent, wrapContent) {
-                            below(ID_TV_TITLE)
+                            below(R.id.share_activity_tv_title)
                         }
 
                         imgEdit = imageView(R.drawable.ic_edit_location) {
@@ -79,7 +76,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                             alignParentRight()
                         }
                     }.lparams(matchParent, wrapContent) {
-                        rightOf(ID_BTN_BACK)
+                        rightOf(R.id.share_activity_btn_back)
                     }
 
                     imgCurrentLocation = imageView(R.drawable.ic_ht_reset_button) {
