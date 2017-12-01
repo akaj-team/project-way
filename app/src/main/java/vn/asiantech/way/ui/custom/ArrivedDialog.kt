@@ -60,6 +60,9 @@ internal class DialogArrived : DialogFragment() {
         return ui.createView(AnkoContext.create(context, this))
     }
 
+    /**
+     * View show arrived dialog when tracking finish
+     */
     inner class DialogUI : AnkoComponent<DialogArrived> {
         override fun createView(ui: AnkoContext<DialogArrived>) = with(ui) {
             verticalLayout {
