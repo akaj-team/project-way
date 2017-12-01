@@ -1,7 +1,8 @@
 package vn.asiantech.way.data.source
 
-import com.hypertrack.lib.models.User
-import com.hypertrack.lib.models.UserParams
+import com.google.android.gms.maps.model.LatLng
+import com.hypertrack.lib.internal.common.models.VehicleType
+import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
@@ -33,7 +34,7 @@ internal interface WayDataSource {
      *  @param userId of user
      *  @return User object which is Observable.
      */
-    fun getUser(userId: String): Observable<User>
+    fun getUser(): Observable<User>
 
     /**
      *  Get address at location on Map.
@@ -104,4 +105,28 @@ internal interface WayDataSource {
      * @return User object which is Observable.
      */
     fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
+
+    /**
+     *  Get current location on Map.
+     *
+     *  @return HyperTrackLocation object which is Observable.
+     */
+    fun getCurrentLocation(): Observable<HyperTrackLocation>
+
+    /**
+     *  Get ETA(Estimated Time of Arrival) of user
+     *
+     *  @param destination: information of position.
+     *  @param vehicle: type of vehicle
+     *  @return Float object which is Observable.
+     */
+    fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float>
+
+    /**
+     *  Create and  assign action
+     *
+     *  @param builder: necessary information to create Action
+     *  @return Action object which is Observable.
+     */
+    fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action>
 }
