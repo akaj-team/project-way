@@ -15,7 +15,7 @@ class ScreenUtil {
         private const val TYPE_UNIT_DIALOG_HEIGHT = 5
         private const val TYPE_DIALOG_MARGIN_WIDTH = 80
 
-        fun getScreenSize(context: Context, dialog: Dialog) {
+        internal fun getScreenSize(context: Context, dialog: Dialog) {
             val displayMetrics: DisplayMetrics = context.resources.displayMetrics
             val width = displayMetrics.widthPixels
             val height = displayMetrics.heightPixels
