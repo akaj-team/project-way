@@ -127,10 +127,10 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 onClick {
                                     if (rlExpandedInfo.visibility == View.GONE) {
                                         rlExpandedInfo.visibility = View.VISIBLE
-                                        imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_18dp)
+                                        imgArrow.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
                                     } else {
                                         rlExpandedInfo.visibility = View.GONE
-                                        imgArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_18dp)
+                                        imgArrow.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
                                     }
                                 }
 
@@ -145,14 +145,14 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                     gravity = Gravity.CENTER
                                 }
 
-                                imgArrow = imageView(R.drawable.ic_keyboard_arrow_right_black_18dp) {
-                                }.lparams {
-                                    alignParentEnd()
-                                    alignParentRight()
-                                    bottomOf(R.id.tracking_progress_info_tv_action_status)
-                                    rightMargin = dimen(R.dimen.margin_high)
-                                    topMargin = dimen(R.dimen.track_top_margin)
-                                }
+                                imgArrow = imageView(R.drawable.ic_keyboard_arrow_right_black_18dp)
+                                        .lparams {
+                                            alignParentEnd()
+                                            alignParentRight()
+                                            bottomOf(R.id.tracking_progress_info_tv_action_status)
+                                            rightMargin = dimen(R.dimen.margin_high)
+                                            topMargin = dimen(R.dimen.track_top_margin)
+                                        }
 
                                 linearLayout {
                                     lparams {
@@ -218,7 +218,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                                 .string.mask),
                                                 R.id.tracking_progress_info_tv_battery)
                                                 .lparams(matchParent, wrapContent)
-                                        imageView(R.drawable.ic_battery_icon) {}
+                                        imageView(R.drawable.ic_battery_icon)
                                                 .lparams {
                                                     gravity = Gravity.CENTER
                                                 }
@@ -395,8 +395,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
     private fun ViewManager.llItemTrackingInfo(tvId: Int, value: String,
                                                description: String) = verticalLayout {
-        textViewTrackingInfo(value, tvId)
-                .lparams(matchParent, wrapContent)
+        textViewTrackingInfo(value, tvId).lparams(matchParent, wrapContent)
         textViewTrackingInfoDescription(description)
                 .lparams(matchParent, wrapContent) {
                     topMargin = dimen(R.dimen.track_top_margin)
