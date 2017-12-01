@@ -25,7 +25,6 @@ import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.ui.base.BaseActivity
-import java.util.*
 
 /**
  * Activity register user
@@ -105,9 +104,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                             yesButton {
                                 //TODO Create User with name, phone and...
                             }
-                            noButton { dialog ->
-                                dialog.dismiss()
-                            }
+                            noButton { dialog -> dialog.dismiss() }
                         }.show()
                     }
                 } else {

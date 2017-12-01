@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.register
 
 import android.content.DialogInterface
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
@@ -115,7 +116,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     val padding = dimen(R.dimen.register_screen_ll_phone_padding)
                     leftPadding = padding
                     rightPadding = padding
-                    imgFlag = imageView().lparams {
+                    imgFlag = imageView(R.drawable.ic_vn).lparams {
                         gravity = Gravity.CENTER_VERTICAL
                     }
 

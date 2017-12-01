@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.register
 
 import android.content.Context
+import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,6 +32,12 @@ class RegisterViewModel(val context: Context) {
 
     internal fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
         return wayRepository.updateUser(userParams)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+    }
+
+    internal fun getUser(userId: String): Observable<User> {
+        return wayRepository.getUser(userId)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
     }
