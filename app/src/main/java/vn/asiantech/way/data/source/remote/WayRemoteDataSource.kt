@@ -1,11 +1,11 @@
 package vn.asiantech.way.data.source.remote
 
+import android.location.Location
+import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.callbacks.HyperTrackCallback
-import com.hypertrack.lib.models.ErrorResponse
-import com.hypertrack.lib.models.SuccessResponse
-import com.hypertrack.lib.models.User
-import com.hypertrack.lib.models.UserParams
+import com.hypertrack.lib.internal.common.models.VehicleType
+import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.subjects.AsyncSubject
 import vn.asiantech.way.data.model.*
@@ -103,5 +103,58 @@ internal class WayRemoteDataSource : WayDataSource {
 
     override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
         return HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
+    }
+
+    override fun getCurrentLocation(): Observable<HyperTrackLocation> {
+        val result = AsyncSubject.create<HyperTrackLocation>()
+        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                val res = HyperTrackLocation((response.responseObject) as? Location?)
+                result.onNext(res)
+                result.onComplete()
+            }
+
+            override fun onError(error: ErrorResponse) {
+                val err = Throwable(error.errorMessage)
+                result.onError(err)
+            }
+        })
+        return result
+    }
+
+    override fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float> {
+        val result = AsyncSubject.create<Float>()
+        HyperTrack.getETA(destination, vehicle, object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                val res = (response.responseObject as Double).toFloat()
+                result.onNext(res)
+                result.onComplete()
+            }
+
+            override fun onError(error: ErrorResponse) {
+                val err = Throwable(error.errorMessage)
+                result.onError(err)
+            }
+
+        })
+        return result
+    }
+
+    override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action> {
+        val result = AsyncSubject.create<Action>()
+        HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
+            override fun onSuccess(response: SuccessResponse) {
+                val res = response.responseObject as Action
+                result.onNext(res)
+                result.onComplete()
+            }
+
+            override fun onError(error: ErrorResponse) {
+                val err = Throwable(error.errorMessage)
+                result.onError(err)
+            }
+
+        })
+        return result
     }
 }
