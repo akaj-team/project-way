@@ -161,6 +161,6 @@ internal class ArrivedDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        ScreenUtil().getSreenSize(context, dialog)
+        ScreenUtil.getScreenSize(context, dialog)
     }
 }
