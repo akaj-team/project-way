@@ -65,7 +65,6 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
 
     }
 
-
     override fun onMenuClick(isShowMenu: Boolean) {
         ui.frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
         mIsExpand = isShowMenu
