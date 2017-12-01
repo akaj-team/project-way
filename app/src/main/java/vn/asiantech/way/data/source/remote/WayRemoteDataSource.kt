@@ -59,8 +59,8 @@ internal class WayRemoteDataSource : WayDataSource {
         val result = AsyncSubject.create<User>()
         HyperTrack.getUser(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
-                val res = response.responseObject as User
-                result.onNext(res)
+                val res = response.responseObject as? User
+                res?.let { result.onNext(it) }
                 result.onComplete()
             }
 
@@ -126,8 +126,8 @@ internal class WayRemoteDataSource : WayDataSource {
         val result = AsyncSubject.create<Float>()
         HyperTrack.getETA(destination, vehicle, object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
-                val res = (response.responseObject as Double).toFloat()
-                result.onNext(res)
+                val res = (response.responseObject as? Double)?.toFloat()
+                res?.let { result.onNext(it) }
                 result.onComplete()
             }
 
@@ -144,8 +144,8 @@ internal class WayRemoteDataSource : WayDataSource {
         val result = AsyncSubject.create<Action>()
         HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
-                val res = response.responseObject as Action
-                result.onNext(res)
+                val res = response.responseObject as? Action
+                res?.let { result.onNext(it) }
                 result.onComplete()
             }
 
