@@ -9,7 +9,7 @@ import android.view.WindowManager
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 01/12/2017.
  */
-class ScreenUtil {
+class ScreenUtil private constructor() {
 
     companion object {
         private const val TYPE_UNIT_DIALOG_HEIGHT = 5
