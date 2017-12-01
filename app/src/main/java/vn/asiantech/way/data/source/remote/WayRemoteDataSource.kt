@@ -22,7 +22,7 @@ internal class WayRemoteDataSource : WayDataSource {
     override fun createUser(userParams: UserParams): Observable<ResponseStatus> {
         val result = AsyncSubject.create<ResponseStatus>()
         HyperTrack.getOrCreateUser(userParams, object : HyperTrackCallback() {
-            override fun onSuccess(success: SuccessResponse) {
+            override fun onSuccess(response: SuccessResponse) {
                 val res = ResponseStatus(true, "Success")
                 result.onNext(res)
                 result.onComplete()
