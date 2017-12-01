@@ -23,15 +23,6 @@ import vn.asiantech.way.R
  * Created by haingoq on 27/11/2017.
  */
 class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
-    companion object {
-        private const val ID_FR_AVATAR = 1001
-        private const val ID_TV_DESCRIPTION = 1002
-        private const val ID_RL_INFORMATION = 1003
-        private const val ID_BTN_SAVE = 1004
-        private const val ID_TV_SKIP = 1005
-        private const val ID_EDT_NAME = 1006
-        private const val ID_VIEW_LINE = 1007
-    }
 
     internal lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
@@ -50,7 +41,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
         relativeLayout {
             lparams(matchParent, matchParent)
             frAvatar = frameLayout {
-                id = ID_FR_AVATAR
+                id = R.id.share_activity_fr_avatar
 
                 imgAvatar = circleImageView {
                     backgroundResource = R.drawable.ic_default_avatar
@@ -80,11 +71,11 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
 
             textView(R.string.register_description) {
-                id = ID_TV_DESCRIPTION
+                id = R.id.share_activity_tv_description
                 gravity = Gravity.CENTER
                 textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
             }.lparams(matchParent, wrapContent) {
-                below(ID_FR_AVATAR)
+                below(R.id.share_activity_fr_avatar)
                 val margin = resources.getDimension(R.dimen.margin_xxhigh).toInt()
                 topMargin = margin
                 leftMargin = margin
@@ -92,11 +83,11 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
 
             relativeLayout {
-                id = ID_RL_INFORMATION
+                id = R.id.share_activity_rl_information
                 backgroundResource = R.drawable.custom_layout_phone
 
                 edtName = editText {
-                    id = ID_EDT_NAME
+                    id = R.id.share_activity_edt_name
                     backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
                     hint = resources.getString(R.string.register_hint_name)
                     inputType = InputType.TYPE_CLASS_TEXT
@@ -106,10 +97,10 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height))
 
                 view {
-                    id = ID_VIEW_LINE
+                    id = R.id.share_activity_view_line
                     backgroundColor = ContextCompat.getColor(context, R.color.grayLight)
                 }.lparams(matchParent, dimen(R.dimen.border)) {
-                    below(ID_EDT_NAME)
+                    below(R.id.share_activity_edt_name)
                 }
 
                 linearLayout {
@@ -129,6 +120,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                                         adapter = countryAdapter
                                         countryAdapter.onItemClick = { country ->
                                             Picasso.with(context).load(country.flagFilePath).into(imgFlag)
+                                            owner.isoCode = country.iso
                                             tvTel.text = resources.getString(R.string.register_plus).plus(country.tel)
                                             dialogInterface.dismiss()
                                         }
@@ -154,10 +146,10 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                         imeOptions = EditorInfo.IME_ACTION_DONE
                     }.lparams(matchParent, matchParent)
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height)) {
-                    below(ID_VIEW_LINE)
+                    below(R.id.share_activity_view_line)
                 }
             }.lparams(matchParent, wrapContent) {
-                below(ID_TV_DESCRIPTION)
+                below(R.id.share_activity_tv_description)
                 val margin = dimen(R.dimen.margin_high)
                 bottomMargin = dimen(R.dimen.margin_huge)
                 leftMargin = margin
@@ -166,7 +158,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
 
             btnRegister = button(R.string.register_button_save_text) {
-                id = ID_BTN_SAVE
+                id = R.id.share_activity_btn_save
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
                 textColor = ContextCompat.getColor(context, R.color.white)
@@ -174,7 +166,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 isEnabled = false
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
-                below(ID_RL_INFORMATION)
+                below(R.id.share_activity_rl_information)
                 leftMargin = margin
                 topMargin = margin
                 rightMargin = margin
@@ -182,11 +174,11 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
             tvSkip = textView {
                 text = resources.getString(R.string.register_skip)
-                id = ID_TV_SKIP
+                id = R.id.share_activity_tv_skip
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
             }.lparams(matchParent, wrapContent) {
-                below(ID_BTN_SAVE)
+                below(R.id.share_activity_btn_save)
                 topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
@@ -195,7 +187,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 gravity = Gravity.CENTER
                 visibility = View.GONE
             }.lparams(matchParent, wrapContent) {
-                below(ID_TV_SKIP)
+                below(R.id.share_activity_tv_skip)
                 topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
