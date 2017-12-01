@@ -20,9 +20,6 @@ import java.util.*
  */
 class CountryAdapter(val context: Context, private val countries: List<Country>) :
         RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
-    companion object {
-        private const val ID_IMG_FLAG = 1001
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemCountryUI()
             .createView(AnkoContext.create(parent.context, parent, false))
@@ -38,27 +35,27 @@ class CountryAdapter(val context: Context, private val countries: List<Country>)
      *  Item country UI
      */
     inner class ItemCountryUI : AnkoComponent<ViewGroup> {
-        private lateinit var imgFlag: ImageView
-        private lateinit var tvTel: TextView
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val itemView = with(ui) {
                 linearLayout {
                     lparams(matchParent, wrapContent)
                     padding = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.START
-                    imgFlag = imageView { id = ID_IMG_FLAG }.
-                            lparams(dimen(R.dimen.register_screen_img_flag_width),
-                                    dimen(R.dimen.margin_xxhigh)) {
-                                gravity = Gravity.CENTER_VERTICAL
-                            }
-                    tvTel = textView {
+                    imageView {
+                        id = R.id.country_adapter_img_flag
+                    }.lparams(dimen(R.dimen.register_screen_img_flag_width),
+                            dimen(R.dimen.margin_xxhigh)) {
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                    textView {
+                        id = R.id.country_adapter_tv_tel
                         gravity = Gravity.CENTER_VERTICAL
                     }.lparams(wrapContent, dimen(R.dimen.margin_xxhigh)) {
                         leftMargin = dimen(R.dimen.register_screen_avatar_margin)
                     }
                 }
             }
-            itemView.tag = CountryHolder(itemView, imgFlag, tvTel)
+            itemView.tag = CountryHolder(itemView)
             return itemView
         }
     }
@@ -68,8 +65,11 @@ class CountryAdapter(val context: Context, private val countries: List<Country>)
     /**
      * Holder Country
      */
-    inner class CountryHolder(itemView: View, private val imgFlag: ImageView, private val tvTel: TextView) :
+    inner class CountryHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView) {
+        private val imgFlag: ImageView = itemView.find(R.id.country_adapter_img_flag)
+        private val tvTel: TextView = itemView.find(R.id.country_adapter_tv_tel)
+
         init {
             itemView.onClick {
                 onItemClick(countries[adapterPosition])
