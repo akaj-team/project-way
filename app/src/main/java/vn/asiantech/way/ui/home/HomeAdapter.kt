@@ -23,7 +23,7 @@ import vn.asiantech.way.data.model.TrackingInformation
  *  Created by at-hoavo on 27/11/2017.
  */
 class HomeAdapter(private val context: Context,
-                  private val locations: List<TrackingInformation>,
+                  private val locations: MutableList<TrackingInformation>,
                   val onClickItem: (Int) -> Unit)
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
