@@ -53,6 +53,8 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                             override fun afterTextChanged(editable: Editable) {
                                 if (editable.toString().trim().isNotEmpty()) {
                                     owner.searchLocations(editable.toString().trim())
+                                } else {
+                                    owner.loadSearchHistory()
                                 }
                             }
                         })
