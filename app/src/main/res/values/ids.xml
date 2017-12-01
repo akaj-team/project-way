@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- View ids for FloatingButtonHorizontal -->
+    <item name="floating_btn_menu_img_btn_search" type="id" />
+    <item name="floating_btn_menu_img_btn_group" type="id" />
+    <item name="floating_btn_menu_img_btn_profile" type="id" />
+    <item name="floating_btn_menu_img_btn_calendar" type="id" />
+    <item name="floating_btn_menu_img_btn_share" type="id" />
+
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
 
@@ -31,6 +38,7 @@
     <!-- View ids for CountryAdapter -->
     <item name="country_adapter_tv_tel" type="id" />
     <item name="country_adapter_img_flag" type="id" />
+
     <!-- View ids on class LocationAdapterUI -->
     <item name="location_adapter_ui_view_break_line" type="id" />
     <item name="location_adapter_ui_img_location_icon" type="id" />
