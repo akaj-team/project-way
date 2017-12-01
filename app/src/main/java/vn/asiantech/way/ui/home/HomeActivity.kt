@@ -46,7 +46,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     private lateinit var ui: HomeActivityUI
     private var locations: MutableList<TrackingInformation> = mutableListOf()
     private var isExit = false
-    private var mIsExpand = false
+    private var isExpand = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +56,9 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
         initViews()
         initMap()
         ui.frOverlay.setOnClickListener {
-            if (mIsExpand) {
+            if (isExpand) {
                 ui.fabMenuGroup.collapseMenu()
-                mIsExpand = false
+                isExpand = false
                 setGoneOverLay()
             }
         }
@@ -67,7 +67,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
 
     override fun onMenuClick(isShowMenu: Boolean) {
         ui.frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
-        mIsExpand = isShowMenu
+        isExpand = isShowMenu
     }
 
     override fun onShareClick() {
@@ -104,7 +104,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
-            toast(resources.getString(R.string.register_double_click_to_exit))
+            toast(getString(R.string.register_double_click_to_exit))
             isExit = true
             Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
@@ -128,7 +128,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             if (location != null) {
                 drawMaker(location)
             } else {
-                toast(resources.getString(R.string.not_update_current_location))
+                toast(getString(R.string.not_update_current_location))
             }
         }
     }
@@ -147,11 +147,11 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             googleMap?.addMarker(MarkerOptions()
                     .position(currentLocation)
                     .draggable(true)
-                    .title(resources.getString(R.string.current_location)))
+                    .title(getString(R.string.current_location)))
                     ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
             googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, ZOOM))
         } else {
-            toast(resources.getString(R.string.toast_text_google_map_null))
+            toast(getString(R.string.toast_text_google_map_null))
         }
     }
 
