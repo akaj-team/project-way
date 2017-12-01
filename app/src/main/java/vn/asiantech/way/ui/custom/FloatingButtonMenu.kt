@@ -85,7 +85,7 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
                     imageResource = R.drawable.ic_menu
                     backgroundResource = R.drawable.custom_menu_button
                     onClick {
-                        onClickMenu()
+                        onMenuClick()
                     }
                 }.lparams(dimen(R.dimen.width_height_image_button_menu),
                         dimen(R.dimen.width_height_image_button_menu)) {
@@ -137,7 +137,7 @@ class FloatingButtonHorizontal(private var onMenuClickListener: OnMenuClickListe
         }
     }
 
-    private fun onClickMenu() {
+    private fun onMenuClick() {
         val anim: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_rotate)
         val animVisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_visible)
         val animInvisible: Animation = AnimationUtils.loadAnimation(context, R.anim.anim_invisible)
