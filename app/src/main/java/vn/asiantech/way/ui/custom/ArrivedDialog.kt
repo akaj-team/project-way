@@ -3,23 +3,21 @@ package vn.asiantech.way.ui.custom
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
-import android.util.DisplayMetrics
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
+import vn.asiantech.way.utils.ScreenUtil
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 01/12/2017.
  */
-internal class DialogArrived : DialogFragment() {
+internal class ArrivedDialog : DialogFragment() {
     companion object {
         private const val TYPE_TIME = "time"
         private const val TYPE_DISTANCE = "distance"
-        private const val TYPE_UNIT_DIALOG_HEIGHT = 5
-        private const val TYPE_DIALOG_MARGIN_WIDTH = 80
         private const val LAYOUT_WEIGHT_VERY_SMALL = 1f
         private const val LAYOUT_WEIGHT_SMALL = 2f
         private const val LAYOUT_WEIGHT_MEDIUM = 3f
@@ -32,8 +30,8 @@ internal class DialogArrived : DialogFragment() {
          *  @return Dialog to show detail user tracked
          */
         internal fun newInstance(time: String?, distance: String?)
-                : DialogArrived {
-            val dialogShowArrived = DialogArrived()
+                : ArrivedDialog {
+            val dialogShowArrived = ArrivedDialog()
             val bundle = Bundle()
             bundle.putString(TYPE_TIME, time)
             bundle.putString(TYPE_DISTANCE, distance)
@@ -63,8 +61,8 @@ internal class DialogArrived : DialogFragment() {
     /**
      * View show arrived dialog when tracking finish
      */
-    inner class DialogUI : AnkoComponent<DialogArrived> {
-        override fun createView(ui: AnkoContext<DialogArrived>) = with(ui) {
+    inner class DialogUI : AnkoComponent<ArrivedDialog> {
+        override fun createView(ui: AnkoContext<ArrivedDialog>) = with(ui) {
             verticalLayout {
                 lparams(matchParent, matchParent)
 
@@ -132,7 +130,7 @@ internal class DialogArrived : DialogFragment() {
                     backgroundResource = R.color.colorGrayLight
                 }.lparams(matchParent, dip(1))
 
-                textView {}.lparams(matchParent, dip(0), LAYOUT_WEIGHT_SMALL)
+                textView().lparams(matchParent, dip(0), LAYOUT_WEIGHT_SMALL)
 
                 textView {
                     backgroundResource = R.color.colorGrayLight
@@ -163,14 +161,6 @@ internal class DialogArrived : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val displayMetrics: DisplayMetrics = resources.displayMetrics
-        val width = displayMetrics.widthPixels
-        val height = displayMetrics.heightPixels
-        val windowParams = WindowManager.LayoutParams()
-        windowParams.copyFrom(dialog.window.attributes)
-        windowParams.height = height - height /
-                TYPE_UNIT_DIALOG_HEIGHT
-        windowParams.width = width - TYPE_DIALOG_MARGIN_WIDTH
-        dialog.window.attributes = windowParams
+        ScreenUtil().getSreenSize(context, dialog)
     }
 }
