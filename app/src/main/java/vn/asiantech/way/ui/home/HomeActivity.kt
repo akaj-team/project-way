@@ -35,7 +35,7 @@ import vn.asiantech.way.utils.LocationUtil
 class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
 
     companion object {
-        const val ZOOM = 16f
+        private const val ZOOM = 16f
         private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
     }
@@ -45,7 +45,6 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
     private var locations: MutableList<TrackingInformation> = mutableListOf()
-
     private var isExit = false
     private var mIsExpand = false
 

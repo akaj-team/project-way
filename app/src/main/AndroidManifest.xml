@@ -78,6 +78,7 @@
         <activity android:name=".ui.splash.SplashActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.search.SearchActivity" />
+        <activity android:name=".ui.share.ShareActivity" />
 
         <!-- Register meta-data here -->
         <!--
