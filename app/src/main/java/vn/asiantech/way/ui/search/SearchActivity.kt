@@ -40,19 +40,25 @@ class SearchActivity : BaseActivity() {
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setMessage(getString(R.string.processing))
+        loadSearchHistory()
     }
 
     override fun onBindViewModel() {
         addDisposables(searchObservable
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .debounce(1500, TimeUnit.MILLISECONDS)
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .subscribe({
-                    searchViewModel.searchLocation(it)
+                    searchViewModel
+                            .searchLocation(it)
+                            .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::updateRecyclerViewLocation)
                 }),
-                searchViewModel.progressBarStatus.subscribe(this::updateProgressBarStatus))
+                searchViewModel.progressBarStatus
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateProgressBarStatus))
     }
 
     /**
@@ -108,9 +114,6 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun updateRecyclerViewLocation(data: List<AutoCompleteLocation>) {
-        if (progressDialog.isShowing) {
-            progressDialog.dismiss()
-        }
         locations.clear()
         data.forEach {
             with(it) {
@@ -121,12 +124,10 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun updateProgressBarStatus(isShow: Boolean) {
-        runOnUiThread {
-            if (isShow) {
-                progressDialog.show()
-            } else {
-                progressDialog.dismiss()
-            }
+        if (isShow) {
+            progressDialog.show()
+        } else {
+            progressDialog.dismiss()
         }
     }
 
@@ -173,6 +174,7 @@ class SearchActivity : BaseActivity() {
         bundle.putParcelable(AppConstants.KEY_LOCATION, location)
         bundle.putString(AppConstants.KEY_CONFIRM,
                 AppConstants.KEY_SHARING)
+        startShareActivityIntent.action = AppConstants.ACTION_SEND_WAY_LOCATION
         startShareActivityIntent.putExtras(bundle)
         startActivity(startShareActivityIntent)
     }

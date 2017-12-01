@@ -75,7 +75,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.search.SearchActivity" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:noHistory="true" />
 
         <!-- Register meta-data here -->
         <!--
