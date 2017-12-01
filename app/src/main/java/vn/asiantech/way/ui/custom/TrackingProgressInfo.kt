@@ -108,7 +108,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 id = R.id.tracking_progress_info_circle_progress_bar
                                 circleColor = ContextCompat.getColor(context, R.color.progressRestColor)
                                 circleProgressColor = ContextCompat.getColor(context, R.color.tracking_experience)
-                                max = 100
+                                max = PROGRESS_BAR_MAX
                                 progress = 0
                                 isLockEnabled = true
                             }
