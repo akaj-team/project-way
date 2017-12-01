@@ -32,7 +32,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setDataForRecyclerView()
         ui = HomeActivityUI(homeAdapter)
         ui.setContentView(this)
         initViews()
@@ -89,11 +88,8 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
         googleMap?.setPadding(padding, padding, padding, size.y / UNIT_PADDING_BOTTOM)
     }
 
-    private fun setDataForRecyclerView() {
+    private fun setDataForRecyclerView(locations: ArrayList<TrackingInformation>) {
         val positions: MutableList<Int> = mutableListOf()
-        val locations = ArrayList<TrackingInformation>()
-        // TODO: Get data from share function into locations
-        initDummyData(locations)
         homeAdapter = HomeAdapter(this, locations) {
             if (position >= 0) {
                 locations[position].isChoose = false
@@ -111,18 +107,6 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingButtonHorizonta
             homeAdapter.notifyItemChanged(it)
             position = it
         }
-    }
-
-    private fun initDummyData(locations: ArrayList<TrackingInformation>) {
-        // TODO set list WayLocation
-//        locations.add(TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-//                LatLng(16.0721115, 108.2302225)))
-//        locations.add(TrackingInformation("2:00 PM", "Drive", "50 minutes| You went to the Hoa Khanh market........",
-//                LatLng(16.0712047, 108.2193197)))
-//        locations.add(TrackingInformation("3:00 PM", "Walk", "30 minutes | 1km", LatLng(16.0721611, 108.2303906)))
-//        locations.add(TrackingInformation("4:00 PM", "Destination", "1 hour ago | 5km", LatLng(16.0725051, 108.2296716)))
-//        locations.add(TrackingInformation("5:00 PM", "Stop", "30 minutes | 1km", LatLng(16.0717437, 108.2236926)))
-//        locations.add(TrackingInformation("6:00 PM", "Start", "15 minutes| 5km", LatLng(16.0712047, 108.2193197)))
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
