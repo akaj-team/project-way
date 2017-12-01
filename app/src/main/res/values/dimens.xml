@@ -81,4 +81,18 @@
     <dimen name="break_line_view_height">0.5dp</dimen>
     <dimen name="break_line_left_margin">64dp</dimen>
     <dimen name="break_line_top_bot_margin">2dp</dimen>
+
+    <!--Share screen-->
+    <dimen name="track_layout_height">50dp</dimen>
+    <dimen name="track_button_size">48dp</dimen>
+    <dimen name="track_margin_value_very_low">10dp</dimen>
+    <dimen name="track_margin_value_low">15dp</dimen>
+    <dimen name="track_margin_value_medium">20dp</dimen>
+    <dimen name="track_margin_value_high">30dp</dimen>
+    <dimen name="track_tv_left_margin">10.5dp</dimen>
+    <dimen name="track_tv_bottom_margin">-4.5dp</dimen>
+    <dimen name="track_tv_top_margin">-5.5dp</dimen>
+    <dimen name="track_top_margin">4dp</dimen>
+    <dimen name="track_view_height">2dp</dimen>
+    <dimen name="track_btn_call_margin">3dp</dimen>
 </resources>
