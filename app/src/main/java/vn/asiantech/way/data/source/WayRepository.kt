@@ -1,58 +1,73 @@
 package vn.asiantech.way.data.source
 
-import com.hypertrack.lib.models.User
-import com.hypertrack.lib.models.UserParams
+import com.google.android.gms.maps.model.LatLng
+import com.hypertrack.lib.internal.common.models.VehicleType
+import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.*
+import vn.asiantech.way.data.source.remote.WayRemoteDataSource
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 
 /**
  * Copyright © 2017 AsianTech inc.
  * Created by vinh.huynh on 11/24/17.
  */
-class WayRepository : WayDataSource{
+class WayRepository : WayDataSource {
+    private val remoteDataSource = WayRemoteDataSource()
+
     override fun createUser(userParams: UserParams): Observable<ResponseStatus> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.createUser(userParams)
     }
 
     override fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.updateUser(userParams)
     }
 
-    override fun getUser(userId: String): Observable<User> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getUser(): Observable<User> {
+        return remoteDataSource.getUser()
     }
 
     override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.getAddressLocation(latLng)
     }
 
     override fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.getLocationDetail(placeId, key)
     }
 
     override fun searchLocations(input: String, key: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.searchLocations(input, key, language, sensor)
     }
 
     override fun createGroup(name: String): Observable<Group> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.createGroup(name)
     }
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.getGroupInfo(groupId)
     }
 
     override fun getGroupMembers(groupId: String): Observable<MutableList<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.getGroupMembers(groupId)
     }
 
     override fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.addUserToGroup(userId, body)
     }
 
     override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.removeUserFromGroup(userId, body)
     }
 
+    override fun getCurrentLocation(): Observable<HyperTrackLocation> {
+        return remoteDataSource.getCurrentLocation()
+    }
+
+    override fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float> {
+        return remoteDataSource.getETA(destination, vehicle)
+    }
+
+    override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action> {
+        return remoteDataSource.createAndAssignAction(builder)
+    }
 }
