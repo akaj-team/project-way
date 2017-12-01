@@ -21,8 +21,6 @@ import vn.asiantech.way.data.source.remote.response.ResponseStatus
 internal class WayRemoteDataSource : WayDataSource {
     override fun createUser(userParams: UserParams): Observable<ResponseStatus> {
         val result = AsyncSubject.create<ResponseStatus>()
-
-
         HyperTrack.getOrCreateUser(userParams, object : HyperTrackCallback() {
             override fun onSuccess(success: SuccessResponse) {
                 val res = ResponseStatus(true, "Success")
@@ -135,7 +133,6 @@ internal class WayRemoteDataSource : WayDataSource {
                 val err = Throwable(error.errorMessage)
                 result.onError(err)
             }
-
         })
         return result
     }
@@ -153,7 +150,6 @@ internal class WayRemoteDataSource : WayDataSource {
                 val err = Throwable(error.errorMessage)
                 result.onError(err)
             }
-
         })
         return result
     }
