@@ -9,7 +9,7 @@ import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.subjects.AsyncSubject
 import vn.asiantech.way.data.model.*
-import vn.asiantech.way.data.source.WayDataSource
+import vn.asiantech.way.data.source.datasource.WayDataSource
 import vn.asiantech.way.data.source.remote.googleapi.ApiClient
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
