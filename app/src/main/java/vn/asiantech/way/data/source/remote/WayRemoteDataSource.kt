@@ -29,8 +29,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val res = Throwable(error.errorMessage)
-                result.onError(res)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
@@ -46,8 +46,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val res = Throwable(error.errorMessage)
-                result.onError(res)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
@@ -63,8 +63,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val res = Throwable(error.errorMessage)
-                result.onError(res)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
@@ -113,8 +113,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val err = Throwable(error.errorMessage)
-                result.onError(err)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
@@ -130,8 +130,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val err = Throwable(error.errorMessage)
-                result.onError(err)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
@@ -147,8 +147,8 @@ internal class WayRemoteDataSource : WayDataSource {
             }
 
             override fun onError(error: ErrorResponse) {
-                val err = Throwable(error.errorMessage)
-                result.onError(err)
+                val throwable = Throwable(error.errorMessage)
+                result.onError(throwable)
             }
         })
         return result
