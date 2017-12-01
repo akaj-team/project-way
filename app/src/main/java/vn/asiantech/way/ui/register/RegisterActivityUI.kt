@@ -4,12 +4,12 @@ import android.content.DialogInterface
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewManager
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
@@ -51,7 +51,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             frAvatar = frameLayout {
                 id = ID_FR_AVATAR
 
-                circleImageView {
+                imgAvatar = circleImageView {
                     backgroundResource = R.drawable.ic_default_avatar
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
@@ -65,7 +65,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     gravity = Gravity.CENTER
                 }
 
-                imgAvatar = circleImageView {
+                circleImageView {
                     backgroundResource = R.drawable.ic_profile_camera
                     borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dimen(R.dimen.border)
@@ -127,7 +127,8 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                                         layoutManager = LinearLayoutManager(context)
                                         adapter = countryAdapter
                                         countryAdapter.onItemClick = { country ->
-                                            // TODO Set image to imgFlag and tel to tvTel
+                                            Picasso.with(context).load(country.flagFilePath).into(imgFlag)
+                                            tvTel.text = resources.getString(R.string.register_plus).plus(country.tel)
                                             dialogInterface.dismiss()
                                         }
                                     }

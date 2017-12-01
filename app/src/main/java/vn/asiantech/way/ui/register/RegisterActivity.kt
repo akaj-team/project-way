@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -18,13 +19,13 @@ import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.models.User
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import org.jetbrains.anko.setContentView
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.ui.base.BaseActivity
+import java.util.*
 
 /**
  * Activity register user
@@ -53,6 +54,9 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         ui.setContentView(this)
         initListener()
         registerViewModel = RegisterViewModel(this)
+        val user = User()
+        user.photo = "http://3.bp.blogspot.com/-JWTHh-LmaZA/VaiyTEScmOI/AAAAAAAAP0U/pDHk_wZxMiE/s1600/2013_aston_martin_dbc_concept-wide.jpg"
+        onGetUser(user)
     }
 
     override fun onBindViewModel() {
@@ -61,18 +65,20 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     override fun onBackPressed() {
-        if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
-            if (!isExit) {
-                isExit = true
-                toast(getString(R.string.register_double_click_to_exit))
-                Handler().postDelayed({
-                    isExit = false
-                }, 1500)
-            } else {
-                finishAffinity()
+        if (intent.extras != null) {
+            if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
+                if (!isExit) {
+                    isExit = true
+                    toast(getString(R.string.register_double_click_to_exit))
+                    Handler().postDelayed({
+                        isExit = false
+                    }, 1500)
+                } else {
+                    finishAffinity()
+                }
+            } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
+                super.onBackPressed()
             }
-        } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
-            super.onBackPressed()
         }
     }
 
@@ -81,18 +87,28 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         val phoneNumber: String = ui.edtPhone.text.toString().trim()
         when (view) {
             ui.btnRegister -> {
-               //TODO Register user
+                //TODO Register user
             }
             ui.tvSkip -> {
                 if (checkPermission()) {
                     if (userWay == null) {
+                        Log.d("xxx", "xxx")
                         if (name.isBlank()) {
                             name = getString(R.string.register_user_name_default)
                         }
                         if (phoneNumber.isBlank()) {
                             ui.edtPhone.text = null
                         }
-                        // TODO change to alert anko layout
+                        alert {
+                            title = resources.getString(R.string.register_title_dialog)
+                            message = resources.getString(R.string.register_message_dialog)
+                            yesButton {
+                                //TODO Create User with name, phone and...
+                            }
+                            noButton { dialog ->
+                                dialog.dismiss()
+                            }
+                        }.show()
                     }
                 } else {
                     toast(getString(R.string.register_request_permission))
@@ -123,19 +139,21 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = ui.edtName.text.toString().trim()
         val phone: String = ui.edtPhone.text.toString().trim()
-        if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
-            ui.tvCancel.visibility = View.VISIBLE
-            ui.tvSkip.visibility = View.GONE
-        } else {
-            if (name.isBlank() && phone.isBlank()) {
-                ui.tvSkip.visibility = View.VISIBLE
-                ui.tvCancel.visibility = View.GONE
-                ui.btnRegister.isEnabled = false
-            } else {
+        if (intent.extras != null) {
+            if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+                ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
                 ui.tvCancel.visibility = View.VISIBLE
                 ui.tvSkip.visibility = View.GONE
-                ui.btnRegister.isEnabled = true
+            } else {
+                if (name.isBlank() && phone.isBlank()) {
+                    ui.tvSkip.visibility = View.VISIBLE
+                    ui.tvCancel.visibility = View.GONE
+                    ui.btnRegister.isEnabled = false
+                } else {
+                    ui.tvCancel.visibility = View.VISIBLE
+                    ui.tvSkip.visibility = View.GONE
+                    ui.btnRegister.isEnabled = true
+                }
             }
         }
     }
@@ -156,7 +174,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
             }
         }
         return false
-
     }
 
     private fun showCountryList(data: List<Country>) {
@@ -217,7 +234,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         }
     }
 
-    private fun onSelectedAvatar(data: Intent) {
+    private fun onAvatarSelected(data: Intent) {
         val uri = data.data
         if (uri != null) {
             Picasso.with(this)
