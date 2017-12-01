@@ -10,7 +10,6 @@ import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -26,13 +25,14 @@ import vn.asiantech.way.ui.custom.FloatingMenuButton
 import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchActivity
+import vn.asiantech.way.ui.share.ShareActivity
 import vn.asiantech.way.utils.LocationUtil
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMenuClickListener {
+class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
 
     companion object {
         const val ZOOM = 16f
@@ -51,8 +51,8 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = HomeActivityUI(homeAdapter, this)
         setDataForRecyclerView()
+        ui = HomeActivityUI(homeAdapter, this)
         ui.setContentView(this)
         initViews()
         initMap()
@@ -63,18 +63,9 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMe
                 setGoneOverLay()
             }
         }
+
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
-        this.googleMap = googleMap
-        setPaddingGoogleLogo()
-        val location = LocationUtil(this).getCurrentLocation()
-        if (location != null) {
-            drawMaker(location)
-        } else {
-            toast(resources.getString(R.string.not_update_current_location))
-        }
-    }
 
     override fun onMenuClick(isShowMenu: Boolean) {
         ui.frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
@@ -82,7 +73,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMe
     }
 
     override fun onShareClick() {
-        startActivity(Intent(this, SearchActivity::class.java))
+        startActivity(Intent(this, ShareActivity::class.java))
         setGoneOverLay()
     }
 
@@ -131,8 +122,17 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMe
 
     private fun initMap() {
         val supportMapFragment = SupportMapFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.home_activity_fr_map, SupportMapFragment()).commit()
-        supportMapFragment.getMapAsync(this)
+        supportFragmentManager.beginTransaction().replace(R.id.home_activity_fr_map, supportMapFragment).commit()
+        supportMapFragment.getMapAsync { googleMap ->
+            this.googleMap = googleMap
+            setPaddingGoogleLogo()
+            val location = LocationUtil(this).getCurrentLocation()
+            if (location != null) {
+                drawMaker(location)
+            } else {
+                toast(resources.getString(R.string.not_update_current_location))
+            }
+        }
     }
 
     private fun setPaddingGoogleLogo() {
@@ -178,7 +178,7 @@ class HomeActivity : BaseActivity(), OnMapReadyCallback, FloatingMenuButton.OnMe
         }
     }
 
-    private fun getHistoryTrackings(){
+    private fun getHistoryTrackings() {
         TODO("Will update in future")
     }
 
