@@ -15,6 +15,7 @@ object AppConstants {
     const val KEY_GROUND_OVERLAY_POSITION = 500f
     const val KEY_GR_ANIMATION_DUR: Long = 2000L
     const val GOOGLE_MAP_API_KEY = "AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U"
+    const val KEY_SHARED_PREFERENCES_NAME = "shared"
     const val KEY_SEARCH_SCREEN_WAY_LOCATION_HISTORY = "key_history"
     const val SEARCH_SCREEN_HISTORY_MAX_SIZE = 10
     const val WAITING_TIME_FOR_SEARCH_FUNCTION = 300L
