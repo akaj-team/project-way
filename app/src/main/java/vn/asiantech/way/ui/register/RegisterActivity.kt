@@ -85,20 +85,18 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     override fun onBackPressed() {
-        if (intent.extras != null) {
-            if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
-                if (!isExit) {
-                    isExit = true
-                    toast(getString(R.string.register_double_click_to_exit))
-                    Handler().postDelayed({
-                        isExit = false
-                    }, BACK_PRESS_DELAY)
-                } else {
-                    finishAffinity()
-                }
-            } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
-                super.onBackPressed()
+        if (intent.extras != null && intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
+            if (!isExit) {
+                isExit = true
+                toast(getString(R.string.register_double_click_to_exit))
+                Handler().postDelayed({
+                    isExit = false
+                }, BACK_PRESS_DELAY)
+            } else {
+                finishAffinity()
             }
+        } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
+            super.onBackPressed()
         }
     }
 
@@ -136,7 +134,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                                 userParam.name = name
                                 createUser(userParam)
                             }
-                            noButton { dialog -> dialog.dismiss() }
+                            noButton { it.dismiss() }
                         }.show()
                     } else {
                         if (ui.edtName.text.toString() != userWay?.name
@@ -175,39 +173,31 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = ui.edtName.text.toString().trim()
         val phone: String = ui.edtPhone.text.toString().trim()
-        if (intent.extras != null) {
-            if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-                ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
+        if (intent.extras != null && intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
+            ui.tvCancel.visibility = View.VISIBLE
+            ui.tvSkip.visibility = View.GONE
+        } else {
+            if (name.isBlank() && phone.isBlank()) {
+                ui.tvSkip.visibility = View.VISIBLE
+                ui.tvCancel.visibility = View.GONE
+                ui.btnRegister.isEnabled = false
+            } else {
                 ui.tvCancel.visibility = View.VISIBLE
                 ui.tvSkip.visibility = View.GONE
-            } else {
-                if (name.isBlank() && phone.isBlank()) {
-                    ui.tvSkip.visibility = View.VISIBLE
-                    ui.tvCancel.visibility = View.GONE
-                    ui.btnRegister.isEnabled = false
-                } else {
-                    ui.tvCancel.visibility = View.VISIBLE
-                    ui.tvSkip.visibility = View.GONE
-                    ui.btnRegister.isEnabled = true
-                }
+                ui.btnRegister.isEnabled = true
             }
         }
     }
 
     override fun onEditorAction(view: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
         when (view) {
-            ui.edtName -> {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    ui.edtPhone.requestFocus()
-                    return true
-                }
+            ui.edtName -> if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                ui.edtPhone.requestFocus()
             }
 
-            ui.edtPhone -> {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ui.edtPhone.hideKeyboard(this)
-                    return true
-                }
+            ui.edtPhone -> if (actionId == EditorInfo.IME_ACTION_DONE) {
+                ui.edtPhone.hideKeyboard(this)
             }
         }
         return false
@@ -222,12 +212,9 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_CODE_GALLERY -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    intentGallery()
-                }
-            }
+        if (requestCode == REQUEST_CODE_GALLERY && grantResults.isNotEmpty()
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            intentGallery()
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -273,9 +260,9 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
             alert {
                 title = getString(R.string.dialog_title_error)
                 message = updateMessage
-                yesButton { dialog ->
+                yesButton {
                     title = getString(R.string.dialog_button_ok)
-                    dialog.dismiss()
+                    it.dismiss()
                 }
             }.show()
         }

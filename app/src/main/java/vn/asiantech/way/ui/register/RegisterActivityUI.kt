@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.register
 
 import android.content.DialogInterface
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
