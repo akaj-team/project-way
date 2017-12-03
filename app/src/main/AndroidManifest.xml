@@ -30,6 +30,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ui.register.RegisterActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -75,6 +76,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.splash.SplashActivity" />
+        <!--<activity android:name=".ui.register.RegisterActivity" />-->
         <activity android:name=".ui.search.SearchActivity" />
 
         <!-- Register meta-data here -->

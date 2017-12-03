@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
@@ -54,6 +55,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         const val INTENT_REGISTER = "Register"
     }
 
+    private val registerObservable = PublishSubject.create<Intent>()
     private var countries = MutableList(0, { Country("", "") })
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var ui: RegisterActivityUI
@@ -63,6 +65,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     internal var isoCode: String? = null
     private var tel: String? = null
     private var isExit = false
+    private var avatarIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +86,18 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe(this::updateProgressBarStatus),
-                registerViewModel.selectAvatar()
+                registerViewModel.selectAvatar(avatarIntent)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
                         .subscribe(this::onAvatarSelected))
+
+
+//        addDisposables(registerObservable.subscribe({
+//            registerViewModel.selectAvatar(it)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(this::onAvatarSelected)
+//        }))
     }
 
     override fun onBackPressed() {
@@ -126,7 +139,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
             ui.tvSkip -> {
                 if (checkPermission()) {
                     if (userWay == null) {
-                        Log.d("xxx", "create")
                         if (name.isBlank()) {
                             name = getString(R.string.register_user_name_default)
                         }
@@ -143,7 +155,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                             noButton { dialog -> dialog.dismiss() }
                         }.show()
                     } else {
-                        Log.d("xxx", "update")
                         if (ui.edtName.text.toString() != userWay?.name
                                 || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, 3)
                                 || avatarUri != null) {
@@ -240,7 +251,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
-            registerViewModel.setIntent(data)
+            // todo
         }
     }
 

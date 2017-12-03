@@ -41,7 +41,7 @@
     <dimen name="home_screen_imgStatus_dimension">50dp</dimen>
     <dimen name="home_screen_tvStatus_size">15sp</dimen>
     <dimen name="home_screen_recyclerView_height">200dp</dimen>
-    <dimen name="home_screen_recyclerView_margin">20dp</dimen>
+    <dimen name="home_screen_recyclerView_margin">15dp</dimen>
     <dimen name="home_screen_expTv_marginRight">25dp</dimen>
 
     <!--Arrived screen-->
@@ -64,6 +64,8 @@
     <!--Group-->
     <dimen name="notification_size">24dp</dimen>
     <dimen name="group_text_size_normal">15dp</dimen>
+    <dimen name="home_screen_floating_button_margin">20dp</dimen>
+    <dimen name="padding_logo_map">0dp</dimen>
     <dimen name="group_screen_img_leave_margin">30dp</dimen>
     <dimen name="group_screen_recycler_view_padding">5dp</dimen>
     <dimen name="group_screen_tv_count_padding_left">10dp</dimen>

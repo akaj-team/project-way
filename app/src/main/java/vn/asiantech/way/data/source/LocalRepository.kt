@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.source.local
+package vn.asiantech.way.data.source
 
 import android.content.Context
 import android.support.annotation.RawRes
@@ -8,15 +8,27 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
-import vn.asiantech.way.data.source.AssetDataSource
+import vn.asiantech.way.data.source.datasource.LocalDataSource
 import java.io.ByteArrayOutputStream
 
 /**
- * Created by tien.hoang on 11/29/17.
+ * Created by tien.hoang on 12/1/17.
  */
-class AssetLocalDataSource(val context: Context) : AssetDataSource {
+class LocalRepository(val context: Context) : LocalDataSource {
     companion object {
         val COUNTRIES_RAW_ID = R.raw.countries
+        const val PREFS_FILE = "AppPrefsKey"
+        const val KEY_LOGIN_TOKEN = "login"
+    }
+
+    private val pref = context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
+
+    override fun getUserToken(): String {
+        return pref.getString(KEY_LOGIN_TOKEN, "")
+    }
+
+    override fun setUserToken(token: String) {
+        pref.edit().putString(KEY_LOGIN_TOKEN, token).apply()
     }
 
     override fun getCountries(): Observable<List<Country>> {
