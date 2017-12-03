@@ -2,15 +2,12 @@ package vn.asiantech.way.ui.register
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
@@ -33,39 +30,33 @@ class RegisterViewModel(val context: Context) {
 
     internal fun createUser(userParams: UserParams): Observable<ResponseStatus> {
         return wayRepository.createUser(userParams)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+                .observeOnUiThread()
     }
 
     internal fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
+        progressBarStatus.onNext(true)
         return wayRepository.updateUser(userParams)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+                .observeOnUiThread()
+                .doOnNext { progressBarStatus.onNext(false) }
+                .doOnError { progressBarStatus.onNext(false) }
     }
 
     internal fun getUser(): Observable<User> {
         progressBarStatus.onNext(true)
         return wayRepository.getUser()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+                .observeOnUiThread()
+                .doOnNext { progressBarStatus.onNext(false) }
+                .doOnError { progressBarStatus.onNext(false) }
+    }
+
+    internal fun selectAvatar(intent: Intent): Observable<Intent> {
+        progressBarStatus.onNext(true)
+        return assetDataRepository.getAvatarIntent(intent)
+                .observeOnUiThread()
                 .doOnNext { progressBarStatus.onNext(false) }
     }
 
-    internal fun selectAvatar(intent: Intent?): Observable<Intent> {
-        Log.d("xxx", "avatar: " + (intent == null))
-        val result = PublishSubject.create<Intent>()
-        result.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    result.onNext(intent!!)
-                }
-        return result
-    }
-
-    internal fun avatar(intent: Intent?): Observable<Intent> {
-        val result = PublishSubject.create<Intent>()
-        result.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-        return result
+    internal fun saveLoginStatus(isLogin: Boolean) {
+        assetDataRepository.setLoginStatus(isLogin)
     }
 }

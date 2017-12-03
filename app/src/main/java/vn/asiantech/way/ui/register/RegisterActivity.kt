@@ -15,32 +15,26 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
-import com.hypertrack.lib.callbacks.HyperTrackCallback
-import com.hypertrack.lib.models.ErrorResponse
-import com.hypertrack.lib.models.SuccessResponse
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.extension.hideKeyboard
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.home.HomeActivity
 
 /**
  * Activity register user
@@ -53,9 +47,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         private const val REQUEST_CODE_PICK_IMAGE = 1003
         private const val REQUEST_CODE_GALLERY = 1004
         const val INTENT_REGISTER = "Register"
+        private const val BACK_PRESS_DELAY = 1500L
+        private const val PHONE_PREFIX_LENGTH = 3
+        private const val AVATAR_SIZE = 300
     }
 
-    private val registerObservable = PublishSubject.create<Intent>()
     private var countries = MutableList(0, { Country("", "") })
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var ui: RegisterActivityUI
@@ -65,7 +61,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     internal var isoCode: String? = null
     private var tel: String? = null
     private var isExit = false
-    private var avatarIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,23 +76,12 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     override fun onBindViewModel() {
-        addDisposables(registerViewModel.getCountries().subscribe(this::showCountryList),
+        addDisposables(
+                registerViewModel.getCountries().subscribe(this::showCountryList),
                 registerViewModel.progressBarStatus
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(this::updateProgressBarStatus),
-                registerViewModel.selectAvatar(avatarIntent)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(this::onAvatarSelected))
+                        .observeOnUiThread()
+                        .subscribe(this::updateProgressBarStatus))
 
-
-//        addDisposables(registerObservable.subscribe({
-//            registerViewModel.selectAvatar(it)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(this::onAvatarSelected)
-//        }))
     }
 
     override fun onBackPressed() {
@@ -108,7 +92,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                     toast(getString(R.string.register_double_click_to_exit))
                     Handler().postDelayed({
                         isExit = false
-                    }, 1500)
+                    }, BACK_PRESS_DELAY)
                 } else {
                     finishAffinity()
                 }
@@ -156,38 +140,19 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                         }.show()
                     } else {
                         if (ui.edtName.text.toString() != userWay?.name
-                                || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, 3)
+                                || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, PHONE_PREFIX_LENGTH)
                                 || avatarUri != null) {
-                            visibleProgressBar(ui.progressBar)
-                            // Update user information
-                            HyperTrack.updateUser(userParam, object : HyperTrackCallback() {
-                                override fun onSuccess(p0: SuccessResponse) {
-                                    HyperTrack.startTracking()
-                                    invisibleProgressBar(ui.progressBar)
-                                    updateUser(userParam)
-                                    // TODO Intent to HomeActivity
-                                }
-
-                                override fun onError(error: ErrorResponse) {
-                                    alert {
-                                        title = getString(R.string.dialog_title_error)
-                                        message = error.errorMessage
-                                        yesButton { dialog ->
-                                            title = getString(R.string.dialog_button_ok)
-                                            dialog.dismiss()
-                                        }
-                                    }.show()
-                                }
-                            })
+                            updateUser(userParam)
                         }
                     }
                 } else {
                     toast(getString(R.string.register_request_permission))
                 }
             }
+
             ui.tvCancel -> {
                 if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-                    // TODO Start HomeActivity
+                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                 } else {
                     ui.edtName.setText("")
                     ui.edtPhone.setText("")
@@ -210,23 +175,23 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val name: String = ui.edtName.text.toString().trim()
         val phone: String = ui.edtPhone.text.toString().trim()
-//        if (intent.extras != null) {
-//            if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-//                ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
-//                ui.tvCancel.visibility = View.VISIBLE
-//                ui.tvSkip.visibility = View.GONE
-//            } else {
-        if (name.isBlank() && phone.isBlank()) {
-            ui.tvSkip.visibility = View.VISIBLE
-            ui.tvCancel.visibility = View.GONE
-            ui.btnRegister.isEnabled = false
-        } else {
-            ui.tvCancel.visibility = View.VISIBLE
-            ui.tvSkip.visibility = View.GONE
-            ui.btnRegister.isEnabled = true
+        if (intent.extras != null) {
+            if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
+                ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
+                ui.tvCancel.visibility = View.VISIBLE
+                ui.tvSkip.visibility = View.GONE
+            } else {
+                if (name.isBlank() && phone.isBlank()) {
+                    ui.tvSkip.visibility = View.VISIBLE
+                    ui.tvCancel.visibility = View.GONE
+                    ui.btnRegister.isEnabled = false
+                } else {
+                    ui.tvCancel.visibility = View.VISIBLE
+                    ui.tvSkip.visibility = View.GONE
+                    ui.btnRegister.isEnabled = true
+                }
+            }
         }
-//            }
-//        }
     }
 
     override fun onEditorAction(view: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
@@ -251,7 +216,8 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
-            // todo
+            addDisposables(registerViewModel.selectAvatar(data)
+                    .subscribe(this::onAvatarSelected))
         }
     }
 
@@ -291,11 +257,28 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     private fun onUserCreated(responseStatus: ResponseStatus) {
-        toast(responseStatus.message)
+        val message = responseStatus.message
+        if (message == "Success") {
+            registerViewModel.saveLoginStatus(true)
+        }
+        toast(message)
     }
 
     private fun onUserUpdated(responseStatus: ResponseStatus) {
-        toast(responseStatus.message)
+        val updateMessage = responseStatus.message
+        if (updateMessage == "Success") {
+            startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
+            toast(responseStatus.message)
+        } else {
+            alert {
+                title = getString(R.string.dialog_title_error)
+                message = updateMessage
+                yesButton { dialog ->
+                    title = getString(R.string.dialog_button_ok)
+                    dialog.dismiss()
+                }
+            }.show()
+        }
     }
 
     private fun onGetUser(user: User) {
@@ -343,13 +326,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     private fun onAvatarSelected(data: Intent?) {
-        Log.d("xxx", "data" + (data == null))
         val uri = data?.data
-        Log.d("xxx", uri.toString())
         if (uri != null) {
             Picasso.with(this)
                     .load(uri)
-                    .resize(300, 300)
+                    .resize(AVATAR_SIZE, AVATAR_SIZE)
                     .into(object : Target {
                         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                             // No-op
@@ -365,7 +346,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                         }
                     })
         } else {
-            val bmp = data?.extras?.get("data") as Bitmap
+            val bmp = data?.extras?.get("data") as? Bitmap
             updateView(bmp)
         }
     }
