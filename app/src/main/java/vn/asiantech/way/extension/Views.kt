@@ -8,7 +8,6 @@ import com.hypertrack.lib.internal.consumer.view.CircularSeekBar
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.ui.custom.BottomButtonCard
-import vn.asiantech.way.ui.custom.TrackingProgressInfo
 
 /**
  * Created by haingoq on 12/10/2017.
