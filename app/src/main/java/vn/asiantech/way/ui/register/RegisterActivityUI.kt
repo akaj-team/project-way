@@ -228,13 +228,12 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             if (view is EditText) {
                 when (view.id) {
                     R.id.register_activity_edt_name,
-                    R.id.register_activity_edt_phone -> {
+                    R.id.register_activity_edt_phone ->
                         view.addTextChangedListener(object : OnWayTextChangeListener {
                             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                                 owner.onHandleTextChange()
                             }
                         })
-                    }
                 }
             }
         }
