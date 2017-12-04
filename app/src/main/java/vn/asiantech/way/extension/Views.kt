@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewManager
 import android.view.inputmethod.InputMethodManager
 import com.hypertrack.lib.internal.consumer.view.RippleView
+import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.ui.custom.BottomButtonCard
 
@@ -24,4 +25,9 @@ internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView {
 
 internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {
     return ankoView({ BottomButtonCard(it) }, 0, init)
+}
+
+internal inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
+        CircleImageView {
+    return ankoView({ CircleImageView(it) }, theme, init)
 }

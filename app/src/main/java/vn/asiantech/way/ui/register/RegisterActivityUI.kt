@@ -6,17 +6,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
 import android.view.Gravity
 import android.view.View
-import android.view.ViewManager
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
 
 /**
@@ -143,7 +141,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
                     tvTel = textView(R.string.register_tel) {
                         id = R.id.register_activity_tv_tel
-                        gravity = Gravity.START or Gravity.CENTER_VERTICAL
+                        gravity = Gravity.CENTER_VERTICAL
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                     }.lparams(dimen(R.dimen.register_screen_tv_tel_width), matchParent)
 
@@ -153,7 +151,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                         hint = resources.getString(R.string.register_hint_phone)
                         inputType = InputType.TYPE_CLASS_PHONE
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
-                        gravity = Gravity.START or Gravity.CENTER_VERTICAL
+                        gravity = Gravity.CENTER_VERTICAL
 
                         onEditorAction { _, actionId, _ ->
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -234,13 +232,5 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 }
             }
         }
-    }
-
-    /*
-     * Add circleImageView library
-     */
-    private inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
-            CircleImageView {
-        return ankoView({ CircleImageView(it) }, theme, init)
     }
 }
