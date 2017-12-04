@@ -95,10 +95,8 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     id = R.id.register_activity_edt_name
                     backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
                     hint = resources.getString(R.string.register_hint_name)
-                    inputType = InputType.TYPE_CLASS_TEXT
                     textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
                     gravity = Gravity.CENTER
-                    imeOptions = EditorInfo.IME_ACTION_NEXT
 
                     onEditorAction { _, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -156,7 +154,6 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                         inputType = InputType.TYPE_CLASS_PHONE
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
-                        imeOptions = EditorInfo.IME_ACTION_DONE
 
                         onEditorAction { _, actionId, _ ->
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
