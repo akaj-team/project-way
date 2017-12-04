@@ -16,5 +16,5 @@ interface LocalDataSource {
     fun getSearchHistory(): List<WayLocation>?
     fun saveSearchHistory(location: WayLocation)
 
-    fun getTrackingHistory(): MutableList<TrackingInformation>
+    fun getTrackingHistory(): MutableList<TrackingInformation>?
 }

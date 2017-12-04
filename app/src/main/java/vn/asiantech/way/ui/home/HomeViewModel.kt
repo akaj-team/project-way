@@ -17,7 +17,7 @@ class HomeViewModel(val context: Context) {
 
     internal fun getTrackingHistory(): Single<MutableList<TrackingInformation>> {
         val subject = SingleSubject.create<MutableList<TrackingInformation>>()
-        subject.onSuccess(localRepository.getTrackingHistory())
+        localRepository.getTrackingHistory()?.let { subject.onSuccess(it) }
         return subject
     }
 }

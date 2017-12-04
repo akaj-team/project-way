@@ -82,9 +82,17 @@ class LocalRepository(val context: Context) : LocalDataSource {
         }
     }
 
-    //TODO: Will update fun later
-    override fun getTrackingHistory(): MutableList<TrackingInformation> {
-        return mutableListOf()
+    override fun getTrackingHistory(): MutableList<TrackingInformation>? {
+        val result = mutableListOf<TrackingInformation>()
+        return try {
+            val history = pref.getString(AppConstants.KEY_TRACKING_HISTORY, "[]")
+            val jsonArray = JSONArray(history)
+            (0 until jsonArray.length())
+                    .mapTo(result) { Gson().fromJson(jsonArray.getJSONObject(it).toString(), TrackingInformation::class.java) }
+            result.toMutableList()
+        } catch (e: JsonSyntaxException) {
+            null
+        }
     }
 
     private fun readJsonFromDirectory(@RawRes resId: Int): String {
