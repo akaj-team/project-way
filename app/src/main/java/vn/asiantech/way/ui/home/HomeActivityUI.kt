@@ -2,8 +2,6 @@ package vn.asiantech.way.ui.home
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import android.widget.FrameLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import vn.asiantech.way.R
@@ -15,7 +13,8 @@ import vn.asiantech.way.ui.custom.floatingButton
  * Created by at-hoavo on 27/11/2017.
  */
 class HomeActivityUI(private val homeAdapter: HomeAdapter,
-                     private var onMenuClick: FloatingMenuButton.OnMenuClickListener) : AnkoComponent<HomeActivity> {
+                     private var onMenuClick: FloatingMenuButton.OnMenuClickListener) :
+        AnkoComponent<HomeActivity> {
 
     internal lateinit var fabMenuGroup: FloatingMenuButton
 

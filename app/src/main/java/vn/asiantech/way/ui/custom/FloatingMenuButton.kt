@@ -2,7 +2,6 @@ package vn.asiantech.way.ui.custom
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -44,7 +43,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
         AnkoContext.createDelegate(this).apply {
             relativeLayout {
                 lparams(matchParent, matchParent)
-                this@FloatingMenuButton.frOverlay = frameLayout {
+                frOverlay = frameLayout {
                     lparams(matchParent, matchParent)
                     visibility = View.GONE
                     backgroundResource = R.color.colorOverlay
@@ -110,7 +109,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                         backgroundResource = R.drawable.custom_menu_button
                         onClick {
                             onMenuClick()
-                            this@FloatingMenuButton.frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
+                            frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
                         }
                     }.lparams(dimen(R.dimen.width_height_image_button_menu),
                             dimen(R.dimen.width_height_image_button_menu)) {
