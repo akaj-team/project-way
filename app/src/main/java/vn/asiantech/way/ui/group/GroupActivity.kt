@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
+import android.util.Log
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -21,5 +22,8 @@ class GroupActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         // TODO: handle later
+        addDisposables(groupViewModel
+                .getGroupId("e4e91b20-498b-49a0-b2aa-64b9a992e21d")
+                .subscribe { Log.i("tag11", it + "----") })
     }
 }

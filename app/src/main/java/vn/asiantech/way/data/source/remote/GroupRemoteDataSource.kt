@@ -35,17 +35,27 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getGroupId(userId: String): Observable<String> {
         val result = PublishSubject.create<String>()
-        val groupRef = firebaseDatabase.getReference("user/$userId/groupId")
-        groupRef.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                result.onError(Throwable(p0?.message))
+        val groupRef = firebaseDatabase.getReference("user/$userId/group")
+//        groupRef.addValueEventListener(object : ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError?) {
+//                result.onError(Throwable(p0?.message))
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot?) {
+//                val id = p0?.getValue(String::class.java)
+//                if (id != null) {
+//                    groupRef.removeValue()
+//                    result.onNext(id)
+//                }
+//            }
+//        })
+        groupRef.addChildEventListener(object : SimpleChildEventListener {
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                result.onNext("xxx" + Gson().toJson(p0?.value))
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
-                val id = p0?.getValue(String::class.java)
-                if (id != null) {
-                    result.onNext(id)
-                }
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+                result.onNext(Gson().toJson(p0?.value))
             }
         })
         return result
