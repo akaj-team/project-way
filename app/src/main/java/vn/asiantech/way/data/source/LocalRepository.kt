@@ -3,7 +3,6 @@ package vn.asiantech.way.data.source
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.annotation.RawRes
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -85,24 +84,7 @@ class LocalRepository(val context: Context) : LocalDataSource {
 
     //TODO: Will update fun later
     override fun getTrackingHistory(): MutableList<TrackingInformation> {
-        return mutableListOf(TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)),
-                TrackingInformation("1:00 PM", "Stop", "30 minutes| You stop at the school...............",
-                        LatLng(16.0721115, 108.2302225)))
+        return mutableListOf()
     }
 
     private fun readJsonFromDirectory(@RawRes resId: Int): String {
