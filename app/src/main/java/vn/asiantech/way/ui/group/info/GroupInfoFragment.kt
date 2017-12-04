@@ -87,10 +87,10 @@ class GroupInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initOnclick()
         recyclerViewMembers.layoutManager = LinearLayoutManager(context)
         recyclerViewMembers.adapter = adapter
+        initView()
+        initOnclick()
     }
 
 
