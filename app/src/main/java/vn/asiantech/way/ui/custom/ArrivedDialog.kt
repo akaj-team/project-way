@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
-import vn.asiantech.way.utils.ScreenUtil
+import vn.asiantech.way.extension.setDialogScreenSize
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -161,6 +161,6 @@ internal class ArrivedDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        ScreenUtil.getScreenSize(context, dialog)
+        dialog.setDialogScreenSize(context)
     }
 }
