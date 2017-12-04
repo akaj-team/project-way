@@ -1,4 +1,4 @@
-package vn.asiantech.way.data.source
+package vn.asiantech.way.data.source.datasource
 
 import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.internal.common.models.VehicleType
