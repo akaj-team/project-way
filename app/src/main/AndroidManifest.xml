@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.home.HomeActivity">
+        <activity android:name=".ui.register.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -76,7 +76,7 @@
         </activity>
 
         <activity android:name=".ui.splash.SplashActivity" />
-        <activity android:name=".ui.register.RegisterActivity" />
+        <!--<activity android:name=".ui.register.RegisterActivity" />-->
         <activity android:name=".ui.share.ShareActivity" />
         <activity
             android:name=".ui.search.SearchActivity"

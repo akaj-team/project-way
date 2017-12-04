@@ -36,11 +36,11 @@ import vn.asiantech.way.ui.home.HomeActivity
  */
 class RegisterActivity : BaseActivity() {
     companion object {
-        const val REQUEST_CODE_SPLASH = 1001
-        const val REQUEST_CODE_HOME = 1002
+        private const val REQUEST_CODE_SPLASH = 1001
+        private const val REQUEST_CODE_HOME = 1002
         private const val REQUEST_CODE_PICK_IMAGE = 1003
         private const val REQUEST_CODE_GALLERY = 1004
-        const val KEY_FROM_REGISTER = "Register"
+        private const val KEY_FROM_REGISTER = "Register"
         private const val BACK_PRESS_DELAY = 1500L
         private const val NUM_CHAR_REMOVE = 3
         private const val AVATAR_SIZE = 300
