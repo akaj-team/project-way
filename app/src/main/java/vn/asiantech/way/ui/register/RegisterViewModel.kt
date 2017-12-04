@@ -5,8 +5,7 @@ import android.content.Intent
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.LocalRepository
@@ -41,11 +40,11 @@ class RegisterViewModel(val context: Context) {
                 .doOnError { progressBarStatus.onNext(false) }
     }
 
-    internal fun getUser(): Observable<User> {
+    internal fun getUser(): Single<User> {
         progressBarStatus.onNext(true)
         return wayRepository.getUser()
                 .observeOnUiThread()
-                .doOnNext { progressBarStatus.onNext(false) }
+                .doOnSuccess { progressBarStatus.onNext(false) }
                 .doOnError { progressBarStatus.onNext(false) }
     }
 

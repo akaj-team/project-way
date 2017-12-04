@@ -50,6 +50,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         private const val BACK_PRESS_DELAY = 1500L
         private const val PHONE_PREFIX_LENGTH = 3
         private const val AVATAR_SIZE = 300
+        private const val SUCCESS = "Success"
     }
 
     private var countries = MutableList(0, { Country("", "") })
@@ -69,19 +70,17 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         initListener()
         isoCode = getString(R.string.register_iso_code_default)
         registerViewModel = RegisterViewModel(this)
-        registerViewModel.getUser()
-                .subscribe(this::onGetUser, {
-                    toast(it.message.toString())
-                })
     }
 
     override fun onBindViewModel() {
-        addDisposables(
-                registerViewModel.getCountries().subscribe(this::showCountryList),
+        addDisposables(registerViewModel.getCountries().subscribe(this::showCountryList),
                 registerViewModel.progressBarStatus
                         .observeOnUiThread()
-                        .subscribe(this::updateProgressBarStatus))
-
+                        .subscribe(this::updateProgressBarStatus),
+                registerViewModel.getUser()
+                        .subscribe(this::onGetUser, {
+                            toast(it.message.toString())
+                        }))
     }
 
     override fun onBackPressed() {
@@ -110,15 +109,11 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                 .setLookupId(phoneNumber)
 
         when (view) {
-            ui.frAvatar -> {
-                checkPermissionGallery()
-            }
+            ui.frAvatar -> checkPermissionGallery()
 
-            ui.btnRegister -> {
-                createUser(userParam)
-            }
+            ui.btnRegister -> createUser(userParam)
 
-            ui.tvSkip -> {
+            ui.tvSkip ->
                 if (checkPermission()) {
                     if (userWay == null) {
                         if (name.isBlank()) {
@@ -146,11 +141,10 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                 } else {
                     toast(getString(R.string.register_request_permission))
                 }
-            }
 
-            ui.tvCancel -> {
+            ui.tvCancel ->
                 if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-                    startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                 } else {
                     ui.edtName.setText("")
                     ui.edtPhone.setText("")
@@ -158,7 +152,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                     avatarBitmap = null
                     Picasso.with(this).load(R.drawable.ic_default_avatar).into(ui.imgAvatar)
                 }
-            }
         }
     }
 
@@ -174,7 +167,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         val name: String = ui.edtName.text.toString().trim()
         val phone: String = ui.edtPhone.text.toString().trim()
         if (intent.extras != null && intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, 3))
+            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, PHONE_PREFIX_LENGTH))
             ui.tvCancel.visibility = View.VISIBLE
             ui.tvSkip.visibility = View.GONE
         } else {
@@ -220,13 +213,15 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     private fun createUser(userParam: UserParams) {
-        addDisposables(registerViewModel.createUser(userParam)
-                .subscribe(this::onUserCreated))
+        val disposable = registerViewModel.createUser(userParam)
+                .subscribe(this::onUserCreated)
+        addDisposables(disposable)
     }
 
     private fun updateUser(userParam: UserParams) {
-        addDisposables(registerViewModel.updateUser(userParam)
-                .subscribe(this::onUserUpdated))
+        val disposable = registerViewModel.updateUser(userParam)
+                .subscribe(this::onUserUpdated)
+        addDisposables(disposable)
     }
 
     private fun showCountryList(data: List<Country>) {
@@ -245,7 +240,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
 
     private fun onUserCreated(responseStatus: ResponseStatus) {
         val message = responseStatus.message
-        if (message == "Success") {
+        if (message == SUCCESS) {
             registerViewModel.saveLoginStatus(true)
         }
         toast(message)
@@ -253,8 +248,8 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
 
     private fun onUserUpdated(responseStatus: ResponseStatus) {
         val updateMessage = responseStatus.message
-        if (updateMessage == "Success") {
-            startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
+        if (updateMessage == SUCCESS) {
+            startActivity(Intent(this, HomeActivity::class.java))
             toast(responseStatus.message)
         } else {
             alert {
