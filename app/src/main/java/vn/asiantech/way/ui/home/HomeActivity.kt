@@ -6,7 +6,6 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,7 +13,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.startActivity
@@ -158,7 +156,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
                 if (it > positions[positions.size - 2]) {
                     ui.recycleViewLocation.scrollToPosition(it + 1)
                 } else {
-                    ui.recycleViewLocation.scrollToPosition(it - 1)
+                    ui.recycleViewLocation.scrollToPosition(it)
                 }
             }
             locations[it].isChoose = true
