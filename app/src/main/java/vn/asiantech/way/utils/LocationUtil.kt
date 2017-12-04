@@ -11,7 +11,7 @@ import android.util.Log
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 29/09/2017.
  */
-class LocationUtil(private val mContext: Context) : LocationListener {
+class LocationUtil(private val context: Context) : LocationListener {
 
     companion object {
         private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 5L
@@ -19,34 +19,34 @@ class LocationUtil(private val mContext: Context) : LocationListener {
         private const val TAG = "Error"
     }
 
-    private var mIsGPSEnabled = false
-    private var mCanGetLocation = false
-    private var mIsNetworkEnabled = false
-    private var mLocation: Location? = null
-    private var mLocationManager: LocationManager? = null
+    private var isGPSEnabled = false
+    private var canGetLocation = false
+    private var isNetworkEnabled = false
+    private var location: Location? = null
+    private var locationManager: LocationManager? = null
 
     /**
      * To get the current location
      *
-     * @return mLocation is the current location
+     * @return location is the current location
      */
     fun getCurrentLocation(): Location? {
         if (canGetLocation()) {
-            mCanGetLocation = true
+            canGetLocation = true
             try {
-                mLocationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+                locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
                 checkGPSOrWifi()
-                if (mIsNetworkEnabled) {
-                    mLocationManager?.let {
+                if (isNetworkEnabled) {
+                    locationManager?.let {
                         it.requestLocationUpdates(
                                 LocationManager.NETWORK_PROVIDER
                                 , MIN_TIME_BW_UPDATES
                                 , MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this)
-                        mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        location = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                     }
-                    if (mLocation != null) {
-                        mLocationManager?.let {
-                            mLocation = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    if (location != null) {
+                        locationManager?.let {
+                            location = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                         }
                     }
                 }
@@ -56,24 +56,24 @@ class LocationUtil(private val mContext: Context) : LocationListener {
         } else {
             Log.d(TAG, "Can not get location!")
         }
-        return mLocation
+        return location
     }
 
     private fun canGetLocation(): Boolean {
-        mLocationManager = mContext
+        locationManager = context
                 .getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         checkGPSOrWifi()
-        mCanGetLocation = !(!mIsGPSEnabled && !mIsNetworkEnabled)
-        return mCanGetLocation
+        canGetLocation = !(!isGPSEnabled && !isNetworkEnabled)
+        return canGetLocation
     }
 
     private fun checkGPSOrWifi() {
-        mLocationManager?.let {
+        locationManager?.let {
             // getting GPS status
-            mIsGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            isGPSEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
             // getting wifi status
-            mIsNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            isNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         }
     }
 
