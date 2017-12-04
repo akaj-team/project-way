@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.group
 
 import android.os.Bundle
 import android.util.Log
+import com.google.gson.Gson
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.ui.base.BaseActivity
 
@@ -29,6 +30,10 @@ class GroupActivity : BaseActivity() {
                 groupViewModel.getGroupId("e4e91b20-498b-49a0-b2aa-64b9a992e21d")
                         .subscribe {
                             Log.i("tag11", "xxx-$it")
+                        },
+                groupViewModel.getInviteList("a7720310-50f0-4dab-86d9-17188da6964b")
+                        .subscribe {
+                            Log.i("tag11", Gson().toJson(it))
                         }
         )
     }

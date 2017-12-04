@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.group
 
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.extension.observeOnUiThread
 
@@ -20,6 +21,11 @@ class GroupActivityViewModel {
 
     internal fun getGroupId(userId: String): Observable<String> {
         return groupDataSource.getGroupId(userId)
+                .observeOnUiThread()
+    }
+
+    internal fun getInviteList(userId: String): Observable<Invite> {
+        return groupDataSource.getInvite(userId)
                 .observeOnUiThread()
     }
 }
