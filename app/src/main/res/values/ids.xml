@@ -82,7 +82,4 @@
     <item name="item_invite_name" type="id"/>
     <item name="item_invite_tv_ok" type="id"/>
     <item name="item_invite_tv_cancel" type="id"/>
-
-
-
 </resources>
