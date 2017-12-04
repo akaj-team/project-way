@@ -15,7 +15,9 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.hideKeyboard
 
 /**
  * Anko layout for RegisterActivity
@@ -40,7 +42,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
         relativeLayout {
             lparams(matchParent, matchParent)
             frAvatar = frameLayout {
-                id = R.id.share_activity_fr_avatar
+                id = R.id.register_activity_fr_avatar
 
                 imgAvatar = circleImageView {
                     backgroundResource = R.drawable.ic_default_avatar
@@ -64,17 +66,21 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.END
                 }
+
+                onClick {
+                    owner.checkPermissionGallery()
+                }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
                 centerHorizontally()
             }
 
             textView(R.string.register_description) {
-                id = R.id.share_activity_tv_description
+                id = R.id.register_activity_tv_description
                 gravity = Gravity.CENTER
                 textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
             }.lparams(matchParent, wrapContent) {
-                below(R.id.share_activity_fr_avatar)
+                below(R.id.register_activity_fr_avatar)
                 val margin = resources.getDimension(R.dimen.margin_xxhigh).toInt()
                 topMargin = margin
                 leftMargin = margin
@@ -82,24 +88,30 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
 
             relativeLayout {
-                id = R.id.share_activity_rl_information
+                id = R.id.register_activity_rl_information
                 backgroundResource = R.drawable.custom_layout_phone
 
                 edtName = editText {
-                    id = R.id.share_activity_edt_name
+                    id = R.id.register_activity_edt_name
                     backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
                     hint = resources.getString(R.string.register_hint_name)
                     inputType = InputType.TYPE_CLASS_TEXT
                     textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
                     gravity = Gravity.CENTER
                     imeOptions = EditorInfo.IME_ACTION_NEXT
+
+                    onEditorAction { _, actionId, _ ->
+                        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                            requestFocus()
+                        }
+                    }
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height))
 
                 view {
-                    id = R.id.share_activity_view_line
+                    id = R.id.register_activity_view_line
                     backgroundColor = ContextCompat.getColor(context, R.color.grayLight)
                 }.lparams(matchParent, dimen(R.dimen.border)) {
-                    below(R.id.share_activity_edt_name)
+                    below(R.id.register_activity_edt_name)
                 }
 
                 linearLayout {
@@ -132,23 +144,31 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     }
 
                     tvTel = textView(R.string.register_tel) {
+                        id = R.id.register_activity_tv_tel
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                     }.lparams(dimen(R.dimen.register_screen_tv_tel_width), matchParent)
 
                     edtPhone = editText {
+                        id = R.id.register_activity_edt_phone
                         backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
                         hint = resources.getString(R.string.register_hint_phone)
                         inputType = InputType.TYPE_CLASS_PHONE
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                         gravity = Gravity.START or Gravity.CENTER_VERTICAL
                         imeOptions = EditorInfo.IME_ACTION_DONE
+
+                        onEditorAction { _, actionId, _ ->
+                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                hideKeyboard(getContext())
+                            }
+                        }
                     }.lparams(matchParent, matchParent)
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height)) {
-                    below(R.id.share_activity_view_line)
+                    below(R.id.register_activity_view_line)
                 }
             }.lparams(matchParent, wrapContent) {
-                below(R.id.share_activity_tv_description)
+                below(R.id.register_activity_tv_description)
                 val margin = dimen(R.dimen.margin_high)
                 bottomMargin = dimen(R.dimen.margin_huge)
                 leftMargin = margin
@@ -157,15 +177,20 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
 
             btnRegister = button(R.string.register_button_save_text) {
-                id = R.id.share_activity_btn_save
+                id = R.id.register_activity_btn_save
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
                 textColor = ContextCompat.getColor(context, R.color.white)
                 textSize = px2dip(dimen(R.dimen.register_screen_save_button_text_size))
                 isEnabled = false
+
+                onClick {
+                    owner.createUser(owner.createUserParam(edtName.text.toString().trim(),
+                            edtPhone.text.toString().trim()))
+                }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
-                below(R.id.share_activity_rl_information)
+                below(R.id.register_activity_rl_information)
                 leftMargin = margin
                 topMargin = margin
                 rightMargin = margin
@@ -173,11 +198,13 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
             tvSkip = textView {
                 text = resources.getString(R.string.register_skip)
-                id = R.id.share_activity_tv_skip
+                id = R.id.register_activity_tv_skip
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
+
+                onClick { owner.onSkipClick() }
             }.lparams(matchParent, wrapContent) {
-                below(R.id.share_activity_btn_save)
+                below(R.id.register_activity_btn_save)
                 topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
@@ -185,8 +212,10 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
                 visibility = View.GONE
+
+                onClick { owner.onCancelClick() }
             }.lparams(matchParent, wrapContent) {
-                below(R.id.share_activity_tv_skip)
+                below(R.id.register_activity_tv_skip)
                 topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 
@@ -194,6 +223,19 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 visibility = View.GONE
             }.lparams {
                 centerInParent()
+            }
+        }.applyRecursively { view: View ->
+            if (view is EditText) {
+                when (view.id) {
+                    R.id.register_activity_edt_name,
+                    R.id.register_activity_edt_phone -> {
+                        view.addTextChangedListener(object : OnWayTextChangeListener {
+                            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                                owner.onHandleTextChange()
+                            }
+                        })
+                    }
+                }
             }
         }
     }

@@ -53,6 +53,7 @@ class RegisterViewModel(val context: Context) {
         return assetDataRepository.getAvatarIntent(intent)
                 .observeOnUiThread()
                 .doOnNext { progressBarStatus.onNext(false) }
+                .doOnError { progressBarStatus.onNext(false) }
     }
 
     internal fun saveLoginStatus(isLogin: Boolean) {

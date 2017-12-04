@@ -13,14 +13,9 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
-import android.widget.TextView
 import com.hypertrack.lib.HyperTrackUtils
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
@@ -30,7 +25,6 @@ import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
-import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.ui.base.BaseActivity
@@ -40,17 +34,17 @@ import vn.asiantech.way.ui.home.HomeActivity
  * Activity register user
  * Created by haibt on 9/26/17.
  */
-class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
+class RegisterActivity : BaseActivity() {
     companion object {
-        const val INTENT_CODE_SPLASH = 1001
-        const val INTENT_CODE_HOME = 1002
+        const val REQUEST_CODE_SPLASH = 1001
+        const val REQUEST_CODE_HOME = 1002
         private const val REQUEST_CODE_PICK_IMAGE = 1003
         private const val REQUEST_CODE_GALLERY = 1004
-        const val INTENT_REGISTER = "Register"
+        const val KEY_FROM_REGISTER = "Register"
         private const val BACK_PRESS_DELAY = 1500L
-        private const val PHONE_PREFIX_LENGTH = 3
+        private const val NUM_CHAR_REMOVE = 3
         private const val AVATAR_SIZE = 300
-        private const val SUCCESS = "Success"
+        private const val RESULT_SUCCESS = "Success"
     }
 
     private var countries = MutableList(0, { Country("", "") })
@@ -67,7 +61,6 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         super.onCreate(savedInstanceState)
         ui = RegisterActivityUI(CountryAdapter(this, countries))
         ui.setContentView(this)
-        initListener()
         isoCode = getString(R.string.register_iso_code_default)
         registerViewModel = RegisterViewModel(this)
     }
@@ -84,7 +77,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
     }
 
     override fun onBackPressed() {
-        if (intent.extras != null && intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_SPLASH) {
+        if (intent.extras != null && intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_CODE_SPLASH) {
             if (!isExit) {
                 isExit = true
                 toast(getString(R.string.register_double_click_to_exit))
@@ -94,106 +87,9 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
             } else {
                 finishAffinity()
             }
-        } else if (intent.extras.getInt(INTENT_REGISTER) == INTENT_CODE_HOME) {
+        } else if (intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_CODE_HOME) {
             super.onBackPressed()
         }
-    }
-
-    override fun onClick(view: View?) {
-        var name: String = ui.edtName.text.toString().trim()
-        val phoneNumber: String = ui.edtPhone.text.toString().trim()
-        val userParam = UserParams()
-                .setName(name)
-                .setPhoto(avatarBitmap?.toBase64())
-                .setPhone(isoCode?.plus("/")?.plus(phoneNumber))
-                .setLookupId(phoneNumber)
-
-        when (view) {
-            ui.frAvatar -> checkPermissionGallery()
-
-            ui.btnRegister -> createUser(userParam)
-
-            ui.tvSkip ->
-                if (checkPermission()) {
-                    if (userWay == null) {
-                        if (name.isBlank()) {
-                            name = getString(R.string.register_user_name_default)
-                        }
-                        if (phoneNumber.isBlank()) {
-                            ui.edtPhone.text = null
-                        }
-                        alert {
-                            title = resources.getString(R.string.register_title_dialog)
-                            message = resources.getString(R.string.register_message_dialog)
-                            yesButton {
-                                userParam.name = name
-                                createUser(userParam)
-                            }
-                            noButton { it.dismiss() }
-                        }.show()
-                    } else {
-                        if (ui.edtName.text.toString() != userWay?.name
-                                || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, PHONE_PREFIX_LENGTH)
-                                || avatarUri != null) {
-                            updateUser(userParam)
-                        }
-                    }
-                } else {
-                    toast(getString(R.string.register_request_permission))
-                }
-
-            ui.tvCancel ->
-                if (intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                } else {
-                    ui.edtName.setText("")
-                    ui.edtPhone.setText("")
-                    avatarUri = null
-                    avatarBitmap = null
-                    Picasso.with(this).load(R.drawable.ic_default_avatar).into(ui.imgAvatar)
-                }
-        }
-    }
-
-    override fun afterTextChanged(p0: Editable?) {
-        // No-op
-    }
-
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        // No-op
-    }
-
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        val name: String = ui.edtName.text.toString().trim()
-        val phone: String = ui.edtPhone.text.toString().trim()
-        if (intent.extras != null && intent.extras[INTENT_REGISTER] == INTENT_CODE_HOME) {
-            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, PHONE_PREFIX_LENGTH))
-            ui.tvCancel.visibility = View.VISIBLE
-            ui.tvSkip.visibility = View.GONE
-        } else {
-            if (name.isBlank() && phone.isBlank()) {
-                ui.tvSkip.visibility = View.VISIBLE
-                ui.tvCancel.visibility = View.GONE
-                ui.btnRegister.isEnabled = false
-            } else {
-                ui.tvCancel.visibility = View.VISIBLE
-                ui.tvSkip.visibility = View.GONE
-                ui.btnRegister.isEnabled = true
-            }
-        }
-    }
-
-    override fun onEditorAction(view: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
-        when (view) {
-            ui.edtName -> if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                ui.edtPhone.requestFocus()
-            }
-
-            ui.edtPhone -> if (actionId == EditorInfo.IME_ACTION_DONE) {
-                ui.edtPhone.hideKeyboard(this)
-            }
-        }
-        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -212,10 +108,83 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun createUser(userParam: UserParams) {
+    internal fun createUser(userParam: UserParams) {
         val disposable = registerViewModel.createUser(userParam)
                 .subscribe(this::onUserCreated)
         addDisposables(disposable)
+    }
+
+    internal fun createUserParam(name: String, phoneNumber: String): UserParams {
+        return UserParams()
+                .setName(name)
+                .setPhoto(avatarBitmap?.toBase64())
+                .setPhone(isoCode?.plus("/")?.plus(phoneNumber))
+                .setLookupId(phoneNumber)
+    }
+
+    internal fun onHandleTextChange() {
+        val name: String = ui.edtName.text.toString().trim()
+        val phone: String = ui.edtPhone.text.toString().trim()
+        if (intent.extras != null && intent.extras[KEY_FROM_REGISTER] == REQUEST_CODE_HOME) {
+            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE))
+            ui.tvCancel.visibility = View.VISIBLE
+            ui.tvSkip.visibility = View.GONE
+        } else {
+            if (name.isBlank() && phone.isBlank()) {
+                ui.tvSkip.visibility = View.VISIBLE
+                ui.tvCancel.visibility = View.GONE
+                ui.btnRegister.isEnabled = false
+            } else {
+                ui.tvCancel.visibility = View.VISIBLE
+                ui.tvSkip.visibility = View.GONE
+                ui.btnRegister.isEnabled = true
+            }
+        }
+    }
+
+    internal fun onSkipClick() {
+        var name: String = ui.edtName.text.toString().trim()
+        val phoneNumber: String = ui.edtPhone.text.toString().trim()
+        val userParam = createUserParam(name, phoneNumber)
+        if (checkPermission()) {
+            if (userWay == null) {
+                if (name.isBlank()) {
+                    name = getString(R.string.register_user_name_default)
+                }
+                if (phoneNumber.isBlank()) {
+                    ui.edtPhone.text = null
+                }
+                alert {
+                    title = resources.getString(R.string.register_title_dialog)
+                    message = resources.getString(R.string.register_message_dialog)
+                    yesButton {
+                        userParam.name = name
+                        createUser(userParam)
+                    }
+                    noButton { it.dismiss() }
+                }.show()
+            } else {
+                if (ui.edtName.text.toString() != userWay?.name
+                        || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE)
+                        || avatarUri != null) {
+                    updateUser(userParam)
+                }
+            }
+        } else {
+            toast(getString(R.string.register_request_permission))
+        }
+    }
+
+    internal fun onCancelClick() {
+        if (intent.extras[KEY_FROM_REGISTER] == REQUEST_CODE_HOME) {
+            startActivity<HomeActivity>()
+        } else {
+            ui.edtName.setText("")
+            ui.edtPhone.setText("")
+            avatarUri = null
+            avatarBitmap = null
+            Picasso.with(this).load(R.drawable.ic_default_avatar).into(ui.imgAvatar)
+        }
     }
 
     private fun updateUser(userParam: UserParams) {
@@ -240,7 +209,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
 
     private fun onUserCreated(responseStatus: ResponseStatus) {
         val message = responseStatus.message
-        if (message == SUCCESS) {
+        if (message == RESULT_SUCCESS) {
             registerViewModel.saveLoginStatus(true)
         }
         toast(message)
@@ -248,8 +217,8 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
 
     private fun onUserUpdated(responseStatus: ResponseStatus) {
         val updateMessage = responseStatus.message
-        if (updateMessage == SUCCESS) {
-            startActivity(Intent(this, HomeActivity::class.java))
+        if (updateMessage == RESULT_SUCCESS) {
+            startActivity<HomeActivity>()
             toast(responseStatus.message)
         } else {
             alert {
@@ -356,7 +325,7 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
                 && HyperTrackUtils.isInternetConnected(this)
     }
 
-    private fun checkPermissionGallery() {
+    internal fun checkPermissionGallery() {
         if (ContextCompat.checkSelfPermission(this
                 , Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -382,17 +351,5 @@ class RegisterActivity : BaseActivity(), View.OnClickListener, TextWatcher, Text
         val chooserIntent = Intent.createChooser(galleryIntent, pickTitle)
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
         startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
-    }
-
-    private fun initListener() {
-        ui.frAvatar.setOnClickListener(this)
-        ui.edtName.setOnEditorActionListener(this)
-        ui.edtName.addTextChangedListener(this)
-        ui.edtPhone.setOnEditorActionListener(this)
-        ui.edtPhone.addTextChangedListener(this)
-        ui.tvTel.addTextChangedListener(this)
-        ui.btnRegister.setOnClickListener(this)
-        ui.tvSkip.setOnClickListener(this)
-        ui.tvCancel.setOnClickListener(this)
     }
 }
