@@ -6,6 +6,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -155,9 +156,9 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             positions.add(it)
             if (positions.size > 1) {
                 if (it > positions[positions.size - 2]) {
-                    recycleViewLocation.scrollToPosition(it + 1)
+                    ui.recycleViewLocation.scrollToPosition(it + 1)
                 } else {
-                    recycleViewLocation.scrollToPosition(it - 1)
+                    ui.recycleViewLocation.scrollToPosition(it - 1)
                 }
             }
             locations[it].isChoose = true
