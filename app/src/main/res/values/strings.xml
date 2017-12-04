@@ -104,10 +104,6 @@
     <string name="eta">ETA</string>
     <string name="open_parentheses">(</string>
     <string name="close_parentheses_distance"> km away)</string>
-    <string name="tv_start_time">3:08 CH, th 10, 2017</string>
-    <string name="tv_end_time">3:08 CH, th 10, 2017</string>
-    <string name="tv_start_address">An Hai Bac</string>
-    <string name="tv_end_address">An Hai Bac, An Hai Bac, An Hai Bac</string>
     <!-- Group Screen -->
     <string name="not_yet_join_to_group">Bạn chưa tham gia vào nhóm.</string>
     <string name="create_new_group">Tạo nhóm mới</string>

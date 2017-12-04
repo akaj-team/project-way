@@ -267,7 +267,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             bottomOf(R.id.tracking_progress_info_tv_start_address)
                                         }
 
-                                        tvStartTime = textView(R.string.tv_start_time) {
+                                        tvStartTime = textView {
                                             id = R.id.tracking_progress_info_tv_start_time
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_very_low)
@@ -276,7 +276,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             rightOf(R.id.tracking_progress_info_img_start_point)
                                         }
 
-                                        tvStartAddress = textView(R.string.tv_start_address) {
+                                        tvStartAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_start_address
                                             textColor = ContextCompat.getColor(context, R.color.colorBlack)
@@ -327,7 +327,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             bottomMargin = dimen(R.dimen.track_margin_value_very_low)
                                         }
 
-                                        tvEndTime = textView(R.string.tv_end_time) {
+                                        tvEndTime = textView {
                                             id = R.id.tracking_progress_info_tv_end_time
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_very_low)
@@ -336,7 +336,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                             leftOf(R.id.tracking_progress_info_img_arrow_right_end_item)
                                         }
 
-                                        tvEndAddress = textView(R.string.tv_end_address) {
+                                        tvEndAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_end_address
                                             textColor = ContextCompat.getColor(context, R.color.colorBlack)
@@ -446,7 +446,6 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
         return this
     }
 }
-
 
 internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
         TrackingProgressInfo {
