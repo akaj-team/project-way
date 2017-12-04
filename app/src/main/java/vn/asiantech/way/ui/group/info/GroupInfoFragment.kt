@@ -116,7 +116,10 @@ class GroupInfoFragment : BaseFragment() {
                             progressDialog.dismiss()
                             if (group != null) {
                                 loadGroupInfo()
-                                initView()
+                                tvName.text = group?.name
+                                tvCreateAt.text = getString(R.string.create_at, group?.createAt
+                                        ?.substring(BEGIN_INDEX, SUBSTRING_LENGTH))
+                                loadGroupMemberList()
                                 return
                             }
                             showToast(R.string.error_message)

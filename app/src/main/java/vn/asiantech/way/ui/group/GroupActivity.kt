@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,9 +27,9 @@ import vn.asiantech.way.ui.group.home.GroupHomeFragment
 import vn.asiantech.way.ui.group.info.GroupInfoFragment
 import vn.asiantech.way.ui.group.invite.InviteFragment
 import vn.asiantech.way.ui.group.reload.ReloadFragment
-import vn.asiantech.way.ui.group.showrequest.ViewRequestFragment
 import vn.asiantech.way.ui.group.search.SearchGroupFragment
 import vn.asiantech.way.ui.group.showinvite.ViewInviteFragment
+import vn.asiantech.way.ui.group.showrequest.ViewRequestFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -123,6 +124,7 @@ class GroupActivity : BaseActivity() {
                 if (user.groupId == null) {
                     replaceFragment(GroupHomeFragment())
                 } else {
+                    Log.i("tag11", "0000" + user.id + "---" + user.groupId)
                     replaceFragment(GroupInfoFragment.getInstance(user.id, user.groupId))
                 }
                 initDatabaseReferences()
