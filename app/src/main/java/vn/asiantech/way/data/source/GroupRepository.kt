@@ -28,26 +28,26 @@ class GroupRepository : GroupDataSource {
     }
 
     override fun getRequest(groupId: String): Observable<Invite> {
-        TODO("not implemented")
+        return remoteDataSource.getRequest(groupId)
     }
 
     override fun upGroupInfo(group: Group): Observable<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.upGroupInfo(group)
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Observable<Boolean> {
-        TODO("not implemented")
+    override fun changeOwner(groupId: String, newOwner: String): Single<Boolean> {
+        return remoteDataSource.changeOwner(groupId, newOwner)
     }
 
     override fun removeGroup(groupId: String): Observable<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.removeGroup(groupId)
     }
 
     override fun upInvite(userId: String, invite: Invite): Single<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.upInvite(userId, invite)
     }
 
     override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.removeUserFromGroup(userId)
     }
 }

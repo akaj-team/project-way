@@ -51,11 +51,6 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    /**
-     * This method used to get invite list of a given user.
-     *
-     * @param userId - id of given user.
-     */
     override fun getInvite(userId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
         val inviteRef = firebaseDatabase.getReference("user/$userId/invites")
@@ -98,11 +93,22 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Observable<Boolean> {
-        TODO("not implemented")
+    override fun changeOwner(groupId: String, newOwner: String): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val inviteRef = firebaseDatabase.getReference("group/$groupId/info/ownerId")
+        inviteRef.setValue(newOwner) { databaseError, dataSuccess ->
+            if (databaseError != null) {
+                result.onSuccess(false)
+            }
+            if (dataSuccess != null) {
+                result.onSuccess(true)
+            }
+        }
+        return result
     }
 
     override fun removeGroup(groupId: String): Observable<Boolean> {
+        // TODO: 04/12/2017
         // Will handle when we want.
         TODO("not implemented")
     }

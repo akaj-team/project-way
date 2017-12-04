@@ -52,7 +52,7 @@ interface GroupDataSource {
      * @param groupId - id of given group.
      * @param newOwner- id of given user.
      */
-    fun changeOwner(groupId: String, newOwner: String): Observable<Boolean>
+    fun changeOwner(groupId: String, newOwner: String): Single<Boolean>
 
     /**
      * This method used to remove a given group.
