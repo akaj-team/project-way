@@ -131,4 +131,6 @@
 
     <!--Invite Screen-->
     <string name="enter_user_name">enter_user_name</string>
+    <string name="invite_text_ok">ok</string>
+    <string name="invite_text_cancel">cancel</string>
 </resources>

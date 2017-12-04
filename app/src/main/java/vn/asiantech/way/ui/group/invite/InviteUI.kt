@@ -41,6 +41,7 @@ class InviteUI() : AnkoComponent<InviteActivity> {
                     rightMargin = dip(value = 10)
                 }
 
+                // RecycleView
                 recyclerView {
                     id = R.id.invite_recycle_view
                 }.lparams(matchParent, matchParent) {
@@ -50,6 +51,4 @@ class InviteUI() : AnkoComponent<InviteActivity> {
         }
 
     }.view
-
-
 }
