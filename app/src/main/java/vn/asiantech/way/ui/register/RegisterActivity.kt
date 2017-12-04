@@ -244,7 +244,7 @@ class RegisterActivity : BaseActivity() {
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                ui.imgAvatar.setImageBitmap(bitmap)
+                ui.imgAvatar.imageBitmap = bitmap
                 invisibleProgressBar(ui.progressBarAvatar)
                 avatarBitmap = bitmap
             }
@@ -303,7 +303,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun updateView(bitmap: Bitmap?) {
-        ui.imgAvatar.setImageBitmap(bitmap)
+        ui.imgAvatar.imageBitmap = bitmap
         ui.tvCancel.visibility = View.VISIBLE
         ui.tvSkip.visibility = View.GONE
         ui.btnRegister.isEnabled = true
