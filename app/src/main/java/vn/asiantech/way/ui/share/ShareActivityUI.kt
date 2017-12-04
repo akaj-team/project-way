@@ -8,8 +8,7 @@ import android.widget.TextView
 import org.jetbrains.anko.*
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.rippleView
-import vn.asiantech.way.ui.custom.bottomCard
-
+import vn.asiantech.way.ui.custom.trackingProgress
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -107,7 +106,8 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                 }
             }
 
-            bottomCard {}
+//           bottomCard {}
+            trackingProgress {}
         }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewManager
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.hypertrack.lib.internal.consumer.view.CircularSeekBar
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.utils.AppConstants
@@ -34,4 +35,8 @@ internal fun Dialog.setDialogScreenSize(context: Context) {
     windowParams.height = height - height / AppConstants.TYPE_UNIT_DIALOG_HEIGHT
     windowParams.width = width - AppConstants.TYPE_DIALOG_MARGIN_WIDTH
     this.window.attributes = windowParams
+}
+
+internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar {
+    return ankoView({ CircularSeekBar(it) }, 0, init)
 }
