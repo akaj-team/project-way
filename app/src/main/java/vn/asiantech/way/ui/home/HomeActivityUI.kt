@@ -18,7 +18,6 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
                      private var onMenuClick: FloatingMenuButton.OnMenuClickListener) : AnkoComponent<HomeActivity> {
 
     internal lateinit var fabMenuGroup: FloatingMenuButton
-    internal lateinit var frOverlay: FrameLayout
 
     override fun createView(ui: AnkoContext<HomeActivity>) = with(ui) {
 
@@ -44,16 +43,10 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
                 }
             }
 
-            frOverlay = frameLayout {
-                visibility = View.GONE
-                backgroundResource = R.color.colorOverlay
-            }.lparams(matchParent, matchParent)
-
             fabMenuGroup = floatingButton(onMenuClick) {}
                     .lparams {
                         alignParentBottom()
                         alignParentRight()
-                        margin = dimen(R.dimen.home_screen_floating_button_margin)
                     }
         }
     }

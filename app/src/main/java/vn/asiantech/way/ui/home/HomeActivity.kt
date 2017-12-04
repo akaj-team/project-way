@@ -6,7 +6,6 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,9 +16,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.FloatingMenuButton
 import vn.asiantech.way.ui.group.GroupActivity
@@ -40,61 +41,43 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
         private const val UNIT_PADDING_BOTTOM = 3
     }
 
-    private var position = -1
-    private var googleMap: GoogleMap? = null
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
+    private lateinit var homeViewModel: HomeViewModel
     private var locations: MutableList<TrackingInformation> = mutableListOf()
     private var isExit = false
-    private var isExpand = false
+    private var position = -1
+    private var googleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setDataForRecyclerView()
+        initRecyclerView()
         ui = HomeActivityUI(homeAdapter, this)
         ui.setContentView(this)
         initViews()
         initMap()
-        ui.frOverlay.setOnClickListener {
-            if (isExpand) {
-                ui.fabMenuGroup.collapseMenu()
-                isExpand = false
-                setGoneOverLay()
-            }
-        }
-
-    }
-
-    override fun onMenuClick(isShowMenu: Boolean) {
-        ui.frOverlay.visibility = if (isShowMenu) View.VISIBLE else View.GONE
-        isExpand = isShowMenu
+        homeViewModel = HomeViewModel(this)
     }
 
     override fun onShareClick() {
-        startActivity(Intent(this, ShareActivity::class.java))
-        setGoneOverLay()
+        startActivity<ShareActivity>()
     }
 
     override fun onProfileClick() {
-        val intent = Intent(this, RegisterActivity::class.java)
         // TODO to put extra for intent
-        startActivity(intent)
-        setGoneOverLay()
+        startActivity<RegisterActivity>()
     }
 
     override fun onCalendarClick() {
-        setGoneOverLay()
         // TODO after completed calendar feature
     }
 
     override fun onSearchClick() {
-        startActivity(Intent(this, SearchActivity::class.java))
-        setGoneOverLay()
+        startActivity<SearchActivity>()
     }
 
     override fun onGroupClick() {
-        startActivity(Intent(this, GroupActivity::class.java))
-        setGoneOverLay()
+        startActivity<GroupActivity>()
     }
 
     override fun onBackPressed() {
@@ -111,7 +94,9 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     }
 
     override fun onBindViewModel() {
-        // TODO to bind with ViewModel
+        addDisposables(homeViewModel.getTrackingHistory()
+                .observeOnUiThread()
+                .subscribe(this::setDataForRecyclerView))
     }
 
     private fun initViews() {
@@ -155,7 +140,12 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
         }
     }
 
-    private fun setDataForRecyclerView() {
+    private fun setDataForRecyclerView(data: MutableList<TrackingInformation>?) {
+        data?.let { locations.addAll(it) }
+        homeAdapter.notifyDataSetChanged()
+    }
+
+    private fun initRecyclerView() {
         val positions: MutableList<Int> = mutableListOf()
         homeAdapter = HomeAdapter(this, locations) {
             if (position >= 0) {
@@ -174,14 +164,6 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             homeAdapter.notifyItemChanged(it)
             position = it
         }
-    }
-
-    private fun getHistoryTrackings() {
-        TODO("Will update in future")
-    }
-
-    private fun setGoneOverLay() {
-        ui.frOverlay.visibility = View.GONE
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {

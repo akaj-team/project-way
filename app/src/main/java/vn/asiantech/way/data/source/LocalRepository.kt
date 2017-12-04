@@ -11,6 +11,7 @@ import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.data.source.datasource.LocalDataSource
 import vn.asiantech.way.utils.AppConstants
@@ -20,6 +21,7 @@ import java.io.ByteArrayOutputStream
  * Created by tien.hoang on 12/1/17.
  */
 class LocalRepository(val context: Context) : LocalDataSource {
+
     companion object {
 
         val COUNTRIES_RAW_ID = R.raw.countries
@@ -80,6 +82,11 @@ class LocalRepository(val context: Context) : LocalDataSource {
         }
     }
 
+    //TODO: Will update fun later
+    override fun getTrackingHistory(): MutableList<TrackingInformation> {
+        return mutableListOf()
+    }
+
     private fun readJsonFromDirectory(@RawRes resId: Int): String {
         val iStream = context.resources.openRawResource(resId)
         val byteStream = ByteArrayOutputStream()
@@ -94,4 +101,5 @@ class LocalRepository(val context: Context) : LocalDataSource {
     private fun getCountries(json: String): List<Country> {
         return Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
     }
+
 }

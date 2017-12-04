@@ -2,6 +2,7 @@ package vn.asiantech.way.data.source.datasource
 
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Country
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.WayLocation
 
 /**
@@ -14,4 +15,6 @@ interface LocalDataSource {
     fun setUserToken(token: String)
     fun getSearchHistory(): List<WayLocation>?
     fun saveSearchHistory(location: WayLocation)
+
+    fun getTrackingHistory(): MutableList<TrackingInformation>
 }
