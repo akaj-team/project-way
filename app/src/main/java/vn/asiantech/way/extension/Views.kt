@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.custom.ankoView
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Created by haingoq on 12/10/2017.
@@ -30,7 +31,7 @@ internal fun Dialog.setDialogScreenSize(context: Context) {
     val height = displayMetrics.heightPixels
     val windowParams = WindowManager.LayoutParams()
     windowParams.copyFrom(this.window.attributes)
-    windowParams.height = height - height / 5
-    windowParams.width = width - 80
+    windowParams.height = height - height / AppConstants.TYPE_UNIT_DIALOG_HEIGHT
+    windowParams.width = width - AppConstants.TYPE_DIALOG_MARGIN_WIDTH
     this.window.attributes = windowParams
 }

@@ -11,8 +11,10 @@ object AppConstants {
     val KEY_SHARING = "sharing"
     val KEY_START_SHARING = "start_sharing"
     val KEY_DEFAULT_ANCHOR = 0.5f
-    val KEY_DRAWABLE_SIZE =  500
+    val KEY_DRAWABLE_SIZE = 500
     val KEY_GROUND_OVERLAY_POSITION = 500f
     val KEY_GR_ANIMATION_DUR: Long = 2000L
     val GOOGLE_MAP_API_KEY = "AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U"
+    const val TYPE_UNIT_DIALOG_HEIGHT = 5
+    const val TYPE_DIALOG_MARGIN_WIDTH = 80
 }
