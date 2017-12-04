@@ -28,11 +28,6 @@ internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomBu
     return ankoView({ BottomButtonCard(it) }, 0, init)
 }
 
-internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
-        TrackingProgressInfo {
-    return ankoView({ TrackingProgressInfo(it) }, 0, init)
-}
-
 internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar {
     return ankoView({ CircularSeekBar(it) }, 0, init)
 }

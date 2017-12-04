@@ -9,6 +9,7 @@ import android.widget.*
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import com.hypertrack.lib.internal.consumer.view.CircularSeekBar
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circularSeekBar
@@ -444,4 +445,10 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
         llDetailArrived.visibility = View.VISIBLE
         return this
     }
+}
+
+
+internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
+        TrackingProgressInfo {
+    return ankoView({ TrackingProgressInfo(it) }, 0, init)
 }
