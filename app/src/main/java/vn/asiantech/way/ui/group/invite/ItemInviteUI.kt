@@ -20,7 +20,7 @@ class ItemInviteUI : AnkoComponent<ViewGroup> {
             lparams(matchParent, matchParent)
             backgroundColor = Color.WHITE
             // Text view name
-            val tvName = textView {
+            textView {
                 id = R.id.item_invite_name
                 singleLine = true
                 textColor = Color.BLACK
