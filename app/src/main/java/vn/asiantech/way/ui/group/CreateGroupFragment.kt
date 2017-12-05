@@ -13,15 +13,6 @@ import vn.asiantech.way.ui.base.BaseFragment
  * Created by haingoq on 28/11/2017.
  */
 class CreateGroupFragment : BaseFragment() {
-
-    companion object {
-        fun getInstance(userId: String): CreateGroupFragment {
-            val instance = CreateGroupFragment()
-
-            return instance
-        }
-    }
-
     lateinit var createGroupViewModel: CreateGroupViewModel
     lateinit var ui: CreateGroupFragmentUI
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
