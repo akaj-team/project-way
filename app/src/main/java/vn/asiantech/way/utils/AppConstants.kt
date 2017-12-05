@@ -23,4 +23,6 @@ object AppConstants {
     const val ACTION_CURRENT_LOCATION = "action_current_location"
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
     const val BACK_PRESS_DELAY = 1500L
+    const val TYPE_UNIT_DIALOG_HEIGHT = 5
+    const val TYPE_DIALOG_MARGIN_WIDTH = 80
 }

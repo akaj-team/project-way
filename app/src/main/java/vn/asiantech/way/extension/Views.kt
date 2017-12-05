@@ -1,13 +1,17 @@
 package vn.asiantech.way.extension
 
+import android.app.Dialog
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewManager
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.hypertrack.lib.internal.consumer.view.CircularSeekBar
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.custom.ankoView
-import vn.asiantech.way.ui.custom.BottomButtonCard
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Created by haingoq on 12/10/2017.
@@ -23,8 +27,19 @@ internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView {
             { RippleView(it, null) }, 0, init)
 }
 
-internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {
-    return ankoView({ BottomButtonCard(it) }, 0, init)
+internal fun Dialog.setDialogScreenSize(context: Context) {
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    val width = displayMetrics.widthPixels
+    val height = displayMetrics.heightPixels
+    val windowParams = WindowManager.LayoutParams()
+    windowParams.copyFrom(this.window.attributes)
+    windowParams.height = height - height / AppConstants.TYPE_UNIT_DIALOG_HEIGHT
+    windowParams.width = width - AppConstants.TYPE_DIALOG_MARGIN_WIDTH
+    this.window.attributes = windowParams
+}
+
+internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar {
+    return ankoView({ CircularSeekBar(it) }, 0, init)
 }
 
 internal inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):

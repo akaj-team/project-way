@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
+import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -12,6 +13,7 @@ import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.rippleView
@@ -295,4 +297,8 @@ class BottomButtonCard(context: Context) :
         tvTitle.visibility = View.VISIBLE
         return this
     }
+}
+
+internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {
+    return ankoView({ BottomButtonCard(it) }, 0, init)
 }
