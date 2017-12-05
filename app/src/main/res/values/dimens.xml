@@ -109,6 +109,6 @@
     <dimen name="track_btn_call_margin">3dp</dimen>
 
     <!--Invite screen-->
-    <dimen name="intvite_screen_bottom_or_top_padding">5</dimen>
-    <dimen name="invite_screen_start_or_end_padding">10</dimen>
+    <dimen name="intvite_screen_bottom_or_top_padding">5dp</dimen>
+    <dimen name="invite_screen_start_or_end_padding">10dp</dimen>
 </resources>
