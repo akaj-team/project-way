@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
