@@ -74,17 +74,12 @@ class RegisterActivity : BaseActivity() {
                         .subscribe(this::onGetUser, {
                             toast(it.message.toString())
                         }),
-                registerViewModel.onBack()
+                registerViewModel.backStatus
                         .subscribe(this::onBackButtonPress))
     }
 
     override fun onBackPressed() {
-        registerViewModel.onBack()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        registerViewModel.resume()
+        registerViewModel.onBackPress()
     }
 
     private fun onBackButtonPress(isBack: Boolean) {

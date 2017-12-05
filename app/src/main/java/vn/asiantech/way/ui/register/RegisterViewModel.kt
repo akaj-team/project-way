@@ -23,7 +23,7 @@ import vn.asiantech.way.utils.AppConstants
  */
 class RegisterViewModel(val context: Context, val isRegister: Boolean) {
     internal val progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
-    private val backStatus: PublishSubject<Boolean> = PublishSubject.create()
+    internal val backStatus: PublishSubject<Boolean> = PublishSubject.create()
     private val wayRepository = WayRepository()
     private val assetDataRepository = LocalRepository(context)
     private var lastClickTime = 0L
@@ -70,20 +70,15 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
                 .setLookupId(phone)
     }
 
-    internal fun onBack(): Observable<Boolean> {
-        backStatus.onNext(getDelayTime())
-        return backStatus.observeOnUiThread()
+    internal fun onBackPress() {
+        backStatus.onNext(handleBackKeyEvent())
     }
 
-    private fun getDelayTime(): Boolean {
+    private fun handleBackKeyEvent(): Boolean {
         if (SystemClock.elapsedRealtime() - lastClickTime < AppConstants.BACK_PRESS_DELAY) {
             return true
         }
         lastClickTime = SystemClock.elapsedRealtime()
         return false
-    }
-
-    internal fun resume() {
-        lastClickTime = 0
     }
 }
