@@ -2,7 +2,9 @@ package vn.asiantech.way.ui.group
 
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**
  *
@@ -11,12 +13,12 @@ import vn.asiantech.way.ui.base.BaseActivity
 class GroupActivity : BaseActivity() {
     private lateinit var ui: GroupActivityUI
     override fun onBindViewModel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
+        supportFragmentManager.beginTransaction().replace(R.id.group_activity_fr, SearchGroupFragment()).commit()
     }
 }

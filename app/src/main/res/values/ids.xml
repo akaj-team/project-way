@@ -10,6 +10,14 @@
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
 
+    <!--View ids for GroupActivity-->
+    <item name="group_activity_fr" type="id" />
+
+    <!--View ids for SearchGroupActivity-->
+    <item name="group_search_adapter_view_break_line" type="id" />
+    <item name="group_search_adapter_tv_name_user" type="id" />
+    <item name="group_search_adapter_tv_join_group" type="id" />
+
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
     <item name="splash_activity_tv_application_name" type="id" />

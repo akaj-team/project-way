@@ -124,8 +124,10 @@
     <string name="leave_group_notification">You have left %s.</string>
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="join">join</string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>
     <string name="arrived_dialog_total_distance">7 km</string>
+    <string name="enter_group_name">Enter group name</string>
 </resources>
