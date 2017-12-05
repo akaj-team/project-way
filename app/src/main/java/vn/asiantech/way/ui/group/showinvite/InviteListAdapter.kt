@@ -59,7 +59,6 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
         }
     }
 
-
     /**
      * Class to bind ViewHolder with Anko layout
      */
