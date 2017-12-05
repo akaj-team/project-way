@@ -82,4 +82,25 @@ interface GroupDataSource {
      * @param groupName - name of group.
      */
     fun searchGroup(groupName: String): Observable<List<Group>>
+
+    /**
+     * This method used to get current request of a given user.
+     *
+     * @param userId - id of given user
+     */
+    fun getCurrentRequestOfUser(userId: String): Observable<Invite>
+
+    /**
+     * This method used to post a request to group.
+     *
+     * @param request - given request.
+     */
+    fun postRequestToGroup(request: Invite)
+
+    /**
+     * This method used to post a request to user.
+     *
+     * @param request - given request
+     */
+    fun postRequestToUser(request: Invite)
 }

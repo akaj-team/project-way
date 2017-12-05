@@ -143,6 +143,38 @@ class GroupRemoteDataSource : GroupDataSource {
                 .map { it.groups }
     }
 
+    override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
+        val result = PublishSubject.create<Invite>()
+        val requestRef = firebaseDatabase.getReference("user/$userId/request")
+        requestRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) = Unit
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                val gson = Gson()
+                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
+                result.onNext(currentRequest)
+            }
+        })
+        return result
+    }
+
+    override fun postRequestToGroup(request: Invite) {
+        val requestRef = firebaseDatabase.getReference("group/${request.to}/request/")
+        requestRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) = Unit
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                val gson = Gson()
+                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
+                result.onNext(currentRequest)
+            }
+        })
+    }
+
+    override fun postRequestToUser(request: Invite) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     /**
      * This interface used to make ChildEventListener become a simple interface.
      */
