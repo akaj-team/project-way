@@ -32,7 +32,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
             lparams(matchParent, matchParent)
-            padding = dimen(R.dimen.intvite_screen_padding)
+            padding = dimen(R.dimen.invite_screen_padding)
             backgroundColor = ActivityCompat.getColor(context, R.color.colorSearchScreenBackground)
 
             verticalLayout {
@@ -51,7 +51,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     backgroundColor = Color.BLACK
                     hint = resources.getString(R.string.enter_user_name)
                     singleLine = true
-                    padding = dimen(R.dimen.intvite_screen_padding)
+                    padding = dimen(R.dimen.invite_screen_padding)
                     textSize = resources.getDimension(R.dimen.search_screen_text_size)
                     textColor = Color.WHITE
 
@@ -61,8 +61,8 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                         }
                     })
                 }.lparams(matchParent, matchParent) {
-                    leftMargin = dimen(R.dimen.intvite_screen_padding)
-                    rightMargin = dimen(R.dimen.intvite_screen_padding)
+                    leftMargin = dimen(R.dimen.invite_screen_padding)
+                    rightMargin = dimen(R.dimen.invite_screen_padding)
                 }
 
                 // RecycleView

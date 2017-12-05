@@ -23,13 +23,13 @@ class ItemUserUI<T> : AnkoComponent<ViewGroup> {
             lparams(matchParent, wrapContent)
             backgroundColor = ActivityCompat.getColor(context!!, R.color.colorWhite)
             gravity = Gravity.CENTER_VERTICAL
-            val paddingTopOrBottom = dimen(R.dimen.intvite_screen_padding)
+            val paddingTopOrBottom = dimen(R.dimen.invite_screen_padding)
             bottomPadding = paddingTopOrBottom
             topPadding = paddingTopOrBottom
 
             // Circle Image
             val sizeImgAvatar = dimen(R.dimen.item_user_img_avatar_width_or_height)
-            val leftRightMargin = dimen(R.dimen.intvite_screen_padding)
+            val leftRightMargin = dimen(R.dimen.invite_screen_padding)
             circleImage {
                 id = R.id.item_user_img_avatar
             }.lparams(sizeImgAvatar, sizeImgAvatar) {
@@ -59,8 +59,8 @@ class ItemUserUI<T> : AnkoComponent<ViewGroup> {
                 text = resources.getText(R.string.item_user_invite)
                 textColor = ContextCompat.getColor(context!!, R.color.colorWhite)
             }.lparams(dip(wrapContent), dip(wrapContent)) {
-                leftMargin = dimen(R.dimen.intvite_screen_padding)
-                rightMargin = dimen(R.dimen.intvite_screen_padding)
+                leftMargin = dimen(R.dimen.invite_screen_padding)
+                rightMargin = dimen(R.dimen.invite_screen_padding)
             }
         }
     }.view
