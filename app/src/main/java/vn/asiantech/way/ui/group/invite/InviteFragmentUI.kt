@@ -56,7 +56,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
 
                     addTextChangedListener(object : SearchActivityUI.TextChangeListener {
                         override fun afterTextChanged(editable: Editable) {
-                           owner.onSearchUser()
+                            owner.searchUserList(editable.toString().trim())
                         }
                     })
                 }.lparams(matchParent, matchParent) {

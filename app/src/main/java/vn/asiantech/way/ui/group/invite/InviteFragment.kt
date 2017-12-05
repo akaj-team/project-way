@@ -39,6 +39,7 @@ class InviteFragment : BaseFragment() {
     private var ownerId = ""
     private lateinit var ui: InviteFragmentUI
     private val users = mutableListOf<User>()
+    private lateinit var inviteViewModel: InviteViewModel
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -48,8 +49,11 @@ class InviteFragment : BaseFragment() {
 
     override fun onBindViewModel() {
         onGetInfomationOfUserInvite()
-
     }
+
+    /**
+     * On get list user from search
+     */
 
     /**
      * On item of  RecyclerView click.
@@ -58,12 +62,21 @@ class InviteFragment : BaseFragment() {
 
     }
 
+    internal fun searchUserList(name : String) {
+        addDisposables(inviteViewModel.searchListUser(name)
+                .observeOnUiThread()
+                .subscribe(this :: onSearchUser))
+    }
+
     /**
      * On get list user from search
      */
-    internal fun onSearchUser() {
+    internal fun onSearchUser(usersList : List<User>?) {
         users.clear()
-
+        if (usersList != null) {
+            users.addAll(usersList!!)
+        }
+        ui.userListAdapter.notifyDataSetChanged()
     }
 
     /**
