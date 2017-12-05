@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -14,6 +13,15 @@ import vn.asiantech.way.ui.base.BaseFragment
  * Created by haingoq on 28/11/2017.
  */
 class CreateGroupFragment : BaseFragment() {
+
+    companion object {
+        fun getInstance(userId: String): CreateGroupFragment {
+            val instance = CreateGroupFragment()
+
+            return instance
+        }
+    }
+
     lateinit var createGroupViewModel: CreateGroupViewModel
     lateinit var ui: CreateGroupFragmentUI
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -36,11 +44,14 @@ class CreateGroupFragment : BaseFragment() {
     internal fun createGroup() {
         addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
                 .observeOnUiThread()
-                .subscribe({
-                    //TODO: update logic more later
-                    toast("Create Group Success")
-                }, {
-                    toast("$it")
-                }))
+                .subscribe(this::createGroupSuccess, this::createGroupFail))
+    }
+
+    private fun createGroupSuccess(boolean: Boolean) {
+        TODO("Will update code later")
+    }
+
+    private fun createGroupFail(throwable: Throwable) {
+        TODO("Will update code later")
     }
 }

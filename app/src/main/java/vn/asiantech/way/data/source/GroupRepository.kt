@@ -32,7 +32,7 @@ class GroupRepository : GroupDataSource {
     }
 
     override fun upGroupInfo(group: Group): Observable<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.upGroupInfo(group)
     }
 
     override fun changeOwner(groupId: String, newOwner: String): Observable<Boolean> {
