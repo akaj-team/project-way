@@ -72,47 +72,49 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
 
                     textView {
                         id = R.id.group_show_invite_adapter_tv_name_group
-                        maxLines = 1
-                        ellipsize = TextUtils.TruncateAt.END
-                        typeface = Typeface.DEFAULT_BOLD
                         textSize = px2dip(dimen(R.dimen.text_size_normal))
-                        textColor = Color.BLACK
                     }.lparams {
-                        margin = dip(10)
-                        leftMargin = dip(20)
+                        margin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
+                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     textView(R.string.ok) {
+                        padding = dimen(R.dimen.invite_list_adapter_padding)
                         id = R.id.group_show_invite_adapter_tv_ok
                         backgroundResource = R.color.colorPinkLight
-                        gravity = Gravity.CENTER
-                        typeface = Typeface.DEFAULT_BOLD
                         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                     }.lparams(dimen(R.dimen.group_screen_tv_ok_width), wrapContent) {
                         below(R.id.group_show_invite_adapter_tv_name_group)
-                        leftMargin = dip(10)
-                        padding = dip(5)
+                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     textView(R.string.cancel) {
+                        padding = dimen(R.dimen.invite_list_adapter_padding)
                         id = R.id.group_show_invite_adapter_tv_cancel
                         backgroundResource = R.color.colorGrayLight
-                        gravity = Gravity.CENTER
-                        typeface = Typeface.DEFAULT_BOLD
                         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                     }.lparams(dimen(R.dimen.group_screen_tv_ok_width), wrapContent) {
                         rightOf(R.id.group_show_invite_adapter_tv_ok)
                         below(R.id.group_show_invite_adapter_tv_name_group)
-                        leftMargin = dip(10)
-                        padding = dip(5)
+                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     view {
                         backgroundResource = R.color.grayLight
-                    }.lparams(matchParent, dip(0.5f)) {
+                    }.lparams(matchParent, dimen(R.dimen.invite_list_adapter_view_height)) {
                         below(R.id.group_show_invite_adapter_tv_ok)
-                        leftMargin = dip(10)
-                        topMargin = dip(5)
+                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
+                        topMargin = dimen(R.dimen.invite_list_adapter_padding)
+                    }
+                }.applyRecursively {
+                    when (it) {
+                        is TextView -> with(it) {
+                            textColor = Color.BLACK
+                            gravity = Gravity.CENTER
+                            maxLines = 1
+                            ellipsize = TextUtils.TruncateAt.END
+                            typeface = Typeface.DEFAULT_BOLD
+                        }
                     }
                 }
             }.view
