@@ -43,6 +43,7 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
     private lateinit var homeViewModel: HomeViewModel
+
     private var locations: MutableList<TrackingInformation> = mutableListOf()
     private var isExit = false
     private var position = -1

@@ -26,12 +26,10 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
             lparams(matchParent, matchParent)
             relativeLayout {
                 lparams(matchParent, matchParent)
-
                 frameLayout {
                     lparams(matchParent, matchParent)
                     id = R.id.home_activity_fr_map
                 }
-
                 recycleViewLocation = recyclerView {
                     backgroundColor = Color.TRANSPARENT
                     layoutManager = LinearLayoutManager(context)
@@ -43,7 +41,6 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
                     rightMargin = dimen(R.dimen.home_screen_recyclerView_margin)
                 }
             }
-
             fabMenuGroup = floatingButton(onMenuClick) {}
                     .lparams {
                         alignParentBottom()
