@@ -21,7 +21,7 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
 
         verticalLayout {
             lparams(matchParent, matchParent) {
-                padding = dip(10)
+                padding = dimen(R.dimen.search_group_padding)
             }
             linearLayout {
                 lparams(matchParent, dip(dimen(R.dimen.search_group_height_ll)))
@@ -49,14 +49,14 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
                         }
                     })
                 }.lparams(matchParent, matchParent) {
-                    leftMargin = dip(10)
+                    leftMargin = dimen(R.dimen.search_group_padding)
                 }
             }
 
             recyclerView {
                 layoutManager = LinearLayoutManager(context)
             }.lparams(matchParent, matchParent) {
-                topMargin = dip(20)
+                topMargin = dimen(R.dimen.search_group_top_margin)
             }
         }
     }

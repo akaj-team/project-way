@@ -62,9 +62,9 @@ class SearchGroupAdapter(private val context: Context, private val groups: Mutab
                     view {
                         id = R.id.group_search_adapter_view_break_line
                         backgroundResource = R.color.colorSearchScreenBackground
-                    }.lparams(matchParent, dip(0.5f)) {
+                    }.lparams(matchParent, dimen(R.dimen.search_group_height_view)) {
                         bottomMargin = dip(2)
-                        leftMargin = dip(64)
+                        leftMargin = dimen(R.dimen.search_group_left_margin)
                         topMargin = dip(2)
                     }
 
@@ -73,28 +73,28 @@ class SearchGroupAdapter(private val context: Context, private val groups: Mutab
 
                         textView {
                             id = R.id.group_search_adapter_tv_name_user
-                            padding = dip(10)
+                            padding = dimen(R.dimen.search_group_padding)
                             typeface = Typeface.DEFAULT_BOLD
                             textSize = px2dip(dimen(R.dimen.search_screen_text_size))
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
                         }.lparams(dip(0), wrapContent) {
-                            leftMargin = dip(10)
+                            leftMargin = dimen(R.dimen.search_group_padding)
                             weight = 1f
                         }
 
                         textView {
                             id = R.id.group_search_adapter_tv_join_group
                             textColor = R.color.colorWhite
-                            padding = dip(5)
+                            dimen(R.dimen.search_group_padding)
                             backgroundResource = R.color.colorPrimaryDark
                             textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
                             text = resources.getString(R.string.join)
                         }.lparams {
-                            leftMargin = dip(10)
-                            rightMargin = dip(10)
+                            leftMargin = dimen(R.dimen.search_group_padding)
+                            rightMargin = dimen(R.dimen.search_group_padding)
                         }
 
                     }.lparams(matchParent, wrapContent) {
