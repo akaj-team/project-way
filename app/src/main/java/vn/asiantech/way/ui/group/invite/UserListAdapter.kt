@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -25,9 +26,8 @@ class UserListAdapter(val users: MutableList<User>)
         holder?.onBind()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListAdapter.UserViewHolder? {
-        return ItemUserUI().createView(AnkoContext.Companion.create(parent.context,
-                parent, false)).tag as? UserListAdapter.UserViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder? {
+        return UserViewHolder(ItemUserUI<ViewGroup>().createView(AnkoContext.create(parent!!.context, parent)))
     }
 
     override fun getItemCount() = users.size
@@ -52,6 +52,7 @@ class UserListAdapter(val users: MutableList<User>)
          */
         fun onBind() {
             with(users[adapterPosition]) {
+                Log.d("aaa","user" + users[adapterPosition])
                 tvName.text = name
                 Glide.with(itemView.context).load(photo).into(imgAvatar)
                 val isShow: Int = if (groupId != null) {

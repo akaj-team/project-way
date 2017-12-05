@@ -1,13 +1,13 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.extension.observeOnUiThread
-
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
@@ -49,6 +49,11 @@ class InviteFragment : BaseFragment() {
         return ui.createView(AnkoContext.create(context, this))
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+            inviteViewModel = InviteViewModel(context)
+    }
+
     override fun onBindViewModel() {
         onGetInfomationOfUserInvite()
     }
@@ -74,6 +79,7 @@ class InviteFragment : BaseFragment() {
      */
     internal fun onSearchUser(usersList : List<User>?) {
         users.clear()
+        Log.d("aaa","usersList" + usersList)
         if (usersList != null) {
             users.addAll(usersList!!)
         }

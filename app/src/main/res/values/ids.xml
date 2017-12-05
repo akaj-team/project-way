@@ -90,4 +90,5 @@
     <item name="item_user_img_avatar" type="id" />
     <item name="item_user_tv_name" type="id" />
     <item name="item_user_tv_invite" type="id" />
+    <item name="splash_id" type="id" />
 </resources>

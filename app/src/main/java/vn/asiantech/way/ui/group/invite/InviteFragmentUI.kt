@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
@@ -13,7 +14,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.ui.search.SearchActivityUI
 
 /**
  * Invite UI
@@ -31,7 +31,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
 
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
-            lparams(matchParent, wrapContent)
+            lparams(matchParent, matchParent)
             padding = dip(value = 10)
             backgroundColor = ActivityCompat.getColor(context, R.color.colorSearchScreenBackground)
 
@@ -53,8 +53,9 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     singleLine = true
                     padding = dip(value = 10)
                     textSize = resources.getDimension(R.dimen.search_screen_text_size)
+                    textColor = Color.WHITE
 
-                    addTextChangedListener(object : SearchActivityUI.TextChangeListener {
+                    addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
                         override fun afterTextChanged(editable: Editable) {
                             owner.searchUserList(editable.toString().trim())
                         }
@@ -78,4 +79,15 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
             }
         }
     }.view
+
+    /**
+     * This interface use to handle Text change event of edit text.
+     */
+    interface TextChangeListener : TextWatcher {
+        override fun beforeTextChanged(var1: CharSequence, var2: Int, var3: Int, var4: Int) = Unit
+
+        override fun onTextChanged(var1: CharSequence, var2: Int, var3: Int, var4: Int) = Unit
+
+        override fun afterTextChanged(editable: Editable)
+    }
 }
