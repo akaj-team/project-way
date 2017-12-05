@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.extension.observeOnUiThread
+
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
@@ -53,16 +54,15 @@ class InviteFragment : BaseFragment() {
     }
 
     /**
-     * On get list user from search
-     */
-
-    /**
      * On item of  RecyclerView click.
      */
     internal fun onItemClick(user: User) {
 
     }
 
+    /**
+     * On get list user from search
+     */
     internal fun searchUserList(name : String) {
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()

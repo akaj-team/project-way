@@ -60,6 +60,8 @@ class SplashActivity : BaseActivity() {
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
+        // open fragment
+
     }
 
     private fun startSwitchScreen() {
