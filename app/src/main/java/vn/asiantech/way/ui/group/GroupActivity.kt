@@ -2,9 +2,7 @@ package vn.asiantech.way.ui.group
 
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
-import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**
  *
@@ -19,7 +17,6 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        supportFragmentManager.beginTransaction().replace(R.id.group_activity_fr, SearchGroupFragment()).commit()
     }
 
     override fun onBindViewModel() {

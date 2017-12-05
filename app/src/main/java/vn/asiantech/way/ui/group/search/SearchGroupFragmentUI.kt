@@ -24,7 +24,7 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
                 padding = dip(10)
             }
             linearLayout {
-                lparams(matchParent, dip(100))
+                lparams(matchParent, dip(dimen(R.dimen.search_group_height_ll)))
                 gravity = Gravity.CENTER_VERTICAL
 
                 imageButton {
