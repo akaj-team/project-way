@@ -77,6 +77,9 @@
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
 
+    <!-- View ids on class GroupActivityUI -->
+    <item name="group_activity_ui_fr_content" type="id" />
+
     <!-- id views on clInviteFragmentUIteUI -->
     <item name="invite_recycle_view" type="id" />
     <item name="item_invite_name" type="id" />
