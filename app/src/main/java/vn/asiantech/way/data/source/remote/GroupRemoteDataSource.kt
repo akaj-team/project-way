@@ -9,7 +9,6 @@ import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
-import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
@@ -68,7 +67,7 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun getRequest(groupId: String): Observable<Invite> {
+    override fun getGroupRequest(groupId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
         val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
@@ -82,7 +81,7 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun upGroupInfo(group: Group): Observable<Boolean> {
+    override fun postGroupInfo(group: Group): Observable<Boolean> {
         val result = PublishSubject.create<Boolean>()
         val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
@@ -96,7 +95,7 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Single<Boolean> {
+    override fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
         val inviteRef = firebaseDatabase.getReference("group/$groupId/info/ownerId")
         inviteRef.setValue(newOwner) { databaseError, dataSuccess ->
@@ -116,7 +115,7 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("not implemented")
     }
 
-    override fun upInvite(userId: String, invite: Invite): Single<Boolean> {
+    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
         val inviteRef = firebaseDatabase.getReference("user/$userId/${invite.to}")
         inviteRef.setValue(invite) { databaseError, dataSuccess ->
@@ -138,8 +137,10 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun searchGroup(groupName: String): Observable<SearchGroupResult> {
-        return HypertrackApi.instance.searchGroup(groupName).toObservable()
+    override fun searchGroup(groupName: String): Observable<List<Group>> {
+        return HypertrackApi.instance.searchGroup(groupName)
+                .toObservable()
+                .map { it.groups }
     }
 
     /**

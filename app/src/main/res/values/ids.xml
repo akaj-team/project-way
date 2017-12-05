@@ -78,5 +78,5 @@
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
 
     <!-- View ids on class GroupActivityUI -->
-    <item name="group_activity_ui_fl_content" type="id" />
+    <item name="group_activity_ui_fr_content" type="id" />
 </resources>

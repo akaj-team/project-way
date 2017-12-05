@@ -4,7 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
-import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.GroupRemoteDataSource
 
@@ -28,31 +27,31 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getInvite(userId)
     }
 
-    override fun getRequest(groupId: String): Observable<Invite> {
-        return remoteDataSource.getRequest(groupId)
+    override fun getGroupRequest(groupId: String): Observable<Invite> {
+        return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun upGroupInfo(group: Group): Observable<Boolean> {
-        return remoteDataSource.upGroupInfo(group)
+    override fun postGroupInfo(group: Group): Observable<Boolean> {
+        return remoteDataSource.postGroupInfo(group)
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Single<Boolean> {
-        return remoteDataSource.changeOwner(groupId, newOwner)
+    override fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean> {
+        return remoteDataSource.changeGroupOwner(groupId, newOwner)
     }
 
     override fun removeGroup(groupId: String): Observable<Boolean> {
         return remoteDataSource.removeGroup(groupId)
     }
 
-    override fun upInvite(userId: String, invite: Invite): Single<Boolean> {
-        return remoteDataSource.upInvite(userId, invite)
+    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.postInvite(userId, invite)
     }
 
     override fun removeUserFromGroup(userId: String): Single<Boolean> {
         return remoteDataSource.removeUserFromGroup(userId)
     }
 
-    override fun searchGroup(groupName: String): Observable<SearchGroupResult> {
+    override fun searchGroup(groupName: String): Observable<List<Group>> {
         return remoteDataSource.searchGroup(groupName)
     }
 }

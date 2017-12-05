@@ -14,7 +14,7 @@ class GroupActivityUI : AnkoComponent<GroupActivity> {
     override fun createView(ui: AnkoContext<GroupActivity>) = with(ui) {
         frameLayout {
             lparams(matchParent, matchParent)
-            id = R.id.group_activity_ui_fl_content
+            id = R.id.group_activity_ui_fr_content
         }
     }
 }

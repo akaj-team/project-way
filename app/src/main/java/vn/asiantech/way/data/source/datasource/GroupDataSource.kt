@@ -4,7 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
-import vn.asiantech.way.data.model.SearchGroupResult
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -38,14 +37,14 @@ interface GroupDataSource {
      *
      * @param groupId - id of given group.
      */
-    fun getRequest(groupId: String): Observable<Invite>
+    fun getGroupRequest(groupId: String): Observable<Invite>
 
     /**
      * This method used to up info of group to firebase database after create.
      *
      * @param group - upload group.
      */
-    fun upGroupInfo(group: Group): Observable<Boolean>
+    fun postGroupInfo(group: Group): Observable<Boolean>
 
     /**
      * This method used to change owner of a given group to a given user
@@ -53,7 +52,7 @@ interface GroupDataSource {
      * @param groupId - id of given group.
      * @param newOwner- id of given user.
      */
-    fun changeOwner(groupId: String, newOwner: String): Single<Boolean>
+    fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean>
 
     /**
      * This method used to remove a given group.
@@ -68,7 +67,7 @@ interface GroupDataSource {
      * @param userId - given user.
      * @param invite - given invite.
      */
-    fun upInvite(userId: String, invite: Invite): Single<Boolean>
+    fun postInvite(userId: String, invite: Invite): Single<Boolean>
 
     /**
      * This method used to remove a given user from his/her group.
@@ -82,5 +81,5 @@ interface GroupDataSource {
      *
      * @param groupName - name of group.
      */
-    fun searchGroup(groupName: String): Observable<SearchGroupResult>
+    fun searchGroup(groupName: String): Observable<List<Group>>
 }

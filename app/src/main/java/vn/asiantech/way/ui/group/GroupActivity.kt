@@ -45,7 +45,7 @@ class GroupActivity : BaseActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.group_activity_ui_fl_content, fragment)
+        transaction.replace(R.id.group_activity_ui_fr_content, fragment)
         transaction.commit()
     }
 
