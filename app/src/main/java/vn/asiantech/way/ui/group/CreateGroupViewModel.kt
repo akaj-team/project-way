@@ -12,6 +12,7 @@ import vn.asiantech.way.data.source.WayRepository
  */
 class CreateGroupViewModel(val context: Context) {
     private val wayRepository = WayRepository()
+
     internal fun createGroup(name: String): Observable<Group> {
         return wayRepository.createGroup(name)
     }
