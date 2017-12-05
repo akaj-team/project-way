@@ -1,12 +1,12 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.info
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.TextView
+import com.hypertrack.lib.models.User
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
@@ -16,13 +16,15 @@ import vn.asiantech.way.R
  *
  * Created by haingoq on 28/11/2017.
  */
-class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
+class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
+    : AnkoComponent<GroupInfoFragment> {
+
     internal lateinit var tvGroupName: TextView
     internal lateinit var tvMembersCount: TextView
     internal lateinit var tvCreateAt: TextView
     internal lateinit var imgInvite: ImageView
     internal lateinit var imgLeave: ImageView
-    internal lateinit var recyclerViewMember: RecyclerView
+    internal val memberListAdapter = MemberListAdapter(userId, members)
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
         verticalLayout {
@@ -59,11 +61,12 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
             }
 
             swipeRefreshLayout {
-                recyclerViewMember = recyclerView {
+                recyclerView {
                     lparams(matchParent, matchParent)
                     layoutManager = LinearLayoutManager(context)
                     backgroundResource = android.R.color.darker_gray
                     padding = dimen(R.dimen.group_screen_recycler_view_padding)
+                    adapter = memberListAdapter
                 }
             }.lparams(matchParent, matchParent)
         }
@@ -75,9 +78,7 @@ class GroupInfoFragmentUI : AnkoComponent<GroupInfoFragment> {
     }.apply {
         val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
         val paddingRight = dimen(R.dimen.group_screen_tv_count_padding_left)
-        bottomPadding = paddingTop
-        rightPadding = paddingRight
-        leftPadding = paddingRight
-        topPadding = paddingTop
+        verticalPadding = paddingTop
+        horizontalPadding = paddingRight
     }
 }

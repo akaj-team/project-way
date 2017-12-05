@@ -17,6 +17,7 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
+        //replaceFragment(R.id.group_activity_ui_fr_content, GroupInfoFragment.getInstance("hhhhhhhasdasdasd", "b8f8a472-8331-4c2f-8b28-bdbdb726d2c5"))
     }
 
     override fun onBindViewModel() {

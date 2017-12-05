@@ -76,4 +76,10 @@
     <item name="tracking_progress_info_img_end_point" type="id" />
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
+
+    <!-- View ids on class ItemMemberUI -->
+    <item name="item_member_img_avatar" type="id" />
+    <item name="item_member_tv_name" type="id" />
+    <item name="item_member_img_call" type="id" />
+
 </resources>

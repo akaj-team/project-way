@@ -24,4 +24,7 @@ object AppConstants {
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
     const val TYPE_DIALOG_MARGIN_WIDTH = 80
+    const val KEY_USER_ID = "key_user_id"
+    const val KEY_GROUP_ID = "key_group_id"
+    const val MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT = 1f
 }
