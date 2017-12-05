@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.GroupRemoteDataSource
 
@@ -49,5 +50,9 @@ class GroupRepository : GroupDataSource {
 
     override fun removeUserFromGroup(userId: String): Single<Boolean> {
         return remoteDataSource.removeUserFromGroup(userId)
+    }
+
+    override fun searchGroup(groupName: String): Observable<SearchGroupResult> {
+        return remoteDataSource.searchGroup(groupName)
     }
 }

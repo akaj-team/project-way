@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.model.SearchGroupResult
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -75,4 +76,11 @@ interface GroupDataSource {
      * @param userId - id of given user.
      */
     fun removeUserFromGroup(userId: String): Single<Boolean>
+
+    /**
+     * This method used to search group by name.
+     *
+     * @param groupName - name of group.
+     */
+    fun searchGroup(groupName: String): Observable<SearchGroupResult>
 }

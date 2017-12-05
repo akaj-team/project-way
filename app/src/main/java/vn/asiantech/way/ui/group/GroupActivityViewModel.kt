@@ -16,12 +16,10 @@ class GroupActivityViewModel {
 
     private val groupRepository = GroupRepository()
     private val wayRepository = WayRepository()
-    private val listenerForGroupChange: Observable<String> by lazy {
-        groupRepository.getGroupId("")
-    }
 
     internal fun getUser(): Observable<User> {
         return wayRepository.getUser()
+                .observeOnUiThread()
     }
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {

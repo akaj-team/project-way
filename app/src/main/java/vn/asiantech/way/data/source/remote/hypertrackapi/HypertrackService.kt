@@ -5,6 +5,7 @@ import io.reactivex.Single
 import retrofit2.http.*
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.remote.response.Response
 
 /**
@@ -55,4 +56,12 @@ interface HypertrackService {
      */
     @PATCH("users/{userId}/")
     fun removeUserFromGroup(@Path("userId") userId: String, @Body body: BodyAddUserToGroup): Single<User>
+
+    /**
+     *  This method used to search groups by name.
+     *
+     *  @param name - name of group.
+     */
+    @GET("groups/")
+    fun searchGroup(@Query("name") name: String): Single<SearchGroupResult>
 }

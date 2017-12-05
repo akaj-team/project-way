@@ -6,9 +6,12 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
+import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.datasource.GroupDataSource
+import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -35,27 +38,17 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getGroupId(userId: String): Observable<String> {
         val result = PublishSubject.create<String>()
-        val groupRef = firebaseDatabase.getReference("user/$userId/group")
-//        groupRef.addValueEventListener(object : ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError?) {
-//                result.onError(Throwable(p0?.message))
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot?) {
-//                val id = p0?.getValue(String::class.java)
-//                if (id != null) {
-//                    groupRef.removeValue()
-//                    result.onNext(id)
-//                }
-//            }
-//        })
-        groupRef.addChildEventListener(object : SimpleChildEventListener {
-            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
-                result.onNext("xxx" + Gson().toJson(p0?.value))
-            }
+        val groupRef = firebaseDatabase.getReference("user/$userId/groupId")
+        groupRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) = Unit
 
-            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
-                result.onNext(Gson().toJson(p0?.value))
+            override fun onDataChange(p0: DataSnapshot?) {
+                val refValue = p0?.value.toString()
+                if (refValue.isNotEmpty()) {
+                    groupRef.setValue("")
+                } else {
+                    result.onNext(refValue)
+                }
             }
         })
         return result
@@ -138,7 +131,15 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        TODO("not implemented")
+        val result = SingleSubject.create<Boolean>()
+        HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
+                .doOnSuccess { result.onSuccess(true) }
+                .doOnError { result.onError(it) }
+        return result
+    }
+
+    override fun searchGroup(groupName: String): Observable<SearchGroupResult> {
+        return HypertrackApi.instance.searchGroup(groupName).toObservable()
     }
 
     /**
