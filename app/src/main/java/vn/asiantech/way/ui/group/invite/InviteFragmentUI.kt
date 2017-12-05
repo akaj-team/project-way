@@ -32,7 +32,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
             lparams(matchParent, matchParent)
-            padding = dip(value = 10)
+            padding = dimen(R.dimen.intvite_screen_padding)
             backgroundColor = ActivityCompat.getColor(context, R.color.colorSearchScreenBackground)
 
             verticalLayout {
@@ -51,7 +51,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     backgroundColor = Color.BLACK
                     hint = resources.getString(R.string.enter_user_name)
                     singleLine = true
-                    padding = dip(value = 10)
+                    padding = dimen(R.dimen.intvite_screen_padding)
                     textSize = resources.getDimension(R.dimen.search_screen_text_size)
                     textColor = Color.WHITE
 
@@ -61,20 +61,21 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                         }
                     })
                 }.lparams(matchParent, matchParent) {
-                    leftMargin = dip(value = 10)
-                    rightMargin = dip(value = 10)
+                    leftMargin = dimen(R.dimen.intvite_screen_padding)
+                    rightMargin = dimen(R.dimen.intvite_screen_padding)
                 }
 
                 // RecycleView
                 recyclerView {
                     id = R.id.invite_recycle_view
+                    clipToPadding = false
                     userListAdapter.onItemClick = {
                         owner.onItemClick(it)
                     }
                     layoutManager = LinearLayoutManager(context)
                     adapter = userListAdapter
                 }.lparams(matchParent, matchParent) {
-                    topMargin = dip(value = 20)
+                    topMargin = dimen(R.dimen.invite_screen_top_margin)
                 }
             }
         }

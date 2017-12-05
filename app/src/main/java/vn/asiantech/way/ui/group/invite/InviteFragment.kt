@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.invite
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,6 +43,7 @@ class InviteFragment : BaseFragment() {
     private lateinit var ui: InviteFragmentUI
     private val users = mutableListOf<User>()
     private lateinit var inviteViewModel: InviteViewModel
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
