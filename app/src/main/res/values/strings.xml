@@ -130,7 +130,7 @@
     <string name="arrived_dialog_total_distance">7 km</string>
 
     <!--Invite Screen-->
-    <string name="enter_user_name">enter_user_name</string>
+    <string name="enter_user_name">user_name</string>
     <string name="invite_text_ok">OK</string>
     <string name="invite_text_cancel">cancel</string>
     <string name="item_user_invite">invite</string>

@@ -39,30 +39,34 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                 lparams(matchParent, wrapContent)
                 gravity = Gravity.CENTER_VERTICAL
 
-                imageButton(R.drawable.ic_back_icon_button) {
-                    backgroundColor = Color.TRANSPARENT
-                    contentDescription = null
-                    onClick {
-                        activity.onBackPressed()
-                    }
-                }.lparams(wrapContent, wrapContent)
+                linearLayout {
+                    lparams(matchParent, wrapContent)
+                    gravity = Gravity.CENTER_VERTICAL
 
-                edtUserName = editText {
-                    backgroundColor = Color.BLACK
-                    hint = resources.getString(R.string.enter_user_name)
-                    singleLine = true
-                    padding = dimen(R.dimen.invite_screen_padding)
-                    textSize = resources.getDimension(R.dimen.search_screen_text_size)
-                    textColor = Color.WHITE
-
-                    addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
-                        override fun afterTextChanged(editable: Editable) {
-                            owner.searchUserList(editable.toString().trim())
+                    imageButton(R.drawable.ic_back_icon_button) {
+                        backgroundColor = Color.TRANSPARENT
+                        contentDescription = null
+                        onClick {
+                            activity.onBackPressed()
                         }
-                    })
-                }.lparams(matchParent, matchParent) {
-                    leftMargin = dimen(R.dimen.invite_screen_padding)
-                    rightMargin = dimen(R.dimen.invite_screen_padding)
+                    }.lparams(wrapContent, wrapContent)
+
+                    edtUserName = editText {
+                        backgroundColor = ActivityCompat.getColor(context, R.color.colorEdtSearchBackground)
+                        hint = resources.getString(R.string.enter_user_name)
+                        singleLine = true
+                        padding = dimen(R.dimen.invite_screen_padding)
+                        textSize = resources.getDimension(R.dimen.search_screen_text_size)
+
+                        addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
+                            override fun afterTextChanged(editable: Editable) {
+                                owner.searchUserList(editable.toString().trim())
+                            }
+                        })
+                    }.lparams(matchParent, matchParent) {
+                        leftMargin = dimen(R.dimen.invite_screen_padding)
+                        rightMargin = dimen(R.dimen.invite_screen_padding)
+                    }
                 }
 
                 // RecycleView
