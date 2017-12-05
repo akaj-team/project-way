@@ -5,7 +5,6 @@ import android.graphics.Point
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -36,7 +35,6 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
 
     companion object {
         private const val ZOOM = 16f
-        private const val TYPE_TIME_DELAY = 3000L
         private const val UNIT_PADDING_BOTTOM = 3
     }
 
@@ -45,7 +43,6 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     private lateinit var homeViewModel: HomeViewModel
 
     private var locations: MutableList<TrackingInformation> = mutableListOf()
-    private var isExit = false
     private var position = -1
     private var googleMap: GoogleMap? = null
 
