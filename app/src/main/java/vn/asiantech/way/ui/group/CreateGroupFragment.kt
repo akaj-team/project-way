@@ -37,6 +37,7 @@ class CreateGroupFragment : BaseFragment() {
         addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
                 .observeOnUiThread()
                 .subscribe({
+                    //TODO: update logic more later
                     toast("Create Group Success")
                 }, {
                     toast("$it")
