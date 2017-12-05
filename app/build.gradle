@@ -79,7 +79,7 @@ android {
     lintOptions {
         abortOnError false
         lintConfig file('lint.xml')
-        xmlOutput file("${buildDir}/reports/lint-groups.xml")
+        xmlOutput file("${buildDir}/reports/lint-results.xml")
     }
     dexOptions {
         jumboMode = true
