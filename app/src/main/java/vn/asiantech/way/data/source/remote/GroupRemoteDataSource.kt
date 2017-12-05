@@ -2,6 +2,7 @@ package vn.asiantech.way.data.source.remote
 
 import com.google.firebase.database.*
 import com.google.gson.Gson
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -158,21 +159,18 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun postRequestToGroup(request: Invite) {
-        val requestRef = firebaseDatabase.getReference("group/${request.to}/request/")
-        requestRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) = Unit
-
-            override fun onDataChange(p0: DataSnapshot?) {
-                val gson = Gson()
-                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-                result.onNext(currentRequest)
-            }
-        })
+    override fun postRequestToGroup(groupId: String, request: Invite) {
+        val requestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        requestRef.setValue(request)
     }
 
-    override fun postRequestToUser(request: Invite) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun postRequestToUser(userId: String, request: Invite) {
+        val requestRef = firebaseDatabase.getReference("user/$userId/request")
+        requestRef.setValue(request)
+    }
+
+    override fun searchUser(name: String): Observable<List<User>> {
+        return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
     }
 
     /**

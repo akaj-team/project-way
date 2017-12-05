@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
@@ -53,5 +54,21 @@ class GroupRepository : GroupDataSource {
 
     override fun searchGroup(groupName: String): Observable<List<Group>> {
         return remoteDataSource.searchGroup(groupName)
+    }
+
+    override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
+        return remoteDataSource.getCurrentRequestOfUser(userId)
+    }
+
+    override fun postRequestToGroup(groupId: String, request: Invite) {
+        remoteDataSource.postRequestToGroup(groupId, request)
+    }
+
+    override fun postRequestToUser(userId: String, request: Invite) {
+        remoteDataSource.postRequestToGroup(userId, request)
+    }
+
+    override fun searchUser(name: String): Observable<List<User>> {
+        return remoteDataSource.searchUser(name)
     }
 }

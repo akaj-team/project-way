@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source.datasource
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
@@ -95,12 +96,19 @@ interface GroupDataSource {
      *
      * @param request - given request.
      */
-    fun postRequestToGroup(request: Invite)
+    fun postRequestToGroup(groupId: String, request: Invite)
 
     /**
      * This method used to post a request to user.
      *
      * @param request - given request
      */
-    fun postRequestToUser(request: Invite)
+    fun postRequestToUser(userId: String, request: Invite)
+
+    /**
+     * This method used to search user by name.
+     *
+     * @param name - name used to search.
+     */
+    fun searchUser(name: String): Observable<List<User>>
 }
