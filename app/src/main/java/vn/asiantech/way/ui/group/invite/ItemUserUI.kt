@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group.invite
 
-import android.graphics.Color
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
@@ -40,7 +39,7 @@ class ItemUserUI<T> : AnkoComponent<ViewGroup> {
             // Text view name
             textView {
                 id = R.id.item_user_tv_name
-                textColor = Color.BLACK
+                textColor = ActivityCompat.getColor(context!!, R.color.colorBlack)
                 textSize = 20f
             }.lparams(dip(0), wrapContent) {
                 leftMargin = dimen(R.dimen.item_user_left_right_margin)

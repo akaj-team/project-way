@@ -46,6 +46,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     imageButton(R.drawable.ic_back_icon_button) {
                         backgroundColor = Color.TRANSPARENT
                         contentDescription = null
+                        padding = dimen(R.dimen.item_user_bottom_or_top_padding)
                         onClick {
                             activity.onBackPressed()
                         }
@@ -73,6 +74,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                 recyclerView {
                     id = R.id.invite_recycle_view
                     clipToPadding = false
+                    background = resources.getDrawable(R.drawable.bg_user_list)
                     userListAdapter.onItemClick = {
                         owner.onItemClick(it)
                     }
