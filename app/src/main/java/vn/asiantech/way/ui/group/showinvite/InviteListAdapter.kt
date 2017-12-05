@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -73,9 +74,6 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
                     textView {
                         id = R.id.group_show_invite_adapter_tv_name_group
                         textSize = px2dip(dimen(R.dimen.text_size_normal))
-                    }.lparams {
-                        margin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
-                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     textView(R.string.ok) {
@@ -85,7 +83,6 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
                         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                     }.lparams(dimen(R.dimen.group_screen_tv_ok_width), wrapContent) {
                         below(R.id.group_show_invite_adapter_tv_name_group)
-                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     textView(R.string.cancel) {
@@ -96,17 +93,19 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
                     }.lparams(dimen(R.dimen.group_screen_tv_ok_width), wrapContent) {
                         rightOf(R.id.group_show_invite_adapter_tv_ok)
                         below(R.id.group_show_invite_adapter_tv_name_group)
-                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     view {
                         backgroundResource = R.color.grayLight
                     }.lparams(matchParent, dimen(R.dimen.invite_list_adapter_view_height)) {
                         below(R.id.group_show_invite_adapter_tv_ok)
-                        leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                         topMargin = dimen(R.dimen.invite_list_adapter_padding)
                     }
                 }.applyRecursively {
+                    if (it.layoutParams is RelativeLayout.LayoutParams) {
+                        (it.layoutParams as RelativeLayout.LayoutParams).leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
+                    }
+
                     when (it) {
                         is TextView -> with(it) {
                             textColor = Color.BLACK
