@@ -81,26 +81,35 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     }
 
     override fun onBackPressed() {
-        if (isExit) {
+        homeViewModel.exitApp()
+    }
+
+    override fun onBindViewModel() {
+        addDisposables(homeViewModel.getTrackingHistory()
+                .observeOnUiThread()
+                .subscribe(this::setDataForRecyclerView),
+                homeViewModel.exitApp()
+                        .subscribe(this::onBackPressButton))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.resume()
+    }
+
+    private fun initViews() {
+        setStatusBarTranslucent(true)
+    }
+
+    private fun onBackPressButton(isBack: Boolean) {
+        if (isBack) {
             val intent = Intent(Intent.ACTION_MAIN)
             intent.addCategory(Intent.CATEGORY_HOME)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
             toast(getString(R.string.register_double_click_to_exit))
-            isExit = true
-            Handler().postDelayed({ isExit = false }, TYPE_TIME_DELAY)
         }
-    }
-
-    override fun onBindViewModel() {
-        addDisposables(homeViewModel.getTrackingHistory()
-                .observeOnUiThread()
-                .subscribe(this::setDataForRecyclerView))
-    }
-
-    private fun initViews() {
-        setStatusBarTranslucent(true)
     }
 
     private fun initMap() {
