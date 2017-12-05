@@ -77,7 +77,7 @@
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
 
-    <!-- id views on class InviteUI -->
+    <!-- id views on clInviteFragmentUIteUI -->
     <item name="invite_recycle_view" type="id" />
     <item name="item_invite_name" type="id" />
     <item name="item_invite_tv_ok" type="id" />

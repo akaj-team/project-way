@@ -19,7 +19,7 @@ import vn.asiantech.way.R
 class UserListAdapter(val users: MutableList<User>)
     : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
 
-    val onItemClick: (user: User) -> Unit = {}
+    var onItemClick: (user: User) -> Unit = {}
 
     override fun onBindViewHolder(holder: UserViewHolder?, position: Int) {
         holder?.onBind()
