@@ -129,4 +129,23 @@ internal interface WayDataSource {
      *  @return Action object which is Observable.
      */
     fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action>
+
+    /**
+     * This method return ETA distance and ETA duration.
+     *
+     *  @param units the units of return value type
+     *  @param origins the start LatLng
+     *  @param destinations the destinations LatLng*
+     *  @return ResultDistance object which is Observable.
+     */
+    fun getLocationDistance(units: String, origins: String, destinations: String): Observable<ResultDistance>
+
+
+    /**
+     * This method return list LatLng from 2 point.
+     *
+     *  @param url the url of google road api.
+     *  @return ResultRoad object which is Observable.
+     */
+    fun getListLocation(url: String): Observable<ResultRoad>
 }

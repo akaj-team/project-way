@@ -1,11 +1,11 @@
 package vn.asiantech.way.data.source.remote.googleapi
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
-import vn.asiantech.way.data.model.AutoCompleteResult
-import vn.asiantech.way.data.model.LocationAddress
-import vn.asiantech.way.data.model.ResultPlaceDetail
+import retrofit2.http.Url
+import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.remote.response.Response
 
 /**
@@ -34,4 +34,18 @@ interface ApiService {
     fun searchLocations(@Query("input") input: String, @Query("key") key: String,
                         @Query("language") language: String = "vi", @Query("sensor") sensor: Boolean = false)
             : Single<AutoCompleteResult>
+
+    /**
+     *  This method to get time and distance location
+     *
+     *  @param units the units of return value type
+     *  @param origins the start LatLng
+     *  @param destinations the destinations LatLng
+     */
+    @GET("distancematrix/json")
+    fun getLocationDistance(@Query("units") units: String, @Query("origins") origins: String,
+                            @Query("destinations") destinations: String): Single<ResultDistance>
+
+    @GET
+    fun getListLocation(@Url url: String): Observable<ResultRoad>
 }
