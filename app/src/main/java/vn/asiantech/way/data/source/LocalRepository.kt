@@ -1,7 +1,6 @@
 package vn.asiantech.way.data.source
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.support.annotation.RawRes
 import com.google.gson.Gson
@@ -9,7 +8,6 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
