@@ -78,8 +78,13 @@
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
 
     <!-- id views on class InviteUI -->
-    <item name="invite_recycle_view" type="id"/>
-    <item name="item_invite_name" type="id"/>
-    <item name="item_invite_tv_ok" type="id"/>
-    <item name="item_invite_tv_cancel" type="id"/>
+    <item name="invite_recycle_view" type="id" />
+    <item name="item_invite_name" type="id" />
+    <item name="item_invite_tv_ok" type="id" />
+    <item name="item_invite_tv_cancel" type="id" />
+
+    <!-- id views on class ItemUserUI -->
+    <item name="item_user_img_avatar" type="id" />
+    <item name="item_user_tv_name" type="id" />
+    <item name="item_user_tv_invite" type="id" />
 </resources>

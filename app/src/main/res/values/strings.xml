@@ -133,4 +133,5 @@
     <string name="enter_user_name">enter_user_name</string>
     <string name="invite_text_ok">OK</string>
     <string name="invite_text_cancel">cancel</string>
+    <string name="item_user_invite">invite</string>
 </resources>

@@ -75,9 +75,6 @@ class ItemInviteUI : AnkoComponent<ViewGroup> {
             }.lparams(matchParent, dip(value = 0.5f)) {
                 below(R.id.item_invite_tv_ok)
                 leftMargin = dip(value = 10)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    marginStart = dip(value = 10)
-                }
                 topMargin = dip(value = 5)
             }
         }
