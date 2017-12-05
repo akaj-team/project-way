@@ -10,6 +10,11 @@
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
 
+    <!--View ids ViewInviteFragmentUIntUI-->
+    <item name="group_show_invite_adapter_tv_name_group" type="id" />
+    <item name="group_show_invite_adapter_tv_ok" type="id" />
+    <item name="group_show_invite_adapter_tv_cancel" type="id" />
+
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
     <item name="splash_activity_tv_application_name" type="id" />

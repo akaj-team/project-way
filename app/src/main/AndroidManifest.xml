@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="com.hypertracklive" />
+                <invites android:scheme="com.hypertracklive" />
             </intent-filter>
 
             <!-- Intent Filter to handle trck.at link -->
@@ -53,18 +53,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
+                <invites android:scheme="http" />
+                <invites android:scheme="https" />
 
                 <!-- Add trck.at DeepLink URL -->
-                <data
+                <invites
                     android:host="a"
                     android:pathPrefix="/" />
             </intent-filter>
 
             <!-- Intent filter to handle Branch Deep Link -->
             <intent-filter>
-                <data
+                <invites
                     android:host="open"
                     android:scheme="hypertrack.io" />
 
@@ -86,7 +86,7 @@
         <activity android:name=".ui.group.GroupActivity" />
         <activity android:name=".ui.search.SearchLocationActivity" />
 
-        <!-- Register meta-data here -->
+        <!-- Register minvitesdata here -->
         <!--
             The API key for Google Maps-based APIs is defined as a string resource.
             (See the file "res/values/google_maps_api.xml").
@@ -95,10 +95,10 @@
             sign the APK for publishing.
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
        -->
-        <meta-data
+        <meta-invites
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GoogleMapsKey" />
-        <meta-data
+        <meta-invites
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
