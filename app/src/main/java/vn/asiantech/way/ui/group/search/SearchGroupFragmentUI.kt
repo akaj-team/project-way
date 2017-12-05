@@ -2,17 +2,21 @@ package vn.asiantech.way.ui.group.search
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.view.Gravity
 import android.view.View
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
+import vn.asiantech.way.ui.search.SearchActivityUI
 
 /**
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
 class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
+
     override fun createView(ui: AnkoContext<SearchGroupFragment>): View = with(ui) {
 
         verticalLayout {
@@ -26,6 +30,9 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
                 imageButton {
                     backgroundColor = Color.TRANSPARENT
                     backgroundResource = R.drawable.ic_back_icon_button
+                    onClick {
+                        owner.onBackClick()
+                    }
                 }
 
                 editText {
@@ -33,6 +40,14 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
                     backgroundColor = Color.WHITE
                     textSize = px2dip(dimen(R.dimen.search_screen_text_size))
                     hint = resources.getString(R.string.enter_group_name)
+
+                    addTextChangedListener(object : SearchActivityUI.TextChangeListener {
+                        override fun afterTextChanged(editable: Editable) {
+                            if (editable.toString().trim().isNotEmpty()) {
+                                owner.searchGroups(editable.toString().trim())
+                            }
+                        }
+                    })
                 }.lparams(matchParent, matchParent) {
                     leftMargin = dip(10)
                 }

@@ -8,5 +8,5 @@ import java.io.Serializable
  * Created by cuongcaov on 09/11/2017
  */
 data class Group(val id: String, var name: String, var token: String,
-                 @SerializedName("created_at") val createAt: String,
+                 val ownerId: String, @SerializedName("created_at") val createAt: String,
                  @SerializedName("modified_at") var modifiedAt: String) : Serializable

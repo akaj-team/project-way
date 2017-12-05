@@ -11,14 +11,18 @@ import vn.asiantech.way.ui.group.search.SearchGroupFragment
  * Created by haingoq on 29/11/2017.
  */
 class GroupActivity : BaseActivity() {
+
     private lateinit var ui: GroupActivityUI
-    override fun onBindViewModel() {
-    }
+    private val groupViewModel = GroupActivityViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
         supportFragmentManager.beginTransaction().replace(R.id.group_activity_fr, SearchGroupFragment()).commit()
+    }
+
+    override fun onBindViewModel() {
+        // TODO: handle later
     }
 }

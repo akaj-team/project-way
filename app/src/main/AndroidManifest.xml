@@ -74,13 +74,16 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.splash.SplashActivity" />
-        <activity android:name=".ui.register.RegisterActivity" />
-        <activity android:name=".ui.share.ShareActivity" />
         <activity
-            android:name=".ui.search.SearchActivity"
-            android:noHistory="true" />
+            android:name=".ui.share.ShareLocationActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.arrived.ArrivedActivity" />
+
+        <activity android:name=".ui.update.UpdateMap" />
+        <activity android:name=".ui.search.SearchLocationActivity" />
 
         <!-- Register meta-data here -->
         <!--
@@ -98,6 +101,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".ui.map.MapActivity" />
 
     </application>
 
