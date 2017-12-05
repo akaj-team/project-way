@@ -82,13 +82,6 @@ class LocalRepository(val context: Context) : LocalDataSource {
         }
     }
 
-    override fun getAvatarIntent(intent: Intent): Observable<Intent> {
-        return PublishSubject.create<Intent> {
-            it.onNext(intent)
-            it.onComplete()
-        }
-    }
-
     private fun readJsonFromDirectory(@RawRes resId: Int): String {
         val iStream = context.resources.openRawResource(resId)
         val byteStream = ByteArrayOutputStream()

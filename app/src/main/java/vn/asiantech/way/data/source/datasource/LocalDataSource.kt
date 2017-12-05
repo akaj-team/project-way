@@ -1,6 +1,5 @@
 package vn.asiantech.way.data.source.datasource
 
-import android.content.Intent
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.model.WayLocation
@@ -44,12 +43,4 @@ interface LocalDataSource {
      * @param location
      */
     fun saveSearchHistory(location: WayLocation)
-
-    /**
-     * This method get avatar of user
-     *
-     * @param intent contain uri or bitmap of avatar
-     * @return Intent object which is Observable.
-     */
-    fun getAvatarIntent(intent: Intent): Observable<Intent>
 }

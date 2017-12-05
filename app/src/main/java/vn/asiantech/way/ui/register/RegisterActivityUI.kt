@@ -33,7 +33,6 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
     internal lateinit var edtPhone: EditText
     internal lateinit var btnRegister: Button
     internal lateinit var tvSkip: TextView
-    internal lateinit var tvCancel: TextView
     internal lateinit var progressBar: ProgressBar
 
     override fun createView(ui: AnkoContext<RegisterActivity>) = with(ui) {
@@ -180,8 +179,16 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 isEnabled = false
 
                 onClick {
-                    owner.createUser(owner.createUserParam(edtName.text.toString().trim(),
-                            edtPhone.text.toString().trim()))
+                    val user = owner.registerViewModel
+                            .generateUserInformation(edtName.text.toString().trim(),
+                                    edtPhone.text.toString().trim(),
+                                    owner.isoCode,
+                                    owner.avatarBitmap)
+                    if (owner.registerViewModel.isRegister) {
+                        owner.createUser(user)
+                    } else {
+                        owner.onUpdateUserInformation(user)
+                    }
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
@@ -191,26 +198,16 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 rightMargin = margin
             }
 
-            tvSkip = textView {
-                text = resources.getString(R.string.register_skip)
+            tvSkip = textView(R.string.register_skip) {
                 id = R.id.register_activity_tv_skip
                 textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                 gravity = Gravity.CENTER
 
-                onClick { owner.onSkipClick() }
+                onClick {
+                    owner.onSkipClick()
+                }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
-                topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
-            }
-
-            tvCancel = textView(R.string.register_cancel) {
-                textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
-                gravity = Gravity.CENTER
-                visibility = View.GONE
-
-                onClick { owner.onCancelClick() }
-            }.lparams(matchParent, wrapContent) {
-                below(R.id.register_activity_tv_skip)
                 topMargin = dimen(R.dimen.register_screen_tv_skip_margin)
             }
 

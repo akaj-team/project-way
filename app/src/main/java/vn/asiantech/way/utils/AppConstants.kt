@@ -22,4 +22,5 @@ object AppConstants {
     const val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
     const val ACTION_CURRENT_LOCATION = "action_current_location"
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
+    const val BACK_PRESS_DELAY = 1500L
 }
