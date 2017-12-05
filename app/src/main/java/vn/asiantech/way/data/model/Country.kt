@@ -6,7 +6,7 @@ import java.util.*
  * Model store information of country
  * Created by haibt on 9/26/17.
  */
-data class Country(private val iso: String, val tel: String) {
+data class Country(val iso: String, val tel: String) {
     val countryName: String
         get() {
             val locale = Locale(Locale.getDefault().displayLanguage, iso)

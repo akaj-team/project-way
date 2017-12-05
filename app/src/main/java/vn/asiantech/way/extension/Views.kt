@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import com.hypertrack.lib.internal.consumer.view.CircularSeekBar
 import com.hypertrack.lib.internal.consumer.view.RippleView
+import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.utils.AppConstants
 
@@ -39,4 +40,9 @@ internal fun Dialog.setDialogScreenSize(context: Context) {
 
 internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar {
     return ankoView({ CircularSeekBar(it) }, 0, init)
+}
+
+internal inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
+        CircleImageView {
+    return ankoView({ CircleImageView(it) }, theme, init)
 }
