@@ -4,6 +4,7 @@ import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.matchParent
+import vn.asiantech.way.R
 
 /**
  *
@@ -13,6 +14,7 @@ class GroupActivityUI : AnkoComponent<GroupActivity> {
     override fun createView(ui: AnkoContext<GroupActivity>) = with(ui) {
         frameLayout {
             lparams(matchParent, matchParent)
+            id = R.id.group_activity_ui_fr_content
         }
     }
 }

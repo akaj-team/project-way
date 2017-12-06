@@ -34,13 +34,15 @@
     <item name="share_activity_tv_title" type="id" />
 
     <!-- View ids for RegisterActivityUI -->
-    <item name="share_activity_fr_avatar" type="id" />
-    <item name="share_activity_tv_description" type="id" />
-    <item name="share_activity_rl_information" type="id" />
-    <item name="share_activity_btn_save" type="id" />
-    <item name="share_activity_tv_skip" type="id" />
-    <item name="share_activity_edt_name" type="id" />
-    <item name="share_activity_view_line" type="id" />
+    <item name="register_activity_fr_avatar" type="id" />
+    <item name="register_activity_tv_description" type="id" />
+    <item name="register_activity_rl_information" type="id" />
+    <item name="register_activity_btn_save" type="id" />
+    <item name="register_activity_tv_skip" type="id" />
+    <item name="register_activity_edt_name" type="id" />
+    <item name="register_activity_view_line" type="id" />
+    <item name="register_activity_tv_tel" type="id" />
+    <item name="register_activity_edt_phone" type="id" />
 
     <!-- View ids for BottomButtonCard -->
     <item name="bottom_button_card_rl_bottom_card" type="id" />
@@ -81,4 +83,7 @@
     <item name="tracking_progress_info_img_end_point" type="id" />
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
+
+    <!-- View ids on class GroupActivityUI -->
+    <item name="group_activity_ui_fr_content" type="id" />
 </resources>

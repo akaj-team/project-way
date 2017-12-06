@@ -17,11 +17,11 @@ import vn.asiantech.way.utils.AppConstants
 import java.io.ByteArrayOutputStream
 
 /**
+ *
  * Created by tien.hoang on 12/1/17.
  */
 class LocalRepository(val context: Context) : LocalDataSource {
     companion object {
-
         val COUNTRIES_RAW_ID = R.raw.countries
         const val PREFS_FILE = "AppPrefsKey"
         const val KEY_LOGIN_TOKEN = "login"
@@ -64,12 +64,12 @@ class LocalRepository(val context: Context) : LocalDataSource {
         editor?.apply()
     }
 
-    override fun getUserToken(): String {
-        return pref.getString(KEY_LOGIN_TOKEN, "")
+    override fun getLoginStatus(): Boolean {
+        return pref.getBoolean(KEY_LOGIN_TOKEN, false)
     }
 
-    override fun setUserToken(token: String) {
-        pref.edit().putString(KEY_LOGIN_TOKEN, token).apply()
+    override fun setLoginStatus(isLogin: Boolean) {
+        pref.edit().putBoolean(KEY_LOGIN_TOKEN, isLogin).apply()
     }
 
     override fun getCountries(): Observable<List<Country>> {
