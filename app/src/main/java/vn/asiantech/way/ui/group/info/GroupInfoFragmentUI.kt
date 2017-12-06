@@ -53,7 +53,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_invite
                     onClick {
-                        owner.callToInviteFragment()
+                        owner.eventViewOnClicked(this@imageView)
                     }
                 }
 
@@ -61,7 +61,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                     id = R.id.group_info_img_approve
                     visibility = View.GONE
                     onClick {
-                        owner.callToViewRequestFragment()
+                        owner.eventViewOnClicked(this@imageView)
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
@@ -71,7 +71,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_leave_group
                     onClick {
-                        owner.leaveGroup()
+                        owner.eventViewOnClicked(this@imageView)
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)

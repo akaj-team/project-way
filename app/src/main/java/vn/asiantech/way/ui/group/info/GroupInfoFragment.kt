@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group.info
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,36 +56,32 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getGroupInfo(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::bindGroupInfo)
+                        .subscribe(this::handleGetGroupInfoCompleted)
         )
     }
 
-    internal fun eventViewClicked(view: View) {
+    internal fun eventViewOnClicked(view: View) {
         when (view.id) {
+            R.id.group_info_img_invite -> sendBroadCast(AppConstants.ACTION_CALL_INVITE_FRAGMENT)
 
+            R.id.group_info_img_approve -> sendBroadCast(AppConstants.ACTION_CALL_VIEW_GROUP_REQUEST_FRAGMENT)
+
+            R.id.group_info_img_leave_group -> handleLeaveGroupOnClicked()
         }
     }
 
-    internal fun callToInviteFragment() {
-        sendBroadCast(AppConstants.ACTION_CALL_INVITE_FRAGMENT)
-    }
-
-    internal fun callToViewRequestFragment() {
-        sendBroadCast(AppConstants.ACTION_CALL_VIEW_GROUP_REQUEST_FRAGMENT)
-    }
-
-    internal fun leaveGroup() {
+    private fun handleLeaveGroupOnClicked() {
         alert(R.string.confirm_message_leave_group, R.string.confirm) {
             yesButton {
                 addDisposables(groupInfoViewModel.leaveGroup(userId)
                         .observeOnUiThread()
-                        .subscribe(this@GroupInfoFragment::afterLeaveGroup))
+                        .subscribe(this@GroupInfoFragment::handleLeaveGroupCompleted))
             }
             noButton { dialog -> dialog.dismiss() }
         }.show()
     }
 
-    private fun bindGroupInfo(groupToBind: Group) {
+    private fun handleGetGroupInfoCompleted(groupToBind: Group) {
         group = groupToBind
         with(group) {
             ui.tvGroupName.text = name
@@ -101,21 +96,20 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getMemberList(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::updateMemberList)
+                        .subscribe(this::handleGetMemberListCompleted)
         )
     }
 
-    private fun updateMemberList(users: MutableList<User>) {
+    private fun handleGetMemberListCompleted(users: MutableList<User>) {
         ui.tvMembersCount.text = getString(R.string.members_count, users.size)
         members.clear()
         members.addAll(users)
         ui.memberListAdapter.notifyDataSetChanged()
     }
 
-    private fun afterLeaveGroup(user: User) {
+    private fun handleLeaveGroupCompleted(user: User) {
         if (user.groupId != groupId) {
-            Log.i("tag11", "ok")
-            sendBroadCast(AppConstants.ACTION_RELOAD)
+            toast(R.string.leave_group_notification)
         } else {
             toast(R.string.error_message)
         }
