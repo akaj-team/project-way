@@ -11,7 +11,7 @@ import vn.asiantech.way.R
  *
  * Created by haingoq on 05/12/2017.
  */
-class ShowRequestFragmentUI : AnkoComponent<ShowRequestFragment> {
+class ShowRequestFragmentUI(private val requestAdapter: RequestAdapter) : AnkoComponent<ShowRequestFragment> {
     override fun createView(ui: AnkoContext<ShowRequestFragment>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
@@ -26,6 +26,7 @@ class ShowRequestFragmentUI : AnkoComponent<ShowRequestFragment> {
             recyclerView {
                 lparams(matchParent, matchParent)
                 layoutManager = LinearLayoutManager(context)
+                adapter = requestAdapter
             }
         }
     }

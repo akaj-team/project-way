@@ -9,6 +9,10 @@
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
+    <item name="group_id_img_avatar" type="id" />
+    <item name="group_id_tv_name" type="id" />
+    <item name="group_id_image_button_accept" type="id" />
+    <item name="group_id_image_button_cancel" type="id" />
 
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
