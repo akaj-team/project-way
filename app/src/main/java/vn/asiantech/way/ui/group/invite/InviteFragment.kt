@@ -72,7 +72,6 @@ class InviteFragment : BaseFragment() {
         if (name.isEmpty()) {
             return
         }
-        users.clear()
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()
                 .subscribe(this::onGetListUserInviteComplete))
