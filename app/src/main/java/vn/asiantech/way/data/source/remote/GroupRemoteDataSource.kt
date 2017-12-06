@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source.remote
 
+import android.util.Log
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
@@ -251,6 +252,37 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
         TODO("Init later")
+    }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        // I will optimize this function when I understand When-Then-And operator of Rx.
+        Log.i("tag11", "xxxxxxxxxxxxx")
+        val result = SingleSubject.create<Boolean>()
+        HypertrackApi.instance.createGroup(groupName)
+                .subscribe({
+                    Log.i("tag11", "tao thanh cong")
+                    val group = it
+                    group.ownerId = ownerId
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
+                            .subscribe({
+                                Log.i("tag11", "add thanh cong")
+                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
+                                groupInfoRef.setValue(group)
+                                        .addOnSuccessListener {
+                                            Log.i("tag11", "up thanh cong")
+                                            result.onSuccess(true)
+                                        }
+                                        .addOnFailureListener {
+                                            result.onError(it)
+                                        }
+                            }, {
+                                result.onError(it)
+                            })
+                }, {
+                    result.onError(it)
+                    Log.i("tag11", it.toString())
+                })
+        return result
     }
 
     /**
