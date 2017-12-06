@@ -17,23 +17,26 @@ import vn.asiantech.way.R
  */
 class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>): View = ui.apply {
+
+        val sizeImgAvatar = dimen(R.dimen.item_user_img_avatar_width_or_height)
+        val leftRightMarginOrPadding = dimen(R.dimen.invite_screen_padding)
+
         linearLayout {
+
             // layout parent
-            lparams(matchParent, wrapContent)
-            backgroundColor = ActivityCompat.getColor(context!!, R.color.colorWhite)
-            gravity = Gravity.CENTER_VERTICAL
-            val paddingTopOrBottom = dimen(R.dimen.invite_screen_padding)
-            bottomPadding = paddingTopOrBottom
-            topPadding = paddingTopOrBottom
+            lparams(matchParent, wrapContent){
+                backgroundColor = ActivityCompat.getColor(context!!, R.color.colorWhite)
+                gravity = Gravity.CENTER_VERTICAL
+                bottomPadding = leftRightMarginOrPadding
+                topPadding = leftRightMarginOrPadding
+            }
 
             // Circle Image
-            val sizeImgAvatar = dimen(R.dimen.item_user_img_avatar_width_or_height)
-            val leftRightMargin = dimen(R.dimen.invite_screen_padding)
             circleImage {
                 id = R.id.item_user_img_avatar
             }.lparams(sizeImgAvatar, sizeImgAvatar) {
-                leftMargin = leftRightMargin
-                rightMargin = leftRightMargin
+                leftMargin = leftRightMarginOrPadding
+                rightMargin = leftRightMarginOrPadding
             }
 
             // Text view name
@@ -42,7 +45,6 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
                 textColor = ActivityCompat.getColor(context!!, R.color.colorBlack)
                 textSize = 20f
             }.lparams(dip(0), wrapContent) {
-                leftMargin = dimen(R.dimen.item_user_left_right_margin)
                 weight = 1f
             }
 
@@ -58,8 +60,8 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
                 text = resources.getText(R.string.item_user_invite)
                 textColor = ContextCompat.getColor(context!!, R.color.colorWhite)
             }.lparams(dip(wrapContent), dip(wrapContent)) {
-                leftMargin = dimen(R.dimen.invite_screen_padding)
-                rightMargin = dimen(R.dimen.invite_screen_padding)
+                leftMargin = leftRightMarginOrPadding
+                rightMargin = leftRightMarginOrPadding
             }
         }
     }.view

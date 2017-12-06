@@ -94,7 +94,7 @@ class InviteFragment : BaseFragment() {
     /**
      * On get infomation of user invite
      */
-    internal fun onGetInfomationOfUserInvite() {
+    private fun onGetInfomationOfUserInvite() {
         userId = arguments.getString(KEY_USER)
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString("KEY_GROUP_NAME")
