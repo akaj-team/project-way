@@ -36,15 +36,15 @@ class RequestAdapter(private val users: List<User>) : RecyclerView.Adapter<Reque
     inner class RequestHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imgAvatar: ImageView = itemView.find(R.id.group_id_img_avatar)
         private val tvName: TextView = itemView.find(R.id.group_id_tv_name)
-        private val imageButtonAccept: ImageButton = itemView.find(R.id.group_id_image_button_accept)
-        private val imageButtonCancel: ImageButton = itemView.find(R.id.group_id_image_button_cancel)
+        private val imgBtnAccept: ImageButton = itemView.find(R.id.group_id_image_button_accept)
+        private val imgBtnCancel: ImageButton = itemView.find(R.id.group_id_image_button_cancel)
 
         init {
-            imageButtonAccept.onClick {
+            imgBtnAccept.onClick {
                 onAcceptClick(users[adapterPosition].id)
             }
 
-            imageButtonCancel.onClick {
+            imgBtnAccept.onClick {
                 onCancelClick(users[adapterPosition].id)
             }
         }
