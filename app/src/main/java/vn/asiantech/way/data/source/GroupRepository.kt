@@ -16,8 +16,8 @@ class GroupRepository : GroupDataSource {
 
     private val remoteDataSource = GroupRemoteDataSource()
 
-    override fun getGroupId(userId: String): Observable<String> {
-        return remoteDataSource.getGroupId(userId)
+    override fun listenerForGroupChange(userId: String): Observable<String> {
+        return remoteDataSource.listenerForGroupChange(userId)
     }
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
@@ -70,5 +70,13 @@ class GroupRepository : GroupDataSource {
 
     override fun searchUser(name: String): Observable<List<User>> {
         return remoteDataSource.searchUser(name)
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.deleteGroupRequest(groupId, request)
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.deleteUserInvite(userId, invite)
     }
 }

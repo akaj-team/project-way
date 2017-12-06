@@ -36,7 +36,7 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun getGroupId(userId: String): Observable<String> {
+    override fun listenerForGroupChange(userId: String): Observable<String> {
         val result = PublishSubject.create<String>()
         val groupRef = firebaseDatabase.getReference("user/$userId/groupId")
         groupRef.addValueEventListener(object : ValueEventListener {
@@ -171,6 +171,30 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun searchUser(name: String): Observable<List<User>> {
         return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
+        inviteRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        userRequestRef.removeValue()
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        groupRequestRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
     }
 
     /**
