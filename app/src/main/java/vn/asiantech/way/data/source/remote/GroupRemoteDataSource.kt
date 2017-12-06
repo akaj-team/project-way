@@ -174,6 +174,30 @@ class GroupRemoteDataSource : GroupDataSource {
         return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
     }
 
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
+        inviteRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        userRequestRef.removeValue()
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        groupRequestRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
     /**
      * This interface used to make ChildEventListener become a simple interface.
      */

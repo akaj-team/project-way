@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
-import android.util.Log
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
@@ -29,14 +28,15 @@ class GroupActivity : BaseActivity() {
                 groupViewModel.getUser()
                         .observeOnUiThread()
                         .subscribe(this::afterLoadUser)
-                )
+        )
     }
 
     private fun afterLoadUser(user: User) {
         addDisposables(groupViewModel.listenerForGroupChange(user.id)
                 .observeOnUiThread()
                 .subscribe {
-                    Log.i("tag11", "ssssss")
+                    groupViewModel.getUser()
+                            .subscribe()
                 })
         if (user.groupId != null) {
             replaceFragment(R.id.group_activity_ui_fr_content,

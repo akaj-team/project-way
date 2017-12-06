@@ -113,6 +113,22 @@ interface GroupDataSource {
     fun searchUser(name: String): Observable<List<User>>
 
     /**
+     * This method used to delete a given invite when a given user refuse it.
+     *
+     * @param userId - id of given user.
+     * @param invite - given invite.
+     */
+    fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean>
+
+    /**
+     * This method used to delete a given request when group owner refuse it.
+     *
+     * @param groupId - id of given group.
+     * @param invite - given request.
+     */
+    fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
+
+    /**
      * This method used to get member list of a given group.
      *
      * @param

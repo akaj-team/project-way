@@ -75,4 +75,12 @@ class GroupRepository : GroupDataSource {
     override fun getMemberList(groupId: String): Single<MutableList<User>> {
         return remoteDataSource.getMemberList(groupId)
     }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.deleteGroupRequest(groupId, request)
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.deleteUserInvite(userId, invite)
+    }
 }
