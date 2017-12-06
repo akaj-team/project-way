@@ -30,6 +30,9 @@ class RequestAdapter(private val users: List<User>) : RecyclerView.Adapter<Reque
 
     override fun getItemCount() = users.size
 
+    /**
+     * Request holder
+     */
     inner class RequestHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imgAvatar: ImageView = itemView.find(R.id.group_id_img_avatar)
         private val tvName: TextView = itemView.find(R.id.group_id_tv_name)
