@@ -80,7 +80,7 @@ class InviteFragment : BaseFragment() {
     }
 
     /**
-     * On get list user from search
+     * On get list user invite complete from search action
      */
     internal fun onGetListUserInviteComplete(usersList: List<User>?) {
         users.clear()
