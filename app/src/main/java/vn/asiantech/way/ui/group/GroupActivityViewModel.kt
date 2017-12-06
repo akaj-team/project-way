@@ -32,6 +32,6 @@ class GroupActivityViewModel {
                 .observeOnUiThread()
     }
 
-    internal fun getUser(): Observable<User> = wayRepository.getUser().observeOnUiThread()
+    internal fun getUser(): Observable<User> = wayRepository.getUser().toObservable()
 
 }

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import vn.asiantech.way.data.model.Group
  */
 class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>, private val listener: (Group) -> Unit)
     : RecyclerView.Adapter<GroupListAdapter.SearchGroupHolder>() {
+    private var groupIdCurrentrequest = ""
     override fun onBindViewHolder(holder: SearchGroupHolder?, position: Int) {
         holder?.onBind()
     }
@@ -30,6 +32,12 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
             .createView(AnkoContext.create(context, parent, false))
             .tag as? SearchGroupHolder
 
+    internal fun setIdforGroupRequest(id: String) {
+        Log.d("hhhh","ok kkkkkk $id")
+        groupIdCurrentrequest = id
+       notifyDataSetChanged()
+    }
+
     /**
      * Custom view item  of groups list.
      */
@@ -39,6 +47,7 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
 
         init {
             tvJoinGroup.onClick {
+                tvJoinGroup.visibility = View.GONE
                 listener(groups[adapterPosition])
             }
         }
@@ -48,6 +57,10 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
          */
         fun onBind() {
             tvNameUser.text = groups[adapterPosition].name
+            if (groups[adapterPosition].id.equals(groupIdCurrentrequest)) {
+                tvJoinGroup.visibility = View.INVISIBLE
+            }
+
         }
     }
 
