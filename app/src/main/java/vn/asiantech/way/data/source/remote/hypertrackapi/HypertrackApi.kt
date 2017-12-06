@@ -33,7 +33,7 @@ object HypertrackApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CustomHypertTrackCallAdapterFactory.create())
+                .addCallAdapterFactory(CustomHyperTrackCallAdapterFactory.create())
                 .client(client)
                 .build()
         retrofit.create(HypertrackService::class.java)

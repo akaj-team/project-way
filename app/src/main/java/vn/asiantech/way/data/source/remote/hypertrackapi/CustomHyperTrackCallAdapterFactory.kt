@@ -10,13 +10,18 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vn.asiantech.way.data.source.remote.util.BaseRxCallAdapterWrapper
 import java.lang.reflect.Type
 
-
-class CustomHypertTrackCallAdapterFactory : CallAdapter.Factory() {
+/**
+ * Custom error handler for Hyper TRack
+ */
+class CustomHyperTrackCallAdapterFactory : CallAdapter.Factory() {
     private var original: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 
     companion object {
+        /**
+         * Create instance
+         */
         fun create(): CallAdapter.Factory {
-            return CustomHypertTrackCallAdapterFactory()
+            return CustomHyperTrackCallAdapterFactory()
         }
     }
 
