@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,11 +82,12 @@ class InviteFragment : BaseFragment() {
      * On get list user invite complete from search action
      */
     internal fun onGetListUserInviteComplete(usersList: List<User>?) {
+        Log.d("aaa","usersList" + usersList)
         users.clear()
         if (usersList != null) {
             users.addAll(usersList)
-            ui.userListAdapter.notifyDataSetChanged()
         }
+        ui.userListAdapter.notifyDataSetChanged()
     }
 
     /**
