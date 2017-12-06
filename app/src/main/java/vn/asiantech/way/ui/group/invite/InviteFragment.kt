@@ -75,7 +75,6 @@ class InviteFragment : BaseFragment() {
         if (name.isEmpty()) {
             return
         }
-
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()
                 .subscribe(this::onGetListUserInviteComplete))
@@ -112,7 +111,7 @@ class InviteFragment : BaseFragment() {
      * On reload list when start search action
      */
     private fun onResetDataListWhenStartSearch(isReset: Boolean) {
-        if (isReset){
+        if (isReset) {
             users.clear()
             ui.userListAdapter.notifyDataSetChanged()
         }
