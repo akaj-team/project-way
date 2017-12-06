@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 
@@ -34,7 +35,7 @@ internal interface WayDataSource {
      *  @param userId of user
      *  @return User object which is Observable.
      */
-    fun getUser(): Observable<User>
+    fun getUser(): Single<User>
 
     /**
      *  Get address at location on Map.

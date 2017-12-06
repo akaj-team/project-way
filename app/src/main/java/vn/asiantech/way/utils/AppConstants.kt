@@ -25,6 +25,7 @@ object AppConstants {
     const val TIME_EXIT_APP = 3000L
     //Key SharePref Tracking
     const val KEY_TRACKING_HISTORY = "tracking_history"
+    const val BACK_PRESS_DELAY = 1500L
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
     const val TYPE_DIALOG_MARGIN_WIDTH = 80
 }
