@@ -24,4 +24,7 @@ object AppConstants {
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
     const val TYPE_DIALOG_MARGIN_WIDTH = 80
+    const val DELAY_TIME : Long = 500
+    const val KEY_EDT_USER_NAME_TEXT_SIZE = 18f
+    const val KEY_TV_USER_NAME_TEXT_SIZE = 20f
 }

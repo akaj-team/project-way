@@ -14,6 +14,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Invite UI
@@ -58,14 +59,14 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                         hint = resources.getString(R.string.item_user_text_hint)
                         singleLine = true
                         padding = dimen(R.dimen.invite_screen_padding)
-                        textSize = 18f
+                        textSize = AppConstants.KEY_EDT_USER_NAME_TEXT_SIZE
                         gravity = Gravity.CENTER_VERTICAL
 
                         addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
                             override fun afterTextChanged(editable: Editable) {
                                 Handler().postDelayed({
                                     owner.onGetListUserInvite(editable.toString().trim())
-                                },500)
+                                },AppConstants.DELAY_TIME)
                             }
                         })
                     }.lparams(matchParent, matchParent) {
@@ -78,7 +79,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                 recyclerView {
                     id = R.id.invite_recycle_view
                     clipToPadding = false
-                    background = resources.getDrawable(R.drawable.bg_user_list)
+                    backgroundColor = ActivityCompat.getColor(context, R.color.colorWhite)
                     userListAdapter.onItemInviteClick = {
                         owner.onItemInviteClick(it)
                     }

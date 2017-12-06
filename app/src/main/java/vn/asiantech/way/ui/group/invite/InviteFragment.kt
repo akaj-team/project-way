@@ -10,7 +10,8 @@ import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
- * Invite Activity
+ * Invite Fragment
+ * @author NgocTTN
  */
 class InviteFragment : BaseFragment() {
 
