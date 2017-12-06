@@ -87,4 +87,8 @@ class GroupRepository : GroupDataSource {
     override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        return remoteDataSource.createGroup(groupName, ownerId)
+    }
 }

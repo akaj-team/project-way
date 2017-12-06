@@ -13,6 +13,14 @@ import vn.asiantech.way.data.model.Invite
 interface GroupDataSource {
 
     /**
+     * This method used to create a group with a given name and ownerId.
+     *
+     * @param groupName - name of group will create.
+     * @param ownerId - id of group owner.
+     */
+    fun createGroup(groupName: String, ownerId: String): Single<Boolean>
+
+    /**
      * This method used to get info of a given group.
      *
      * @param groupId - id of given group.

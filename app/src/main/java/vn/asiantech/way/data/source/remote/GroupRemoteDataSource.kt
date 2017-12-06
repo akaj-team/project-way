@@ -253,6 +253,34 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("Init later")
     }
 
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        // TODO: 06/12/2017
+        // I will optimize this function when I understand When-Then-And operator of Rx.
+        // at-cuongcao
+        val result = SingleSubject.create<Boolean>()
+        HypertrackApi.instance.createGroup(groupName)
+                .subscribe({
+                    val group = it
+                    group.ownerId = ownerId
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
+                            .subscribe({
+                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
+                                groupInfoRef.setValue(group)
+                                        .addOnSuccessListener {
+                                            result.onSuccess(true)
+                                        }
+                                        .addOnFailureListener {
+                                            result.onError(it)
+                                        }
+                            }, {
+                                result.onError(it)
+                            })
+                }, {
+                    result.onError(it)
+                })
+        return result
+    }
+
     /**
      * This interface used to make ChildEventListener become a simple interface.
      */
