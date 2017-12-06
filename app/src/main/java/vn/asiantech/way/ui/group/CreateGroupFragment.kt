@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import vn.asiantech.way.data.model.BodyAddUserToGroup
+import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -31,16 +33,14 @@ class CreateGroupFragment : BaseFragment() {
 
     private lateinit var createGroupViewModel: CreateGroupViewModel
     private lateinit var ui: CreateGroupFragmentUI
-
-    private var user: User? = null
+    private lateinit var user: User
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?) = CreateGroupFragmentUI()
             .createView(AnkoContext.create(context, this))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user = arguments.getSerializable(KEY_USER) as? User
-        ui = CreateGroupFragmentUI()
+        user = arguments.getSerializable(KEY_USER) as User
         createGroupViewModel = CreateGroupViewModel(activity)
     }
 
@@ -52,13 +52,16 @@ class CreateGroupFragment : BaseFragment() {
      * Create Group
      */
     internal fun createGroup() {
-        addDisposables(createGroupViewModel.createGroup(user?.id, ui.edtGroupName.text.toString())
+        addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
                 .observeOnUiThread()
                 .subscribe(this::createGroupSuccess, this::createGroupFail))
     }
 
-    private fun createGroupSuccess(boolean: Boolean) {
-        TODO("Will update code later")
+    private fun createGroupSuccess(group: Group) {
+        addDisposables(createGroupViewModel.addUserToGroup(user.id, BodyAddUserToGroup(group.id))
+                .observeOnUiThread().subscribe({}, {}))
+        addDisposables(createGroupViewModel.upGroupInfo(group)
+                .observeOnUiThread().subscribe())
     }
 
     private fun createGroupFail(throwable: Throwable) {
