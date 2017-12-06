@@ -50,6 +50,7 @@ class InviteFragmentUI(private val users: MutableList<User>) : AnkoComponent<Inv
                         leftMargin = dimen(R.dimen.invite_screen_padding)
                         rightMargin = dimen(R.dimen.invite_screen_padding)
                     }
+
                     // Edit text : enter user name
                     edtUserName = editText {
                         backgroundColor = ActivityCompat.getColor(context, R.color.colorEdtSearchBackground)

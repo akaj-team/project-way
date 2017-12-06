@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
-import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -63,8 +62,6 @@ class InviteFragment : BaseFragment() {
      * On item invite click of  RecyclerView list.
      */
     internal fun onItemInviteClick(user: User) {
-        val inviteRef = firebaseDatabase.getReference("user/$user/invites/$groupId")
-        inviteRef.setValue(Invite(userId, groupId, groupName, userId == ownerId))
     }
 
     /**
