@@ -85,7 +85,7 @@ class InviteFragment : BaseFragment() {
     internal fun onGetListUserInviteComplete(usersList: List<User>?) {
         users.clear()
         if (usersList != null) {
-            users.addAll(usersList!!)
+            users.addAll(usersList)
         }
         ui.userListAdapter.notifyDataSetChanged()
     }
