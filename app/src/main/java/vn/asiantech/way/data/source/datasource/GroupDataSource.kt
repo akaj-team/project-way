@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source.datasource
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
@@ -23,7 +24,7 @@ interface GroupDataSource {
      *
      * @param userId - id of given user.
      */
-    fun getGroupId(userId: String): Observable<String>
+    fun listenerForGroupChange(userId: String): Observable<String>
 
     /**
      * This method used to get invite list of a given user.
@@ -37,14 +38,14 @@ interface GroupDataSource {
      *
      * @param groupId - id of given group.
      */
-    fun getRequest(groupId: String): Observable<Invite>
+    fun getGroupRequest(groupId: String): Observable<Invite>
 
     /**
      * This method used to up info of group to firebase database after create.
      *
      * @param group - upload group.
      */
-    fun upGroupInfo(group: Group): Observable<Boolean>
+    fun postGroupInfo(group: Group): Observable<Boolean>
 
     /**
      * This method used to change owner of a given group to a given user
@@ -52,7 +53,7 @@ interface GroupDataSource {
      * @param groupId - id of given group.
      * @param newOwner- id of given user.
      */
-    fun changeOwner(groupId: String, newOwner: String): Observable<Boolean>
+    fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean>
 
     /**
      * This method used to remove a given group.
@@ -67,12 +68,54 @@ interface GroupDataSource {
      * @param userId - given user.
      * @param invite - given invite.
      */
-    fun upInvite(userId: String, invite: Invite): Single<Boolean>
+    fun postInvite(userId: String, invite: Invite): Single<Boolean>
 
     /**
      * This method used to remove a given user from his/her group.
      *
      * @param userId - id of given user.
      */
-    fun removeUserFromGroup(userId: String): Single<Boolean>
+    fun removeUserFromGroup(userId: String): Single<User>
+
+    /**
+     * This method used to search group by name.
+     *
+     * @param groupName - name of group.
+     */
+    fun searchGroup(groupName: String): Observable<List<Group>>
+
+    /**
+     * This method used to get current request of a given user.
+     *
+     * @param userId - id of given user
+     */
+    fun getCurrentRequestOfUser(userId: String): Observable<Invite>
+
+    /**
+     * This method used to post a request to group.
+     *
+     * @param request - given request.
+     */
+    fun postRequestToGroup(groupId: String, request: Invite)
+
+    /**
+     * This method used to post a request to user.
+     *
+     * @param request - given request
+     */
+    fun postRequestToUser(userId: String, request: Invite)
+
+    /**
+     * This method used to search user by name.
+     *
+     * @param name - name used to search.
+     */
+    fun searchUser(name: String): Observable<List<User>>
+
+    /**
+     * This method used to get member list of a given group.
+     *
+     * @param
+     */
+    fun getMemberList(groupId: String): Single<MutableList<User>>
 }

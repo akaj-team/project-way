@@ -27,4 +27,8 @@ object AppConstants {
     const val KEY_USER_ID = "key_user_id"
     const val KEY_GROUP_ID = "key_group_id"
     const val MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT = 1f
+    const val STANDARD_DATE_TIME_LENGTH = 10
+    const val ACTION_CALL_INVITE_FRAGMENT = "action_call_invite_fragment"
+    const val ACTION_CALL_VIEW_GROUP_REQUEST_FRAGMENT = "action_call_request_fragment"
+    const val ACTION_RELOAD = "action_reload"
 }

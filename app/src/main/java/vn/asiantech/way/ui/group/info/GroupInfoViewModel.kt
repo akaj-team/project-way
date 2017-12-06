@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.info
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.source.GroupRepository
@@ -14,6 +15,18 @@ class GroupInfoViewModel {
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {
         return groupRepository.getGroupInfo(groupId)
+                .observeOnUiThread()
+    }
+
+    internal fun getMemberList(groupId: String): Observable<MutableList<User>> {
+        return groupRepository.getMemberList(groupId)
+                .toObservable()
+                .observeOnUiThread()
+    }
+
+    internal fun leaveGroup(userId: String): Observable<User> {
+        return groupRepository.removeUserFromGroup(userId)
+                .toObservable()
                 .observeOnUiThread()
     }
 }

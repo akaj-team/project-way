@@ -9,6 +9,7 @@
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
+    <item name="group_info_id_img_approve" type="id" />
 
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
@@ -76,6 +77,9 @@
     <item name="tracking_progress_info_img_end_point" type="id" />
     <item name="tracking_progress_info_img_arrow_right_start_item" type="id" />
     <item name="tracking_progress_info_img_arrow_right_end_item" type="id" />
+
+    <!-- View ids on class GroupActivityUI -->
+    <item name="group_activity_ui_fr_content" type="id" />
 
     <!-- View ids on class ItemMemberUI -->
     <item name="item_member_img_avatar" type="id" />

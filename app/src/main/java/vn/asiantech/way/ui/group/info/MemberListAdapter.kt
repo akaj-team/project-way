@@ -15,6 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import vn.asiantech.way.R
 import vn.asiantech.way.utils.AppConstants
 
 /**
@@ -76,33 +77,44 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
 
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             val view = with(ui) {
-                linearLayout {
+                verticalLayout {
                     lparams(matchParent, wrapContent)
-                    val paddingLeft = dimen(R.dimen.group_screen_tv_count_padding_left)
-                    val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
-                    verticalPadding = paddingTop
-                    horizontalPadding = paddingLeft
                     backgroundColor = Color.WHITE
 
-                    circleImageView {
-                        id = R.id.item_member_img_avatar
-                        backgroundResource = R.mipmap.ic_launcher_round
-                    }.lparams(dimen(R.dimen.group_screen_avatar_width),
-                            dimen(R.dimen.group_screen_avatar_width))
+                    linearLayout {
+                        val paddingLeft = dimen(R.dimen.group_screen_tv_count_padding_left)
+                        val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
+                        verticalPadding = paddingTop
+                        horizontalPadding = paddingLeft
+                        backgroundColor = Color.WHITE
 
-                    textView {
-                        id = R.id.item_member_tv_name
-                        textColor = Color.BLACK
-                        textSize = px2dip(dimen(R.dimen.text_size_normal))
-                    }.lparams(dimen(R.dimen.group_screen_tv_name_width), wrapContent) {
-                        leftMargin = dimen(R.dimen.group_text_size_normal)
-                        weight = AppConstants.MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT
+                        circleImageView {
+                            id = R.id.item_member_img_avatar
+                            backgroundResource = R.mipmap.ic_launcher_round
+                        }.lparams(dimen(R.dimen.group_screen_avatar_width),
+                                dimen(R.dimen.group_screen_avatar_width))
+
+                        textView {
+                            id = R.id.item_member_tv_name
+                            textColor = Color.BLACK
+                            textSize = px2dip(dimen(R.dimen.text_size_normal))
+                        }.lparams(dimen(R.dimen.group_screen_tv_name_width), wrapContent) {
+                            leftMargin = dimen(R.dimen.group_text_size_normal)
+                            weight = AppConstants.MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT
+                        }
+
+                        imageView(R.drawable.ic_phone_forwarded_blue_a700_48dp) {
+                            id = R.id.item_member_img_call
+                        }.lparams(dimen(R.dimen.group_screen_avatar_width),
+                                dimen(R.dimen.group_screen_avatar_width))
+                    }.lparams(matchParent, wrapContent)
+
+                    view {
+                        backgroundResource = R.color.colorSearchScreenBackground
+                    }.lparams(matchParent, dimen(R.dimen.break_line_view_height)) {
+                        verticalMargin = dimen(R.dimen.break_line_top_bot_margin)
+                        leftMargin = dimen(R.dimen.break_line_left_margin)
                     }
-
-                    imageView(R.drawable.ic_phone_forwarded_blue_a700_48dp) {
-                        id = R.id.item_member_img_call
-                    }.lparams(dimen(R.dimen.group_screen_avatar_width),
-                            dimen(R.dimen.group_screen_avatar_width))
                 }
             }
             view.tag = MemberItemViewHolder(view)

@@ -3,12 +3,14 @@ package vn.asiantech.way.ui.group.info
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
+import android.view.View
 import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import vn.asiantech.way.R
 
@@ -22,8 +24,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
     internal lateinit var tvGroupName: TextView
     internal lateinit var tvMembersCount: TextView
     internal lateinit var tvCreateAt: TextView
-    internal lateinit var imgInvite: ImageView
-    internal lateinit var imgLeave: ImageView
+    internal lateinit var imgApprove: ImageView
     internal val memberListAdapter = MemberListAdapter(userId, members)
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
@@ -49,15 +50,32 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 lparams(matchParent, wrapContent)
                 padding = dimen(R.dimen.group_screen_tv_count_padding_left)
 
-                imgInvite = imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
+                imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
                     id = R.id.group_info_id_img_invite
+                    onClick {
+                        owner.callToInviteFragment()
+                    }
                 }
 
-                imgLeave = imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp)
-                        .lparams {
-                            leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
-                            rightOf(R.id.group_info_id_img_invite)
-                        }
+                imgApprove = imageView(R.drawable.ic_spellcheck_deep_purple_a200_36dp) {
+                    id = R.id.group_info_id_img_approve
+                    visibility = View.GONE
+                    onClick {
+                        owner.callToViewRequestFragment()
+                    }
+                }.lparams {
+                    leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
+                    rightOf(R.id.group_info_id_img_invite)
+                }
+
+                imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp) {
+                    onClick {
+                        owner.leaveGroup()
+                    }
+                }.lparams {
+                    leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
+                    rightOf(R.id.group_info_id_img_approve)
+                }
             }
 
             swipeRefreshLayout {

@@ -1,8 +1,13 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
+import android.util.Log
+import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.group.info.GroupInfoFragment
 
 /**
  *
@@ -17,10 +22,25 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        //replaceFragment(R.id.group_activity_ui_fr_content, GroupInfoFragment.getInstance("hhhhhhhasdasdasd", "b8f8a472-8331-4c2f-8b28-bdbdb726d2c5"))
     }
 
     override fun onBindViewModel() {
-        // TODO: handle later
+        addDisposables(
+                groupViewModel.getUser()
+                        .observeOnUiThread()
+                        .subscribe(this::afterLoadUser)
+                )
+    }
+
+    private fun afterLoadUser(user: User) {
+        addDisposables(groupViewModel.listenerForGroupChange(user.id)
+                .observeOnUiThread()
+                .subscribe {
+                    Log.i("tag11", "ssssss")
+                })
+        if (user.groupId != null) {
+            replaceFragment(R.id.group_activity_ui_fr_content,
+                    GroupInfoFragment.getInstance(user.id, user.groupId))
+        }
     }
 }

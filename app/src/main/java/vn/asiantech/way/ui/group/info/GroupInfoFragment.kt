@@ -5,9 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.gson.Gson
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.yesButton
+import vn.asiantech.way.R
+import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 import vn.asiantech.way.utils.AppConstants
 
@@ -21,6 +27,7 @@ class GroupInfoFragment : BaseFragment() {
     private val groupInfoViewModel = GroupInfoViewModel()
     private var userId = ""
     private var groupId = ""
+    private lateinit var group: Group
     private val members = mutableListOf<User>()
 
     companion object {
@@ -48,9 +55,63 @@ class GroupInfoFragment : BaseFragment() {
 
     override fun onBindViewModel() {
         addDisposables(
-                groupInfoViewModel.getGroupInfo(groupId).subscribe {
-                    Log.i("tag11", Gson().toJson(it).toString())
-                }
+                groupInfoViewModel.getGroupInfo(groupId)
+                        .observeOnUiThread()
+                        .subscribe(this::bindGroupInfo)
         )
+    }
+
+    internal fun callToInviteFragment() {
+        sendBroadCast(AppConstants.ACTION_CALL_INVITE_FRAGMENT)
+    }
+
+    internal fun callToViewRequestFragment() {
+        sendBroadCast(AppConstants.ACTION_CALL_VIEW_GROUP_REQUEST_FRAGMENT)
+    }
+
+    internal fun leaveGroup() {
+        alert(R.string.confirm_message_leave_group, R.string.confirm) {
+            yesButton {
+                addDisposables(groupInfoViewModel.leaveGroup(userId)
+                        .observeOnUiThread()
+                        .subscribe(this@GroupInfoFragment::afterLeaveGroup))
+            }
+            noButton { dialog -> dialog.dismiss() }
+        }.show()
+    }
+
+    private fun bindGroupInfo(groupToBind: Group) {
+        group = groupToBind
+        with(group) {
+            ui.tvGroupName.text = name
+            ui.tvCreateAt.text = getString(R.string.create_at, createAt.substring(0,
+                    AppConstants.STANDARD_DATE_TIME_LENGTH))
+            if (userId == group.ownerId) {
+                ui.imgApprove.visibility = View.VISIBLE
+            } else {
+                ui.imgApprove.visibility = View.GONE
+            }
+        }
+        addDisposables(
+                groupInfoViewModel.getMemberList(groupId)
+                        .observeOnUiThread()
+                        .subscribe(this::updateMemberList)
+        )
+    }
+
+    private fun updateMemberList(users: MutableList<User>) {
+        ui.tvMembersCount.text = getString(R.string.members_count, users.size)
+        members.clear()
+        members.addAll(users)
+        ui.memberListAdapter.notifyDataSetChanged()
+    }
+
+    private fun afterLeaveGroup(user: User) {
+        if (user.groupId != groupId) {
+            Log.i("tag11", "ok")
+            sendBroadCast(AppConstants.ACTION_RELOAD)
+        } else {
+            toast(R.string.error_message)
+        }
     }
 }
