@@ -73,7 +73,7 @@
     <dimen name="group_screen_avatar_width">48dp</dimen>
     <dimen name="group_screen_tv_name_width">0dp</dimen>
     <dimen name="search_screen_text_size">18dp</dimen>
-    <dimen name="search_group_height_ll">100</dimen>
+    <dimen name="search_group_height_ll">20dp</dimen>
     <dimen name="search_group_padding">10dp</dimen>
     <dimen name="search_group_left_margin">64dp</dimen>
     <dimen name="search_group_top_margin">20dp</dimen>

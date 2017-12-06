@@ -18,8 +18,8 @@ import vn.asiantech.way.data.model.Group
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupAdapter(private val context: Context, private val groups: MutableList<Group>, private val listener: (Group) -> Unit)
-    : RecyclerView.Adapter<SearchGroupAdapter.SearchGroupHolder>() {
+class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>, private val listener: (Group) -> Unit)
+    : RecyclerView.Adapter<GroupListAdapter.SearchGroupHolder>() {
     override fun onBindViewHolder(holder: SearchGroupHolder?, position: Int) {
         holder?.onBind()
     }
@@ -33,18 +33,21 @@ class SearchGroupAdapter(private val context: Context, private val groups: Mutab
     /**
      * Custom view item  of groups list.
      */
-    inner class SearchGroupHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvJoinGroup: TextView = itemView.find(R.id.group_search_adapter_tv_join_group)
-        private val tvNameUser: TextView = itemView.find(R.id.group_search_adapter_tv_name_user)
+    inner class SearchGroupHolder(item: View) : RecyclerView.ViewHolder(item) {
+        private val tvJoinGroup: TextView = item.find(R.id.group_search_adapter_tv_join_group)
+        private val tvNameUser: TextView = item.find(R.id.group_search_adapter_tv_name_user)
+
+        init {
+            tvJoinGroup.onClick {
+                listener(groups[adapterPosition])
+            }
+        }
 
         /**
          * Bind data to item view.
          */
         fun onBind() {
             tvNameUser.text = groups[adapterPosition].name
-            tvJoinGroup.onClick {
-                listener(groups[adapterPosition])
-            }
         }
     }
 
@@ -62,7 +65,7 @@ class SearchGroupAdapter(private val context: Context, private val groups: Mutab
                     view {
                         id = R.id.group_search_adapter_view_break_line
                         backgroundResource = R.color.colorSearchScreenBackground
-                    }.lparams(matchParent, dimen(R.dimen.search_group_height_view)) {
+                    }.lparams(matchParent, dip(0.5f)) {
                         bottomMargin = dip(2)
                         leftMargin = dimen(R.dimen.search_group_left_margin)
                         topMargin = dip(2)
@@ -79,21 +82,19 @@ class SearchGroupAdapter(private val context: Context, private val groups: Mutab
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
                         }.lparams(dip(0), wrapContent) {
-                            leftMargin = dimen(R.dimen.search_group_padding)
                             weight = 1f
                         }
 
                         textView {
                             id = R.id.group_search_adapter_tv_join_group
                             textColor = R.color.colorWhite
-                            dimen(R.dimen.search_group_padding)
-                            backgroundResource = R.color.colorPrimaryDark
+                            padding = dimen(R.dimen.search_group_padding)
+                            backgroundResource = R.color.colorPinkLight
                             textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
                             text = resources.getString(R.string.join)
                         }.lparams {
-                            leftMargin = dimen(R.dimen.search_group_padding)
                             rightMargin = dimen(R.dimen.search_group_padding)
                         }
 

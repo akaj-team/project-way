@@ -10,12 +10,13 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.ui.search.SearchActivityUI
+import vn.asiantech.way.ui.group.search.GroupListAdapter
 
 /**
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
+class SearchGroupFragmentUI(private val SearchGroupAdapter:GroupListAdapter) : AnkoComponent<SearchGroupFragment> {
 
     override fun createView(ui: AnkoContext<SearchGroupFragment>): View = with(ui) {
 
@@ -44,7 +45,7 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
                     addTextChangedListener(object : SearchActivityUI.TextChangeListener {
                         override fun afterTextChanged(editable: Editable) {
                             if (editable.toString().trim().isNotEmpty()) {
-                                owner.searchGroups(editable.toString().trim())
+                                owner.eventOnTextChangeSearchGroup(editable.toString().trim())
                             }
                         }
                     })
@@ -55,6 +56,7 @@ class SearchGroupFragmentUI : AnkoComponent<SearchGroupFragment> {
 
             recyclerView {
                 layoutManager = LinearLayoutManager(context)
+                adapter=SearchGroupAdapter
             }.lparams(matchParent, matchParent) {
                 topMargin = dimen(R.dimen.search_group_top_margin)
             }

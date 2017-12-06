@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,43 +49,21 @@ class SearchGroupFragment : BaseFragment() {
     private lateinit var userRef: DatabaseReference
     private var currentRequest: Invite? = null
 
-    private lateinit var adapter: SearchGroupAdapter
+    private lateinit var adapter: GroupListAdapter
     private lateinit var ui: SearchGroupFragmentUI
     private val searchGroupViewModel = SearchGroupViewModel()
     private val searchGroupObservable = PublishSubject.create<String>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = SearchGroupFragmentUI()
-        user = arguments.getSerializable(KEY_USER) as? User
-        userRef = firebaseDatabase.getReference("user/" + user?.id + "/request")
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) = Unit
-
-            override fun onDataChange(p0: DataSnapshot?) {
-                val gson = Gson()
-                currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-            }
-        })
-        return ui.createView(AnkoContext.create(context, this))
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter = SearchGroupAdapter(context, groups) {
-
-            if (currentRequest != null) {
-                val groupRef = firebaseDatabase.getReference("group/" + currentRequest?.to
-                        + "/request/" + user?.id)
-                groupRef.removeValue()
-            }
-            val invite = Invite(user?.id!!, user?.id!!, it.name, true)
-            userRef.setValue(invite)
-            firebaseDatabase.getReference("group/" + it.id
-                    + "/request/" + user?.id).setValue(invite)
-            currentRequest = invite
+        adapter = GroupListAdapter(context, groups){
+            eventOnItemClicked(it)
         }
+
+        ui = SearchGroupFragmentUI(adapter)
+
+        user = arguments.getSerializable(KEY_USER) as? User
+        return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
@@ -100,21 +79,41 @@ class SearchGroupFragment : BaseFragment() {
                                     {
                                         toast(R.string.error_message)
                                     })
+
                 })
         )
     }
 
-    internal fun searchGroups(query: String) {
+    internal fun eventOnTextChangeSearchGroup(query: String) {
         searchGroupObservable.onNext(query)
-    }
-
-    private fun updateRecyclerViewGroup(data: List<Group>) {
-        groups.clear()
-        groups.addAll(data)
-        adapter.notifyDataSetChanged()
     }
 
     internal fun onBackClick() {
         //TODO : send broadcast to GroupActivity
+    }
+
+    private fun eventOnItemClicked(group:Group){
+        addDisposables(
+                searchGroupViewModel
+                        .postRequestToGroup()
+                        .subscribe (
+                                this::handlePostRequestToGroupSuccessed,
+                                this::handlePostRequestToGroupError
+                        )
+        )
+    }
+
+    private fun handlePostRequestToGroupSuccessed(isSuccess:Boolean){
+       toast("success")
+    }
+
+    private fun handlePostRequestToGroupError(error:Throwable){
+        toast("Error when post request to Group")
+    }
+
+    private fun updateRecyclerViewGroup(data: List<Group>) {
+            groups.clear()
+            groups.addAll(data)
+            adapter.notifyDataSetChanged()
     }
 }
