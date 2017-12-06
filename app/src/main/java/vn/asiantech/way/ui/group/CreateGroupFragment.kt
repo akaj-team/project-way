@@ -34,6 +34,7 @@ class CreateGroupFragment : BaseFragment() {
     private lateinit var createGroupViewModel: CreateGroupViewModel
     private lateinit var ui: CreateGroupFragmentUI
     private lateinit var user: User
+    private var group: Group? = null
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?) = CreateGroupFragmentUI()
             .createView(AnkoContext.create(context, this))
@@ -58,13 +59,32 @@ class CreateGroupFragment : BaseFragment() {
     }
 
     private fun createGroupSuccess(group: Group) {
-        addDisposables(createGroupViewModel.addUserToGroup(user.id, BodyAddUserToGroup(group.id))
-                .observeOnUiThread().subscribe({}, {}))
-        addDisposables(createGroupViewModel.upGroupInfo(group)
-                .observeOnUiThread().subscribe())
+        group.ownerId = user.id
+        this.group = group
+        addDisposables(createGroupViewModel.addUserToGroup(group.ownerId, BodyAddUserToGroup(group.id))
+                .observeOnUiThread()
+                .subscribe(this::handleAddUserSuccess, this::handleAddUserError))
     }
 
     private fun createGroupFail(throwable: Throwable) {
+        TODO("Will update code later")
+    }
+
+    private fun handleAddUserSuccess(user: User) {
+        addDisposables(createGroupViewModel.upGroupInfo(group!!)
+                .observeOnUiThread()
+                .subscribe(this::handleUpGroupInfoSuccess, this::handleUpGroupInfoError))
+    }
+
+    private fun handleAddUserError(throwable: Throwable) {
+        TODO("Will update code later")
+    }
+
+    private fun handleUpGroupInfoSuccess(boolean: Boolean) {
+        TODO("Will update code later")
+    }
+
+    private fun handleUpGroupInfoError(throwable: Throwable) {
         TODO("Will update code later")
     }
 }

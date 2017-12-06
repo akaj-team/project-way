@@ -63,10 +63,6 @@ class SplashActivity : BaseActivity() {
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
-        val viewModel=CreateGroupViewModel(this)
-        addDisposables(viewModel.createGroup("e4e91b20-498b-49a0-b2aa-64b9a992e21d","test")
-                .observeOnUiThread()
-                .subscribe({ Log.d("TTTTT","TTTTT")},{}))
     }
 
     private fun startSwitchScreen() {
