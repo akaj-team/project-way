@@ -30,6 +30,10 @@ class GroupInfoFragment : BaseFragment() {
     private val members = mutableListOf<User>()
 
     companion object {
+
+        /**
+         * This function used to get Instance of GroupInfoFragment
+         */
         fun getInstance(userId: String, groupId: String): GroupInfoFragment {
             val instance = GroupInfoFragment()
             val bundle = Bundle()
