@@ -32,7 +32,6 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
             lparams(matchParent, matchParent)
-            padding = dimen(R.dimen.invite_screen_padding)
             backgroundColor = ActivityCompat.getColor(context, R.color.colorSearchScreenBackground)
 
             verticalLayout {
@@ -43,6 +42,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     lparams(matchParent, wrapContent)
                     gravity = Gravity.CENTER_VERTICAL
 
+                    // Image Button: back
                     imageButton(R.drawable.ic_back_icon_button) {
                         backgroundColor = Color.TRANSPARENT
                         contentDescription = null
@@ -50,14 +50,19 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                         onClick {
                             activity.onBackPressed()
                         }
-                    }.lparams(wrapContent, wrapContent)
-
+                    }.lparams(wrapContent, wrapContent) {
+                        topMargin = dimen(R.dimen.invite_screen_padding)
+                        leftMargin = dimen(R.dimen.invite_screen_padding)
+                        rightMargin = dimen(R.dimen.invite_screen_padding)
+                    }
+                    // Edit text : User name
                     edtUserName = editText {
                         backgroundColor = ActivityCompat.getColor(context, R.color.colorEdtSearchBackground)
-                        hint = resources.getString(R.string.enter_user_name)
+                        hint = resources.getString(R.string.item_user_text_hint)
                         singleLine = true
                         padding = dimen(R.dimen.invite_screen_padding)
-                        textSize = resources.getDimension(R.dimen.search_screen_text_size)
+                        textSize = 18f
+                        gravity = Gravity.CENTER_VERTICAL
 
                         addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
                             override fun afterTextChanged(editable: Editable) {
@@ -65,12 +70,12 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                             }
                         })
                     }.lparams(matchParent, matchParent) {
-                        leftMargin = dimen(R.dimen.invite_screen_padding)
+                        topMargin = dimen(R.dimen.invite_screen_padding)
                         rightMargin = dimen(R.dimen.invite_screen_padding)
                     }
                 }
 
-                // RecycleView
+                // RecycleView: list user
                 recyclerView {
                     id = R.id.invite_recycle_view
                     clipToPadding = false
@@ -82,6 +87,9 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     adapter = userListAdapter
                 }.lparams(matchParent, matchParent) {
                     topMargin = dimen(R.dimen.invite_screen_top_margin)
+                    bottomMargin = dimen(R.dimen.invite_screen_padding)
+                    leftMargin = dimen(R.dimen.invite_screen_padding)
+                    rightMargin = dimen(R.dimen.invite_screen_padding)
                 }
             }
         }
