@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
+import android.util.Log
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
@@ -16,6 +17,7 @@ class GroupActivity : BaseActivity() {
 
     private lateinit var ui: GroupActivityUI
     private val groupViewModel = GroupActivityViewModel()
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,20 +29,33 @@ class GroupActivity : BaseActivity() {
         addDisposables(
                 groupViewModel.getUser()
                         .observeOnUiThread()
-                        .subscribe(this::afterLoadUser)
+                        .subscribe(this::handleAfterLoadUserCompleted)
         )
     }
 
-    private fun afterLoadUser(user: User) {
-        addDisposables(groupViewModel.listenerForGroupChange(user.id)
-                .observeOnUiThread()
-                .subscribe {
-                    groupViewModel.getUser()
-                            .subscribe()
-                })
-        if (user.groupId != null) {
+    private fun handleAfterLoadUserCompleted(newUser: User) {
+        Log.i("tag11", "aaaaaaaaaaa")
+        if (user == null) {
+            Log.i("tag11", "111111111111")
+            addDisposables(groupViewModel.listenerForGroupChange(newUser.id)
+                    .observeOnUiThread()
+                    .subscribe {
+                        groupViewModel.getUser()
+                                .subscribe(this::handleAfterReloadUserCompleted)
+                    })
+        }
+        user = newUser
+        if (newUser.groupId != null) {
             replaceFragment(R.id.group_activity_ui_fr_content,
-                    GroupInfoFragment.getInstance(user.id, user.groupId))
+                    GroupInfoFragment.getInstance(newUser.id, newUser.groupId))
+        }
+    }
+
+    private fun handleAfterReloadUserCompleted(newUser: User) {
+        Log.i("tag11", "ssss")
+        if (newUser.groupId != null && newUser.groupId != user?.groupId) {
+            replaceFragment(R.id.group_activity_ui_fr_content,
+                    GroupInfoFragment.getInstance(newUser.id, newUser.groupId))
         }
     }
 }
