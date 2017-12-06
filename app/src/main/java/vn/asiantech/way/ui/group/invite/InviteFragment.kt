@@ -52,10 +52,10 @@ class InviteFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         //init invite view model
         inviteViewModel = InviteViewModel(context)
+        onGetInfomationOfUserInvite()
     }
 
     override fun onBindViewModel() {
-        onGetInfomationOfUserInvite()
         inviteViewModel.resetDataStatus
                 .observeOnUiThread()
                 .subscribe(this::onResetDataListWhenStartSearch)
