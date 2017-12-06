@@ -45,7 +45,7 @@ class InviteFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = InviteFragmentUI(activity, users)
+        ui = InviteFragmentUI(users)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -71,7 +71,7 @@ class InviteFragment : BaseFragment() {
      * On get list user invite from search action
      */
     internal fun onGetListUserInvite(name: String) {
-        if (name.isEmpty()){
+        if (name.isEmpty()) {
             return
         }
         addDisposables(inviteViewModel.searchListUser(name)
@@ -98,5 +98,12 @@ class InviteFragment : BaseFragment() {
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString("KEY_GROUP_NAME")
         ownerId = arguments.getString("KEY_GROUP_OWNER")
+    }
+
+    /**
+     * On back pressed activity
+     */
+    internal fun onBackPressed() {
+        activity.onBackPressed()
     }
 }

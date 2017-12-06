@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group.invite
 
-import android.app.Activity
 import android.graphics.Color
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -20,12 +19,8 @@ import vn.asiantech.way.R
  * @author NgocTTN
  */
 
-class InviteFragmentUI(val activity: Activity, private val users: MutableList<User>) : AnkoComponent<InviteFragment> {
+class InviteFragmentUI(private val users: MutableList<User>) : AnkoComponent<InviteFragment> {
 
-    private var userId = ""
-    private var groupId = ""
-    private var groupName = ""
-    private var ownerId = ""
     internal lateinit var edtUserName: EditText
     internal val userListAdapter = UserListAdapter(users)
 
@@ -48,7 +43,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                         contentDescription = null
                         padding = dimen(R.dimen.item_user_bottom_or_top_padding)
                         onClick {
-                            activity.onBackPressed()
+                            owner.onBackPressed()
                         }
                     }.lparams(wrapContent, wrapContent) {
                         topMargin = dimen(R.dimen.invite_screen_padding)
