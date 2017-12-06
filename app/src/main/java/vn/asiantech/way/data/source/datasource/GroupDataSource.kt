@@ -24,7 +24,7 @@ interface GroupDataSource {
      *
      * @param userId - id of given user.
      */
-    fun getGroupId(userId: String): Observable<String>
+    fun listenerForGroupChange(userId: String): Observable<String>
 
     /**
      * This method used to get invite list of a given user.
@@ -111,4 +111,20 @@ interface GroupDataSource {
      * @param name - name used to search.
      */
     fun searchUser(name: String): Observable<List<User>>
+
+    /**
+     * This method used to delete a given invite when a given user refuse it.
+     *
+     * @param userId - id of given user.
+     * @param invite - given invite.
+     */
+    fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean>
+
+    /**
+     * This method used to delete a given request when group owner refuse it.
+     *
+     * @param groupId - id of given group.
+     * @param invite - given request.
+     */
+    fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
 }
