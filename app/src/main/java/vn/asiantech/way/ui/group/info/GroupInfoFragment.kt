@@ -61,6 +61,12 @@ class GroupInfoFragment : BaseFragment() {
         )
     }
 
+    internal fun eventViewClicked(view: View) {
+        when (view.id) {
+
+        }
+    }
+
     internal fun callToInviteFragment() {
         sendBroadCast(AppConstants.ACTION_CALL_INVITE_FRAGMENT)
     }

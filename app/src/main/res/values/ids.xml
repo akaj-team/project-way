@@ -8,8 +8,9 @@
     <item name="floating_btn_menu_img_btn_share" type="id" />
 
     <!--View ids for GroupInfoFragmentUI-->
-    <item name="group_info_id_img_invite" type="id" />
-    <item name="group_info_id_img_approve" type="id" />
+    <item name="group_info_img_invite" type="id" />
+    <item name="group_info_img_approve" type="id" />
+    <item name="group_info_img_leave_group" type="id" />
 
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />

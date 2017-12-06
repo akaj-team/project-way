@@ -51,30 +51,31 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 padding = dimen(R.dimen.group_screen_tv_count_padding_left)
 
                 imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
-                    id = R.id.group_info_id_img_invite
+                    id = R.id.group_info_img_invite
                     onClick {
                         owner.callToInviteFragment()
                     }
                 }
 
                 imgApprove = imageView(R.drawable.ic_spellcheck_deep_purple_a200_36dp) {
-                    id = R.id.group_info_id_img_approve
+                    id = R.id.group_info_img_approve
                     visibility = View.GONE
                     onClick {
                         owner.callToViewRequestFragment()
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
-                    rightOf(R.id.group_info_id_img_invite)
+                    rightOf(R.id.group_info_img_invite)
                 }
 
                 imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp) {
+                    id = R.id.group_info_img_leave_group
                     onClick {
                         owner.leaveGroup()
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
-                    rightOf(R.id.group_info_id_img_approve)
+                    rightOf(R.id.group_info_img_approve)
                 }
             }
 
