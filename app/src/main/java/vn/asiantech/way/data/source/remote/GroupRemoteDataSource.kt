@@ -30,7 +30,11 @@ class GroupRemoteDataSource : GroupDataSource {
             }
 
             override fun onDataChange(p0: DataSnapshot?) {
-                result.onNext(Gson().fromJson(p0?.value.toString(), Group::class.java))
+                if (p0?.value == null) {
+                    result.onError(Throwable())
+                } else {
+                    result.onNext(Gson().fromJson(p0.value.toString(), Group::class.java))
+                }
             }
         })
         return result
@@ -151,9 +155,13 @@ class GroupRemoteDataSource : GroupDataSource {
             override fun onCancelled(p0: DatabaseError?) = Unit
 
             override fun onDataChange(p0: DataSnapshot?) {
-                val gson = Gson()
-                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-                result.onNext(currentRequest)
+                if (p0?.value == null) {
+                    result.onNext(Invite("", "", "", false))
+                } else {
+                    val gson = Gson()
+                    val currentRequest = gson.fromJson(gson.toJson(p0.value), Invite::class.java)
+                    result.onNext(currentRequest)
+                }
             }
         })
         return result
@@ -162,30 +170,41 @@ class GroupRemoteDataSource : GroupDataSource {
     override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
         val gson = Gson()
         val result = SingleSubject.create<Boolean>()
-        val userRequest = firebaseDatabase.getReference("user/${request.to}/request")
+        val userRequest = firebaseDatabase.getReference("user/${request.from}/request")
         userRequest.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
                 result.onError(Throwable(p0?.message))
             }
 
             override fun onDataChange(p0: DataSnapshot?) {
-                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-                val currentGroupRequestRef = firebaseDatabase
-                        .getReference("group/${currentRequest.to}/request/${request.to}")
-                currentGroupRequestRef.removeValue()
-                        .addOnSuccessListener {
-                            userRequest.removeValue()
-                            val requestRef = firebaseDatabase.getReference("group/$groupId" +
-                                    "/request/${request.to}")
-                            requestRef.setValue(request).addOnSuccessListener {
-                                result.onSuccess(true)
-                            }.addOnFailureListener {
-                                result.onError(it)
+                if (p0?.value == null) {
+                    userRequest.setValue(request)
+                    val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                            "/request/${request.from}")
+                    requestRef.setValue(request).addOnSuccessListener {
+                        result.onSuccess(true)
+                    }.addOnFailureListener {
+                        result.onError(it)
+                    }
+                } else {
+                    val currentRequest = gson.fromJson(gson.toJson(p0.value), Invite::class.java)
+                    val currentGroupRequestRef = firebaseDatabase
+                            .getReference("group/${currentRequest.to}/request/${request.from}")
+                    currentGroupRequestRef.removeValue()
+                            .addOnSuccessListener {
+                                userRequest.setValue(request)
+                                val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                                        "/request/${request.from}")
+                                requestRef.setValue(request).addOnSuccessListener {
+                                    result.onSuccess(true)
+                                }.addOnFailureListener {
+                                    result.onError(it)
+                                }
                             }
-                        }
-                        .addOnFailureListener {
-                            result.onError(Throwable(it))
-                        }
+                            .addOnFailureListener {
+                                result.onError(Throwable(it))
+                            }
+                }
             }
         })
         return result
