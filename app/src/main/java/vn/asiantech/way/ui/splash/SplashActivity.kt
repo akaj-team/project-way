@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
@@ -16,10 +15,8 @@ import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.CreateGroupViewModel
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
