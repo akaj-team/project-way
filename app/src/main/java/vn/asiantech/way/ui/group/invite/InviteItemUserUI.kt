@@ -26,7 +26,6 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
             // layout parent
             lparams(matchParent, wrapContent){
                 backgroundColor = ActivityCompat.getColor(context!!, R.color.colorWhite)
-                gravity = Gravity.CENTER_VERTICAL
                 bottomPadding = leftRightMarginOrPadding
                 topPadding = leftRightMarginOrPadding
             }
@@ -44,6 +43,9 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
                 id = R.id.item_user_tv_name
                 textColor = ActivityCompat.getColor(context!!, R.color.colorBlack)
                 textSize = 20f
+                gravity = Gravity.CENTER_VERTICAL
+                bottomPadding = leftRightMarginOrPadding
+                topPadding = leftRightMarginOrPadding
             }.lparams(dip(0), wrapContent) {
                 weight = 1f
             }
@@ -53,12 +55,12 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
                 id = R.id.item_user_tv_invite
                 backgroundColor = ActivityCompat.getColor(context!!, R.color.colorPrimaryDark)
                 maxLines = 1
+                text = resources.getText(R.string.item_user_invite)
+                textColor = ContextCompat.getColor(context!!, R.color.colorWhite)
                 topPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
                 bottomPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
                 rightPadding = dimen(R.dimen.item_user_left_or_right_padding)
                 leftPadding = dimen(R.dimen.item_user_left_or_right_padding)
-                text = resources.getText(R.string.item_user_invite)
-                textColor = ContextCompat.getColor(context!!, R.color.colorWhite)
             }.lparams(dip(wrapContent), dip(wrapContent)) {
                 leftMargin = leftRightMarginOrPadding
                 rightMargin = leftRightMarginOrPadding
