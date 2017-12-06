@@ -8,7 +8,9 @@ import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.AsyncSubject
+import io.reactivex.subjects.SingleSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.datasource.WayDataSource
@@ -55,13 +57,12 @@ internal class WayRemoteDataSource : WayDataSource {
         return result
     }
 
-    override fun getUser(): Observable<User> {
-        val result = AsyncSubject.create<User>()
+    override fun getUser(): Single<User> {
+        val result = SingleSubject.create<User>()
         HyperTrack.getUser(object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 val res = response.responseObject as? User
-                res?.let { result.onNext(it) }
-                result.onComplete()
+                res?.let { result.onSuccess(it) }
             }
 
             override fun onError(error: ErrorResponse) {

@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.datasource.WayDataSource
 import vn.asiantech.way.data.source.remote.WayRemoteDataSource
@@ -24,7 +25,7 @@ class WayRepository : WayDataSource {
         return remoteDataSource.updateUser(userParams)
     }
 
-    override fun getUser(): Observable<User> {
+    override fun getUser(): Single<User> {
         return remoteDataSource.getUser()
     }
 
