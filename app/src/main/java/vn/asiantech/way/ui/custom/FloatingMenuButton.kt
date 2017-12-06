@@ -124,9 +124,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                             view.gravity = Gravity.END
                             view.visibility = View.INVISIBLE
                         }
-                        is TextView -> {
-                            view.gravity = Gravity.CENTER
-                        }
+                        is TextView -> view.gravity = Gravity.CENTER
                     }
                 }
             }
