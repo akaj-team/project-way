@@ -96,14 +96,14 @@ interface GroupDataSource {
      *
      * @param request - given request.
      */
-    fun postRequestToGroup(groupId: String, request: Invite)
+    fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean>
 
     /**
      * This method used to post a request to user.
      *
      * @param request - given request
      */
-    fun postRequestToUser(userId: String, request: Invite)
+    fun postRequestToUser(userId: String, request: Invite): Single<Boolean>
 
     /**
      * This method used to search user by name.

@@ -60,12 +60,12 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getCurrentRequestOfUser(userId)
     }
 
-    override fun postRequestToGroup(groupId: String, request: Invite) {
-        remoteDataSource.postRequestToGroup(groupId, request)
+    override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(groupId, request)
     }
 
-    override fun postRequestToUser(userId: String, request: Invite) {
-        remoteDataSource.postRequestToGroup(userId, request)
+    override fun postRequestToUser(userId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(userId, request)
     }
 
     override fun searchUser(name: String): Observable<List<User>> {

@@ -159,14 +159,26 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun postRequestToGroup(groupId: String, request: Invite) {
+    override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val requestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
-        requestRef.setValue(request)
+        requestRef.setValue(request).addOnSuccessListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
     }
 
-    override fun postRequestToUser(userId: String, request: Invite) {
+    override fun postRequestToUser(userId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val requestRef = firebaseDatabase.getReference("user/$userId/request")
-        requestRef.setValue(request)
+        requestRef.setValue(request).addOnSuccessListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
     }
 
     override fun searchUser(name: String): Observable<List<User>> {
