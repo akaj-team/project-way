@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.register
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.SystemClock
 import com.hypertrack.lib.models.User
@@ -68,6 +69,16 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
                 .setPhoto(avatar?.toBase64())
                 .setPhone(isoCode.plus("/").plus(phone))
                 .setLookupId(phone)
+    }
+
+    internal fun getAvatar(): Observable<Intent> {
+        val result = PublishSubject.create<Intent>()
+        return result
+    }
+
+    internal fun onSkipClicked(userParams: UserParams): Observable<UserParams> {
+        val result = PublishSubject.create<UserParams>()
+        return result
     }
 
     internal fun onBackPress() {
