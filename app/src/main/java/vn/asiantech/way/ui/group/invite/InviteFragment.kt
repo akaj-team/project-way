@@ -62,6 +62,7 @@ class InviteFragment : BaseFragment() {
      * On item invite click of  RecyclerView list.
      */
     internal fun onItemInviteClick(user: User) {
+        //todo handel save database firebase
     }
 
     /**
@@ -71,6 +72,7 @@ class InviteFragment : BaseFragment() {
         if (name.isEmpty()) {
             return
         }
+        users.clear()
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()
                 .subscribe(this::onGetListUserInviteComplete))
@@ -83,8 +85,8 @@ class InviteFragment : BaseFragment() {
         users.clear()
         if (usersList != null) {
             users.addAll(usersList)
+            ui.userListAdapter.notifyDataSetChanged()
         }
-        ui.userListAdapter.notifyDataSetChanged()
     }
 
     /**

@@ -16,8 +16,8 @@ import vn.asiantech.way.R
  * User List Adapter
  * @author NgocTTN
  */
-class UserListAdapter(val users: MutableList<User>)
-    : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
+class InviteUserListAdapter(val users: MutableList<User>)
+    : RecyclerView.Adapter<InviteUserListAdapter.UserViewHolder>() {
 
     var onItemInviteClick: (user: User) -> Unit = {}
 
@@ -26,7 +26,7 @@ class UserListAdapter(val users: MutableList<User>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder? {
-        return UserViewHolder(ItemUserUI<ViewGroup>().createView(AnkoContext.create(parent.context, parent)))
+        return UserViewHolder(InviteItemUserUI<ViewGroup>().createView(AnkoContext.create(parent.context, parent)))
     }
 
     override fun getItemCount() = users.size

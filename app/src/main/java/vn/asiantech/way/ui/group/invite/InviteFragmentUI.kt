@@ -22,7 +22,7 @@ import vn.asiantech.way.R
 class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment> {
 
     internal lateinit var edtUserName: EditText
-    internal val userListAdapter = UserListAdapter(users)
+    internal val userListAdapter = InviteUserListAdapter(users)
 
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {

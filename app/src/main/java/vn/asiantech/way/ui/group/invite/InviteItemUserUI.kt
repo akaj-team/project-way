@@ -15,7 +15,7 @@ import vn.asiantech.way.R
  * Item User UI
  * @author NgocTTN
  */
-class ItemUserUI<T> : AnkoComponent<ViewGroup> {
+class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>): View = ui.apply {
         linearLayout {
             // layout parent
