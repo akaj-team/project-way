@@ -19,7 +19,7 @@ import vn.asiantech.way.R
  * @author NgocTTN
  */
 
-class InviteFragmentUI(private val users: MutableList<User>) : AnkoComponent<InviteFragment> {
+class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment> {
 
     internal lateinit var edtUserName: EditText
     internal val userListAdapter = UserListAdapter(users)
