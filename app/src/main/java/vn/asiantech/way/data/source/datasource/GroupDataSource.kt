@@ -127,4 +127,9 @@ interface GroupDataSource {
      * @param invite - given request.
      */
     fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
+
+    /**
+     *
+     */
+    fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean>
 }
