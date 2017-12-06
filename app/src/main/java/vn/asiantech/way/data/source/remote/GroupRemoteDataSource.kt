@@ -160,13 +160,34 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        val gson = Gson()
         val result = SingleSubject.create<Boolean>()
-        val requestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
-        requestRef.setValue(request).addOnSuccessListener {
-            result.onSuccess(true)
-        }.addOnFailureListener {
-            result.onError(it)
-        }
+        val userRequest = firebaseDatabase.getReference("user/${request.to}/request")
+        userRequest.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                result.onError(Throwable(p0?.message))
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
+                val currentGroupRequestRef = firebaseDatabase
+                        .getReference("group/${currentRequest.to}/request/${request.to}")
+                currentGroupRequestRef.removeValue()
+                        .addOnSuccessListener {
+                            userRequest.removeValue()
+                            val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                                    "/request/${request.to}")
+                            requestRef.setValue(request).addOnSuccessListener {
+                                result.onSuccess(true)
+                            }.addOnFailureListener {
+                                result.onError(it)
+                            }
+                        }
+                        .addOnFailureListener {
+                            result.onError(Throwable(it))
+                        }
+            }
+        })
         return result
     }
 
@@ -207,6 +228,10 @@ class GroupRemoteDataSource : GroupDataSource {
             result.onError(it)
         }
         return result
+    }
+
+    override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
+        TODO("Init later")
     }
 
     /**
