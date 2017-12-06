@@ -55,7 +55,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                         leftMargin = dimen(R.dimen.invite_screen_padding)
                         rightMargin = dimen(R.dimen.invite_screen_padding)
                     }
-                    // Edit text : User name
+                    // Edit text : enter user name
                     edtUserName = editText {
                         backgroundColor = ActivityCompat.getColor(context, R.color.colorEdtSearchBackground)
                         hint = resources.getString(R.string.item_user_text_hint)
@@ -66,7 +66,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
 
                         addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
                             override fun afterTextChanged(editable: Editable) {
-                                owner.searchUserList(editable.toString().trim())
+                                owner.onGetListUserInvite(editable.toString().trim())
                             }
                         })
                     }.lparams(matchParent, matchParent) {
@@ -75,7 +75,7 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     }
                 }
 
-                // RecycleView: list user
+                // RecycleView: list user invite
                 recyclerView {
                     id = R.id.invite_recycle_view
                     clipToPadding = false

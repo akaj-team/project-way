@@ -1,13 +1,12 @@
 package vn.asiantech.way.ui.group.invite
 
-import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -43,7 +42,6 @@ class InviteFragment : BaseFragment() {
     private lateinit var ui: InviteFragmentUI
     private val users = mutableListOf<User>()
     private lateinit var inviteViewModel: InviteViewModel
-    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -53,6 +51,7 @@ class InviteFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //init invite view model
         inviteViewModel = InviteViewModel(context)
     }
 
@@ -64,25 +63,27 @@ class InviteFragment : BaseFragment() {
      * On item invite click of  RecyclerView list.
      */
     internal fun onItemInviteClick(user: User) {
-        /*val inviteRef = firebaseDatabase.getReference("user/$user/invites/$groupId")
-        inviteRef.setValue(Invite(userId, groupId, groupName, userId == ownerId))*/
+        val inviteRef = firebaseDatabase.getReference("user/$user/invites/$groupId")
+        inviteRef.setValue(Invite(userId, groupId, groupName, userId == ownerId))
     }
 
     /**
-     * On get list user from search
+     * On get list user invite from search action
      */
-    internal fun searchUserList(name: String) {
+    internal fun onGetListUserInvite(name: String) {
+        if (name.isEmpty()){
+            return
+        }
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()
-                .subscribe(this::onSearchUser))
+                .subscribe(this::onGetListUserInviteComplete))
     }
 
     /**
      * On get list user from search
      */
-    internal fun onSearchUser(usersList: List<User>?) {
+    internal fun onGetListUserInviteComplete(usersList: List<User>?) {
         users.clear()
-        Log.d("aaa", "usersList" + usersList)
         if (usersList != null) {
             users.addAll(usersList!!)
         }
