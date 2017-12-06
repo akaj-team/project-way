@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -20,7 +19,7 @@ import vn.asiantech.way.R
 class UserListAdapter(val users: MutableList<User>)
     : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
 
-    var onItemClick: (user: User) -> Unit = {}
+    var onItemInviteClick: (user: User) -> Unit = {}
 
     override fun onBindViewHolder(holder: UserViewHolder?, position: Int) {
         holder?.onBind()
@@ -42,8 +41,9 @@ class UserListAdapter(val users: MutableList<User>)
         private val tvInvite: TextView = itemView.find(R.id.item_user_tv_invite)
 
         init {
-            itemView.onClick {
-                onItemClick(users[adapterPosition])
+            tvInvite.onClick {
+                onItemInviteClick(users[adapterPosition])
+                tvInvite.visibility = View.GONE
             }
         }
 
@@ -52,7 +52,6 @@ class UserListAdapter(val users: MutableList<User>)
          */
         fun onBind() {
             with(users[adapterPosition]) {
-                Log.d("aaa","user" + users[adapterPosition])
                 tvName.text = name
                 Glide.with(itemView.context).load(photo).into(imgAvatar)
                 val isShow: Int = if (groupId != null) {

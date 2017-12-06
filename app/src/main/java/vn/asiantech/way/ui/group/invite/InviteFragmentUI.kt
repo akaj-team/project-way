@@ -80,8 +80,8 @@ class InviteFragmentUI(val activity: Activity, private val users: MutableList<Us
                     id = R.id.invite_recycle_view
                     clipToPadding = false
                     background = resources.getDrawable(R.drawable.bg_user_list)
-                    userListAdapter.onItemClick = {
-                        owner.onItemClick(it)
+                    userListAdapter.onItemInviteClick = {
+                        owner.onItemInviteClick(it)
                     }
                     layoutManager = LinearLayoutManager(context)
                     adapter = userListAdapter

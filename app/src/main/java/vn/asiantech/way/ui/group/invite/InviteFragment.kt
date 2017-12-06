@@ -53,7 +53,7 @@ class InviteFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            inviteViewModel = InviteViewModel(context)
+        inviteViewModel = InviteViewModel(context)
     }
 
     override fun onBindViewModel() {
@@ -61,27 +61,28 @@ class InviteFragment : BaseFragment() {
     }
 
     /**
-     * On item of  RecyclerView click.
+     * On item invite click of  RecyclerView list.
      */
-    internal fun onItemClick(user: User) {
-
+    internal fun onItemInviteClick(user: User) {
+        /*val inviteRef = firebaseDatabase.getReference("user/$user/invites/$groupId")
+        inviteRef.setValue(Invite(userId, groupId, groupName, userId == ownerId))*/
     }
 
     /**
      * On get list user from search
      */
-    internal fun searchUserList(name : String) {
+    internal fun searchUserList(name: String) {
         addDisposables(inviteViewModel.searchListUser(name)
                 .observeOnUiThread()
-                .subscribe(this :: onSearchUser))
+                .subscribe(this::onSearchUser))
     }
 
     /**
      * On get list user from search
      */
-    internal fun onSearchUser(usersList : List<User>?) {
+    internal fun onSearchUser(usersList: List<User>?) {
         users.clear()
-        Log.d("aaa","usersList" + usersList)
+        Log.d("aaa", "usersList" + usersList)
         if (usersList != null) {
             users.addAll(usersList!!)
         }
