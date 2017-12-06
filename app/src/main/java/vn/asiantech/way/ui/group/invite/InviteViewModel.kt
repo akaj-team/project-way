@@ -12,15 +12,15 @@ import vn.asiantech.way.extension.observeOnUiThread
  * @author NgocTTN
  */
 class InviteViewModel(val context: Context) {
-    internal var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
+    internal var resetDataStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val groupRepository = GroupRepository()
 
     internal fun searchListUser(name : String) : Observable<List<User>> {
-        progressBarStatus.onNext(true)
+        resetDataStatus.onNext(true)
         return groupRepository
                 .searchUser(name)
                 .observeOnUiThread()
-                .doOnNext { progressBarStatus.onNext(false) }
+                .doOnNext { resetDataStatus.onNext(false) }
                 .map { it }
     }
 }
