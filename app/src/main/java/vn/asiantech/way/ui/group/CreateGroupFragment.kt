@@ -49,9 +49,6 @@ class CreateGroupFragment : BaseFragment() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    /**
-     * Create Group
-     */
     internal fun createGroup() {
         addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
                 .observeOnUiThread()
