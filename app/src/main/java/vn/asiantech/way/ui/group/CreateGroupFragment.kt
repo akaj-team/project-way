@@ -55,28 +55,28 @@ class CreateGroupFragment : BaseFragment() {
     internal fun createGroup() {
         addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
                 .observeOnUiThread()
-                .subscribe(this::createGroupSuccess, this::createGroupFail))
+                .subscribe(this::handleCreateGroupSuccess, this::handleCreateGroupError))
     }
 
-    private fun createGroupSuccess(group: Group) {
+    private fun handleCreateGroupSuccess(group: Group) {
         group.ownerId = user.id
         this.group = group
         addDisposables(createGroupViewModel.addUserToGroup(group.ownerId, BodyAddUserToGroup(group.id))
                 .observeOnUiThread()
-                .subscribe(this::handleAddUserSuccess, this::handleAddUserError))
+                .subscribe(this::handleAddUserToGroupSuccess, this::handleAddUserToGroupError))
     }
 
-    private fun createGroupFail(throwable: Throwable) {
+    private fun handleCreateGroupError(throwable: Throwable) {
         TODO("Will update code later")
     }
 
-    private fun handleAddUserSuccess(user: User) {
+    private fun handleAddUserToGroupSuccess(user: User) {
         addDisposables(createGroupViewModel.upGroupInfo(group!!)
                 .observeOnUiThread()
                 .subscribe(this::handleUpGroupInfoSuccess, this::handleUpGroupInfoError))
     }
 
-    private fun handleAddUserError(throwable: Throwable) {
+    private fun handleAddUserToGroupError(throwable: Throwable) {
         TODO("Will update code later")
     }
 
