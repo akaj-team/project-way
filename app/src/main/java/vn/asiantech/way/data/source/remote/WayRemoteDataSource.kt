@@ -12,7 +12,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
-import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.datasource.WayDataSource
 import vn.asiantech.way.data.source.remote.googleapi.ApiClient
