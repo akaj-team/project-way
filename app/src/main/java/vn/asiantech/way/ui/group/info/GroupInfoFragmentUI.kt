@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.info
 
 import android.graphics.Color
+import android.support.annotation.StringRes
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
@@ -41,13 +42,12 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
                 textColor = Color.WHITE
                 textSize = px2dip(dimen(R.dimen.text_size_normal))
                 val padding = dimen(R.dimen.group_screen_group_name_padding)
-                leftPadding = padding
-                rightPadding = padding
+                horizontalPadding = padding
             }.lparams(matchParent, dimen(R.dimen.toolbar_height))
 
             tvMembersCount = textViewInfo()
             tvCreateAt = textViewInfo()
-            textViewInfo(resources.getString(R.string.members_list))
+            textViewInfo(R.string.members_list)
 
             relativeLayout {
                 lparams(matchParent, wrapContent)
@@ -55,16 +55,16 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
 
                 imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_invite
-                    onClick {
-                        owner.eventViewOnClicked(this@imageView)
+                    onClick { it ->
+                        owner.eventViewOnClicked(it!!)
                     }
                 }
 
                 imgApprove = imageView(R.drawable.ic_spellcheck_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_approve
                     visibility = View.GONE
-                    onClick {
-                        owner.eventViewOnClicked(this@imageView)
+                    onClick { it ->
+                        owner.eventViewOnClicked(it!!)
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
@@ -73,8 +73,8 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
 
                 imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_leave_group
-                    onClick {
-                        owner.eventViewOnClicked(this@imageView)
+                    onClick { it ->
+                        owner.eventViewOnClicked(it!!)
                     }
                 }.lparams {
                     leftMargin = dimen(R.dimen.group_screen_img_leave_margin)
@@ -100,13 +100,10 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
         }
     }
 
-    private fun ViewManager.textViewInfo(str: String = "") = textView {
-        text = str
+    private fun ViewManager.textViewInfo(@StringRes resourceId: Int = R.string.empty_string) = textView(resourceId) {
         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
     }.apply {
-        val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
-        val paddingRight = dimen(R.dimen.group_screen_tv_count_padding_left)
-        verticalPadding = paddingTop
-        horizontalPadding = paddingRight
+        verticalPadding = dimen(R.dimen.group_screen_recycler_view_padding)
+        horizontalPadding = dimen(R.dimen.group_screen_tv_count_padding_left)
     }
 }
