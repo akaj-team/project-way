@@ -30,13 +30,17 @@ class GroupRemoteDataSource : GroupDataSource {
             }
 
             override fun onDataChange(p0: DataSnapshot?) {
-                result.onNext(Gson().fromJson(p0?.value.toString(), Group::class.java))
+                if (p0?.value == null) {
+                    result.onError(Throwable())
+                } else {
+                    result.onNext(Gson().fromJson(p0.value.toString(), Group::class.java))
+                }
             }
         })
         return result
     }
 
-    override fun getGroupId(userId: String): Observable<String> {
+    override fun listenerForGroupChange(userId: String): Observable<String> {
         val result = PublishSubject.create<String>()
         val groupRef = firebaseDatabase.getReference("user/$userId/groupId")
         groupRef.addValueEventListener(object : ValueEventListener {
@@ -151,26 +155,127 @@ class GroupRemoteDataSource : GroupDataSource {
             override fun onCancelled(p0: DatabaseError?) = Unit
 
             override fun onDataChange(p0: DataSnapshot?) {
-                val gson = Gson()
-                val currentRequest = gson.fromJson(gson.toJson(p0?.value), Invite::class.java)
-                result.onNext(currentRequest)
+                if (p0?.value == null) {
+                    result.onNext(Invite("", "", "", false))
+                } else {
+                    val gson = Gson()
+                    val currentRequest = gson.fromJson(gson.toJson(p0.value), Invite::class.java)
+                    result.onNext(currentRequest)
+                }
             }
         })
         return result
     }
 
-    override fun postRequestToGroup(groupId: String, request: Invite) {
-        val requestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
-        requestRef.setValue(request)
+    override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        val gson = Gson()
+        val result = SingleSubject.create<Boolean>()
+        val userRequest = firebaseDatabase.getReference("user/${request.from}/request")
+        userRequest.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                result.onError(Throwable(p0?.message))
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0?.value == null) {
+                    userRequest.setValue(request)
+                    val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                            "/request/${request.from}")
+                    requestRef.setValue(request).addOnSuccessListener {
+                        result.onSuccess(true)
+                    }.addOnFailureListener {
+                        result.onError(it)
+                    }
+                } else {
+                    val currentRequest = gson.fromJson(gson.toJson(p0.value), Invite::class.java)
+                    val currentGroupRequestRef = firebaseDatabase
+                            .getReference("group/${currentRequest.to}/request/${request.from}")
+                    currentGroupRequestRef.removeValue()
+                            .addOnSuccessListener {
+                                userRequest.setValue(request)
+                                val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                                        "/request/${request.from}")
+                                requestRef.setValue(request).addOnSuccessListener {
+                                    result.onSuccess(true)
+                                }.addOnFailureListener {
+                                    result.onError(it)
+                                }
+                            }
+                            .addOnFailureListener {
+                                result.onError(it)
+                            }
+                }
+            }
+        })
+        return result
     }
 
-    override fun postRequestToUser(userId: String, request: Invite) {
+    override fun postRequestToUser(userId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val requestRef = firebaseDatabase.getReference("user/$userId/request")
-        requestRef.setValue(request)
+        requestRef.setValue(request).addOnSuccessListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
     }
 
     override fun searchUser(name: String): Observable<List<User>> {
         return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
+        inviteRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        userRequestRef.removeValue()
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        groupRequestRef.removeValue().addOnCompleteListener {
+            result.onSuccess(true)
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
+    override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
+        TODO("Init later")
+    }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        HypertrackApi.instance.createGroup(groupName)
+                .subscribe({
+                    val group = it
+                    group.ownerId = ownerId
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
+                            .subscribe({
+                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
+                                groupInfoRef.setValue(group)
+                                        .addOnSuccessListener {
+                                            result.onSuccess(true)
+                                        }
+                                        .addOnFailureListener {
+                                            result.onError(it)
+                                        }
+                            }, {
+                                result.onError(it)
+                            })
+                }, {
+                    result.onError(it)
+                })
+        return result
     }
 
     /**
