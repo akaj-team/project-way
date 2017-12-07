@@ -9,8 +9,8 @@ import android.widget.EditText
  * Created by haingoq on 06/12/2017.
  */
 fun EditText.onTextChangeListener(onTextChanged: (CharSequence?) -> Unit = {},
-                                     afterTextChanged: (Editable?) -> Unit = {},
-                                     beforeTextChanged: (CharSequence?) -> Unit = {}) {
+                                  afterTextChanged: (Editable?) -> Unit = {},
+                                  beforeTextChanged: (CharSequence?) -> Unit = {}) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
             afterTextChanged.invoke(p0)
