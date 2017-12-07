@@ -36,6 +36,7 @@ class RegisterActivity : BaseActivity() {
         private const val REQUEST_CODE_PICK_IMAGE = 1002
         private const val REQUEST_CODE_GALLERY = 1003
         private const val NUM_CHAR_REMOVE = 3
+        private const val AVATAR_SIZE = 300
         private const val KEY_FROM_REGISTER = "Register"
     }
 
@@ -90,7 +91,7 @@ class RegisterActivity : BaseActivity() {
             if (uri != null) {
                 Picasso.with(this)
                         .load(uri)
-                        .resize(300, 300)
+                        .resize(AVATAR_SIZE, AVATAR_SIZE)
                         .into(object : Target {
                             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                                 // No-op
@@ -106,7 +107,7 @@ class RegisterActivity : BaseActivity() {
                             }
                         })
             } else {
-                avatarBitmap = data.extras.get("data") as Bitmap
+                avatarBitmap = data.extras.get("data") as? Bitmap
                 handleGetAvatarCompleted()
             }
         }
