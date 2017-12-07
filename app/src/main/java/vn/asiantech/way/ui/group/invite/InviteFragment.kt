@@ -82,9 +82,16 @@ class InviteFragment : BaseFragment() {
     }
 
     /**
+     * On back pressed activity
+     */
+    internal fun onBackPressed() {
+        activity.onBackPressed()
+    }
+
+    /**
      * On get list user invite complete from search action
      */
-    internal fun onGetListUserInviteComplete(usersList: List<User>?) {
+    private fun onGetListUserInviteComplete(usersList: List<User>?) {
         if (usersList != null) {
             users.addAll(usersList)
             ui.userListAdapter.notifyDataSetChanged()
@@ -99,13 +106,6 @@ class InviteFragment : BaseFragment() {
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString("KEY_GROUP_NAME")
         ownerId = arguments.getString("KEY_GROUP_OWNER")
-    }
-
-    /**
-     * On back pressed activity
-     */
-    internal fun onBackPressed() {
-        activity.onBackPressed()
     }
 
     /**
