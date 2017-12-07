@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
@@ -27,27 +28,47 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getInvite(userId)
     }
 
-    override fun getRequest(groupId: String): Observable<Invite> {
-        TODO("not implemented")
+    override fun getGroupRequest(groupId: String): Observable<Invite> {
+        return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun upGroupInfo(group: Group): Observable<Boolean> {
-        return remoteDataSource.upGroupInfo(group)
+    override fun postGroupInfo(group: Group): Observable<Boolean> {
+        return remoteDataSource.postGroupInfo(group)
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Observable<Boolean> {
-        TODO("not implemented")
+    override fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean> {
+        return remoteDataSource.changeGroupOwner(groupId, newOwner)
     }
 
     override fun removeGroup(groupId: String): Observable<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.removeGroup(groupId)
     }
 
-    override fun upInvite(userId: String, invite: Invite): Single<Boolean> {
-        TODO("not implemented")
+    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.postInvite(userId, invite)
     }
 
     override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.removeUserFromGroup(userId)
+    }
+
+    override fun searchGroup(groupName: String): Observable<List<Group>> {
+        return remoteDataSource.searchGroup(groupName)
+    }
+
+    override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
+        return remoteDataSource.getCurrentRequestOfUser(userId)
+    }
+
+    override fun postRequestToGroup(groupId: String, request: Invite) {
+        remoteDataSource.postRequestToGroup(groupId, request)
+    }
+
+    override fun postRequestToUser(userId: String, request: Invite) {
+        remoteDataSource.postRequestToGroup(userId, request)
+    }
+
+    override fun searchUser(name: String): Observable<List<User>> {
+        return remoteDataSource.searchUser(name)
     }
 }

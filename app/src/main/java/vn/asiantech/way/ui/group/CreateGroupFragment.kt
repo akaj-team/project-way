@@ -68,7 +68,7 @@ class CreateGroupFragment : BaseFragment() {
     }
 
     private fun handleAddUserToGroupSuccess(user: User) {
-        addDisposables(createGroupViewModel.upGroupInfo(group!!)
+        addDisposables(createGroupViewModel.postGroupInfo(group!!)
                 .observeOnUiThread()
                 .subscribe(this::handleUpGroupInfoSuccess, this::handleUpGroupInfoError))
     }

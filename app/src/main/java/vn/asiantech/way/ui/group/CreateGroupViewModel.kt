@@ -25,7 +25,7 @@ class CreateGroupViewModel(val context: Context) {
         return wayRepository.addUserToGroup(userId, body)
     }
 
-    internal fun upGroupInfo(group: Group): Observable<Boolean> {
-        return groupRepository.upGroupInfo(group)
+    internal fun postGroupInfo(group: Group): Observable<Boolean> {
+        return groupRepository.postGroupInfo(group)
     }
 }
