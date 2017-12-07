@@ -39,8 +39,8 @@ class InviteFragment : BaseFragment() {
     private var groupId = ""
     private var groupName = ""
     private var ownerId = ""
-    private lateinit var ui: InviteFragmentUI
     private val users = mutableListOf<User>()
+    private lateinit var ui: InviteFragmentUI
     private lateinit var inviteViewModel: InviteViewModel
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
