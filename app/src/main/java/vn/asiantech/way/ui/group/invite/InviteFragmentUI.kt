@@ -2,8 +2,6 @@ package vn.asiantech.way.ui.group.invite
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
@@ -85,15 +83,4 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
             }
         }
     }.view
-
-    /**
-     * This interface use to handle Text change event of edit text.
-     */
-    interface TextChangeListener : TextWatcher {
-        override fun beforeTextChanged(var1: CharSequence, var2: Int, var3: Int, var4: Int) = Unit
-
-        override fun onTextChanged(var1: CharSequence, var2: Int, var3: Int, var4: Int) = Unit
-
-        override fun afterTextChanged(editable: Editable)
-    }
 }
