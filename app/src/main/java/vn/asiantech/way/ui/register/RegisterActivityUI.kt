@@ -16,12 +16,13 @@ import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
+import vn.asiantech.way.extension.onUserInformationChange
 
 /**
  * Anko layout for RegisterActivity
  * Created by haingoq on 27/11/2017.
  */
-class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<NewRegisterActivity> {
+class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
 
     internal lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
@@ -35,7 +36,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
     internal lateinit var tvSkip: TextView
     internal lateinit var progressBar: ProgressBar
 
-    override fun createView(ui: AnkoContext<NewRegisterActivity>) = with(ui) {
+    override fun createView(ui: AnkoContext<RegisterActivity>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
             frAvatar = frameLayout {
@@ -65,6 +66,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
                 }
 
                 onClick {
+                    owner.eventClicked(frAvatar)
                 }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
@@ -125,7 +127,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
                                         adapter = countryAdapter
                                         countryAdapter.onItemClick = { country ->
                                             Picasso.with(context).load(country.flagFilePath).into(imgFlag)
-//                                            owner.isoCode = country.iso
+                                            owner.isoCode = country.iso
                                             tvTel.text = resources.getString(R.string.register_plus).plus(country.tel)
                                             dialogInterface.dismiss()
                                         }
@@ -178,7 +180,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
                 isEnabled = false
 
                 onClick {
-
+                    owner.eventClicked(btnRegister)
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
@@ -194,7 +196,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
                 gravity = Gravity.CENTER
 
                 onClick {
-
+                    owner.eventClicked(tvSkip)
                 }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
@@ -208,13 +210,11 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<New
             }
         }.applyRecursively { view: View ->
             if (view is EditText) {
-                when (view.id) {
-                    R.id.register_activity_edt_name,
-                    R.id.register_activity_edt_phone ->
-                        view.addTextChangedListener(object : OnWayTextChangeListener {
-                            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            }
-                        })
+                when (view) {
+                    edtName, edtPhone -> view.onUserInformationChange {
+                        owner.onHandleTextChange(edtName.text.toString().trim(),
+                                edtPhone.text.toString().trim())
+                    }
                 }
             }
         }

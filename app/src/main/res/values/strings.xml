@@ -88,7 +88,7 @@
     <string name="dialog_title_error">Error</string>
     <string name="bottom_button_card_view_text_start_share">Start Sharing</string>
     <string name="register_update_profile">Update Profile</string>
-    <string name="register_message_dialog">Your default user name is user</string>
+    <string name="register_message_dialog">Do you want create user with user name is User ?</string>
     <string name="register_title_dialog">Information</string>
     <string name="register_title_error_dialog">Error</string>
 
