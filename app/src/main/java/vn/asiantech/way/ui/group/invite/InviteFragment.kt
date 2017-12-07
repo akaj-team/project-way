@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.extension.observeOnUiThread
@@ -66,10 +65,10 @@ class InviteFragment : BaseFragment() {
                 .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
+                .filter { it.isNotEmpty() }
                 .subscribe({
                     inviteViewModel
                             .searchListUser(it)
-                            .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::onGetListUserInviteComplete)
                 }),
                 inviteViewModel.resetDataStatus
@@ -88,9 +87,6 @@ class InviteFragment : BaseFragment() {
      * On get list user invite from search action
      */
     internal fun onGetListUserInvite(name: String) {
-        if (name.length == 0) {
-            return
-        }
         inviteObservable.onNext(name)
     }
 

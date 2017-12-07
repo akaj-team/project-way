@@ -16,11 +16,9 @@ class InviteViewModel(val context: Context) {
     private val groupRepository = GroupRepository()
 
     internal fun searchListUser(name : String) : Observable<List<User>> {
-        resetDataStatus.onNext(true)
         return groupRepository
                 .searchUser(name)
+                .doOnSubscribe {  resetDataStatus.onNext(true)}
                 .observeOnUiThread()
-                .doOnNext { resetDataStatus.onNext(false) }
-                .map { it }
     }
 }
