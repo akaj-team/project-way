@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
-import com.hypertrack.lib.models.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R

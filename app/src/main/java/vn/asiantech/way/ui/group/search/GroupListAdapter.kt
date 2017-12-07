@@ -79,7 +79,7 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
                     view {
                         id = R.id.group_search_adapter_view_break_line
                         backgroundResource = R.color.colorSearchScreenBackground
-                    }.lparams(matchParent, dip(0.5f)) {
+                    }.lparams(matchParent, dip(1)) {
                         bottomMargin = dip(2)
                         leftMargin = dimen(R.dimen.search_group_left_margin)
                         topMargin = dip(2)
