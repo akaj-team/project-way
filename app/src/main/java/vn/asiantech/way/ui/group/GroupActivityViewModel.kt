@@ -31,7 +31,4 @@ class GroupActivityViewModel {
         return groupDataSource.getInvite(userId)
                 .observeOnUiThread()
     }
-
-    internal fun getUser(): Observable<User> = wayRepository.getUser().toObservable()
-
 }

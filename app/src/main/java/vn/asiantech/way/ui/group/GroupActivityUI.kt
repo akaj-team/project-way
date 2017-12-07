@@ -13,8 +13,8 @@ import vn.asiantech.way.R
 class GroupActivityUI : AnkoComponent<GroupActivity> {
     override fun createView(ui: AnkoContext<GroupActivity>) = with(ui) {
         frameLayout {
-            id = R.id.group_activity_fr
             lparams(matchParent, matchParent)
+            id = R.id.group_activity_ui_fr_content
         }
     }
 }

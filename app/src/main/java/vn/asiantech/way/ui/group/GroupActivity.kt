@@ -1,11 +1,8 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
-import io.reactivex.android.schedulers.AndroidSchedulers
 import org.jetbrains.anko.setContentView
-import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**
  *
@@ -23,10 +20,6 @@ class GroupActivity : BaseActivity() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(groupViewModel.getUser()
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    supportFragmentManager.beginTransaction().replace(R.id.group_activity_fr, SearchGroupFragment.getInstance(it)).commit()
-                })
+        // TODO: handle later
     }
 }

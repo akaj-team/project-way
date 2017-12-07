@@ -34,7 +34,6 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
 
     internal fun updateCurrentRequest(invite: Invite) {
         currentRequest = invite
-        Log.d("hhhhhh", "$currentRequest.to")
         notifyDataSetChanged()
     }
 
