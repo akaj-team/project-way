@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
-import vn.asiantech.way.data.model.BodyAddUserToGroup
-import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -34,7 +32,6 @@ class CreateGroupFragment : BaseFragment() {
     private lateinit var createGroupViewModel: CreateGroupViewModel
     private lateinit var ui: CreateGroupFragmentUI
     private lateinit var user: User
-    private var group: Group? = null
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?) = CreateGroupFragmentUI()
             .createView(AnkoContext.create(context, this))
@@ -42,42 +39,28 @@ class CreateGroupFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         user = arguments.getSerializable(KEY_USER) as User
-        createGroupViewModel = CreateGroupViewModel(activity)
+        createGroupViewModel = CreateGroupViewModel()
     }
 
     override fun onBindViewModel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Nothing to do
     }
 
     internal fun createGroup() {
-        addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString())
+        addDisposables(createGroupViewModel.createGroup(ui.edtGroupName.text.toString(), user.id)
                 .observeOnUiThread()
                 .subscribe(this::handleCreateGroupSuccess, this::handleCreateGroupError))
-    }
-
-    private fun handleCreateGroupSuccess(group: Group) {
-        group.ownerId = user.id
-        this.group = group
-        addDisposables(createGroupViewModel.addUserToGroup(group.ownerId, BodyAddUserToGroup(group.id))
-                .observeOnUiThread()
-                .subscribe(this::handleAddUserToGroupSuccess, this::handleAddUserToGroupError))
     }
 
     private fun handleCreateGroupError(throwable: Throwable) {
         TODO("Will update code later")
     }
 
-    private fun handleAddUserToGroupSuccess(user: User) {
-        addDisposables(createGroupViewModel.postGroupInfo(group!!)
-                .observeOnUiThread()
-                .subscribe(this::handleUpGroupInfoSuccess, this::handleUpGroupInfoError))
-    }
-
     private fun handleAddUserToGroupError(throwable: Throwable) {
         TODO("Will update code later")
     }
 
-    private fun handleUpGroupInfoSuccess(boolean: Boolean) {
+    private fun handleCreateGroupSuccess(boolean: Boolean) {
         TODO("Will update code later")
     }
 
