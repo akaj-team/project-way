@@ -2,7 +2,6 @@ package vn.asiantech.way.ui.group.invite
 
 import android.graphics.Color
 import android.os.Handler
-import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
@@ -29,7 +28,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
             lparams(matchParent, matchParent)
-            backgroundColor = ActivityCompat.getColor(context, R.color.colorSearchScreenBackground)
+            backgroundResource = R.color.colorSearchScreenBackground
 
             verticalLayout {
                 lparams(matchParent, wrapContent)
@@ -41,7 +40,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
 
                     // Image Button: back
                     imageButton(R.drawable.ic_back_icon_button) {
-                        backgroundColor = Color.TRANSPARENT
+                        backgroundResource = Color.TRANSPARENT
                         contentDescription = null
                         padding = dimen(R.dimen.item_user_bottom_or_top_padding)
                         onClick {
@@ -49,17 +48,16 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                         }
                     }.lparams(wrapContent, wrapContent) {
                         topMargin = dimen(R.dimen.invite_screen_padding)
-                        leftMargin = dimen(R.dimen.invite_screen_padding)
-                        rightMargin = dimen(R.dimen.invite_screen_padding)
+                        horizontalMargin = dimen(R.dimen.invite_screen_padding)
                     }
 
                     // Edit text : enter user name
                     edtUserName = editText {
-                        backgroundColor = ActivityCompat.getColor(context, R.color.colorEdtSearchBackground)
+                        backgroundResource = R.color.colorEdtSearchBackground
                         hint = resources.getString(R.string.item_user_text_hint)
                         singleLine = true
                         padding = dimen(R.dimen.invite_screen_padding)
-                        textSize = AppConstants.KEY_EDT_USER_NAME_TEXT_SIZE
+                        textSize = px2dip(dimen(R.dimen.invite_screen_edt_user_name_text_size))
                         gravity = Gravity.CENTER_VERTICAL
 
                         addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
@@ -79,7 +77,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                 recyclerView {
                     id = R.id.invite_recycle_view
                     clipToPadding = false
-                    backgroundColor = ActivityCompat.getColor(context, R.color.colorWhite)
+                    backgroundResource = R.color.colorWhite
                     userListAdapter.onItemInviteClick = {
                         owner.onItemInviteClick(it)
                     }
@@ -88,8 +86,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                 }.lparams(matchParent, matchParent) {
                     topMargin = dimen(R.dimen.invite_screen_top_margin)
                     bottomMargin = dimen(R.dimen.invite_screen_padding)
-                    leftMargin = dimen(R.dimen.invite_screen_padding)
-                    rightMargin = dimen(R.dimen.invite_screen_padding)
+                    horizontalMargin = dimen(R.dimen.invite_screen_padding)
                 }
             }
         }

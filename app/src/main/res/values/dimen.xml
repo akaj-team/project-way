@@ -3,4 +3,7 @@
 
     <!-- SeaMyLocationtion Screen-->
     <dimen name="search_screen_text_size">18dp</dimen>
+    <!-- Invite Screen-->
+    <dimen name="invite_screen_edt_user_name_text_size">18dp</dimen>
+    <dimen name="invite_screen_tv_user_name_text_size">20dp</dimen>
 </resources>

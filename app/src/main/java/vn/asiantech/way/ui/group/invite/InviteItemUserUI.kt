@@ -10,7 +10,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import vn.asiantech.way.R
-import vn.asiantech.way.utils.AppConstants
 
 /**
  * Item User UI
@@ -27,26 +26,23 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
             // layout parent
             lparams(matchParent, wrapContent) {
                 backgroundColor = ActivityCompat.getColor(context, R.color.colorWhite)
-                bottomPadding = leftRightMarginOrPadding
-                topPadding = leftRightMarginOrPadding
+                verticalPadding = leftRightMarginOrPadding
             }
 
             // Circle Image
             circleImage {
                 id = R.id.item_user_img_avatar
             }.lparams(sizeImgAvatar, sizeImgAvatar) {
-                leftMargin = leftRightMarginOrPadding
-                rightMargin = leftRightMarginOrPadding
+                horizontalMargin = leftRightMarginOrPadding
             }
 
             // Text view name
             textView {
                 id = R.id.item_user_tv_name
                 textColor = ActivityCompat.getColor(context, R.color.colorBlack)
-                textSize = AppConstants.KEY_TV_USER_NAME_TEXT_SIZE
+                textSize = px2dip(dimen(R.dimen.invite_screen_tv_user_name_text_size))
                 gravity = Gravity.CENTER_VERTICAL
-                bottomPadding = leftRightMarginOrPadding
-                topPadding = leftRightMarginOrPadding
+                verticalPadding = leftRightMarginOrPadding
             }.lparams(dip(0), wrapContent) {
                 weight = 1f
             }
@@ -58,13 +54,10 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
                 maxLines = 1
                 text = resources.getText(R.string.item_user_invite)
                 textColor = ContextCompat.getColor(context, R.color.colorWhite)
-                topPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
-                bottomPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
-                rightPadding = dimen(R.dimen.item_user_left_or_right_padding)
-                leftPadding = dimen(R.dimen.item_user_left_or_right_padding)
+                verticalPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
+                horizontalPadding = dimen(R.dimen.item_user_left_or_right_padding)
             }.lparams(dip(wrapContent), dip(wrapContent)) {
-                leftMargin = leftRightMarginOrPadding
-                rightMargin = leftRightMarginOrPadding
+                horizontalMargin = leftRightMarginOrPadding
             }
         }
     }.view
