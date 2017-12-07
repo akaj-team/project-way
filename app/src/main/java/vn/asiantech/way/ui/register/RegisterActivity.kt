@@ -42,7 +42,7 @@ class RegisterActivity : BaseActivity() {
 
     private lateinit var ui: RegisterActivityUI
     private lateinit var registerViewModel: RegisterViewModel
-    private val countries: MutableList<Country> = ArrayList()
+    private val countries = mutableListOf<Country>()
     private var userWay: User? = null
     internal var isoCode: String? = null
     private var avatarBitmap: Bitmap? = null
@@ -82,6 +82,14 @@ class RegisterActivity : BaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         registerViewModel.eventBackPressed()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_GALLERY && grantResults.isNotEmpty()
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            intentGallery()
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -127,7 +135,7 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
-    internal fun eventClicked(view: View) {
+    internal fun eventOnViewClicked(view: View) {
         when (view) {
             ui.frAvatar -> checkPermissionGallery()
 

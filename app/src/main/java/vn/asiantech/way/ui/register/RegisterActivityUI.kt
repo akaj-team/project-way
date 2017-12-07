@@ -66,7 +66,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 }
 
                 onClick {
-                    owner.eventClicked(frAvatar)
+                    owner.eventOnViewClicked(frAvatar)
                 }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
@@ -180,7 +180,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 isEnabled = false
 
                 onClick {
-                    owner.eventClicked(btnRegister)
+                    owner.eventOnViewClicked(btnRegister)
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
@@ -196,7 +196,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 gravity = Gravity.CENTER
 
                 onClick {
-                    owner.eventClicked(tvSkip)
+                    owner.eventOnViewClicked(tvSkip)
                 }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
