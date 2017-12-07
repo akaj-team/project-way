@@ -18,7 +18,7 @@ interface GroupDataSource {
      * @param groupName - name of group will create.
      * @param ownerId - id of group owner.
      */
-    fun createGroup(groupName: String, ownerId: String): Single<Group>
+    fun createGroup(groupName: String, ownerId: String): Single<Boolean>
 
     /**
      * This method used to get info of a given group.
@@ -53,7 +53,7 @@ interface GroupDataSource {
      *
      * @param group - upload group.
      */
-    fun postGroupInfo(group: Group): Observable<Boolean>
+    fun postGroupInfo(group: Group): Single<Boolean>
 
     /**
      * This method used to change owner of a given group to a given user

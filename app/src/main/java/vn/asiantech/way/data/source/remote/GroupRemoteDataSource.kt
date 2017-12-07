@@ -87,15 +87,15 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun postGroupInfo(group: Group): Observable<Boolean> {
-        val result = PublishSubject.create<Boolean>()
+    override fun postGroupInfo(group: Group): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
             if (databaseError != null) {
                 result.onError(databaseError.toException())
             }
             if (dataSuccess != null) {
-                result.onNext(true)
+                result.onSuccess(true)
             }
         }
         return result
@@ -254,39 +254,15 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("Init later")
     }
 
-    override fun createGroup(groupName: String, ownerId: String): Single<Group> {
-        val result = SingleSubject.create<Group>()
-        //var group: Group? = null
-        wayRemoteDataSource.createGroup(groupName)
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        return HypertrackApi.instance.createGroup(groupName)
                 .flatMap { group ->
-                    wayRemoteDataSource.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                    group.ownerId = ownerId
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                            .flatMap {
+                                postGroupInfo(group)
+                            }
                 }
-                .subscribe {
-
-                }
-
-
-//        HypertrackApi.instance.createGroup(groupName)
-//                .subscribe({
-//                    val group = it
-//                    group.ownerId = ownerId
-//                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
-//                            .subscribe({
-//                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
-//                                groupInfoRef.setValue(group)
-//                                        .addOnSuccessListener {
-//                                            result.onSuccess(true)
-//                                        }
-//                                        .addOnFailureListener {
-//                                            result.onError(it)
-//                                        }
-//                            }, {
-//                                result.onError(it)
-//                            })
-//                }, {
-//                    result.onError(it)
-//                })
-        return result
     }
 
     /**

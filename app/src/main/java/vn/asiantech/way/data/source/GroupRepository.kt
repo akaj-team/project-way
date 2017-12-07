@@ -32,7 +32,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun postGroupInfo(group: Group): Observable<Boolean> {
+    override fun postGroupInfo(group: Group): Single<Boolean> {
         return remoteDataSource.postGroupInfo(group)
     }
 
