@@ -40,12 +40,7 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
         private val tvCancel: TextView = itemView.find(R.id.group_show_invite_adapter_tv_cancel)
         private val tvNameGroup: TextView = itemView.find(R.id.group_show_invite_adapter_tv_name_group)
 
-        /**
-         * Bind data to InviteViewHolder.
-         */
-        fun onBind() {
-            tvNameGroup.text = invites[adapterPosition].groupName
-
+        init {
             tvOk.onClick {
                 listener.onOkClick(invites[adapterPosition])
                 invites.removeAt(adapterPosition)
@@ -57,6 +52,13 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
                 invites.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
             }
+        }
+
+        /**
+         * Bind data to InviteViewHolder.
+         */
+        fun onBind() {
+            tvNameGroup.text = invites[adapterPosition].groupName
         }
     }
 
@@ -103,7 +105,7 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
                     }
                 }.applyRecursively {
                     if (it.layoutParams is RelativeLayout.LayoutParams) {
-                        (it.layoutParams as RelativeLayout.LayoutParams).leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
+                        (it.layoutParams as? RelativeLayout.LayoutParams)?.leftMargin = dimen(R.dimen.invite_list_adapter_margin_tv_name_group)
                     }
 
                     when (it) {
