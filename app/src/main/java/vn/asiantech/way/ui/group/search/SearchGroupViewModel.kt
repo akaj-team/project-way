@@ -18,9 +18,6 @@ class SearchGroupViewModel {
         return groupRepository
                 .searchGroup(query)
                 .observeOnUiThread()
-                .doOnNext {
-
-                }
     }
 
     internal fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {

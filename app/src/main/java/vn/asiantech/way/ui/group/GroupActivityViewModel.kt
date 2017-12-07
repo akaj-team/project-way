@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group
 
-import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
