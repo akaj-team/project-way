@@ -124,6 +124,7 @@
     <string name="leave_group_notification">You have left %s.</string>
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="group_screen_invite_request">Invite requests</string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>
