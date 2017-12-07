@@ -25,15 +25,15 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
         LinearLayout(context, attrs) {
 
     private lateinit var rlSearch: RelativeLayout
-    private lateinit var imgBtnSearch: ImageButton
+    internal lateinit var imgBtnSearch: ImageButton
     private lateinit var rlGroup: RelativeLayout
-    private lateinit var imgBtnGroup: ImageButton
+    internal lateinit var imgBtnGroup: ImageButton
     private lateinit var rlCalendar: RelativeLayout
-    private lateinit var imgBtnCalendar: ImageButton
+    internal lateinit var imgBtnCalendar: ImageButton
     private lateinit var rlProfile: RelativeLayout
-    private lateinit var imgBtnProfile: ImageButton
+    internal lateinit var imgBtnProfile: ImageButton
     private lateinit var rlShare: RelativeLayout
-    private lateinit var imgBtnShare: ImageButton
+    internal lateinit var imgBtnShare: ImageButton
     private lateinit var imgBtnMenu: ImageButton
     private lateinit var frOverlay: FrameLayout
     private var isExpand = false
@@ -66,7 +66,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     imgBtnSearch.onClick {
                         setGoneOverLay()
                         visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.onSearchClick()
+                        onMenuClickListener.eventItemMenuClicked(imgBtnSearch)
                     }
                     rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group,
                             R.drawable.custom_bg_item_group_button,
@@ -75,7 +75,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     imgBtnGroup.onClick {
                         setGoneOverLay()
                         visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.onGroupClick()
+                        onMenuClickListener.eventItemMenuClicked(imgBtnGroup)
                     }
                     rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar,
                             R.drawable.custom_bg_item_calendar_button,
@@ -84,7 +84,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     imgBtnCalendar.onClick {
                         setGoneOverLay()
                         visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.onCalendarClick()
+                        onMenuClickListener.eventItemMenuClicked(imgBtnCalendar)
                     }
                     rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile,
                             R.drawable.custom_bg_item_profile_button,
@@ -93,7 +93,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     imgBtnProfile.onClick {
                         setGoneOverLay()
                         visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.onProfileClick()
+                        onMenuClickListener.eventItemMenuClicked(imgBtnProfile)
                     }
                     rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share,
                             R.drawable.custom_bg_item_share_button,
@@ -102,7 +102,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     imgBtnShare.onClick {
                         setGoneOverLay()
                         visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.onShareClick()
+                        onMenuClickListener.eventItemMenuClicked(imgBtnShare)
                     }
                     imgBtnMenu = imageButton {
                         imageResource = R.drawable.ic_menu
@@ -225,29 +225,9 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
      */
     interface OnMenuClickListener {
         /**
-         * Event when button share clicked
+         * Event when Item button menu Click
          */
-        fun onShareClick()
-
-        /**
-         * Event when button profile clicked
-         */
-        fun onProfileClick()
-
-        /**
-         * Event when button calendar clicked
-         */
-        fun onCalendarClick()
-
-        /**
-         * Event when button search clicked
-         */
-        fun onSearchClick()
-
-        /**
-         * Event when button group clicked
-         */
-        fun onGroupClick()
+        fun eventItemMenuClicked(view: View)
     }
 }
 

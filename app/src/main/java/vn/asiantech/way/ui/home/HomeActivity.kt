@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -56,25 +57,13 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
         homeViewModel = HomeViewModel(this)
     }
 
-    override fun onShareClick() {
-        startActivity<ShareActivity>()
-    }
-
-    override fun onProfileClick() {
-        // TODO to put extra for intent
-        startActivity<RegisterActivity>()
-    }
-
-    override fun onCalendarClick() {
-        // TODO after completed calendar feature
-    }
-
-    override fun onSearchClick() {
-        startActivity<SearchActivity>()
-    }
-
-    override fun onGroupClick() {
-        startActivity<GroupActivity>()
+    override fun eventItemMenuClicked(view: View) {
+        when (view) {
+            ui.fabMenuGroup.imgBtnProfile -> startActivity<RegisterActivity>()
+            ui.fabMenuGroup.imgBtnGroup -> startActivity<GroupActivity>()
+            ui.fabMenuGroup.imgBtnSearch -> startActivity<SearchActivity>()
+            ui.fabMenuGroup.imgBtnShare -> startActivity<ShareActivity>()
+        }
     }
 
     override fun onBackPressed() {

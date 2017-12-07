@@ -41,11 +41,11 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
                     rightMargin = dimen(R.dimen.home_screen_recyclerView_margin)
                 }
             }
-            fabMenuGroup = floatingButton(onMenuClick) {}
-                    .lparams {
-                        alignParentBottom()
-                        alignParentRight()
-                    }
+            fabMenuGroup = floatingButton(onMenuClick) {
+            }.lparams {
+                alignParentBottom()
+                alignParentRight()
+            }
         }
     }
 }

@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.splash.SplashActivity">
+        <activity android:name=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -80,7 +80,6 @@
         <activity
             android:name=".ui.search.SearchActivity"
             android:noHistory="true" />
-        <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.arrived.ArrivedActivity" />
 
         <activity android:name=".ui.update.UpdateMap" />
