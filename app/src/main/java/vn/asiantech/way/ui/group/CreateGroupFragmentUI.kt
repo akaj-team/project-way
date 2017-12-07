@@ -9,6 +9,7 @@ import android.view.ViewManager
 import android.widget.Button
 import android.widget.EditText
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 
 /**
@@ -47,7 +48,9 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
                     }
-
+            btnCreateGroup.onClick {
+                owner.createGroup()
+            }
             btnBack = buttonCreateGroup(R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
