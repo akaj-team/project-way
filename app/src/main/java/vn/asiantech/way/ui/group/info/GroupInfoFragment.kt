@@ -104,6 +104,18 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun handleGetGroupInfoCompleted(groupToBind: Group) {
+        bindGroupInfoToView(groupToBind)
+        addDisposables(
+                groupInfoViewModel.getMemberList(groupId)
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetMemberListCompleted, {
+                            toast(R.string.error_message)
+                            ui.swipeRefreshLayout.isRefreshing = false
+                        })
+        )
+    }
+
+    private fun bindGroupInfoToView(groupToBind: Group) {
         group = groupToBind
         with(group) {
             ui.memberListAdapter.groupOwnerId = group.ownerId
@@ -116,14 +128,6 @@ class GroupInfoFragment : BaseFragment() {
                 ui.imgApprove.visibility = View.GONE
             }
         }
-        addDisposables(
-                groupInfoViewModel.getMemberList(groupId)
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetMemberListCompleted, {
-                            toast(R.string.error_message)
-                            ui.swipeRefreshLayout.isRefreshing = false
-                        })
-        )
     }
 
     private fun handleGetMemberListCompleted(users: MutableList<User>) {
