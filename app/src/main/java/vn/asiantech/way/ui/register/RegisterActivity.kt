@@ -35,7 +35,6 @@ class RegisterActivity : BaseActivity() {
         private const val REQUEST_REGISTER = 1001
         private const val REQUEST_CODE_PICK_IMAGE = 1002
         private const val REQUEST_CODE_GALLERY = 1003
-        private const val NUM_CHAR_REMOVE = 3
         private const val AVATAR_SIZE = 300
         private const val KEY_FROM_REGISTER = "Register"
     }
@@ -43,7 +42,6 @@ class RegisterActivity : BaseActivity() {
     private lateinit var ui: RegisterActivityUI
     private lateinit var registerViewModel: RegisterViewModel
     private val countries = mutableListOf<Country>()
-    private var userWay: User? = null
     internal var isoCode: String? = null
     private var avatarBitmap: Bitmap? = null
 
@@ -57,6 +55,7 @@ class RegisterActivity : BaseActivity() {
             registerViewModel = RegisterViewModel(this, false)
             addDisposables(registerViewModel.getUser()
                     .subscribe(this::handleGetUserCompleted, this::handleGetUserError))
+            ui.btnRegister.text = getString(R.string.register_update)
             ui.tvSkip.text = getString(R.string.cancel)
         }
     }
@@ -123,15 +122,9 @@ class RegisterActivity : BaseActivity() {
 
     internal fun onHandleTextChange(name: String, phone: String) {
         if (registerViewModel.isRegister) {
-            if (name.isBlank() && phone.isBlank()) {
-                ui.btnRegister.isEnabled = false
-                ui.tvSkip.visibility = View.GONE
-            } else {
-                ui.btnRegister.isEnabled = true
-                ui.tvSkip.visibility = View.VISIBLE
-            }
+            ui.btnRegister.isEnabled = !(name.isBlank() && phone.isBlank())
         } else {
-            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE))
+            ui.btnRegister.isEnabled = registerViewModel.isEnableUpdateButton(name, phone)
         }
     }
 
@@ -163,19 +156,14 @@ class RegisterActivity : BaseActivity() {
                     registerViewModel.saveLoginStatus(true)
                 } else {
                     // Update user
-                    if (ui.edtName.text.toString() != userWay?.name
-                            || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE)
-                            || avatarBitmap != null) {
-                        addDisposables(registerViewModel.updateUser(userParam)
-                                .subscribe(this::handleUpdateUserCompleted))
-                    }
+                    addDisposables(registerViewModel.updateUser(userParam)
+                            .subscribe(this::handleUpdateUserCompleted))
                 }
             }
         }
     }
 
     private fun handleGetUserCompleted(user: User) {
-        userWay = user
         val target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 visibleProgressBar(ui.progressBarAvatar)
@@ -263,6 +251,7 @@ class RegisterActivity : BaseActivity() {
             yesButton {
                 addDisposables(registerViewModel.createUser(userParam)
                         .subscribe(this@RegisterActivity::handleCreateUserCompleted))
+                startActivity<HomeActivity>()
             }
             noButton { it.dismiss() }
         }.show()

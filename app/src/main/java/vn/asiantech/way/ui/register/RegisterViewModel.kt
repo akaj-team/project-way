@@ -28,6 +28,7 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
     private val wayRepository = WayRepository()
     private val assetDataRepository = LocalRepository(context)
     private var lastClickTime = 0L
+    private lateinit var user: User
 
     internal fun getCountries(): Observable<List<Country>> {
         return assetDataRepository.getCountries()
@@ -47,11 +48,21 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
                 .doOnError { progressBarStatus.onNext(false) }
     }
 
+    internal fun isEnableUpdateButton(name: String, phone: String): Boolean {
+        if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)) {
+            return false
+        }
+        return true
+    }
+
     internal fun getUser(): Single<User> {
         progressBarStatus.onNext(true)
         return wayRepository.getUser()
                 .observeOnUiThread()
-                .doOnSuccess { progressBarStatus.onNext(false) }
+                .doOnSuccess {
+                    user = it
+                    progressBarStatus.onNext(false)
+                }
                 .doOnError { progressBarStatus.onNext(false) }
     }
 

@@ -16,7 +16,7 @@ import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
-import vn.asiantech.way.extension.onUserInformationChange
+import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  * Anko layout for RegisterActivity
@@ -24,7 +24,7 @@ import vn.asiantech.way.extension.onUserInformationChange
  */
 class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
 
-    internal lateinit var dialogInterface: DialogInterface
+    private lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
     internal lateinit var progressBarAvatar: ProgressBar
     internal lateinit var imgAvatar: ImageView
@@ -211,7 +211,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
         }.applyRecursively { view: View ->
             if (view is EditText) {
                 when (view) {
-                    edtName, edtPhone -> view.onUserInformationChange {
+                    edtName, edtPhone -> view.onTextChangeListener {
                         owner.onHandleTextChange(edtName.text.toString().trim(),
                                 edtPhone.text.toString().trim())
                     }
