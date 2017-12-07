@@ -20,6 +20,7 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val wayRemoteDataSource = WayRemoteDataSource()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -91,7 +92,7 @@ class GroupRemoteDataSource : GroupDataSource {
         val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
             if (databaseError != null) {
-                result.onNext(false)
+                result.onError(databaseError.toException())
             }
             if (dataSuccess != null) {
                 result.onNext(true)
@@ -253,28 +254,38 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("Init later")
     }
 
-    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        val result = SingleSubject.create<Boolean>()
-        HypertrackApi.instance.createGroup(groupName)
-                .subscribe({
-                    val group = it
-                    group.ownerId = ownerId
-                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
-                            .subscribe({
-                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
-                                groupInfoRef.setValue(group)
-                                        .addOnSuccessListener {
-                                            result.onSuccess(true)
-                                        }
-                                        .addOnFailureListener {
-                                            result.onError(it)
-                                        }
-                            }, {
-                                result.onError(it)
-                            })
-                }, {
-                    result.onError(it)
-                })
+    override fun createGroup(groupName: String, ownerId: String): Single<Group> {
+        val result = SingleSubject.create<Group>()
+        //var group: Group? = null
+        wayRemoteDataSource.createGroup(groupName)
+                .flatMap { group ->
+                    wayRemoteDataSource.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                }
+                .subscribe {
+
+                }
+
+
+//        HypertrackApi.instance.createGroup(groupName)
+//                .subscribe({
+//                    val group = it
+//                    group.ownerId = ownerId
+//                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
+//                            .subscribe({
+//                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
+//                                groupInfoRef.setValue(group)
+//                                        .addOnSuccessListener {
+//                                            result.onSuccess(true)
+//                                        }
+//                                        .addOnFailureListener {
+//                                            result.onError(it)
+//                                        }
+//                            }, {
+//                                result.onError(it)
+//                            })
+//                }, {
+//                    result.onError(it)
+//                })
         return result
     }
 

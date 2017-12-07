@@ -18,7 +18,7 @@ interface GroupDataSource {
      * @param groupName - name of group will create.
      * @param ownerId - id of group owner.
      */
-    fun createGroup(groupName: String, ownerId: String): Single<Boolean>
+    fun createGroup(groupName: String, ownerId: String): Single<Group>
 
     /**
      * This method used to get info of a given group.
