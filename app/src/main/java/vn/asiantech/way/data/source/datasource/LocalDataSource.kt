@@ -45,5 +45,10 @@ interface LocalDataSource {
      */
     fun saveSearchHistory(location: WayLocation)
 
+    /**
+     * This method get tracking history of user
+     *
+     * @return list were be tracking
+     */
     fun getTrackingHistory(): MutableList<TrackingInformation>?
 }

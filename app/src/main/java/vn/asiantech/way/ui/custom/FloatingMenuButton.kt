@@ -23,17 +23,16 @@ import vn.asiantech.way.R
 class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                          context: Context, attrs: AttributeSet? = null) :
         LinearLayout(context, attrs) {
-
-    private lateinit var rlSearch: RelativeLayout
     internal lateinit var imgBtnSearch: ImageButton
-    private lateinit var rlGroup: RelativeLayout
     internal lateinit var imgBtnGroup: ImageButton
-    private lateinit var rlCalendar: RelativeLayout
     internal lateinit var imgBtnCalendar: ImageButton
-    private lateinit var rlProfile: RelativeLayout
     internal lateinit var imgBtnProfile: ImageButton
-    private lateinit var rlShare: RelativeLayout
     internal lateinit var imgBtnShare: ImageButton
+    private lateinit var rlSearch: RelativeLayout
+    private lateinit var rlGroup: RelativeLayout
+    private lateinit var rlCalendar: RelativeLayout
+    private lateinit var rlProfile: RelativeLayout
+    private lateinit var rlShare: RelativeLayout
     private lateinit var imgBtnMenu: ImageButton
     private lateinit var frOverlay: FrameLayout
     private var isExpand = false
