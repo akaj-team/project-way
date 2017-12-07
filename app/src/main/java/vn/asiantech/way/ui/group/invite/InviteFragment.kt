@@ -46,10 +46,11 @@ class InviteFragment : BaseFragment() {
     private val inviteObservable = PublishSubject.create<String>()
     private lateinit var ui: InviteFragmentUI
     private lateinit var inviteViewModel: InviteViewModel
+    private lateinit var adapter: InviteUserListAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = InviteFragmentUI(users)
+        ui = InviteFragmentUI(adapter)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -58,6 +59,8 @@ class InviteFragment : BaseFragment() {
         // Init invite view model
         inviteViewModel = InviteViewModel(context)
         onGetInformationOfUserInvite()
+        // Init adapter
+        adapter = InviteUserListAdapter(users)
     }
 
     override fun onBindViewModel() {

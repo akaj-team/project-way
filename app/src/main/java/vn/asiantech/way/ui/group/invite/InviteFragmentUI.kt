@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
-import com.hypertrack.lib.models.User
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -17,10 +16,9 @@ import vn.asiantech.way.extension.onUserNameChanged
  * @author NgocTTN
  */
 
-class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment> {
+class InviteFragmentUI(val userListAdapter: InviteUserListAdapter) : AnkoComponent<InviteFragment> {
 
     internal lateinit var edtUserName: EditText
-    internal val userListAdapter = InviteUserListAdapter(users)
 
     override fun createView(ui: AnkoContext<InviteFragment>): View = ui.apply {
         verticalLayout {
@@ -56,7 +54,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
                         padding = dimen(R.dimen.invite_screen_padding)
                         textSize = px2dip(dimen(R.dimen.invite_screen_edt_user_name_text_size))
                         gravity = Gravity.CENTER_VERTICAL
-                        onUserNameChanged{
+                        onUserNameChanged {
                             owner.onGetListUserInvite(it.toString())
                         }
                     }.lparams(matchParent, matchParent) {
