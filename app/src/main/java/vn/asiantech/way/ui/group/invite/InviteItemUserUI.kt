@@ -15,7 +15,7 @@ import vn.asiantech.way.R
  * Item User UI
  * @author NgocTTN
  */
-class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
+class InviteItemUserUI : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>): View = ui.apply {
 
         val sizeImgAvatar = dimen(R.dimen.item_user_img_avatar_width_or_height)

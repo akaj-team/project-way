@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.graphics.Color
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +12,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.utils.AppConstants
 
 /**
  * Invite UI
@@ -62,9 +60,7 @@ class InviteFragmentUI(users: MutableList<User>) : AnkoComponent<InviteFragment>
 
                         addTextChangedListener(object : InviteFragmentUI.TextChangeListener {
                             override fun afterTextChanged(editable: Editable) {
-                                Handler().postDelayed({
-                                    owner.onGetListUserInvite(editable.toString().trim())
-                                },AppConstants.DELAY_TIME)
+                                owner.onGetListUserInvite(editable.toString().trim())
                             }
                         })
                     }.lparams(matchParent, matchParent) {

@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.utils.AppConstants
+import java.util.concurrent.TimeUnit
 
 /**
  * Invite Fragment
@@ -40,6 +44,7 @@ class InviteFragment : BaseFragment() {
     private var groupName = ""
     private var ownerId = ""
     private val users = mutableListOf<User>()
+    private val inviteObservable = PublishSubject.create<String>()
     private lateinit var ui: InviteFragmentUI
     private lateinit var inviteViewModel: InviteViewModel
 
@@ -57,9 +62,19 @@ class InviteFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(inviteViewModel.resetDataStatus
+        addDisposables(inviteObservable
                 .observeOnUiThread()
-                .subscribe(this::onResetDataListWhenStartSearch))
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe({
+                    inviteViewModel
+                            .searchListUser(it)
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::onGetListUserInviteComplete)
+                }),
+                inviteViewModel.resetDataStatus
+                        .observeOnUiThread()
+                        .subscribe(this::onResetDataListWhenStartSearch))
     }
 
     /**
@@ -73,12 +88,10 @@ class InviteFragment : BaseFragment() {
      * On get list user invite from search action
      */
     internal fun onGetListUserInvite(name: String) {
-        if (name.isEmpty()) {
+        if (name.length == 0) {
             return
         }
-        addDisposables(inviteViewModel.searchListUser(name)
-                .observeOnUiThread()
-                .subscribe(this::onGetListUserInviteComplete))
+        inviteObservable.onNext(name)
     }
 
     /**
