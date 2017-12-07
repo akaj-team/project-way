@@ -21,6 +21,7 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val wayRemoteDataSource = WayRemoteDataSource()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -88,15 +89,15 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun postGroupInfo(group: Group): Observable<Boolean> {
-        val result = PublishSubject.create<Boolean>()
+    override fun postGroupInfo(group: Group): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
             if (databaseError != null) {
-                result.onNext(false)
+                result.onError(databaseError.toException())
             }
             if (dataSuccess != null) {
-                result.onNext(true)
+                result.onSuccess(true)
             }
         }
         return result
@@ -256,28 +257,14 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        val result = SingleSubject.create<Boolean>()
-        HypertrackApi.instance.createGroup(groupName)
-                .subscribe({
-                    val group = it
+        return HypertrackApi.instance.createGroup(groupName)
+                .flatMap { group ->
                     group.ownerId = ownerId
-                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
-                            .subscribe({
-                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
-                                groupInfoRef.setValue(group)
-                                        .addOnSuccessListener {
-                                            result.onSuccess(true)
-                                        }
-                                        .addOnFailureListener {
-                                            result.onError(it)
-                                        }
-                            }, {
-                                result.onError(it)
-                            })
-                }, {
-                    result.onError(it)
-                })
-        return result
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                            .flatMap {
+                                postGroupInfo(group)
+                            }
+                }
     }
 
     /**

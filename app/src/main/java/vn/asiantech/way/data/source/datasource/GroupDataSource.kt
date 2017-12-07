@@ -53,7 +53,7 @@ interface GroupDataSource {
      *
      * @param group - upload group.
      */
-    fun postGroupInfo(group: Group): Observable<Boolean>
+    fun postGroupInfo(group: Group): Single<Boolean>
 
     /**
      * This method used to change owner of a given group to a given user
