@@ -51,22 +51,22 @@ class InviteFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //init invite view model
+        // Init invite view model
         inviteViewModel = InviteViewModel(context)
-        onGetInfomationOfUserInvite()
+        onGetInformationOfUserInvite()
     }
 
     override fun onBindViewModel() {
-        inviteViewModel.resetDataStatus
+        addDisposables(inviteViewModel.resetDataStatus
                 .observeOnUiThread()
-                .subscribe(this::onResetDataListWhenStartSearch)
+                .subscribe(this::onResetDataListWhenStartSearch))
     }
 
     /**
      * On item invite click of  RecyclerView list.
      */
     internal fun onItemInviteClick(user: User) {
-        //todo handel save database firebase
+        // TODO: Handle save database firebase
     }
 
     /**
@@ -101,7 +101,7 @@ class InviteFragment : BaseFragment() {
     /**
      * On get infomation of user invite
      */
-    private fun onGetInfomationOfUserInvite() {
+    private fun onGetInformationOfUserInvite() {
         userId = arguments.getString(KEY_USER)
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString("KEY_GROUP_NAME")
