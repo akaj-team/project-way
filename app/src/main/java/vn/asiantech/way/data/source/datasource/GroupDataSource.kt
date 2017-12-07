@@ -13,6 +13,14 @@ import vn.asiantech.way.data.model.Invite
 interface GroupDataSource {
 
     /**
+     * This method used to create a group with a given name and ownerId.
+     *
+     * @param groupName - name of group will create.
+     * @param ownerId - id of group owner.
+     */
+    fun createGroup(groupName: String, ownerId: String): Single<Boolean>
+
+    /**
      * This method used to get info of a given group.
      *
      * @param groupId - id of given group.
@@ -24,7 +32,7 @@ interface GroupDataSource {
      *
      * @param userId - id of given user.
      */
-    fun getGroupId(userId: String): Observable<String>
+    fun listenerForGroupChange(userId: String): Observable<String>
 
     /**
      * This method used to get invite list of a given user.
@@ -96,14 +104,14 @@ interface GroupDataSource {
      *
      * @param request - given request.
      */
-    fun postRequestToGroup(groupId: String, request: Invite)
+    fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean>
 
     /**
      * This method used to post a request to user.
      *
      * @param request - given request
      */
-    fun postRequestToUser(userId: String, request: Invite)
+    fun postRequestToUser(userId: String, request: Invite): Single<Boolean>
 
     /**
      * This method used to search user by name.
@@ -111,4 +119,25 @@ interface GroupDataSource {
      * @param name - name used to search.
      */
     fun searchUser(name: String): Observable<List<User>>
+
+    /**
+     * This method used to delete a given invite when a given user refuse it.
+     *
+     * @param userId - id of given user.
+     * @param invite - given invite.
+     */
+    fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean>
+
+    /**
+     * This method used to delete a given request when group owner refuse it.
+     *
+     * @param groupId - id of given group.
+     * @param invite - given request.
+     */
+    fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
+
+    /**
+     *
+     */
+    fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean>
 }
