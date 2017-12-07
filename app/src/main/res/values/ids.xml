@@ -87,6 +87,7 @@
     <!-- View ids on class ItemMemberUI -->
     <item name="item_member_img_avatar" type="id" />
     <item name="item_member_tv_name" type="id" />
+    <item name="item_member_img_up_to_admin" type="id" />
     <item name="item_member_img_call" type="id" />
 
 </resources>

@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.group.info
 
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
+import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.extension.observeOnUiThread
@@ -28,5 +29,9 @@ class GroupInfoViewModel {
         return groupRepository.removeUserFromGroup(userId)
                 .toObservable()
                 .observeOnUiThread()
+    }
+
+    internal fun changeGroupOwner(groupId: String, newOwnerId: String): Single<Boolean> {
+        return groupRepository.changeGroupOwner(groupId, newOwnerId)
     }
 }

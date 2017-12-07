@@ -52,7 +52,7 @@ class GroupInfoFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = GroupInfoFragmentUI(userId, members)
+        ui = GroupInfoFragmentUI(userId, "", members)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -74,6 +74,24 @@ class GroupInfoFragment : BaseFragment() {
         }
     }
 
+    internal fun eventImageUpToAdminClicked(userId: String) {
+        alert(R.string.confirm_message_change_owner, R.string.confirm) {
+            yesButton {
+                it.dismiss()
+                groupInfoViewModel.changeGroupOwner(groupId, userId)
+                        .observeOnUiThread()
+                        .subscribe(this@GroupInfoFragment::handleChangeGroupOwnerCompleted)
+            }
+            noButton {
+                it.dismiss()
+            }
+        }.show()
+    }
+
+    internal fun handleSwipeRefreshLayoutOnRefresh() {
+        reloadGroupInfo()
+    }
+
     private fun handleLeaveGroupOnClicked() {
         alert(R.string.confirm_message_leave_group, R.string.confirm) {
             yesButton {
@@ -88,6 +106,7 @@ class GroupInfoFragment : BaseFragment() {
     private fun handleGetGroupInfoCompleted(groupToBind: Group) {
         group = groupToBind
         with(group) {
+            ui.memberListAdapter.groupOwnerId = group.ownerId
             ui.tvGroupName.text = name
             ui.tvCreateAt.text = getString(R.string.create_at, createAt.substring(0,
                     AppConstants.STANDARD_DATE_TIME_LENGTH))
@@ -100,11 +119,15 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getMemberList(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleGetMemberListCompleted)
+                        .subscribe(this::handleGetMemberListCompleted, {
+                            toast(R.string.error_message)
+                            ui.swipeRefreshLayout.isRefreshing = false
+                        })
         )
     }
 
     private fun handleGetMemberListCompleted(users: MutableList<User>) {
+        ui.swipeRefreshLayout.isRefreshing = false
         ui.tvMembersCount.text = getString(R.string.members_count, users.size)
         members.clear()
         members.addAll(users)
@@ -117,5 +140,19 @@ class GroupInfoFragment : BaseFragment() {
         } else {
             toast(R.string.error_message)
         }
+    }
+
+    private fun handleChangeGroupOwnerCompleted(success: Boolean) {
+        if (success) {
+            toast(R.string.success)
+        } else {
+            toast(R.string.error_message)
+        }
+    }
+
+    private fun reloadGroupInfo() {
+        groupInfoViewModel.getGroupInfo(groupId)
+                .observeOnUiThread()
+                .subscribe(this::handleGetGroupInfoCompleted)
     }
 }

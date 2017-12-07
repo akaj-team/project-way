@@ -22,8 +22,10 @@ import vn.asiantech.way.utils.AppConstants
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 05/12/2017
  */
-class MemberListAdapter(val userId: String, val members: MutableList<User>)
+class MemberListAdapter(val userId: String, var groupOwnerId: String, val members: MutableList<User>)
     : RecyclerView.Adapter<MemberListAdapter.MemberItemViewHolder>() {
+
+    var onImageUpToAdminClick: (userId: String) -> Unit = {}
 
     override fun getItemCount() = members.size
 
@@ -43,6 +45,7 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
 
         private val imgAvatar = itemView.find<CircleImageView>(R.id.item_member_img_avatar)
         private val tvName = itemView.find<TextView>(R.id.item_member_tv_name)
+        private val imgUpToAdmin = itemView.find<ImageView>(R.id.item_member_img_up_to_admin)
         private val imgCall = itemView.find<ImageView>(R.id.item_member_img_call)
 
         init {
@@ -51,6 +54,9 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
                 intent.data = Uri.parse(itemView.context.getString(R.string.call_intent,
                         members[adapterPosition].lookupId))
                 itemView.context.startActivity(intent)
+            }
+            imgUpToAdmin.onClick {
+                onImageUpToAdminClick(members[adapterPosition].id)
             }
         }
 
@@ -65,6 +71,11 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
                     imgCall.visibility = View.VISIBLE
                 } else {
                     imgCall.visibility = View.GONE
+                }
+                if (userId == groupOwnerId && id != groupOwnerId) {
+                    imgUpToAdmin.visibility = View.VISIBLE
+                } else {
+                    imgUpToAdmin.visibility = View.GONE
                 }
             }
         }
@@ -98,15 +109,23 @@ class MemberListAdapter(val userId: String, val members: MutableList<User>)
                             id = R.id.item_member_tv_name
                             textColor = Color.BLACK
                             textSize = px2dip(dimen(R.dimen.text_size_normal))
+                            singleLine = true
                         }.lparams(dimen(R.dimen.group_screen_tv_name_width), wrapContent) {
                             leftMargin = dimen(R.dimen.group_text_size_normal)
                             weight = AppConstants.MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT
                         }
 
+                        imageView(R.drawable.ic_up_to_admin) {
+                            id = R.id.item_member_img_up_to_admin
+                        }.lparams(dimen(R.dimen.group_screen_avatar_width),
+                                dimen(R.dimen.group_screen_avatar_width))
+
                         imageView(R.drawable.ic_phone_forwarded_blue_a700_48dp) {
                             id = R.id.item_member_img_call
                         }.lparams(dimen(R.dimen.group_screen_avatar_width),
-                                dimen(R.dimen.group_screen_avatar_width))
+                                dimen(R.dimen.group_screen_avatar_width)) {
+                            leftMargin = dimen(R.dimen.default_padding_margin)
+                        }
                     }.lparams(matchParent, wrapContent)
 
                     view {

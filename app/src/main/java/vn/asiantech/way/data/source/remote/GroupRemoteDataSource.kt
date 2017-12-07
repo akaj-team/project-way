@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source.remote
 
+import android.util.Log
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
@@ -33,7 +34,8 @@ class GroupRemoteDataSource : GroupDataSource {
                 if (p0?.value == null) {
                     result.onError(Throwable())
                 } else {
-                    result.onNext(Gson().fromJson(p0.value.toString(), Group::class.java))
+                    Log.i("tag11", Gson().toJson(p0.value))
+                    result.onNext(Gson().fromJson(Gson().toJson(p0.value), Group::class.java))
                 }
             }
         })

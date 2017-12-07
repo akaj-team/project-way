@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.info
 
 import android.graphics.Color
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
@@ -11,6 +12,7 @@ import com.hypertrack.lib.models.User
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import vn.asiantech.way.R
 
@@ -18,14 +20,15 @@ import vn.asiantech.way.R
  *
  * Created by haingoq on 28/11/2017.
  */
-class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
+class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<User>)
     : AnkoComponent<GroupInfoFragment> {
 
     internal lateinit var tvGroupName: TextView
     internal lateinit var tvMembersCount: TextView
     internal lateinit var tvCreateAt: TextView
     internal lateinit var imgApprove: ImageView
-    internal val memberListAdapter = MemberListAdapter(userId, members)
+    internal lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    internal val memberListAdapter = MemberListAdapter(userId, ownerId, members)
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
         verticalLayout {
@@ -79,12 +82,18 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 }
             }
 
-            swipeRefreshLayout {
+            swipeRefreshLayout = swipeRefreshLayout {
+                onRefresh {
+                    owner.handleSwipeRefreshLayoutOnRefresh()
+                }
                 recyclerView {
                     lparams(matchParent, matchParent)
                     layoutManager = LinearLayoutManager(context)
                     backgroundResource = android.R.color.darker_gray
-                    padding = dimen(R.dimen.group_screen_recycler_view_padding)
+                    topPadding = dimen(R.dimen.group_screen_recycler_view_padding)
+                    memberListAdapter.onImageUpToAdminClick = {
+                        owner.eventImageUpToAdminClicked(it)
+                    }
                     adapter = memberListAdapter
                 }
             }.lparams(matchParent, matchParent)
