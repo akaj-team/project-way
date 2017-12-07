@@ -202,7 +202,7 @@ class GroupRemoteDataSource : GroupDataSource {
                                 }
                             }
                             .addOnFailureListener {
-                                result.onError(Throwable(it))
+                                result.onError(it)
                             }
                 }
             }
@@ -254,9 +254,6 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        // TODO: 06/12/2017
-        // I will optimize this function when I understand When-Then-And operator of Rx.
-        // at-cuongcao
         val result = SingleSubject.create<Boolean>()
         HypertrackApi.instance.createGroup(groupName)
                 .subscribe({
