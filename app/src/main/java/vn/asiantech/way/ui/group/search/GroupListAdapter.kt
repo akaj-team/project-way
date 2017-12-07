@@ -14,14 +14,14 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.model.Invite
 
 /**
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>, private val listener: (Group) -> Unit)
+class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>, private var currentRequest: Invite, private val listener: (Group) -> Unit)
     : RecyclerView.Adapter<GroupListAdapter.SearchGroupHolder>() {
-    private var groupIdCurrentrequest = ""
     override fun onBindViewHolder(holder: SearchGroupHolder?, position: Int) {
         holder?.onBind()
     }
@@ -32,10 +32,10 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
             .createView(AnkoContext.create(context, parent, false))
             .tag as? SearchGroupHolder
 
-    internal fun setIdforGroupRequest(id: String) {
-        Log.d("hhhh","ok kkkkkk $id")
-        groupIdCurrentrequest = id
-       notifyDataSetChanged()
+    internal fun updateCurrentRequest(invite: Invite) {
+        currentRequest = invite
+        Log.d("hhhhhh", "$currentRequest.to")
+        notifyDataSetChanged()
     }
 
     /**
@@ -57,10 +57,11 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
          */
         fun onBind() {
             tvNameUser.text = groups[adapterPosition].name
-            if (groups[adapterPosition].id.equals(groupIdCurrentrequest)) {
+            if (groups[adapterPosition].id.equals(currentRequest.to)) {
                 tvJoinGroup.visibility = View.INVISIBLE
+            } else {
+                tvJoinGroup.visibility = View.VISIBLE
             }
-
         }
     }
 

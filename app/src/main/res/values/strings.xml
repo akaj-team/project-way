@@ -130,4 +130,5 @@
     <string name="arrived_dialog_total_time">14 min</string>
     <string name="arrived_dialog_total_distance">7 km</string>
     <string name="enter_group_name">Enter group name</string>
+    <string name="success">success</string>
 </resources>

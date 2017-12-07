@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +42,7 @@ class SearchGroupFragment : BaseFragment() {
 
     private var user: User? = null
     private var groups = mutableListOf<Group>()
-    private lateinit var currentRequest: Invite
+    private var currentRequest: Invite = Invite("", "", "", false)
 
     private lateinit var adapter: GroupListAdapter
     private lateinit var ui: SearchGroupFragmentUI
@@ -52,10 +51,8 @@ class SearchGroupFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        adapter = GroupListAdapter(context, groups) {
+        adapter = GroupListAdapter(context, groups, currentRequest) {
             eventOnItemClicked(it)
-            getCurrentRequest()
-            adapter.setIdforGroupRequest(currentRequest.to)
         }
 
         ui = SearchGroupFragmentUI(adapter)
@@ -65,27 +62,16 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-        getCurrentRequest()
-        addDisposables(searchGroupObservable
+        addDisposables(searchGroupViewModel
+                .getCurrentRequest(user?.id!!)
                 .observeOnUiThread()
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .subscribe({
-                    searchGroupViewModel
-                            .searchGroup(it)
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::updateRecyclerViewGroup,
-                                    {
-                                        toast(R.string.error_message)
-                                    })
-
-                }, {
-
-                })
+                .subscribe(this::handleGetCurrentRequestSuccess,
+                        this::handleGetCurrentRequestError
+                )
         )
     }
 
-    internal fun eventOnTextChangeSearchGroup(query: String) {
+    internal fun eventOnTextChangedSearchGroup(query: String) {
         searchGroupObservable.onNext(query)
     }
 
@@ -94,12 +80,36 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handleGetCurrentRequestSuccess(invite: Invite) {
-        Log.d("hhhhh", "invite: ${invite.to}")
         currentRequest = invite
+        searchGroupObservable
+                .observeOnUiThread()
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe({
+                    searchGroupViewModel
+                            .searchGroup(it)
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    this::updateRecyclerViewGroup,
+                                    this::handleSearchGroupError
+                            )
+
+                })
     }
 
     private fun handleGetCurrentRequestError(error: Throwable) {
-        toast("get Current request error")
+        toast("${error.message}")
+    }
+
+    private fun updateRecyclerViewGroup(data: List<Group>) {
+        adapter.updateCurrentRequest(currentRequest)
+        groups.clear()
+        groups.addAll(data)
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun handleSearchGroupError(error: Throwable) {
+        toast("${error.message}")
     }
 
     private fun eventOnItemClicked(group: Group) {
@@ -107,6 +117,9 @@ class SearchGroupFragment : BaseFragment() {
         addDisposables(
                 searchGroupViewModel
                         .postRequestToGroup(group.id, invite)
+                        .doOnSuccess {
+                            currentRequest = invite
+                        }
                         .subscribe(
                                 this::handlePostRequestToGroupSuccess,
                                 this::handlePostRequestToGroupError
@@ -115,27 +128,10 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handlePostRequestToGroupSuccess(isSuccess: Boolean) {
-        getCurrentRequest()
-        toast("success")
+        toast(getString(R.string.success))
     }
 
     private fun handlePostRequestToGroupError(error: Throwable) {
-        toast("Error when post request to Group: ${error.message}")
-    }
-
-    private fun getCurrentRequest() {
-        searchGroupViewModel
-                .getCurrentRequest(user?.id!!)
-                .observeOnUiThread()
-                .subscribe(this::handleGetCurrentRequestSuccess,
-                        this::handleGetCurrentRequestError
-                )
-    }
-
-    private fun updateRecyclerViewGroup(data: List<Group>) {
-        adapter.setIdforGroupRequest(currentRequest.to)
-        groups.clear()
-        groups.addAll(data)
-        adapter.notifyDataSetChanged()
+        toast("${error.message}")
     }
 }
