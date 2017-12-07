@@ -23,9 +23,9 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
 
         linearLayout {
 
-            // layout parent
+            // Layout parent
             lparams(matchParent, wrapContent) {
-                backgroundColor = ActivityCompat.getColor(context, R.color.colorWhite)
+                backgroundResource = R.color.colorWhite
                 verticalPadding = leftRightMarginOrPadding
             }
 
@@ -48,11 +48,10 @@ class InviteItemUserUI<T> : AnkoComponent<ViewGroup> {
             }
 
             // Text view invite
-            textView {
+            textView(R.string.item_user_invite) {
                 id = R.id.item_user_tv_invite
-                backgroundColor = ActivityCompat.getColor(context, R.color.colorPrimaryDark)
+                backgroundResource = R.color.colorPrimaryDark
                 maxLines = 1
-                text = resources.getText(R.string.item_user_invite)
                 textColor = ContextCompat.getColor(context, R.color.colorWhite)
                 verticalPadding = dimen(R.dimen.item_user_bottom_or_top_padding)
                 horizontalPadding = dimen(R.dimen.item_user_left_or_right_padding)

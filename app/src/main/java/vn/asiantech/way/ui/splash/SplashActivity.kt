@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
@@ -18,7 +17,6 @@ import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.invite.InviteFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -62,15 +60,6 @@ class SplashActivity : BaseActivity() {
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
-        // open fragment
-        replaceFragment(InviteFragment.getInstance("1", "1", "ngoc","1"))
-
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.splash_id, fragment)
-        transaction.commit()
     }
 
     private fun startSwitchScreen() {
