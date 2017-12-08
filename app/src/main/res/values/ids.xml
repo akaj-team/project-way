@@ -13,7 +13,7 @@
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
     <item name="splash_activity_tv_application_name" type="id" />
-    <item name="splash_id" type="id" />
+    <item name="splash_activity_rl_container" type="id" />
 
     <!-- View ids for HomeAdapter -->
     <item name="home_activity_fr_map" type="id" />

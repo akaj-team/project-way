@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group.invite
 
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
@@ -39,7 +38,7 @@ class InviteItemUserUI : AnkoComponent<ViewGroup> {
             // Text view name
             textView {
                 id = R.id.item_user_tv_name
-                textColor = ActivityCompat.getColor(context, R.color.colorBlack)
+                textColor = ContextCompat.getColor(context, R.color.colorBlack)
                 textSize = px2dip(dimen(R.dimen.invite_screen_tv_user_name_text_size))
                 gravity = Gravity.CENTER_VERTICAL
                 verticalPadding = leftRightMarginOrPadding

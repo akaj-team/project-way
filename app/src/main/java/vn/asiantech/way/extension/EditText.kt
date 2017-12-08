@@ -9,7 +9,7 @@ import android.widget.EditText
  * Extension method on text change
  */
 
-fun EditText.onUserNameChanged(onTextChanged: (CharSequence?) -> Unit) {
+fun EditText.onSearchLocationChanged(onTextChanged: (CharSequence?) -> Unit) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(p0: Editable?) = Unit
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit

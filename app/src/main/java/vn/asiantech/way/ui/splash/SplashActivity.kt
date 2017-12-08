@@ -69,7 +69,7 @@ class SplashActivity : BaseActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.splash_id, fragment)
+        transaction.replace(R.id.splash_activity_rl_container, fragment)
         transaction.commit()
     }
 

@@ -43,7 +43,7 @@ class InviteFragment : BaseFragment() {
     private var groupName = ""
     private var ownerId = ""
     private val users = mutableListOf<User>()
-    private val inviteObservable = PublishSubject.create<String>()
+    private val searchInviteObservable = PublishSubject.create<String>()
     private lateinit var ui: InviteFragmentUI
     private lateinit var inviteViewModel: InviteViewModel
     private lateinit var adapter: InviteUserListAdapter
@@ -64,7 +64,7 @@ class InviteFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(inviteObservable
+        addDisposables(searchInviteObservable
                 .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
@@ -90,7 +90,7 @@ class InviteFragment : BaseFragment() {
      * On get list user invite from search action
      */
     internal fun onGetListUserInvite(name: String) {
-        inviteObservable.onNext(name)
+        searchInviteObservable.onNext(name)
     }
 
     /**
