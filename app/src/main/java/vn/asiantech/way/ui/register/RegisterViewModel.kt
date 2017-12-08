@@ -48,8 +48,9 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
                 .doOnError { progressBarStatus.onNext(false) }
     }
 
-    internal fun isEnableUpdateButton(name: String, phone: String): Boolean {
-        if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)) {
+    internal fun isEnableUpdateButton(name: String, phone: String, avatar: Bitmap?): Boolean {
+        if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)
+                && avatar != null) {
             return false
         }
         return true

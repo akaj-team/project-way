@@ -124,7 +124,7 @@ class RegisterActivity : BaseActivity() {
         if (registerViewModel.isRegister) {
             ui.btnRegister.isEnabled = !(name.isBlank() && phone.isBlank())
         } else {
-            ui.btnRegister.isEnabled = registerViewModel.isEnableUpdateButton(name, phone)
+            ui.btnRegister.isEnabled = registerViewModel.isEnableUpdateButton(name, phone, avatarBitmap)
         }
     }
 
