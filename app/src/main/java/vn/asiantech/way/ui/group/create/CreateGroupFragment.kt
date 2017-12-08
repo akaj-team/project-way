@@ -57,9 +57,8 @@ class CreateGroupFragment : BaseFragment() {
         when (view.id) {
             R.id.create_group_fragment_ui_btn_back -> activity.onBackPressed()
 
-            R.id.create_group_fragment_ui_btn_create -> {
+            R.id.create_group_fragment_ui_btn_create ->
                 eventCreateGroup(ui.edtGroupName.text.toString().trim())
-            }
         }
     }
 
