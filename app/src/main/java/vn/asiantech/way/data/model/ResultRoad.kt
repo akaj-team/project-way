@@ -8,7 +8,13 @@ import com.google.gson.annotations.SerializedName
  */
 data class ResultRoad(@SerializedName("snappedPoints") val snappedPoints: List<LocationRoad>)
 
+/**
+ *  Location return from google map Road api.
+ */
 data class LocationRoad(@SerializedName("location") val location: Point,
                         @SerializedName("placeId") val placeId: String)
 
+/**
+ *  Structured formatting from google map Road api.
+ */
 data class Point(val latitude: Double, val longitude: Double)

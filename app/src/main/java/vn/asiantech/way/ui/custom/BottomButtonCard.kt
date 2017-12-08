@@ -230,7 +230,7 @@ class BottomButtonCard(context: Context) :
     internal fun showBottomCardLayout() {
         hideProgress()
         btnSharing.visibility = View.VISIBLE
-        AnimationUtils.expand(this, 100000)
+        AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
     internal fun hideBottomCardLayout() {

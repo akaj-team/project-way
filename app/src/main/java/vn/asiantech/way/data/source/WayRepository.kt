@@ -33,16 +33,16 @@ class WayRepository : WayDataSource {
         return remoteDataSource.getAddressLocation(latLng)
     }
 
-    override fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail> {
-        return remoteDataSource.getLocationDetail(placeId, key)
+    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> {
+        return remoteDataSource.getLocationDetail(placeId)
     }
 
     override fun getLocationDistance(origins: String, destinations: String): Observable<ResultDistance> {
         return remoteDataSource.getLocationDistance(origins, destinations)
     }
 
-    override fun searchLocations(input: String, key: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
-        return remoteDataSource.searchLocations(input, key, language, sensor)
+    override fun searchLocations(input: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
+        return remoteDataSource.searchLocations(input, language, sensor)
     }
 
     override fun createGroup(name: String): Observable<Group> {

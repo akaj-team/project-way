@@ -62,8 +62,14 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         private const val REQUEST_CODE = 200
         private const val ZINDEX_VALUE = 8f
         private const val POLYLINE_WIDTH = 20f
+
+        const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
+        const val KEY_LOCATION = "location"
+        const val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
+        const val ACTION_CURRENT_LOCATION = "action_current_location"
     }
 
+    private lateinit var shareActivityUI: ShareActivityUI
     private lateinit var shareViewModel: ShareViewModel
     private lateinit var ui: ShareActivityUI
     private lateinit var supportMapFragment: SupportMapFragment
