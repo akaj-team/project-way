@@ -73,4 +73,10 @@ interface HypertrackService {
      */
     @GET("users/")
     fun searchUser(@Query("name") name: String): Single<UserListResult>
+
+    /**
+     * This method used to get user info by user id.
+     */
+    @GET("users/{userId}")
+    fun getUserInfo(@Path("userId") userId: String): Single<User>
 }

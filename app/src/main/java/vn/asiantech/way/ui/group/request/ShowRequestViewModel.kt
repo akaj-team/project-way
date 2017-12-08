@@ -2,9 +2,9 @@ package vn.asiantech.way.ui.group.request
 
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
-import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
@@ -25,8 +25,8 @@ class ShowRequestViewModel {
                 .observeOnUiThread()
     }
 
-    internal fun getRequestUsers(groupId: String): Observable<Invite> {
-        return groupRepository.getGroupRequest(groupId)
+    internal fun getRequestUsers(userId: String): Single<User> {
+        return groupRepository.getUserInfo(userId)
                 .observeOnUiThread()
     }
 }

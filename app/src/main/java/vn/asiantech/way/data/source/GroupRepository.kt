@@ -87,4 +87,8 @@ class GroupRepository : GroupDataSource {
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
         return remoteDataSource.createGroup(groupName, ownerId)
     }
+
+    override fun getUserInfo(userId: String): Single<User> {
+        return remoteDataSource.getUserInfo(userId)
+    }
 }

@@ -278,6 +278,10 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
+    override fun getUserInfo(userId: String): Single<User> {
+        return HypertrackApi.instance.getUserInfo(userId)
+    }
+
     /**
      * This interface used to make ChildEventListener become a simple interface.
      */
