@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,19 +44,22 @@ class SearchGroupFragment : BaseFragment() {
     private var user: User? = null
     private var groups = mutableListOf<Group>()
     private var currentRequest: Invite = Invite("", "", "", false)
-
     private lateinit var adapter: GroupListAdapter
     private lateinit var ui: SearchGroupFragmentUI
+    private lateinit var progressDialog: ProgressDialog
+
     private val searchGroupViewModel = SearchGroupViewModel()
     private val searchGroupObservable = PublishSubject.create<String>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         adapter = GroupListAdapter(context, groups, currentRequest) {
-            eventOnItemClicked(it)
+            eventOnJoinButtonClicked(it)
         }
-
         ui = SearchGroupFragmentUI(adapter)
+        progressDialog = ProgressDialog(context)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage(getString(R.string.processing))
 
         user = arguments.getSerializable(KEY_USER) as? User
         return ui.createView(AnkoContext.create(context, this))
@@ -65,7 +69,8 @@ class SearchGroupFragment : BaseFragment() {
         addDisposables(searchGroupViewModel
                 .getCurrentRequest(user?.id!!)
                 .observeOnUiThread()
-                .subscribe(this::handleGetCurrentRequestSuccess,
+                .subscribe(
+                        this::handleGetCurrentRequestSuccess,
                         this::handleGetCurrentRequestError
                 )
         )
@@ -98,7 +103,7 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handleGetCurrentRequestError(error: Throwable) {
-        toast("${error.message}")
+        toast(error.message.toString())
     }
 
     private fun updateRecyclerViewGroup(data: List<Group>) {
@@ -109,11 +114,12 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handleSearchGroupError(error: Throwable) {
-        toast("${error.message}")
+        toast(error.message.toString())
     }
 
-    private fun eventOnItemClicked(group: Group) {
+    private fun eventOnJoinButtonClicked(group: Group) {
         val invite = Invite(user?.id!!, group.id, group.name, true)
+        progressDialog.show()
         addDisposables(
                 searchGroupViewModel
                         .postRequestToGroup(group.id, invite)
@@ -128,10 +134,13 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handlePostRequestToGroupSuccess(isSuccess: Boolean) {
+        progressDialog.dismiss()
         toast(getString(R.string.success))
+        adapter.updateCurrentRequest(currentRequest)
+        adapter.notifyDataSetChanged()
     }
 
     private fun handlePostRequestToGroupError(error: Throwable) {
-        toast("${error.message}")
+        toast(error.message.toString())
     }
 }
