@@ -16,7 +16,7 @@ import vn.asiantech.way.ui.base.BaseFragment
  */
 class CreateGroupFragment : BaseFragment() {
     companion object {
-        private const val KEY_USER_ID = "user"
+        private const val KEY_USER_ID = "user_id"
 
         /**
          * Get instance with given user.
@@ -34,14 +34,11 @@ class CreateGroupFragment : BaseFragment() {
     private lateinit var ui: CreateGroupFragmentUI
     private var userId: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ui = CreateGroupFragmentUI()
+        return ui.createView(AnkoContext.create(context, this))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?) = ui
-            .createView(AnkoContext.create(context, this))
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,16 +50,16 @@ class CreateGroupFragment : BaseFragment() {
         // Nothing to do
     }
 
-    internal fun eventViewOnclick(view: View) {
+    internal fun eventOnViewClicked(view: View) {
         when (view.id) {
             R.id.create_group_fragment_ui_btn_back -> activity.onBackPressed()
 
             R.id.create_group_fragment_ui_btn_create ->
-                eventCreateGroup(ui.edtGroupName.text.toString().trim())
+                createGroup(ui.edtGroupName.text.toString().trim())
         }
     }
 
-    private fun eventCreateGroup(groupName: String) {
+    private fun createGroup(groupName: String) {
         if (groupName.isNotEmpty()) {
             addDisposables(createGroupViewModel.createGroup(groupName, userId)
                     .observeOnUiThread()
