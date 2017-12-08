@@ -127,8 +127,11 @@
     <string name="coming_soon">Coming soon</string>
     <string name="group_screen_invite_request">Invite requests</string>
     <string name="group_name_empty">Group name must not empty</string>
+    <string name="empty_string"></string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>
     <string name="arrived_dialog_total_distance">7 km</string>
+    <string name="confirm_message_change_owner">Do you want to take this person is admin?</string>
+    <string name="success">Success</string>
 </resources>

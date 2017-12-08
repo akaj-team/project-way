@@ -1,5 +1,7 @@
 package vn.asiantech.way.ui.base
 
+import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -23,6 +25,14 @@ abstract class BaseFragment : Fragment() {
 
     protected fun addDisposables(vararg ds: Disposable) {
         ds.forEach { subscription.add(it) }
+    }
+
+    internal fun sendBroadCast(action: String, bundle: Bundle? = null) {
+        val intent = Intent(action)
+        if (bundle != null) {
+            intent.putExtras(bundle)
+        }
+        activity.sendBroadcast(intent)
     }
 
     /**
