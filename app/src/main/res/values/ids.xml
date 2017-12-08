@@ -9,6 +9,10 @@
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
+    <item name="group_id_img_avatar" type="id" />
+    <item name="group_id_tv_name" type="id" />
+    <item name="group_id_image_button_accept" type="id" />
+    <item name="group_id_image_button_cancel" type="id" />
 
     <!--View ids ViewInviteFragmentUIntUI-->
     <item name="group_show_invite_adapter_tv_name_group" type="id" />
@@ -86,4 +90,9 @@
 
     <!-- View ids on class GroupActivityUI -->
     <item name="group_activity_ui_fr_content" type="id" />
+
+    <!-- View ids for class CreateGroupFragmentUI -->
+    <item name="create_group_fragment_ui_btn_create" type="id" />
+    <item name="create_group_fragment_ui_btn_back" type="id" />
+
 </resources>

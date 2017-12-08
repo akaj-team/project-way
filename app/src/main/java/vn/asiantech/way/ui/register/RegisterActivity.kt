@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,75 +25,62 @@ import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.home.HomeActivity
-import java.util.*
 
 /**
- * Activity register user
- * Created by haibt on 9/26/17.
+ *
+ * Created by haingoq on 06/12/2017.
  */
 class RegisterActivity : BaseActivity() {
     companion object {
-        private const val REQUEST_CODE_SPLASH = 1001
-        private const val REQUEST_CODE_PICK_IMAGE = 1003
-        private const val REQUEST_CODE_GALLERY = 1004
-        private const val KEY_FROM_REGISTER = "Register"
-        private const val NUM_CHAR_REMOVE = 3
+        private const val REQUEST_REGISTER = 1001
+        private const val REQUEST_CODE_PICK_IMAGE = 1002
+        private const val REQUEST_CODE_GALLERY = 1003
         private const val AVATAR_SIZE = 300
-        private const val RESULT_SUCCESS = "Success"
+        private const val KEY_FROM_REGISTER = "Register"
     }
 
-    private var countries: MutableList<Country> = ArrayList()
-    internal lateinit var registerViewModel: RegisterViewModel
     private lateinit var ui: RegisterActivityUI
-    private var userWay: User? = null
-    private var avatarUri: Uri? = null
-    internal var avatarBitmap: Bitmap? = null
+    private lateinit var registerViewModel: RegisterViewModel
+    private val countries = mutableListOf<Country>()
     internal var isoCode: String? = null
-    private var tel: String? = null
+    private var avatarBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = RegisterActivityUI(CountryAdapter(this, countries))
         ui.setContentView(this)
-        isoCode = getString(R.string.register_iso_code_default)
-        if (intent.extras != null && intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_CODE_SPLASH) {
+        if (intent.extras != null && intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_REGISTER) {
             registerViewModel = RegisterViewModel(this, true)
         } else {
             registerViewModel = RegisterViewModel(this, false)
-            ui.tvSkip.text = resources.getString(R.string.cancel)
+            addDisposables(registerViewModel.getUser()
+                    .subscribe(this::handleGetUserCompleted, this::handleGetUserError))
+            ui.btnRegister.text = getString(R.string.register_update)
+            ui.tvSkip.text = getString(R.string.cancel)
         }
     }
 
     override fun onBindViewModel() {
-        addDisposables(registerViewModel.getCountries().subscribe(this::showCountryList),
+        addDisposables(
+                registerViewModel.getCountries()
+                        .subscribe(this::handleGetCountriesCompleted),
+
                 registerViewModel.progressBarStatus
                         .observeOnUiThread()
-                        .subscribe(this::updateProgressBarStatus),
-                registerViewModel.getUser()
-                        .subscribe(this::onGetUser, {
-                            toast(it.message.toString())
-                        }),
+                        .subscribe(this::handleGetProgressBarStatusCompleted),
+
+                registerViewModel.createDefaultUserStatus
+                        .observeOnUiThread()
+                        .subscribe(this::handleSkipClicked),
+
                 registerViewModel.backStatus
-                        .subscribe(this::onBackButtonPress))
+                        .observeOnUiThread()
+                        .subscribe(this::handleBackKeyEvent))
     }
 
     override fun onBackPressed() {
-        registerViewModel.onBackPress()
-    }
-
-    private fun onBackButtonPress(isBack: Boolean) {
-        if (isBack) {
-            super.onBackPressed()
-        } else {
-            toast(getString(R.string.register_double_click_to_exit))
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
-            setUserAvatar(data)
-        }
+        super.onBackPressed()
+        registerViewModel.eventBackPressed()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -105,114 +91,79 @@ class RegisterActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    internal fun createUser(userParam: UserParams) {
-        val disposable = registerViewModel.createUser(userParam)
-                .subscribe(this::onUserCreated)
-        addDisposables(disposable)
-    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
+            val uri = data.data
+            if (uri != null) {
+                Picasso.with(this)
+                        .load(uri)
+                        .resize(AVATAR_SIZE, AVATAR_SIZE)
+                        .into(object : Target {
+                            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                                // No-op
+                            }
 
-    internal fun onHandleTextChange() {
-        val name: String = ui.edtName.text.toString().trim()
-        val phone: String = ui.edtPhone.text.toString().trim()
-        if (registerViewModel.isRegister) {
-            if (name.isBlank() && phone.isBlank()) {
-                ui.tvSkip.visibility = View.VISIBLE
-                ui.btnRegister.isEnabled = false
+                            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                                // No-op
+                            }
+
+                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                                avatarBitmap = bitmap
+                                handleGetAvatarCompleted()
+                            }
+                        })
             } else {
-                ui.tvSkip.visibility = View.GONE
-                ui.btnRegister.isEnabled = true
+                avatarBitmap = data.extras.get("data") as? Bitmap
+                handleGetAvatarCompleted()
             }
-        } else {
-            ui.btnRegister.isEnabled = !(name == userWay?.name && phone == userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE))
-            ui.tvSkip.visibility = View.GONE
         }
     }
 
-    internal fun onSkipClick() {
-        var name: String = ui.edtName.text.toString().trim()
-        val phoneNumber: String = ui.edtPhone.text.toString().trim()
-        val userParam = registerViewModel.generateUserInformation(name, phoneNumber, isoCode, avatarBitmap)
+    internal fun onHandleTextChange(name: String, phone: String) {
         if (registerViewModel.isRegister) {
-            if (name.isBlank()) {
-                name = getString(R.string.register_user_name_default)
-            }
-            if (phoneNumber.isBlank()) {
-                ui.edtPhone.text = null
-            }
-            alert {
-                title = resources.getString(R.string.register_title_dialog)
-                message = resources.getString(R.string.register_message_dialog)
-                yesButton {
-                    userParam.name = name
-                    createUser(userParam)
+            ui.btnRegister.isEnabled = !(name.isBlank() && phone.isBlank())
+        } else {
+            ui.btnRegister.isEnabled = registerViewModel.isEnableUpdateButton(name, phone, avatarBitmap)
+        }
+    }
+
+    internal fun eventOnViewClicked(view: View) {
+        when (view) {
+            ui.frAvatar -> checkPermissionGallery()
+
+            ui.tvSkip ->
+                if (registerViewModel.isRegister) {
+                    // Create default user
+                    registerViewModel.createUserDefault(getString(R.string.register_user_name_default))
+                } else {
+                    // Come back Home when cancel update user
+                    startActivity<HomeActivity>()
                 }
-                noButton { it.dismiss() }
-            }.show()
-        } else {
-            if (ui.edtName.text.toString() != userWay?.name
-                    || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE)
-                    || avatarUri != null) {
-                updateUser(userParam)
+
+            ui.btnRegister -> {
+                // Create User param
+                val userParam = registerViewModel.generateUserInformation(
+                        ui.edtName.text.toString().trim(),
+                        ui.edtPhone.text.toString().trim(),
+                        isoCode, avatarBitmap)
+
+                if (registerViewModel.isRegister) {
+                    // Register user
+                    addDisposables(registerViewModel.createUser(userParam)
+                            .subscribe(this::handleCreateUserCompleted))
+                    // Save login status to SharePreference
+                    registerViewModel.saveLoginStatus(true)
+                } else {
+                    // Update user
+                    addDisposables(registerViewModel.updateUser(userParam)
+                            .subscribe(this::handleUpdateUserCompleted))
+                }
             }
         }
-        startActivity<HomeActivity>()
     }
 
-    internal fun onUpdateUserInformation(userParam: UserParams) {
-        if (ui.edtName.text.toString() != userWay?.name
-                || ui.edtPhone.text.toString() != userWay?.phone?.removeRange(0, NUM_CHAR_REMOVE)
-                || avatarUri != null) {
-            updateUser(userParam)
-        }
-    }
-
-    private fun updateUser(userParam: UserParams) {
-        val disposable = registerViewModel.updateUser(userParam)
-                .subscribe(this::onUserUpdated)
-        addDisposables(disposable)
-    }
-
-    private fun showCountryList(data: List<Country>) {
-        countries.clear()
-        countries.addAll(data)
-        ui.countryAdapter.notifyDataSetChanged()
-    }
-
-    private fun updateProgressBarStatus(isShow: Boolean) {
-        if (isShow) {
-            visibleProgressBar(ui.progressBar)
-        } else {
-            invisibleProgressBar(ui.progressBar)
-        }
-    }
-
-    private fun onUserCreated(responseStatus: ResponseStatus) {
-        val message = responseStatus.message
-        if (message == RESULT_SUCCESS) {
-            registerViewModel.saveLoginStatus(true)
-        }
-        toast(message)
-    }
-
-    private fun onUserUpdated(responseStatus: ResponseStatus) {
-        val updateMessage = responseStatus.message
-        if (updateMessage == RESULT_SUCCESS) {
-            startActivity<HomeActivity>()
-            toast(responseStatus.message)
-        } else {
-            alert {
-                title = getString(R.string.dialog_title_error)
-                message = updateMessage
-                yesButton {
-                    title = getString(R.string.dialog_button_ok)
-                    it.dismiss()
-                }
-            }.show()
-        }
-    }
-
-    private fun onGetUser(user: User) {
-        userWay = user
+    private fun handleGetUserCompleted(user: User) {
         val target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 visibleProgressBar(ui.progressBarAvatar)
@@ -225,7 +176,6 @@ class RegisterActivity : BaseActivity() {
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 ui.imgAvatar.imageBitmap = bitmap
                 invisibleProgressBar(ui.progressBarAvatar)
-                avatarBitmap = bitmap
             }
         }
         Picasso.with(this)
@@ -233,6 +183,7 @@ class RegisterActivity : BaseActivity() {
                 .into(target)
         ui.imgAvatar.tag = target
         ui.edtName.setText(user.name)
+        ui.edtPhone.setText(user.phone)
         val basePhone: List<String>? = user.phone?.split("/")
         if (basePhone != null) {
             if (basePhone.size > 1) {
@@ -244,7 +195,6 @@ class RegisterActivity : BaseActivity() {
                         val telephone = country.tel
                         ui.tvTel.text = getString(R.string.register_plus).plus(telephone)
                         Picasso.with(this).load(country.flagFilePath).into(ui.imgFlag)
-                        tel = telephone
                         break
                     }
                 }
@@ -255,50 +205,59 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
-    private fun setUserAvatar(data: Intent?) {
-        val uri = data?.data
-        if (uri != null) {
-            Picasso.with(this)
-                    .load(uri)
-                    .resize(AVATAR_SIZE, AVATAR_SIZE)
-                    .into(object : Target {
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                            // No-op
-                        }
+    private fun handleGetUserError(t: Throwable) {
+        toast(t.message.toString())
+    }
 
-                        override fun onBitmapFailed(errorDrawable: Drawable?) {
-                            // No-op
-                        }
+    private fun handleCreateUserCompleted(responseStatus: ResponseStatus) {
+        toast(responseStatus.message)
+    }
 
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            updateView(bitmap)
-                            avatarBitmap = bitmap
-                        }
-                    })
+    private fun handleUpdateUserCompleted(responseStatus: ResponseStatus) {
+        toast(responseStatus.message)
+    }
+
+    private fun handleGetCountriesCompleted(list: List<Country>) {
+        countries.clear()
+        countries.addAll(list)
+        ui.countryAdapter.notifyDataSetChanged()
+    }
+
+    private fun handleBackKeyEvent(isBack: Boolean) {
+        if (isBack) {
+            super.onBackPressed()
         } else {
-            val bitmap = data?.extras?.get("data") as? Bitmap
-            updateView(bitmap)
+            toast(getString(R.string.register_double_click_to_exit))
         }
     }
 
-    private fun updateView(bitmap: Bitmap?) {
-        ui.imgAvatar.imageBitmap = bitmap
-        ui.tvSkip.visibility = View.GONE
+    private fun handleGetProgressBarStatusCompleted(isShow: Boolean) {
+        if (isShow) {
+            visibleProgressBar(ui.progressBar)
+        } else {
+            invisibleProgressBar(ui.progressBar)
+        }
+    }
+
+    private fun handleGetAvatarCompleted() {
+        ui.imgAvatar.imageBitmap = avatarBitmap
         ui.btnRegister.isEnabled = true
     }
 
-    private fun visibleProgressBar(progressBar: ProgressBar) {
-        progressBar.visibility = View.VISIBLE
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    private fun handleSkipClicked(userParam: UserParams) {
+        alert {
+            title = getString(R.string.register_title_dialog)
+            message = getString(R.string.register_message_dialog)
+            yesButton {
+                addDisposables(registerViewModel.createUser(userParam)
+                        .subscribe(this@RegisterActivity::handleCreateUserCompleted))
+                startActivity<HomeActivity>()
+            }
+            noButton { it.dismiss() }
+        }.show()
     }
 
-    private fun invisibleProgressBar(progressBar: ProgressBar) {
-        progressBar.visibility = View.GONE
-        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-    }
-
-    internal fun checkPermissionGallery() {
+    private fun checkPermissionGallery() {
         if (ContextCompat.checkSelfPermission(this
                 , Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -324,5 +283,16 @@ class RegisterActivity : BaseActivity() {
         val chooserIntent = Intent.createChooser(galleryIntent, pickTitle)
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
         startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
+    }
+
+    private fun visibleProgressBar(progressBar: ProgressBar) {
+        progressBar.visibility = View.VISIBLE
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun invisibleProgressBar(progressBar: ProgressBar) {
+        progressBar.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 }

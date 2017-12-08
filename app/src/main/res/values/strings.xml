@@ -59,6 +59,7 @@
     <string name="register_double_click_to_exit">Please click BACK again to exit</string>
     <string name="register_request_permission">Please turn on Internet and GPS</string>
     <string name="register_tel">+84</string>
+    <string name="register_update">Update</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
     <string name="not_update_current_location">\"Do not update the current location!\"</string>
@@ -88,7 +89,7 @@
     <string name="dialog_title_error">Error</string>
     <string name="bottom_button_card_view_text_start_share">Start Sharing</string>
     <string name="register_update_profile">Update Profile</string>
-    <string name="register_message_dialog">Your default user name is user</string>
+    <string name="register_message_dialog">Do you want create user with user name is User ?</string>
     <string name="register_title_dialog">Information</string>
     <string name="register_title_error_dialog">Error</string>
 
@@ -125,6 +126,8 @@
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
     <string name="invite_list">Invite List</string>
+    <string name="group_screen_invite_request">Invite requests</string>
+    <string name="group_name_empty">Group name must not empty</string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>

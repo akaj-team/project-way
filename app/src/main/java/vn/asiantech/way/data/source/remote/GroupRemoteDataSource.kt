@@ -33,7 +33,7 @@ class GroupRemoteDataSource : GroupDataSource {
                 if (p0?.value == null) {
                     result.onError(Throwable())
                 } else {
-                    result.onNext(Gson().fromJson(p0.value.toString(), Group::class.java))
+                    result.onNext(Gson().fromJson(Gson().toJson(p0.value), Group::class.java))
                 }
             }
         })
@@ -86,15 +86,15 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun postGroupInfo(group: Group): Observable<Boolean> {
-        val result = PublishSubject.create<Boolean>()
+    override fun postGroupInfo(group: Group): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
         val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
             if (databaseError != null) {
-                result.onNext(false)
+                result.onError(databaseError.toException())
             }
             if (dataSuccess != null) {
-                result.onNext(true)
+                result.onSuccess(true)
             }
         }
         return result
@@ -134,12 +134,8 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        val result = SingleSubject.create<Boolean>()
-        HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
-                .doOnSuccess { result.onSuccess(true) }
-                .doOnError { result.onError(it) }
-        return result
+    override fun removeUserFromGroup(userId: String): Single<User> {
+        return HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
     }
 
     override fun searchGroup(groupName: String): Observable<List<Group>> {
@@ -254,28 +250,18 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        val result = SingleSubject.create<Boolean>()
-        HypertrackApi.instance.createGroup(groupName)
-                .subscribe({
-                    val group = it
+        return HypertrackApi.instance.createGroup(groupName)
+                .flatMap { group ->
                     group.ownerId = ownerId
-                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
-                            .subscribe({
-                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
-                                groupInfoRef.setValue(group)
-                                        .addOnSuccessListener {
-                                            result.onSuccess(true)
-                                        }
-                                        .addOnFailureListener {
-                                            result.onError(it)
-                                        }
-                            }, {
-                                result.onError(it)
-                            })
-                }, {
-                    result.onError(it)
-                })
-        return result
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                            .flatMap {
+                                postGroupInfo(group)
+                            }
+                }
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
     }
 
     /**
