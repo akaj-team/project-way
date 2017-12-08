@@ -10,6 +10,7 @@ import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
@@ -20,6 +21,7 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val wayRepository = WayRepository()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -262,6 +264,51 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getMemberList(groupId: String): Single<MutableList<User>> {
         return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
+    }
+
+    override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
+        val gson = Gson()
+        val result = SingleSubject.create<Boolean>()
+        val userRequest = firebaseDatabase.getReference("user/$userId/request")
+        userRequest.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                result.onError(Throwable(p0?.message))
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                if (p0?.value == null) {
+                    if (!invite.request) {
+                        userRequest.setValue(invite)
+                        invite.request = true
+                        val requestRef = firebaseDatabase.getReference("group/${invite.to}" +
+                                "/request/${invite.to}")
+                        invite.to = userId
+                        requestRef.setValue(invite).addOnSuccessListener {
+                            result.onSuccess(true)
+                        }.addOnFailureListener {
+                            result.onError(it)
+                        }
+                    }
+                } else {
+                    val currentGroupRequestRef = firebaseDatabase
+                            .getReference("group/${p0.value}/request/$userId")
+                    currentGroupRequestRef.removeValue()
+                            .addOnSuccessListener {
+                                if (invite.request) {
+                                    wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                                            .
+                                            .doOnError {
+
+                                            }
+                                }
+                            }
+                            .addOnFailureListener {
+                                result.onError(it)
+                            }
+                }
+            }
+        })
+        return result
     }
 
     /**
