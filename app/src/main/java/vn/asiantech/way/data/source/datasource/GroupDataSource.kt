@@ -150,8 +150,11 @@ interface GroupDataSource {
 
     /**
      * This method used to handle when a given user accept a given invite.
-     *
-     *
      */
     fun acceptInvite(userId: String, invite: Invite): Single<Boolean>
+
+    /**
+     * This method used to get user info by userId
+     */
+    fun getUserInfo(userId: String): Single<User>
 }
