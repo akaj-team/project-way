@@ -126,6 +126,7 @@
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
     <string name="group_screen_invite_request">Invite requests</string>
+    <string name="group_name_empty">Group name must not empty</string>
     <string name="empty_string"></string>
 
     <!--Arrived dialog-->
