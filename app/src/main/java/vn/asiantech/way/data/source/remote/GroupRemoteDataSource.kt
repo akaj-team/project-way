@@ -1,6 +1,5 @@
 package vn.asiantech.way.data.source.remote
 
-import android.util.Log
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
@@ -21,7 +20,6 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
-    private val wayRemoteDataSource = WayRemoteDataSource()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -35,7 +33,6 @@ class GroupRemoteDataSource : GroupDataSource {
                 if (p0?.value == null) {
                     result.onError(Throwable())
                 } else {
-                    Log.i("tag11", Gson().toJson(p0.value))
                     result.onNext(Gson().fromJson(Gson().toJson(p0.value), Group::class.java))
                 }
             }
@@ -224,10 +221,6 @@ class GroupRemoteDataSource : GroupDataSource {
         return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
     }
 
-    override fun getMemberList(groupId: String): Single<MutableList<User>> {
-        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
-    }
-
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
         val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
@@ -265,6 +258,10 @@ class GroupRemoteDataSource : GroupDataSource {
                                 postGroupInfo(group)
                             }
                 }
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
     }
 
     /**

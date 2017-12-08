@@ -72,10 +72,6 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.searchUser(name)
     }
 
-    override fun getMemberList(groupId: String): Single<MutableList<User>> {
-        return remoteDataSource.getMemberList(groupId)
-    }
-
     override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
         return remoteDataSource.deleteGroupRequest(groupId, request)
     }
@@ -90,5 +86,9 @@ class GroupRepository : GroupDataSource {
 
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
         return remoteDataSource.createGroup(groupName, ownerId)
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return remoteDataSource.getMemberList(groupId)
     }
 }

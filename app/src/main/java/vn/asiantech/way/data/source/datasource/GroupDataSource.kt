@@ -132,19 +132,19 @@ interface GroupDataSource {
      * This method used to delete a given request when group owner refuse it.
      *
      * @param groupId - id of given group.
-     * @param invite - given request.
+     * @param request - given request.
      */
     fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
 
     /**
-     *
+     * This method used to delete request of user to group.
      */
     fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean>
 
     /**
      * This method used to get member list of a given group.
      *
-     * @param
+     * @param groupId - id of given group.
      */
     fun getMemberList(groupId: String): Single<MutableList<User>>
 }

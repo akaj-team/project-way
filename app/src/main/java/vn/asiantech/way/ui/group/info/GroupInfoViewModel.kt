@@ -26,9 +26,7 @@ class GroupInfoViewModel {
     }
 
     internal fun leaveGroup(userId: String): Observable<User> {
-        return groupRepository.removeUserFromGroup(userId)
-                .toObservable()
-                .observeOnUiThread()
+        return groupRepository.removeUserFromGroup(userId).toObservable()
     }
 
     internal fun changeGroupOwner(groupId: String, newOwnerId: String): Single<Boolean> {

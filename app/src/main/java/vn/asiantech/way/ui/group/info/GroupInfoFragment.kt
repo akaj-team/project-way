@@ -98,6 +98,7 @@ class GroupInfoFragment : BaseFragment() {
                 addDisposables(groupInfoViewModel.leaveGroup(userId)
                         .observeOnUiThread()
                         .subscribe(this@GroupInfoFragment::handleLeaveGroupCompleted))
+
             }
             noButton { dialog -> dialog.dismiss() }
         }.show()
@@ -148,7 +149,8 @@ class GroupInfoFragment : BaseFragment() {
 
     private fun handleChangeGroupOwnerCompleted(success: Boolean) {
         if (success) {
-            toast(R.string.success)
+            toast(getString(R.string.leave_group_notification, group.name))
+            sendBroadCast(AppConstants.ACTION_RELOAD)
         } else {
             toast(R.string.error_message)
         }
