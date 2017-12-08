@@ -44,7 +44,7 @@ class RequestAdapter(private val users: List<User>) : RecyclerView.Adapter<Reque
                 onAcceptClick(users[adapterPosition].id)
             }
 
-            imgBtnAccept.onClick {
+            imgBtnCancel.onClick {
                 onCancelClick(users[adapterPosition].id)
             }
         }

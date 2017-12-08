@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.base
 
 import android.support.v4.app.Fragment
+import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -10,6 +11,7 @@ import io.reactivex.disposables.Disposable
  */
 abstract class BaseFragment : Fragment() {
     private val subscription: CompositeDisposable = CompositeDisposable()
+    val firebaseDatabase = FirebaseDatabase.getInstance()
 
     override fun onPause() {
         super.onPause()
