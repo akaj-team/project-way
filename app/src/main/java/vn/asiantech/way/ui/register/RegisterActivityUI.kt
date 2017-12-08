@@ -47,7 +47,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     backgroundResource = R.drawable.ic_default_avatar
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
-                    borderColor = Color.WHITE
+                    borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dimen(R.dimen.border)
                 }
 
@@ -59,7 +59,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
                 circleImageView {
                     backgroundResource = R.drawable.ic_profile_camera
-                    borderColor = Color.WHITE
+                    borderColor = ContextCompat.getColor(context, R.color.white)
                     borderWidth = dimen(R.dimen.border)
                 }.lparams {
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
@@ -176,7 +176,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 id = R.id.register_activity_btn_save
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
-                textColor = Color.WHITE
+                textColor = ContextCompat.getColor(context, R.color.white)
                 textSize = px2dip(dimen(R.dimen.register_screen_save_button_text_size))
                 isEnabled = false
 
