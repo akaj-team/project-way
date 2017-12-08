@@ -85,4 +85,9 @@
 
     <!-- View ids on class GroupActivityUI -->
     <item name="group_activity_ui_fr_content" type="id" />
+
+    <!-- View ids for class CreateGroupFragmentUI -->
+    <item name="create_group_fragment_ui_btn_create" type="id" />
+    <item name="create_group_fragment_ui_btn_back" type="id" />
+
 </resources>
