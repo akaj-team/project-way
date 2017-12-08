@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
@@ -282,6 +283,7 @@ class GroupRemoteDataSource : GroupDataSource {
                             if (p0?.value == null) {
                                 if (invite.request) {
                                     wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                                            .subscribeOn(Schedulers.io())
                                             .subscribe({
                                                 result.onSuccess(true)
                                             }, {
@@ -305,12 +307,15 @@ class GroupRemoteDataSource : GroupDataSource {
                                 currentGroupRequestRef.removeValue()
                                         .addOnSuccessListener {
                                             if (invite.request) {
-                                                wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                                                HypertrackApi.instance.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                                                        .subscribeOn(Schedulers.io())
+                                                        .toObservable()
                                                         .subscribe({
                                                             result.onSuccess(true)
                                                         }, {
                                                             result.onError(it)
                                                         })
+
                                             } else {
                                                 invite.request = true
                                                 userRequest.setValue(invite)
