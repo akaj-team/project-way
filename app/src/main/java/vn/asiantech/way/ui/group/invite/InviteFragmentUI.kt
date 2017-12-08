@@ -9,7 +9,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.onSearchLocationChanged
+import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  * Invite UI
@@ -54,9 +54,9 @@ class InviteFragmentUI(val userListAdapter: InviteUserListAdapter) : AnkoCompone
                         padding = dimen(R.dimen.invite_screen_padding)
                         textSize = px2dip(dimen(R.dimen.invite_screen_edt_user_name_text_size))
                         gravity = Gravity.CENTER_VERTICAL
-                        onSearchLocationChanged {
+                        onTextChangeListener({}, {
                             owner.onGetListUserInvite(it.toString())
-                        }
+                        }, {})
                     }.lparams(matchParent, matchParent) {
                         topMargin = dimen(R.dimen.invite_screen_padding)
                         rightMargin = dimen(R.dimen.invite_screen_padding)
