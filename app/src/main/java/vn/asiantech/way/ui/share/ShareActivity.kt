@@ -1,13 +1,11 @@
 package vn.asiantech.way.ui.share
 
 import android.os.Bundle
-import android.util.Log
 import com.google.android.gms.maps.SupportMapFragment
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.utils.AppConstants
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -15,29 +13,33 @@ import vn.asiantech.way.utils.AppConstants
  */
 class ShareActivity : BaseActivity() {
 
+    companion object {
+        const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
+        const val KEY_LOCATION = "location"
+        const val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
+        const val ACTION_CURRENT_LOCATION = "action_current_location"
+    }
+
     private lateinit var shareActivityUI: ShareActivityUI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         shareActivityUI = ShareActivityUI()
         shareActivityUI.setContentView(this)
         when (intent.action) {
-            AppConstants.ACTION_CURRENT_LOCATION -> {
+            ACTION_CURRENT_LOCATION -> {
                 // TODO: 01/12/2017
                 // Get current location and do more...
-                Log.i("tag11", "1111111111111")
             }
 
-            AppConstants.ACTION_CHOOSE_ON_MAP -> {
+            ACTION_CHOOSE_ON_MAP -> {
                 // TODO: 01/12/2017
                 // Choose location on the map and do more...
-                Log.i("tag11", "2222222222")
             }
 
-            AppConstants.ACTION_SEND_WAY_LOCATION -> {
-                val location = intent.extras.getParcelable<WayLocation>(AppConstants.KEY_LOCATION)
+            ACTION_SEND_WAY_LOCATION -> {
+                val location = intent.extras.getParcelable<WayLocation>(KEY_LOCATION)
                 // TODO: 01/12/2017
                 // Do more...
-                Log.i("tag11", location.formatAddress)
             }
 
             else -> {
