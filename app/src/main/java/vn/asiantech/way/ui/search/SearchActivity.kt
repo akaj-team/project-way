@@ -111,7 +111,6 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-
     /**
      * Load search history from shared references.
      */
