@@ -268,7 +268,6 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
-        val gson = Gson()
         val result = SingleSubject.create<Boolean>()
         val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
         val userRequest = firebaseDatabase.getReference("user/$userId/request")
