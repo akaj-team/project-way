@@ -1,6 +1,7 @@
 package vn.asiantech.way.data.source.remote
 
 import android.location.Location
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.FirebaseDatabase
 import com.hypertrack.lib.HyperTrack
@@ -17,6 +18,7 @@ import vn.asiantech.way.data.source.datasource.WayDataSource
 import vn.asiantech.way.data.source.remote.googleapi.ApiClient
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
+import kotlin.concurrent.thread
 
 /**
  * Copyright © 2017 AsianTech inc.
@@ -106,12 +108,14 @@ internal class WayRemoteDataSource : WayDataSource {
                     result.onError(it)
                 }
                 .addOnSuccessListener {
-                    HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
-                            .subscribe({
-                                result.onNext(it)
-                            }, {
-                                result.onError(it)
-                            })
+                    thread {
+                        HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
+                                .subscribe({
+                                    result.onNext(it)
+                                }, {
+                                    result.onError(it)
+                                })
+                    }
                 }
         return result
     }
@@ -124,10 +128,12 @@ internal class WayRemoteDataSource : WayDataSource {
                     result.onError(it)
                 }
                 .addOnSuccessListener {
-                    HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
-                            .subscribe {
-                                result.onNext(it)
-                            }
+                    thread {
+                        HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
+                                .subscribe {
+                                    result.onNext(it)
+                                }
+                    }
                 }
         return result
     }

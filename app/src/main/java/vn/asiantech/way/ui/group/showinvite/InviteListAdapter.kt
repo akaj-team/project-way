@@ -1,8 +1,8 @@
 package vn.asiantech.way.ui.group.showinvite
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.Gravity
@@ -19,8 +19,10 @@ import vn.asiantech.way.data.model.Invite
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 05/12/2017.
  */
-class InviteListAdapter(private val context: Context, private val invites: MutableList<Invite>, val listener: OnItemClick)
+class InviteListAdapter(private val context: Context, private val invites: MutableList<Invite>)
     : RecyclerView.Adapter<InviteListAdapter.InviteViewHolder>() {
+    internal var onOkClick: (Invite) -> Unit = {}
+    internal var onCancelClick: (Invite) -> Unit = {}
 
     override fun onBindViewHolder(holder: InviteViewHolder?, position: Int) {
         holder?.onBind()
@@ -42,13 +44,13 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
 
         init {
             tvOk.onClick {
-                listener.onOkClick(invites[adapterPosition])
+                onOkClick(invites[adapterPosition])
                 invites.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
             }
 
             tvCancel.onClick {
-                listener.onCancelClick(invites[adapterPosition])
+                onCancelClick(invites[adapterPosition])
                 invites.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
             }
@@ -71,7 +73,7 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
             val itemView = ui.apply {
                 relativeLayout {
                     lparams(matchParent, dimen(R.dimen.group_screen_adapter_item_width))
-                    backgroundColor = Color.WHITE
+                    backgroundResource = R.color.colorWhite
 
                     textView {
                         id = R.id.group_show_invite_adapter_tv_name_group
@@ -99,7 +101,7 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
 
                     view {
                         backgroundResource = R.color.grayLight
-                    }.lparams(matchParent, dimen(R.dimen.invite_list_adapter_view_height)) {
+                    }.lparams(matchParent, dip(1)) {
                         below(R.id.group_show_invite_adapter_tv_ok)
                         topMargin = dimen(R.dimen.invite_list_adapter_padding)
                     }
@@ -110,7 +112,7 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
 
                     when (it) {
                         is TextView -> with(it) {
-                            textColor = Color.BLACK
+                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
                             gravity = Gravity.CENTER
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
@@ -123,21 +125,5 @@ class InviteListAdapter(private val context: Context, private val invites: Mutab
             itemView.tag = InviteViewHolder(itemView)
             return itemView
         }
-    }
-
-    /**
-     * This interface used to handle item of InviteViewHolder click.
-     */
-    interface OnItemClick {
-
-        /**
-         * This method used to handle button ok on click.
-         */
-        fun onOkClick(invite: Invite)
-
-        /**
-         * This method used to handle button cancel on click.
-         */
-        fun onCancelClick(invite: Invite)
     }
 }

@@ -65,7 +65,7 @@ class GroupRemoteDataSource : GroupDataSource {
         val inviteRef = firebaseDatabase.getReference("user/$userId/invites")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
-                val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
+                val invite = Gson().fromJson(Gson().toJson(p0?.value), Invite::class.java)
                 if (invite != null) {
                     result.onNext(invite)
                 }
@@ -225,7 +225,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
         inviteRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
