@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.splash.SplashActivity">
+        <activity android:name=".ui.search.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -75,16 +75,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.share.ShareLocationActivity"
+            android:name=".ui.share.ShareActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
-        <activity android:name=".ui.arrived.ArrivedActivity" />
-
-        <activity android:name=".ui.update.UpdateMap" />
-        <activity android:name=".ui.group.GroupActivity" />
-        <activity android:name=".ui.search.SearchLocationActivity" />
 
         <!-- Register meta-data here -->
         <!--
@@ -101,8 +96,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity android:name=".ui.map.MapActivity" />
 
     </application>
 
