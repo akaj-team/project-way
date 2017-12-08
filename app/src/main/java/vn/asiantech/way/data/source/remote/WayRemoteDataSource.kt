@@ -2,6 +2,7 @@ package vn.asiantech.way.data.source.remote
 
 import android.location.Location
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.database.FirebaseDatabase
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.internal.common.models.VehicleType
@@ -9,6 +10,7 @@ import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.AsyncSubject
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.datasource.WayDataSource
@@ -97,11 +99,35 @@ internal class WayRemoteDataSource : WayDataSource {
     }
 
     override fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        return HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
+        val result = PublishSubject.create<User>()
+        val userGroupRef = FirebaseDatabase.getInstance().getReference("user/$userId/groupId")
+        userGroupRef.setValue(userId)
+                .addOnFailureListener {
+                    result.onError(it)
+                }
+                .addOnSuccessListener {
+                    HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
+                            .subscribe {
+                                result.onNext(it)
+                            }
+                }
+        return result
     }
 
     override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        return HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
+        val result = PublishSubject.create<User>()
+        val userGroupRef = FirebaseDatabase.getInstance().getReference("user/$userId/groupId")
+        userGroupRef.setValue(userId)
+                .addOnFailureListener {
+                    result.onError(it)
+                }
+                .addOnSuccessListener {
+                    HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
+                            .subscribe {
+                                result.onNext(it)
+                            }
+                }
+        return result
     }
 
     override fun getCurrentLocation(): Observable<HyperTrackLocation> {

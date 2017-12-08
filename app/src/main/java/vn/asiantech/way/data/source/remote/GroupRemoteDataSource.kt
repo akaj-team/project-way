@@ -202,7 +202,7 @@ class GroupRemoteDataSource : GroupDataSource {
                                 }
                             }
                             .addOnFailureListener {
-                                result.onError(Throwable(it))
+                                result.onError(it)
                             }
                 }
             }
@@ -251,6 +251,31 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
         TODO("Init later")
+    }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        HypertrackApi.instance.createGroup(groupName)
+                .subscribe({
+                    val group = it
+                    group.ownerId = ownerId
+                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(it.id))
+                            .subscribe({
+                                val groupInfoRef = firebaseDatabase.getReference("group/${group.id}/info")
+                                groupInfoRef.setValue(group)
+                                        .addOnSuccessListener {
+                                            result.onSuccess(true)
+                                        }
+                                        .addOnFailureListener {
+                                            result.onError(it)
+                                        }
+                            }, {
+                                result.onError(it)
+                            })
+                }, {
+                    result.onError(it)
+                })
+        return result
     }
 
     /**

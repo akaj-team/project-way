@@ -9,9 +9,10 @@
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
-
-    <!--View ids for GroupActivity-->
-    <item name="group_activity_fr" type="id" />
+    <item name="group_id_img_avatar" type="id" />
+    <item name="group_id_tv_name" type="id" />
+    <item name="group_id_image_button_accept" type="id" />
+    <item name="group_id_image_button_cancel" type="id" />
 
     <!--View ids for SearchGroupActivity-->
     <item name="group_search_adapter_view_break_line" type="id" />
