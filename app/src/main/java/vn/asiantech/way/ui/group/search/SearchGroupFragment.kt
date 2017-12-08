@@ -68,7 +68,6 @@ class SearchGroupFragment : BaseFragment() {
     override fun onBindViewModel() {
         addDisposables(searchGroupViewModel
                 .getCurrentRequest(user.id)
-                .observeOnUiThread()
                 .subscribe(
                         this::handleGetCurrentRequestSuccess,
                         this::handleGetCurrentRequestError
@@ -96,7 +95,6 @@ class SearchGroupFragment : BaseFragment() {
                 .subscribe({
                     searchGroupViewModel
                             .searchGroup(it)
-                            .observeOnUiThread()
                             .subscribe(
                                     this::updateRecyclerViewGroup,
                                     this::handleSearchGroupError

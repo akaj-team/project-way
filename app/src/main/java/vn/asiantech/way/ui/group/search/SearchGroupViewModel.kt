@@ -23,10 +23,12 @@ class SearchGroupViewModel {
     internal fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
         return groupRepository
                 .postRequestToGroup(groupId, request)
+                .observeOnUiThread()
     }
 
     internal fun getCurrentRequest(userId: String): Observable<Invite> {
         return groupRepository
                 .getCurrentRequestOfUser(userId)
+                .observeOnUiThread()
     }
 }
