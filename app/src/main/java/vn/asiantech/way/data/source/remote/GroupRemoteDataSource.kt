@@ -20,7 +20,6 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
-    private val wayRemoteDataSource = WayRemoteDataSource()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -34,7 +33,7 @@ class GroupRemoteDataSource : GroupDataSource {
                 if (p0?.value == null) {
                     result.onError(Throwable())
                 } else {
-                    result.onNext(Gson().fromJson(p0.value.toString(), Group::class.java))
+                    result.onNext(Gson().fromJson(Gson().toJson(p0.value), Group::class.java))
                 }
             }
         })
@@ -135,12 +134,8 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        val result = SingleSubject.create<Boolean>()
-        HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
-                .doOnSuccess { result.onSuccess(true) }
-                .doOnError { result.onError(it) }
-        return result
+    override fun removeUserFromGroup(userId: String): Single<User> {
+        return HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
     }
 
     override fun searchGroup(groupName: String): Observable<List<Group>> {
@@ -263,6 +258,10 @@ class GroupRemoteDataSource : GroupDataSource {
                                 postGroupInfo(group)
                             }
                 }
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
     }
 
     /**
