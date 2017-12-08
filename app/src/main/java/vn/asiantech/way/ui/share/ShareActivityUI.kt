@@ -4,11 +4,17 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
+import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.bottomCard
 import vn.asiantech.way.extension.rippleView
+import vn.asiantech.way.ui.custom.BottomButtonCard
+import vn.asiantech.way.ui.custom.TrackingProgressInfo
+import vn.asiantech.way.ui.custom.bottomCard
+import vn.asiantech.way.ui.custom.trackingProgressInfo
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -23,12 +29,17 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
         const val MARGIN_VALUE_VERY_LARGE = 50
     }
 
+    internal lateinit var trackingInfo: TrackingProgressInfo
+    internal lateinit var bottomCard: BottomButtonCard
+    internal lateinit var rlSearchLocation: RelativeLayout
     internal lateinit var frMapView: FrameLayout
+    internal lateinit var btnBack: RippleView
     internal lateinit var tvTitle: TextView
     internal lateinit var tvLocation: TextView
     internal lateinit var imgEdit: ImageView
     internal lateinit var imgCurrentLocation: ImageView
     internal lateinit var imgChooseMarker: ImageView
+    internal lateinit var imgPickLocation: ImageView
 
     override fun createView(ui: AnkoContext<ShareActivity>) = with(ui) {
         relativeLayout {
@@ -40,7 +51,12 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         id = R.id.share_activity_map
                     }.lparams(matchParent, matchParent)
 
-                    rippleView {
+                    btnBack = rippleView {
+
+                        onClick {
+                            owner.eventButtonBackClicked()
+                        }
+
                         id = R.id.share_activity_btn_back
                         imageView(R.drawable.ic_back_icon_button) {
                         }.lparams(wrapContent, wrapContent)
@@ -48,8 +64,12 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         margin = dimen(R.dimen.margin_base)
                     }
 
-                    relativeLayout {
+                    rlSearchLocation = relativeLayout {
                         backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+
+                        onClick {
+                            owner.eventRlSearchLocationClicked()
+                        }
 
                         tvTitle = textView(R.string.going_somewhere) {
                             id = R.id.share_activity_tv_title
@@ -99,14 +119,19 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                     backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
                 }
 
-                imgChooseMarker = imageView(R.drawable.select_expected_place) {
+                imgPickLocation = imageView(R.drawable.select_expected_place) {
                 }.lparams(wrapContent, wrapContent) {
                     centerInParent()
                     bottomMargin = dip(MARGIN_VALUE_SMALL)
                 }
             }
 
-            bottomCard {}
+            bottomCard = bottomCard {
+                visibility = View.GONE
+            }
+
+            trackingInfo = trackingProgressInfo {
+            }
         }
     }
 }

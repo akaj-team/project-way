@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
+import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -12,6 +13,7 @@ import com.hypertrack.lib.internal.common.util.HTTextUtils
 import com.hypertrack.lib.internal.consumer.utils.AnimationUtils
 import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.rippleView
@@ -36,9 +38,9 @@ class BottomButtonCard(context: Context) :
 
     var actionType: ActionType
 
-    val onCloseButtonClick: () -> Unit = {}
-    val onActionButtonClick: () -> Unit = {}
-    val onCopyButtonClick: () -> Unit = {}
+    var onBottomCardListener: OnBottomCardListener? = null
+
+    var onCopyButtonClick: () -> Unit = {}
 
     // TODO: Will use in future
 //    val isActionTypeConfirmLocation: Boolean
@@ -66,13 +68,14 @@ class BottomButtonCard(context: Context) :
                     alignParentBottom()
                 }
                 btnClose = rippleView {
+                    visibility = View.GONE
                     id = R.id.bottom_button_card_btn_close
                     bottomPadding = dimen(R.dimen.padding_medium)
                     leftPadding = dimen(R.dimen.padding_medium)
                     rightPadding = dimen(R.dimen.padding_medium)
 
                     setOnRippleCompleteListener {
-                        onCloseButtonClick
+                        onBottomCardListener?.onCloseButtonClick()
                     }
 
                     imageView {
@@ -83,7 +86,7 @@ class BottomButtonCard(context: Context) :
                     alignParentRight()
                 }
 
-                tvTitle = textView(R.string.bottom_button_card_title_text) {
+                tvTitle = textView(R.string.share_textview_text_look_good) {
                     id = R.id.bottom_button_card_tv_title
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
@@ -110,7 +113,7 @@ class BottomButtonCard(context: Context) :
                     backgroundResource = R.drawable.custom_bg_button_share
 
                     setOnRippleCompleteListener {
-                        onActionButtonClick
+                        onBottomCardListener?.onActionButtonClick()
                     }
 
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
@@ -155,7 +158,6 @@ class BottomButtonCard(context: Context) :
                             onCopyButtonClick
                             tvCopyLink.isEnabled = false
                             tvCopyLink.text = context.getString(R.string.share_textview_text_copied)
-
                         }
 
                     }.lparams(wrapContent, wrapContent) {
@@ -228,12 +230,12 @@ class BottomButtonCard(context: Context) :
     internal fun showBottomCardLayout() {
         hideProgress()
         btnSharing.visibility = View.VISIBLE
-        AnimationUtils.expand(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
+        AnimationUtils.expand(this, 100000)
     }
 
     internal fun hideBottomCardLayout() {
         hideProgress()
-        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlBottomCard)
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
 //    fun showTrackingProgress() {
@@ -295,4 +297,30 @@ class BottomButtonCard(context: Context) :
         tvTitle.visibility = View.VISIBLE
         return this
     }
+
+    /**
+     * Interface create fun onClickListener for BottomButtonCard
+     */
+    interface OnBottomCardListener {
+        /**
+         * Button close click listener
+         */
+        fun onCloseButtonClick()
+
+        /**
+         * Button share click listener
+         */
+        fun onActionButtonClick()
+
+        /**
+         * Button copy link click listener
+         */
+        fun onCopyButtonClick()
+    }
+}
+
+internal fun ViewManager.bottomCard() = bottomCard {}
+
+internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {
+    return ankoView({ BottomButtonCard(it) }, 0, init)
 }

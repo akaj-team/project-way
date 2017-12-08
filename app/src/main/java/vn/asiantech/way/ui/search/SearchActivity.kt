@@ -146,8 +146,6 @@ class SearchActivity : BaseActivity() {
         searchViewModel.saveSearchHistories(location)
         val bundle = Bundle()
         bundle.putParcelable(AppConstants.KEY_LOCATION, location)
-        bundle.putString(AppConstants.KEY_CONFIRM,
-                AppConstants.KEY_SHARING)
         startShareActivityIntent.action = AppConstants.ACTION_SEND_WAY_LOCATION
         startShareActivityIntent.putExtras(bundle)
         startActivity(startShareActivityIntent)

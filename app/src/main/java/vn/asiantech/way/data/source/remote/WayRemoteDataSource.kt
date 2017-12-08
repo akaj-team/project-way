@@ -83,8 +83,8 @@ internal class WayRemoteDataSource : WayDataSource {
         return ApiClient.instance.searchLocations(input, key, language, sensor).toObservable()
     }
 
-    override fun getLocationDistance(units: String, origins: String, destinations: String): Observable<ResultDistance> {
-        return ApiClient.instance.getLocationDistance(units, origins, destinations).toObservable()
+    override fun getLocationDistance(origins: String, destinations: String): Observable<ResultDistance> {
+        return ApiClient.instance.getLocationDistance(origins, destinations).toObservable()
     }
 
     override fun getListLocation(url: String): Observable<ResultRoad> {
