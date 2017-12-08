@@ -30,6 +30,6 @@ class CreateGroupViewModel {
     }
 
     private fun postGroupInfo(group: Group): Observable<Boolean> {
-        return groupRepository.postGroupInfo(group)
+        return groupRepository.postGroupInfo(group).toObservable()
     }
 }

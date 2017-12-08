@@ -16,6 +16,7 @@ import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
+import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  * Anko layout for RegisterActivity
@@ -23,7 +24,7 @@ import vn.asiantech.way.extension.hideKeyboard
  */
 class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
 
-    internal lateinit var dialogInterface: DialogInterface
+    private lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
     internal lateinit var progressBarAvatar: ProgressBar
     internal lateinit var imgAvatar: ImageView
@@ -65,7 +66,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 }
 
                 onClick {
-                    owner.checkPermissionGallery()
+                    owner.eventOnViewClicked(frAvatar)
                 }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
@@ -179,16 +180,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 isEnabled = false
 
                 onClick {
-                    val user = owner.registerViewModel
-                            .generateUserInformation(edtName.text.toString().trim(),
-                                    edtPhone.text.toString().trim(),
-                                    owner.isoCode,
-                                    owner.avatarBitmap)
-                    if (owner.registerViewModel.isRegister) {
-                        owner.createUser(user)
-                    } else {
-                        owner.onUpdateUserInformation(user)
-                    }
+                    owner.eventOnViewClicked(btnRegister)
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
@@ -204,7 +196,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 gravity = Gravity.CENTER
 
                 onClick {
-                    owner.onSkipClick()
+                    owner.eventOnViewClicked(tvSkip)
                 }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
@@ -218,14 +210,11 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
         }.applyRecursively { view: View ->
             if (view is EditText) {
-                when (view.id) {
-                    R.id.register_activity_edt_name,
-                    R.id.register_activity_edt_phone ->
-                        view.addTextChangedListener(object : OnWayTextChangeListener {
-                            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                                owner.onHandleTextChange()
-                            }
-                        })
+                when (view) {
+                    edtName, edtPhone -> view.onTextChangeListener {
+                        owner.onHandleTextChange(edtName.text.toString().trim(),
+                                edtPhone.text.toString().trim())
+                    }
                 }
             }
         }

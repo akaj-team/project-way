@@ -9,7 +9,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
-import vn.asiantech.way.extension.afterTextChanged
+import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  *  Copyright © 2017 AsianTech inc.
@@ -41,11 +41,11 @@ class SearchGroupFragmentUI(private val SearchGroupAdapter: GroupListAdapter) : 
                     textSize = px2dip(dimen(R.dimen.search_screen_text_size))
                     hint = resources.getString(R.string.enter_group_name)
 
-                    afterTextChanged {
+                    onTextChangeListener({}, {
                         if (it.toString().trim().isNotEmpty()) {
                             owner.eventOnTextChangedSearchGroup(it.toString().trim())
                         }
-                    }
+                    }, {})
 
                 }.lparams(matchParent, matchParent) {
                     leftMargin = dimen(R.dimen.search_group_padding)
