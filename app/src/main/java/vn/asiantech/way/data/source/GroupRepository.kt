@@ -16,8 +16,8 @@ class GroupRepository : GroupDataSource {
 
     private val remoteDataSource = GroupRemoteDataSource()
 
-    override fun getGroupId(userId: String): Observable<String> {
-        return remoteDataSource.getGroupId(userId)
+    override fun listenerForGroupChange(userId: String): Observable<String> {
+        return remoteDataSource.listenerForGroupChange(userId)
     }
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
@@ -32,7 +32,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun postGroupInfo(group: Group): Observable<Boolean> {
+    override fun postGroupInfo(group: Group): Single<Boolean> {
         return remoteDataSource.postGroupInfo(group)
     }
 
@@ -48,7 +48,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.postInvite(userId, invite)
     }
 
-    override fun removeUserFromGroup(userId: String): Single<Boolean> {
+    override fun removeUserFromGroup(userId: String): Single<User> {
         return remoteDataSource.removeUserFromGroup(userId)
     }
 
@@ -60,15 +60,35 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getCurrentRequestOfUser(userId)
     }
 
-    override fun postRequestToGroup(groupId: String, request: Invite) {
-        remoteDataSource.postRequestToGroup(groupId, request)
+    override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(groupId, request)
     }
 
-    override fun postRequestToUser(userId: String, request: Invite) {
-        remoteDataSource.postRequestToGroup(userId, request)
+    override fun postRequestToUser(userId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(userId, request)
     }
 
     override fun searchUser(name: String): Observable<List<User>> {
         return remoteDataSource.searchUser(name)
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.deleteGroupRequest(groupId, request)
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.deleteUserInvite(userId, invite)
+    }
+
+    override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        return remoteDataSource.createGroup(groupName, ownerId)
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return remoteDataSource.getMemberList(groupId)
     }
 }

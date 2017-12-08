@@ -9,6 +9,10 @@
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
+    <item name="group_id_img_avatar" type="id" />
+    <item name="group_id_tv_name" type="id" />
+    <item name="group_id_image_button_accept" type="id" />
+    <item name="group_id_image_button_cancel" type="id" />
 
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
@@ -30,13 +34,15 @@
     <item name="share_activity_tv_title" type="id" />
 
     <!-- View ids for RegisterActivityUI -->
-    <item name="share_activity_fr_avatar" type="id" />
-    <item name="share_activity_tv_description" type="id" />
-    <item name="share_activity_rl_information" type="id" />
-    <item name="share_activity_btn_save" type="id" />
-    <item name="share_activity_tv_skip" type="id" />
-    <item name="share_activity_edt_name" type="id" />
-    <item name="share_activity_view_line" type="id" />
+    <item name="register_activity_fr_avatar" type="id" />
+    <item name="register_activity_tv_description" type="id" />
+    <item name="register_activity_rl_information" type="id" />
+    <item name="register_activity_btn_save" type="id" />
+    <item name="register_activity_tv_skip" type="id" />
+    <item name="register_activity_edt_name" type="id" />
+    <item name="register_activity_view_line" type="id" />
+    <item name="register_activity_tv_tel" type="id" />
+    <item name="register_activity_edt_phone" type="id" />
 
     <!-- View ids for BottomButtonCard -->
     <item name="bottom_button_card_rl_bottom_card" type="id" />
