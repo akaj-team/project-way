@@ -2,7 +2,7 @@ package vn.asiantech.way.ui.group.create
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.text.InputFilter
 import android.view.Gravity
 import android.view.ViewManager
@@ -46,27 +46,24 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
                     }
                     .onClick {
-                        owner.eventViewOnclick(it!!)
+                        owner.eventOnViewClicked(it!!)
                     }
             buttonCreateGroup(R.id.create_group_fragment_ui_btn_back, R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
                     }
                     .onClick {
-                        owner.eventViewOnclick(it!!)
+                        owner.eventOnViewClicked(it!!)
                     }
         }
     }
 
     private fun ViewManager.buttonCreateGroup(viewId: Int, strResource: Int, color: Int) = button {
         id = viewId
-        backgroundColor = ActivityCompat.getColor(context, color)
+        backgroundColor = ContextCompat.getColor(context, color)
         text = resources.getString(strResource)
         setAllCaps(false)
         textColor = Color.WHITE
         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
-        onClick {
-
-        }
     }
 }

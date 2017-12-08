@@ -1,6 +1,6 @@
 package vn.asiantech.way.ui.group.create
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import vn.asiantech.way.data.source.GroupRepository
 
 /**
@@ -11,7 +11,7 @@ import vn.asiantech.way.data.source.GroupRepository
 class CreateGroupViewModel {
     private val groupRepository = GroupRepository()
 
-    internal fun createGroup(name: String, userId: String): Observable<Boolean> {
-        return groupRepository.createGroup(name, userId).toObservable()
+    internal fun createGroup(name: String, userId: String): Single<Boolean> {
+        return groupRepository.createGroup(name, userId)
     }
 }
