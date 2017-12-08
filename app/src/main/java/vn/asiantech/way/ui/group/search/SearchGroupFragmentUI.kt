@@ -31,7 +31,7 @@ class SearchGroupFragmentUI(private val SearchGroupAdapter: GroupListAdapter) : 
                     backgroundColor = Color.TRANSPARENT
                     backgroundResource = R.drawable.ic_back_icon_button
                     onClick {
-                        owner.onBackClick()
+                        owner.eventOnBackClick()
                     }
                 }
 
