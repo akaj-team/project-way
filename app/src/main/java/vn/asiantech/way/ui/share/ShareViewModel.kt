@@ -31,12 +31,20 @@ class ShareViewModel(val context: Context) {
     var batteryCapacity = BehaviorSubject.create<Int>()
     val result: BehaviorSubject<HyperTrackLocation> = BehaviorSubject.create<HyperTrackLocation>()
     private val resultDistancePerSecond = BehaviorSubject.create<List<Float>>()
+    private val resultTimeDuring = BehaviorSubject.create<String>()
     private val wayRepository = WayRepository()
     private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             val level = p1?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
             level?.let { batteryCapacity.onNext(it) }
         }
+    }
+
+    companion object {
+        private val ONE_MINUTE_VALUE = 60
+        private val ONE_HOUR_VALUE = 3600
+        private val HOUR_VALUE = 3599
+        private val NUMBER_FOUR = 4.0
     }
 
     init {
@@ -135,14 +143,14 @@ class ShareViewModel(val context: Context) {
     }
 
     internal fun getTimeDuringStatus(time: Long): Observable<String> {
-        val result = BehaviorSubject.create<String>()
         val stringTime: String = when {
-            time in 60..3599 -> (time / 60).toString().plus("min")
-            time < 60 -> time.toString().plus("second")
-            else -> (time / 3600).toString().plus("hour")
+            time in ShareViewModel.ONE_MINUTE_VALUE..ShareViewModel.HOUR_VALUE -> (time / ShareViewModel
+                    .ONE_MINUTE_VALUE).toString().plus("min")
+            time < ShareViewModel.ONE_MINUTE_VALUE -> time.toString().plus("second")
+            else -> (time / ShareViewModel.ONE_HOUR_VALUE).toString().plus("hour")
         }
-        result.onNext(stringTime)
-        return result
+        resultTimeDuring.onNext(stringTime)
+        return resultTimeDuring
     }
 
     private fun radians(n: Double) = n * (Math.PI / (AppConstants.RADIUS / 2))
@@ -155,7 +163,8 @@ class ShareViewModel(val context: Context) {
         val endLat = radians(endLatLong.latitude)
         val endLong = radians(endLatLong.longitude)
         var deltaLong = endLong - startLong
-        val deltaPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / 4.0) / Math.tan(startLat / 2.0 + Math.PI / 4.0))
+        val deltaPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / ShareViewModel.NUMBER_FOUR) / Math.tan
+        (startLat / 2.0 + Math.PI / ShareViewModel.NUMBER_FOUR))
         if (Math.abs(deltaLong) > Math.PI) {
             deltaLong = if (deltaLong > 0.0) {
                 -(2.0 * Math.PI - deltaLong)

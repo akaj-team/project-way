@@ -22,6 +22,7 @@ object AppConstants {
     const val ACTION_CURRENT_LOCATION = "action_current_location"
     const val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
+    const val BACK_PRESS_DELAY = 1500L
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
     const val TYPE_DIALOG_MARGIN_WIDTH = 80
     const val RADIUS = 360.0
@@ -31,4 +32,5 @@ object AppConstants {
     const val PROGRESS_BAR_MAX = 100
     const val MIN_SPEED = 0.2
     const val MAX_SPEED = 15.5
+    const val NUM_CHAR_REMOVE = 3
 }

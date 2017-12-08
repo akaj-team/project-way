@@ -21,5 +21,6 @@
     <issue id="StringFormatInvalid" severity="ignore"/>
     <issue id="UnusedResources" severity="ignore"/>
     <issue id="RelativeOverlap" severity="ignore"/>
-    <issue id="ParcelCreator” severity=“ignore"/>
+    <issue id="ParcelCreator" severity="ignore"/>
+    <issue id="CheckResult" severity="ignore"/>
 </lint>

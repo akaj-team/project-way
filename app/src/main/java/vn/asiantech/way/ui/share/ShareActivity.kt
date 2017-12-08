@@ -117,12 +117,15 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         supportMapFragment = SupportMapFragment()
         mLocationUpdates = ArrayList()
         mLocations = mutableListOf()
+        if (intent.extras != null) {
+            mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
+        }
+        mAction = intent.action
         initializeUIViews()
         initMap()
         configMap()
         initLocationRequest()
         initGoogleApiClient()
-        mAction = intent.action
         initBottomButtonCard(true, mAction)
         setEnableRlSearchLocation()
     }
@@ -358,7 +361,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                 shareViewModel.getCalendarDateTime()
                         .observeOnUiThread()
                         .subscribe(handleEndTime),
-                shareViewModel.getTimeDuringStatus(mCountTimer / 1000)
+                shareViewModel.getTimeDuringStatus(mCountTimer / AppConstants.TIME_ZOOM_CAMERA)
                         .observeOnUiThread()
                         .subscribe(handleStartTime))
         ui.trackingInfo.tvDistance.text = mEtaDistance

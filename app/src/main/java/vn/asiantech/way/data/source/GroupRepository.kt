@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import vn.asiantech.way.data.model.Group
@@ -15,8 +16,8 @@ class GroupRepository : GroupDataSource {
 
     private val remoteDataSource = GroupRemoteDataSource()
 
-    override fun getGroupId(userId: String): Observable<String> {
-        return remoteDataSource.getGroupId(userId)
+    override fun listenerForGroupChange(userId: String): Observable<String> {
+        return remoteDataSource.listenerForGroupChange(userId)
     }
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
@@ -27,27 +28,67 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getInvite(userId)
     }
 
-    override fun getRequest(groupId: String): Observable<Invite> {
-        TODO("not implemented")
+    override fun getGroupRequest(groupId: String): Observable<Invite> {
+        return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun upGroupInfo(group: Group): Observable<Boolean> {
-        TODO("not implemented")
+    override fun postGroupInfo(group: Group): Single<Boolean> {
+        return remoteDataSource.postGroupInfo(group)
     }
 
-    override fun changeOwner(groupId: String, newOwner: String): Observable<Boolean> {
-        TODO("not implemented")
+    override fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean> {
+        return remoteDataSource.changeGroupOwner(groupId, newOwner)
     }
 
     override fun removeGroup(groupId: String): Observable<Boolean> {
-        TODO("not implemented")
+        return remoteDataSource.removeGroup(groupId)
     }
 
-    override fun upInvite(userId: String, invite: Invite): Single<Boolean> {
-        TODO("not implemented")
+    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.postInvite(userId, invite)
     }
 
-    override fun removeUserFromGroup(userId: String): Single<Boolean> {
-        TODO("not implemented")
+    override fun removeUserFromGroup(userId: String): Single<User> {
+        return remoteDataSource.removeUserFromGroup(userId)
+    }
+
+    override fun searchGroup(groupName: String): Observable<List<Group>> {
+        return remoteDataSource.searchGroup(groupName)
+    }
+
+    override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
+        return remoteDataSource.getCurrentRequestOfUser(userId)
+    }
+
+    override fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(groupId, request)
+    }
+
+    override fun postRequestToUser(userId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.postRequestToGroup(userId, request)
+    }
+
+    override fun searchUser(name: String): Observable<List<User>> {
+        return remoteDataSource.searchUser(name)
+    }
+
+    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+        return remoteDataSource.deleteGroupRequest(groupId, request)
+    }
+
+    override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.deleteUserInvite(userId, invite)
+    }
+
+    override fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
+        return remoteDataSource.createGroup(groupName, ownerId)
+    }
+
+    override fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return remoteDataSource.getMemberList(groupId)
     }
 }

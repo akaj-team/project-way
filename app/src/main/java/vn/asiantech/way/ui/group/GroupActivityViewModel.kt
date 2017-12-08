@@ -20,7 +20,7 @@ class GroupActivityViewModel {
     }
 
     internal fun getGroupId(userId: String): Observable<String> {
-        return groupDataSource.getGroupId(userId)
+        return groupDataSource.listenerForGroupChange(userId)
                 .observeOnUiThread()
     }
 
