@@ -277,7 +277,14 @@ class GroupRemoteDataSource : GroupDataSource {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 if (p0?.value == null) {
-                    if (!invite.request) {
+                    if (invite.request) {
+                        wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                                .subscribe({
+                                    result.onSuccess(true)
+                                }, {
+                                    result.onError(it)
+                                })
+                    } else {
                         userRequest.setValue(invite)
                         invite.request = true
                         val requestRef = firebaseDatabase.getReference("group/${invite.to}" +
@@ -296,10 +303,30 @@ class GroupRemoteDataSource : GroupDataSource {
                             .addOnSuccessListener {
                                 if (invite.request) {
                                     wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
-                                            .
-                                            .doOnError {
-
+                                            .subscribe({
+                                                result.onSuccess(true)
+                                            }, {
+                                                result.onError(it)
+                                            })
+                                } else {
+                                    invite.request = true
+                                    userRequest.setValue(invite)
+                                            .addOnSuccessListener {
+                                                val newGroupRef = firebaseDatabase
+                                                        .getReference("group/${invite.to}/request/$userId")
+                                                invite.to = userId
+                                                newGroupRef.setValue(invite)
+                                                        .addOnSuccessListener {
+                                                            result.onSuccess(true)
+                                                        }
+                                                        .addOnFailureListener {
+                                                            result.onError(it)
+                                                        }
                                             }
+                                            .addOnFailureListener {
+                                                result.onError(it)
+                                            }
+
                                 }
                             }
                             .addOnFailureListener {

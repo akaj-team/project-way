@@ -91,4 +91,8 @@ class GroupRepository : GroupDataSource {
     override fun getMemberList(groupId: String): Single<MutableList<User>> {
         return remoteDataSource.getMemberList(groupId)
     }
+
+    override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.acceptInvite(userId, invite)
+    }
 }
