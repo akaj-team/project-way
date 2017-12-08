@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.search
 
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
@@ -35,8 +36,8 @@ class SearchGroupFragmentUI(private val SearchGroupAdapter: GroupListAdapter) : 
                 }
 
                 editText {
-                    textColor = Color.BLACK
-                    backgroundColor = Color.WHITE
+                    textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                    backgroundResource = R.color.colorWhite
                     textSize = px2dip(dimen(R.dimen.search_screen_text_size))
                     hint = resources.getString(R.string.enter_group_name)
 

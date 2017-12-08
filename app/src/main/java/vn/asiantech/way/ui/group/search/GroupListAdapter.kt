@@ -1,8 +1,8 @@
 package vn.asiantech.way.ui.group.search
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.Gravity
@@ -72,15 +72,14 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
             val itemView = ui.apply {
                 relativeLayout {
                     lparams(matchParent, wrapContent)
-                    backgroundColor = Color.WHITE
+                    backgroundResource = R.color.colorWhite
 
                     view {
                         id = R.id.group_search_adapter_view_break_line
                         backgroundResource = R.color.colorSearchScreenBackground
                     }.lparams(matchParent, dip(1)) {
-                        bottomMargin = dip(2)
                         leftMargin = dimen(R.dimen.search_group_left_margin)
-                        topMargin = dip(2)
+                        verticalMargin = dip(2)
                     }
 
                     linearLayout {
@@ -97,15 +96,14 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
                             weight = 1f
                         }
 
-                        textView {
+                        textView(R.string.join) {
                             id = R.id.group_search_adapter_tv_join_group
-                            textColor = R.color.colorWhite
+                            textColor = ContextCompat.getColor(context, R.color.colorWhite)
                             padding = dimen(R.dimen.search_group_padding)
                             backgroundResource = R.color.colorPinkLight
                             textSize = px2dip(dimen(R.dimen.group_text_size_normal))
                             maxLines = 1
                             ellipsize = TextUtils.TruncateAt.END
-                            text = resources.getString(R.string.join)
                         }.lparams {
                             rightMargin = dimen(R.dimen.search_group_padding)
                         }

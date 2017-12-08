@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.toast
@@ -17,7 +17,6 @@ import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
-
 
 /**
  *  Copyright © 2017 AsianTech inc.
@@ -41,7 +40,7 @@ class SearchGroupFragment : BaseFragment() {
         }
     }
 
-    private var user: User? = null
+    private lateinit var user: User
     private var groups = mutableListOf<Group>()
     private var currentRequest: Invite = Invite("", "", "", false)
     private lateinit var adapter: GroupListAdapter
@@ -50,6 +49,7 @@ class SearchGroupFragment : BaseFragment() {
 
     private val searchGroupViewModel = SearchGroupViewModel()
     private val searchGroupObservable = PublishSubject.create<String>()
+    private val progressDialogObservable = BehaviorSubject.create<Boolean>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -61,18 +61,21 @@ class SearchGroupFragment : BaseFragment() {
         progressDialog.setCancelable(false)
         progressDialog.setMessage(getString(R.string.processing))
 
-        user = arguments.getSerializable(KEY_USER) as? User
+        user = arguments.getSerializable(KEY_USER) as User
         return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
         addDisposables(searchGroupViewModel
-                .getCurrentRequest(user?.id!!)
+                .getCurrentRequest(user.id)
                 .observeOnUiThread()
                 .subscribe(
                         this::handleGetCurrentRequestSuccess,
                         this::handleGetCurrentRequestError
-                )
+                ),
+                progressDialogObservable
+                        .observeOnUiThread()
+                        .subscribe(this::updateProgressDialog)
         )
     }
 
@@ -81,7 +84,7 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     internal fun onBackClick() {
-        //TODO : send broadcast to GroupActivity
+        //TODO : Send broadcast to GroupActivity
     }
 
     private fun handleGetCurrentRequestSuccess(invite: Invite) {
@@ -93,7 +96,7 @@ class SearchGroupFragment : BaseFragment() {
                 .subscribe({
                     searchGroupViewModel
                             .searchGroup(it)
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .observeOnUiThread()
                             .subscribe(
                                     this::updateRecyclerViewGroup,
                                     this::handleSearchGroupError
@@ -118,8 +121,8 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun eventOnJoinButtonClicked(group: Group) {
-        val invite = Invite(user?.id!!, group.id, group.name, true)
-        progressDialog.show()
+        val invite = Invite(user.id, group.id, group.name, true)
+        progressDialogObservable.onNext(false)
         addDisposables(
                 searchGroupViewModel
                         .postRequestToGroup(group.id, invite)
@@ -134,7 +137,7 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     private fun handlePostRequestToGroupSuccess(isSuccess: Boolean) {
-        progressDialog.dismiss()
+        progressDialogObservable.onNext(true)
         toast(getString(R.string.success))
         adapter.updateCurrentRequest(currentRequest)
         adapter.notifyDataSetChanged()
@@ -142,5 +145,13 @@ class SearchGroupFragment : BaseFragment() {
 
     private fun handlePostRequestToGroupError(error: Throwable) {
         toast(error.message.toString())
+    }
+
+    private fun updateProgressDialog(isShow: Boolean) {
+        if (isShow) {
+            progressDialog.dismiss()
+        } else {
+            progressDialog.show()
+        }
     }
 }
