@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.create
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -6,7 +6,6 @@ import android.support.v4.app.ActivityCompat
 import android.text.InputFilter
 import android.view.Gravity
 import android.view.ViewManager
-import android.widget.Button
 import android.widget.EditText
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -23,8 +22,6 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
     }
 
     internal lateinit var edtGroupName: EditText
-    internal lateinit var btnCreateGroup: Button
-    internal lateinit var btnBack: Button
 
     override fun createView(ui: AnkoContext<CreateGroupFragment>) = with(ui) {
         verticalLayout {
@@ -44,25 +41,32 @@ class CreateGroupFragmentUI : AnkoComponent<CreateGroupFragment> {
                 setTypeface(null, Typeface.ITALIC)
             }.lparams(matchParent, wrapContent)
 
-            btnCreateGroup = buttonCreateGroup(R.string.create_group, R.color.colorAccent)
+            buttonCreateGroup(R.id.create_group_fragment_ui_btn_create, R.string.create_group, R.color.colorAccent)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
                     }
-            btnCreateGroup.onClick {
-                owner.createGroup()
-            }
-            btnBack = buttonCreateGroup(R.string.back, android.R.color.darker_gray)
+                    .onClick {
+                        owner.eventViewOnclick(it!!)
+                    }
+            buttonCreateGroup(R.id.create_group_fragment_ui_btn_back, R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen(R.dimen.group_screen_group_name_padding)
+                    }
+                    .onClick {
+                        owner.eventViewOnclick(it!!)
                     }
         }
     }
 
-    private fun ViewManager.buttonCreateGroup(strResource: Int, color: Int) = button {
+    private fun ViewManager.buttonCreateGroup(viewId: Int, strResource: Int, color: Int) = button {
+        id = viewId
         backgroundColor = ActivityCompat.getColor(context, color)
         text = resources.getString(strResource)
         setAllCaps(false)
         textColor = Color.WHITE
         textSize = px2dip(dimen(R.dimen.group_text_size_normal))
+        onClick {
+
+        }
     }
 }
