@@ -39,7 +39,7 @@ class ViewInviteFragment : BaseFragment() {
     private lateinit var progressDialog: ProgressDialog
 
     private var invites = mutableListOf<Invite>()
-    private var viewInviteViewModel = ViewInviteViewModel()
+    private var viewModel = ViewInviteViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,22 +56,19 @@ class ViewInviteFragment : BaseFragment() {
             eventOnButtonCancelClick(it)
         }
         ui = ViewInviteFragmentUI(adapter)
-
-        progressDialog = ProgressDialog(context)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage(getString(R.string.processing))
+        initProgressDialog()
         return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
         addDisposables(
-                viewInviteViewModel
+                viewModel
                         .getInvitesOfUser(userId)
                         .subscribe(
                                 this::handleGetInviteSuccess,
                                 this::handleGetInviteError),
 
-                viewInviteViewModel
+                viewModel
                         .progressDialogObservable
                         .subscribe(this::updateProgressDialog)
         )
@@ -95,9 +92,8 @@ class ViewInviteFragment : BaseFragment() {
     }
 
     private fun eventOnButtonOkClick(invite: Invite) {
-        viewInviteViewModel.progressDialogObservable.onNext(false)
         addDisposables(
-                viewInviteViewModel
+                viewModel
                         .acceptInvite(userId, invite)
                         .subscribe(
                                 this::handleAcceptInviteSuccess,
@@ -107,8 +103,8 @@ class ViewInviteFragment : BaseFragment() {
     }
 
     private fun eventOnButtonCancelClick(invite: Invite) {
-        viewInviteViewModel.progressDialogObservable.onNext(false)
-        addDisposables(viewInviteViewModel
+        viewModel.progressDialogObservable.onNext(false)
+        addDisposables(viewModel
                 .removeInviteUserFromGroup(userId, invite)
                 .subscribe(
                         this::handleRemoveInviteSuccess,
@@ -120,6 +116,7 @@ class ViewInviteFragment : BaseFragment() {
     private fun handleAcceptInviteSuccess(isOwner: Boolean) {
         if (isOwner) {
             //TODO : send broadcast to Group Activity
+            toast("owner success")
         } else {
             toast(R.string.notify_success)
         }
@@ -135,5 +132,11 @@ class ViewInviteFragment : BaseFragment() {
 
     private fun handleRemoveInviteError(error: Throwable) {
         toast(error.message.toString())
+    }
+
+    private fun initProgressDialog() {
+        progressDialog = ProgressDialog(context)
+        progressDialog.setCancelable(false)
+        progressDialog.setMessage(getString(R.string.processing))
     }
 }

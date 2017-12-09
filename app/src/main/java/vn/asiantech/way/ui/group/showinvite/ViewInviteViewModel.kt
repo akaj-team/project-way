@@ -36,8 +36,10 @@ class ViewInviteViewModel {
         return groupRepository
                 .acceptInvite(userId, invite)
                 .observeOnUiThread()
-                .doOnSubscribe { isOwnerInviteObservable.onSuccess(invite.request) }
+                .doOnSuccess {
+                    isOwnerInviteObservable.onSuccess(invite.request)
+                    progressDialogObservable.onNext(true)
+                }
                 .flatMap { isOwnerInviteObservable }
-                .doOnSuccess { progressDialogObservable.onNext(true) }
     }
 }
