@@ -10,6 +10,7 @@ import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
