@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
+import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
@@ -15,9 +16,11 @@ import java.util.concurrent.TimeUnit
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupViewModel {
+class SearchGroupViewModel(private val userId: String) {
     private val searchGroupObservable = PublishSubject.create<String>()
     private val groupRepository = GroupRepository()
+    internal var currentRequest: Invite = Invite("", "", "", false)
+
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
 
     private fun searchGroup(query: String): Observable<List<Group>> {
@@ -30,21 +33,31 @@ class SearchGroupViewModel {
         searchGroupObservable.onNext(query)
     }
 
-    internal fun postRequestToGroup(groupId: String, request: Invite): Single<Boolean> {
-        progressDialogObservable.onNext(false)
+    internal fun postRequestToGroup(group: Group): Single<Boolean> {
+        val invite = Invite(userId, group.id, group.name, true)
         return groupRepository
-                .postRequestToGroup(groupId, request)
+                .postRequestToGroup(group.id, invite)
                 .observeOnUiThread()
-                .doOnSuccess { progressDialogObservable.onNext(true) }
+                .doOnSubscribe {
+                    progressDialogObservable.onNext(false)
+                }
+                .doOnSuccess {
+                    currentRequest = invite
+                    progressDialogObservable.onNext(true)
+                }
     }
 
-    internal fun getCurrentRequest(userId: String): Observable<Invite> {
+    internal fun triggerSearchGroup(): Observable<List<Group>> {
         return groupRepository
                 .getCurrentRequestOfUser(userId)
                 .observeOnUiThread()
+                .doOnNext { currentRequest = it }
+                .flatMap {
+                    searchGroupQuery()
+                }
     }
 
-    internal fun searchGroupQuery(): Observable<List<Group>> {
+    private fun searchGroupQuery(): Observable<List<Group>> {
         return searchGroupObservable
                 .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
