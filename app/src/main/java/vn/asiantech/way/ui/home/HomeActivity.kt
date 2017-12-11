@@ -42,7 +42,7 @@ class HomeActivity : BaseActivity() {
     private lateinit var ui: HomeActivityUI
     private lateinit var homeViewModel: HomeViewModel
 
-    private var locations: MutableList<TrackingInformation> = mutableListOf()
+    private var locations = mutableListOf<TrackingInformation>()
     private var position = -1
     private var googleMap: GoogleMap? = null
 

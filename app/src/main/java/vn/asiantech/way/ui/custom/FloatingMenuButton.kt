@@ -13,6 +13,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.setAnimation
 
 @SuppressLint("ViewConstructor")
 /**
@@ -37,7 +38,6 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
     private lateinit var frOverlay: FrameLayout
     private var isExpand = false
 
-
     init {
         AnkoContext.createDelegate(this).apply {
             relativeLayout {
@@ -59,23 +59,23 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     lparams(matchParent, matchParent)
                     rlSearch = itemFloatingButton(R.id.floating_btn_menu_img_btn_search,
                             R.drawable.custom_bg_item_search_button,
-                            R.drawable.ic_search, R.string.custom_floating_menu_search_title).lparams()
+                            R.drawable.ic_search, R.string.custom_floating_menu_search_title)
                     imgBtnSearch = rlSearch.find(R.id.floating_btn_menu_img_btn_search)
                     rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group,
                             R.drawable.custom_bg_item_group_button,
-                            R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title).lparams()
+                            R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title)
                     imgBtnGroup = rlGroup.find(R.id.floating_btn_menu_img_btn_group)
                     rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar,
                             R.drawable.custom_bg_item_calendar_button,
-                            R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title).lparams()
+                            R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title)
                     imgBtnCalendar = rlCalendar.find(R.id.floating_btn_menu_img_btn_calendar)
                     rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile,
                             R.drawable.custom_bg_item_profile_button,
-                            R.drawable.ic_profile, R.string.custom_floating_menu_profile_title).lparams()
+                            R.drawable.ic_profile, R.string.custom_floating_menu_profile_title)
                     imgBtnProfile = rlProfile.find(R.id.floating_btn_menu_img_btn_profile)
                     rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share,
                             R.drawable.custom_bg_item_share_button,
-                            R.drawable.ic_share, R.string.custom_floating_menu_share_title).lparams()
+                            R.drawable.ic_share, R.string.custom_floating_menu_share_title)
                     imgBtnShare = rlShare.find(R.id.floating_btn_menu_img_btn_share)
                     imgBtnMenu = imageButton {
                         id = R.id.floating_btn_menu
@@ -154,19 +154,9 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
             startAnimationFab(animInvisible)
             false
         }
-        animInvisible.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationRepeat(p0: Animation?) {
-                // No-op
-            }
-
-            override fun onAnimationEnd(p0: Animation?) {
-                visibilityAllChildView(View.INVISIBLE)
-            }
-
-            override fun onAnimationStart(p0: Animation?) {
-                // No-op
-            }
-        })
+        animInvisible.setAnimation {
+            visibilityAllChildView(View.INVISIBLE)
+        }
     }
 
     private fun startAnimationFab(animation: Animation) {
@@ -196,7 +186,6 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
     private fun setGoneOverLay() {
         frOverlay.visibility = View.GONE
     }
-
 
     /**
      * Interface menu click listener
