@@ -1,7 +1,7 @@
 package vn.asiantech.way.ui.group.showinvite
 
-import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,21 +33,16 @@ class ViewInviteFragment : BaseFragment() {
         }
     }
 
-    private lateinit var userId: String
     private lateinit var ui: ViewInviteFragmentUI
     private lateinit var adapter: InviteListAdapter
-    private lateinit var progressDialog: ProgressDialog
 
     private var invites = mutableListOf<Invite>()
-    private var viewModel = ViewInviteViewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        userId = arguments.getString(KEY_USER_ID)
-    }
+    private lateinit var viewModel: ViewInviteViewModel
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        val userId = arguments.getString(KEY_USER_ID)
+        viewModel = ViewInviteViewModel(userId)
         adapter = InviteListAdapter(context, invites)
         adapter.onOkClick = {
             eventOnButtonOkClick(it)
@@ -56,14 +51,13 @@ class ViewInviteFragment : BaseFragment() {
             eventOnButtonCancelClick(it)
         }
         ui = ViewInviteFragmentUI(adapter)
-        initProgressDialog()
         return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
         addDisposables(
                 viewModel
-                        .getInvitesOfUser(userId)
+                        .getInvitesOfUser()
                         .subscribe(
                                 this::handleGetInviteSuccess,
                                 this::handleGetInviteError),
@@ -85,16 +79,16 @@ class ViewInviteFragment : BaseFragment() {
 
     private fun updateProgressDialog(isShow: Boolean) {
         if (isShow) {
-            progressDialog.dismiss()
+            hideProgressDialog()
         } else {
-            progressDialog.show()
+            showProgressDialog()
         }
     }
 
     private fun eventOnButtonOkClick(invite: Invite) {
         addDisposables(
                 viewModel
-                        .acceptInvite(userId, invite)
+                        .acceptInvite(invite)
                         .subscribe(
                                 this::handleAcceptInviteSuccess,
                                 this::handleAcceptInviteError
@@ -103,9 +97,8 @@ class ViewInviteFragment : BaseFragment() {
     }
 
     private fun eventOnButtonCancelClick(invite: Invite) {
-        viewModel.progressDialogObservable.onNext(false)
         addDisposables(viewModel
-                .removeInviteUserFromGroup(userId, invite)
+                .removeInviteUserFromGroup(invite)
                 .subscribe(
                         this::handleRemoveInviteSuccess,
                         this::handleRemoveInviteError
@@ -114,11 +107,7 @@ class ViewInviteFragment : BaseFragment() {
     }
 
     private fun handleAcceptInviteSuccess(isOwner: Boolean) {
-        if (isOwner) {
-            //TODO : send broadcast to Group Activity
-        } else {
-            toast(R.string.notify_success)
-        }
+        toast(R.string.notify_success)
     }
 
     private fun handleAcceptInviteError(error: Throwable) {
@@ -131,11 +120,5 @@ class ViewInviteFragment : BaseFragment() {
 
     private fun handleRemoveInviteError(error: Throwable) {
         toast(error.message.toString())
-    }
-
-    private fun initProgressDialog() {
-        progressDialog = ProgressDialog(context)
-        progressDialog.setCancelable(false)
-        progressDialog.setMessage(getString(R.string.processing))
     }
 }

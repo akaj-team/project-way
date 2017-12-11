@@ -133,4 +133,6 @@
     <string name="arrived_dialog_total_time">14 min</string>
     <string name="arrived_dialog_total_distance">7 km</string>
     <string name="notify_success">success</string>
+    <string name="progress_dialog_message">Please wait a minute</string>
+    <string name="progress_dialog_title">processing...</string>
 </resources>
