@@ -181,5 +181,3 @@ class HomeAdapter(private val context: Context,
         return ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
     }
 }
-
-
