@@ -142,7 +142,8 @@ class GroupInfoFragment : BaseFragment() {
 
     private fun handleLeaveGroupCompleted(user: User) {
         if (user.groupId != groupId) {
-            toast(R.string.leave_group_notification)
+            toast(getString(R.string.leave_group_notification, group.name))
+            sendBroadCast(AppConstants.ACTION_RELOAD)
         } else {
             toast(R.string.error_message)
         }
@@ -150,8 +151,7 @@ class GroupInfoFragment : BaseFragment() {
 
     private fun handleChangeGroupOwnerCompleted(success: Boolean) {
         if (success) {
-            toast(getString(R.string.leave_group_notification, group.name))
-            sendBroadCast(AppConstants.ACTION_RELOAD)
+            toast(R.string.success)
         } else {
             toast(R.string.error_message)
         }
