@@ -28,7 +28,7 @@ class ViewInviteViewModel(private val userId: String) {
                 .doOnSubscribe {
                     progressDialogObservable.onNext(false)
                 }
-                .doAfterTerminate {
+                .doFinally {
                     progressDialogObservable.onNext(true)
                 }
     }
@@ -40,7 +40,7 @@ class ViewInviteViewModel(private val userId: String) {
                 .doOnSubscribe {
                     progressDialogObservable.onNext(false)
                 }
-                .doAfterTerminate {
+                .doFinally {
                     progressDialogObservable.onNext(true)
                 }
     }
