@@ -66,7 +66,7 @@ class GroupRemoteDataSource : GroupDataSource {
         val inviteRef = firebaseDatabase.getReference("user/$userId/invites")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
-                val invite = Gson().fromJson(Gson().toJson(p0?.value), Invite::class.java)
+                val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
                 if (invite != null) {
                     result.onNext(invite)
                 }
