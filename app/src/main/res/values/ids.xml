@@ -19,6 +19,11 @@
     <item name="group_show_invite_adapter_tv_ok" type="id" />
     <item name="group_show_invite_adapter_tv_cancel" type="id" />
 
+    <!--View ids for SearchGroupActivity-->
+    <item name="group_search_adapter_view_break_line" type="id" />
+    <item name="group_search_adapter_tv_name_user" type="id" />
+    <item name="group_search_adapter_tv_join_group" type="id" />
+
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
     <item name="splash_activity_tv_application_name" type="id" />
