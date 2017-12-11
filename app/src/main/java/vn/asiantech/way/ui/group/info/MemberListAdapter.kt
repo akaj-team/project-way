@@ -22,15 +22,16 @@ import vn.asiantech.way.utils.AppConstants
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 05/12/2017
  */
-class MemberListAdapter(val userId: String, var groupOwnerId: String, val members: MutableList<User>)
+class MemberListAdapter(val userId: String, val users: MutableList<User>)
     : RecyclerView.Adapter<MemberListAdapter.MemberItemViewHolder>() {
 
+    var groupOwnerId: String = ""
     var onImageUpToAdminClick: (userId: String) -> Unit = {}
 
-    override fun getItemCount() = members.size
+    override fun getItemCount() = users.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberItemViewHolder? {
-        return MemberItemUI().createView(AnkoContext.Companion.create(parent.context, parent,
+        return MemberItemUI().createView(AnkoContext.create(parent.context, parent,
                 false)).tag as? MemberItemViewHolder
     }
 
@@ -52,11 +53,11 @@ class MemberListAdapter(val userId: String, var groupOwnerId: String, val member
             imgCall.onClick {
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse(itemView.context.getString(R.string.call_intent,
-                        members[adapterPosition].lookupId))
+                        users[adapterPosition].lookupId))
                 itemView.context.startActivity(intent)
             }
             imgUpToAdmin.onClick {
-                onImageUpToAdminClick(members[adapterPosition].id)
+                onImageUpToAdminClick(users[adapterPosition].id)
             }
         }
 
@@ -64,7 +65,7 @@ class MemberListAdapter(val userId: String, var groupOwnerId: String, val member
          * Bind data to view holder.
          */
         fun onBind() {
-            with(members[adapterPosition]) {
+            with(users[adapterPosition]) {
                 Glide.with(itemView.context).load(photo).into(imgAvatar)
                 tvName.text = name
                 if (userId != id && lookupId != null) {
@@ -93,10 +94,8 @@ class MemberListAdapter(val userId: String, var groupOwnerId: String, val member
                     backgroundColor = Color.WHITE
 
                     linearLayout {
-                        val paddingLeft = dimen(R.dimen.group_screen_tv_count_padding_left)
-                        val paddingTop = dimen(R.dimen.group_screen_recycler_view_padding)
-                        verticalPadding = paddingTop
-                        horizontalPadding = paddingLeft
+                        verticalPadding = dimen(R.dimen.group_screen_recycler_view_padding)
+                        horizontalPadding = dimen(R.dimen.group_screen_tv_count_padding_left)
                         backgroundColor = Color.WHITE
 
                         circleImageView {

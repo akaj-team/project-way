@@ -25,7 +25,7 @@ import vn.asiantech.way.R
  *
  * Created by haingoq on 28/11/2017.
  */
-class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<User>)
+class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
     : AnkoComponent<GroupInfoFragment> {
 
     internal lateinit var tvGroupName: TextView
@@ -33,7 +33,7 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
     internal lateinit var tvCreateAt: TextView
     internal lateinit var imgApprove: ImageView
     internal lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    internal val memberListAdapter = MemberListAdapter(userId, ownerId, members)
+    internal val memberListAdapter = MemberListAdapter(userId, members)
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
         verticalLayout {
@@ -45,8 +45,7 @@ class GroupInfoFragmentUI(userId: String, ownerId: String, members: MutableList<
                 maxLines = 1
                 textColor = Color.WHITE
                 textSize = px2dip(dimen(R.dimen.text_size_normal))
-                val padding = dimen(R.dimen.group_screen_group_name_padding)
-                horizontalPadding = padding
+                horizontalPadding = dimen(R.dimen.group_screen_group_name_padding)
             }.lparams(matchParent, dimen(R.dimen.toolbar_height))
 
             tvMembersCount = textViewInfo()

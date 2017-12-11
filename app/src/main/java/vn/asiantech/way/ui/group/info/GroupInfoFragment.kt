@@ -27,7 +27,7 @@ class GroupInfoFragment : BaseFragment() {
     private var userId = ""
     private var groupId = ""
     private lateinit var group: Group
-    private val members = mutableListOf<User>()
+    private val users = mutableListOf<User>()
 
     companion object {
 
@@ -51,7 +51,7 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        ui = GroupInfoFragmentUI(userId, "", members)
+        ui = GroupInfoFragmentUI(userId, users)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -118,7 +118,7 @@ class GroupInfoFragment : BaseFragment() {
     private fun bindGroupInfoToView(groupToBind: Group) {
         group = groupToBind
         with(group) {
-            ui.memberListAdapter.groupOwnerId = group.ownerId
+            ui.memberListAdapter.groupOwnerId = ownerId
             ui.tvGroupName.text = name
             ui.tvCreateAt.text = getString(R.string.create_at, createAt.substring(0,
                     AppConstants.STANDARD_DATE_TIME_LENGTH))
@@ -133,8 +133,8 @@ class GroupInfoFragment : BaseFragment() {
     private fun handleGetMemberListCompleted(users: MutableList<User>) {
         ui.swipeRefreshLayout.isRefreshing = false
         ui.tvMembersCount.text = getString(R.string.members_count, users.size)
-        members.clear()
-        members.addAll(users)
+        this.users.clear()
+        this.users.addAll(users)
         ui.memberListAdapter.notifyDataSetChanged()
     }
 
