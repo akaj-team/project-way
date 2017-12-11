@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.home
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import vn.asiantech.way.R
@@ -13,9 +14,7 @@ import vn.asiantech.way.ui.custom.floatingButton
  * Created at 11 / 2017
  * Created by at-hoavo on 27/11/2017.
  */
-class HomeActivityUI(private val homeAdapter: HomeAdapter,
-                     private var onMenuClick: FloatingMenuButton.OnMenuClickListener) :
-        AnkoComponent<HomeActivity> {
+class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeActivity> {
 
     internal lateinit var fabMenuGroup: FloatingMenuButton
     internal lateinit var recycleViewLocation: RecyclerView
@@ -41,7 +40,12 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter,
                     rightMargin = dimen(R.dimen.home_screen_recyclerView_margin)
                 }
             }
-            fabMenuGroup = floatingButton(onMenuClick) {
+            fabMenuGroup = floatingButton(object : FloatingMenuButton.OnMenuClickListener {
+                override fun eventItemMenuClicked(view: View) {
+                    owner.eventOnClickItemMenu(view)
+                }
+
+            }) {
             }.lparams {
                 alignParentBottom()
                 alignParentRight()

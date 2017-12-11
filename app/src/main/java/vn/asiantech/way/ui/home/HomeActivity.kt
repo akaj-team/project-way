@@ -21,7 +21,6 @@ import vn.asiantech.way.R
 import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.custom.FloatingMenuButton
 import vn.asiantech.way.ui.group.GroupActivity
 import vn.asiantech.way.ui.register.RegisterActivity
 import vn.asiantech.way.ui.search.SearchActivity
@@ -32,7 +31,7 @@ import vn.asiantech.way.utils.LocationUtil
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
-class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
+class HomeActivity : BaseActivity() {
 
     companion object {
         private const val ZOOM = 16f
@@ -50,20 +49,11 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRecyclerView()
-        ui = HomeActivityUI(homeAdapter, this)
+        ui = HomeActivityUI(homeAdapter)
         ui.setContentView(this)
         initViews()
         initMap()
         homeViewModel = HomeViewModel(this)
-    }
-
-    override fun eventItemMenuClicked(view: View) {
-        when (view) {
-            ui.fabMenuGroup.imgBtnProfile -> startActivity<RegisterActivity>()
-            ui.fabMenuGroup.imgBtnGroup -> startActivity<GroupActivity>()
-            ui.fabMenuGroup.imgBtnSearch -> startActivity<SearchActivity>()
-            ui.fabMenuGroup.imgBtnShare -> startActivity<ShareActivity>()
-        }
     }
 
     override fun onBackPressed() {
@@ -168,6 +158,15 @@ class HomeActivity : BaseActivity(), FloatingMenuButton.OnMenuClickListener {
             } else {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             }
+        }
+    }
+
+    internal fun eventOnClickItemMenu(view: View) {
+        when (view) {
+            ui.fabMenuGroup.imgBtnProfile -> startActivity<RegisterActivity>()
+            ui.fabMenuGroup.imgBtnGroup -> startActivity<GroupActivity>()
+            ui.fabMenuGroup.imgBtnSearch -> startActivity<SearchActivity>()
+            ui.fabMenuGroup.imgBtnShare -> startActivity<ShareActivity>()
         }
     }
 

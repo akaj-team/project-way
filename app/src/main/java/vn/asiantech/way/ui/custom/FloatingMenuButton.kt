@@ -55,66 +55,36 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                     }
                 }
                 verticalLayout {
-                    gravity = Gravity.END
-                    gravity = Gravity.BOTTOM
+                    gravity = Gravity.END or Gravity.BOTTOM
                     lparams(matchParent, matchParent)
                     rlSearch = itemFloatingButton(R.id.floating_btn_menu_img_btn_search,
                             R.drawable.custom_bg_item_search_button,
                             R.drawable.ic_search, R.string.custom_floating_menu_search_title).lparams()
                     imgBtnSearch = rlSearch.find(R.id.floating_btn_menu_img_btn_search)
-                    imgBtnSearch.onClick {
-                        setGoneOverLay()
-                        visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.eventItemMenuClicked(imgBtnSearch)
-                    }
                     rlGroup = itemFloatingButton(R.id.floating_btn_menu_img_btn_group,
                             R.drawable.custom_bg_item_group_button,
                             R.drawable.ic_group_white_24dp, R.string.custom_floating_menu_group_title).lparams()
                     imgBtnGroup = rlGroup.find(R.id.floating_btn_menu_img_btn_group)
-                    imgBtnGroup.onClick {
-                        setGoneOverLay()
-                        visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.eventItemMenuClicked(imgBtnGroup)
-                    }
                     rlCalendar = itemFloatingButton(R.id.floating_btn_menu_img_btn_calendar,
                             R.drawable.custom_bg_item_calendar_button,
                             R.drawable.ic_calendar, R.string.custom_floating_menu_calendar_title).lparams()
                     imgBtnCalendar = rlCalendar.find(R.id.floating_btn_menu_img_btn_calendar)
-                    imgBtnCalendar.onClick {
-                        setGoneOverLay()
-                        visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.eventItemMenuClicked(imgBtnCalendar)
-                    }
                     rlProfile = itemFloatingButton(R.id.floating_btn_menu_img_btn_profile,
                             R.drawable.custom_bg_item_profile_button,
                             R.drawable.ic_profile, R.string.custom_floating_menu_profile_title).lparams()
                     imgBtnProfile = rlProfile.find(R.id.floating_btn_menu_img_btn_profile)
-                    imgBtnProfile.onClick {
-                        setGoneOverLay()
-                        visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.eventItemMenuClicked(imgBtnProfile)
-                    }
                     rlShare = itemFloatingButton(R.id.floating_btn_menu_img_btn_share,
                             R.drawable.custom_bg_item_share_button,
                             R.drawable.ic_share, R.string.custom_floating_menu_share_title).lparams()
                     imgBtnShare = rlShare.find(R.id.floating_btn_menu_img_btn_share)
-                    imgBtnShare.onClick {
-                        setGoneOverLay()
-                        visibilityAllChildView(View.INVISIBLE)
-                        onMenuClickListener.eventItemMenuClicked(imgBtnShare)
-                    }
                     imgBtnMenu = imageButton {
+                        id = R.id.floating_btn_menu
                         imageResource = R.drawable.ic_menu
                         backgroundResource = R.drawable.custom_menu_button
-                        onClick {
-                            onMenuClick()
-                            frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
-                        }
                     }.lparams(dimen(R.dimen.width_height_image_button_menu),
                             dimen(R.dimen.width_height_image_button_menu)) {
                         gravity = Gravity.END
-                        bottomMargin = dimen(R.dimen.top_bot_margin_image_button_menu)
-                        topMargin = dimen(R.dimen.top_bot_margin_image_button_menu)
+                        verticalMargin = dimen(R.dimen.top_bot_margin_image_button_menu)
                         padding = dimen(R.dimen.padding_floating)
                     }
                 }.applyRecursively { view: View ->
@@ -124,6 +94,18 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                             view.visibility = View.INVISIBLE
                         }
                         is TextView -> view.gravity = Gravity.CENTER
+                        is ImageButton -> {
+                            view.onClick {
+                                if (view.id == R.id.floating_btn_menu) {
+                                    onMenuClick()
+                                    frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
+                                } else {
+                                    setGoneOverLay()
+                                    visibilityAllChildView(View.INVISIBLE)
+                                    onMenuClickListener.eventItemMenuClicked(view)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -150,8 +132,7 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
             rightMargin = dimen(R.dimen.margin_right_image_button)
         }
         textView(title) {
-            leftPadding = dimen(R.dimen.padding_floating)
-            rightPadding = dimen(R.dimen.padding_floating)
+            horizontalPadding = dimen(R.dimen.padding_floating)
             textSize = px2dip(dimen(R.dimen.custom_menu_text_size))
             backgroundResource = R.drawable.custom_bg_item_menu_title
         }.lparams(wrapContent, dimen(R.dimen.height_text_view)) {

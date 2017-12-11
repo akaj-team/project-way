@@ -23,7 +23,7 @@ object AppConstants {
     const val ACTION_CURRENT_LOCATION = "action_current_location"
     const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
     const val TIME_EXIT_APP = 3000L
-    //Key SharePref Tracking
+    // Key SharePref Tracking
     const val KEY_TRACKING_HISTORY = "tracking_history"
     const val BACK_PRESS_DELAY = 1500L
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
