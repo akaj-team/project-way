@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 04/12/2017.
  */
-data class ResultRoad(@SerializedName("snappedPoints") val snappedPoints: List<LocationRoad>)
+data class ResultRoad(@SerializedName("snappedPoints") val locationRoads: List<LocationRoad>)
 
 /**
  *  Location return from google map Road api.

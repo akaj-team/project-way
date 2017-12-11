@@ -44,7 +44,7 @@ interface ApiService {
      *  @param destinations the destinations LatLng
      */
     @GET("distancematrix/json")
-    fun getLocationDistance(@Query("origins") origins: String, @Query("destinations") destinations: String,
+    fun getLocationDistance(@Query("origins") origin: String, @Query("destinations") destination: String,
                             @Query("units") units: String = "metric"): Single<ResultDistance>
 
     /**

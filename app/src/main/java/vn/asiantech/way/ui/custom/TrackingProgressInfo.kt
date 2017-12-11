@@ -452,26 +452,25 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
         return this
     }
 
-    // todo event for arrived
-    internal fun setArrowRightStartItemClick() {
+    private fun setArrowRightStartItemClick() {
         imgArrowRightStartItem.visibility = View.GONE
         imgArrowDropDownStartItem.visibility = View.VISIBLE
         tvStartAddress.visibility = View.VISIBLE
     }
 
-    internal fun setArrowDropDownEndItemClick() {
+    private fun setArrowDropDownEndItemClick() {
         imgArrowDropDownEndItem.visibility = View.GONE
         imgArrowRightEndItem.visibility = View.VISIBLE
         tvEndAddress.visibility = View.GONE
     }
 
-    internal fun setArrowDropDownStartItemClick() {
+    private fun setArrowDropDownStartItemClick() {
         imgArrowDropDownStartItem.visibility = View.GONE
         imgArrowRightStartItem.visibility = View.VISIBLE
         tvStartAddress.visibility = View.GONE
     }
 
-    internal fun setArrowRightEndItemClick() {
+    private fun setArrowRightEndItemClick() {
         imgArrowRightEndItem.visibility = View.GONE
         imgArrowDropDownEndItem.visibility = View.VISIBLE
         tvEndAddress.visibility = View.VISIBLE

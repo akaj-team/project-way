@@ -8,9 +8,13 @@ import com.google.android.gms.maps.model.GroundOverlay
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 05/12/2017.
  */
-class RadiusAnimation(private val mGroundOverlay: GroundOverlay?) : Animation() {
+class RadiusAnimation(private val groundOverlay: GroundOverlay?) : Animation() {
+    companion object {
+        private const val GROUND_OVERLAY_RADIUS = 400
+    }
+
     override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-        mGroundOverlay?.setDimensions((400 * interpolatedTime))
-        mGroundOverlay?.transparency = interpolatedTime
+        groundOverlay?.setDimensions((GROUND_OVERLAY_RADIUS * interpolatedTime))
+        groundOverlay?.transparency = interpolatedTime
     }
 }

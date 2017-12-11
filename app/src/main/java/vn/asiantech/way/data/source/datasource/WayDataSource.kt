@@ -138,8 +138,7 @@ internal interface WayDataSource {
      *  @param destinations the destinations LatLng*
      *  @return ResultDistance object which is Observable.
      */
-    fun getLocationDistance(origins: String, destinations: String): Observable<ResultDistance>
-
+    fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance>
 
     /**
      * This method return list LatLng from 2 point.

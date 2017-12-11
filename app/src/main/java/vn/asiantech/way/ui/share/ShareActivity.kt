@@ -32,7 +32,7 @@ import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.LocationRoad
-import vn.asiantech.way.data.model.Rows
+import vn.asiantech.way.data.model.Row
 import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.extension.observeOnUiThread
@@ -73,7 +73,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private lateinit var shareViewModel: ShareViewModel
     private lateinit var destinationLatLng: LatLng
     private lateinit var googleMap: GoogleMap
-    private lateinit var ui: ShareActivityUI
+    private val ui = ShareActivityUI()
     private var locations: MutableList<TrackingInformation>? = mutableListOf()
     private var locationUpdates: MutableList<LatLng>? = ArrayList()
     private var currentMarker: Marker? = null
@@ -82,12 +82,12 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private var currentLatLng: LatLng? = null
     private var currentLocation: Location? = null
     private var currentStatus = "STOP"
-    private var isStartTracking: Boolean = false
-    private var isReTracking: Boolean = false
-    private var isArrived: Boolean = false
-    private var isConfirm: Boolean = false
-    private var isSetETA: Boolean = false
+    private var isStartTracking = false
     private var isStopTracking = false
+    private var isReTracking = false
+    private var isArrived = false
+    private var isConfirm = false
+    private var isSetETA = false
     private var destinationName: String? = null
     private var etaDistance: String? = null
     private var timeArrived: String? = null
@@ -111,7 +111,6 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = ShareActivityUI()
         ui.setContentView(this)
         shareViewModel = ShareViewModel(this)
         supportMapFragment = SupportMapFragment()
@@ -269,7 +268,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     // Get ETA Distance and duration
-    private fun handleDistanceETA(row: List<Rows>) {
+    private fun handleDistanceETA(row: List<Row>) {
         ui.trackingInfo.tvTime.text = resources.getString(R.string.eta, row[0].elements[0]
                 .duration.text)
         ui.trackingInfo.tvDistance.text = resources.getString(R.string.open_parentheses,

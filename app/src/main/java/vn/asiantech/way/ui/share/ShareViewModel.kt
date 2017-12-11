@@ -18,7 +18,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.LocationRoad
-import vn.asiantech.way.data.model.Rows
+import vn.asiantech.way.data.model.Row
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
@@ -31,12 +31,12 @@ import java.util.*
  * Created by datbuit. on 04/12/2017.
  */
 class ShareViewModel(val context: Context) {
-    var batteryCapacity = BehaviorSubject.create<Int>()
+    var batteryCapacity: BehaviorSubject<Int> = BehaviorSubject.create<Int>()
     val result: BehaviorSubject<HyperTrackLocation> = BehaviorSubject.create<HyperTrackLocation>()
     private val resultDistancePerSecond = BehaviorSubject.create<List<Float>>()
     private val resultTimeDuring = BehaviorSubject.create<String>()
     private val wayRepository = WayRepository()
-    private val mCurrentBatteryReceiver = object : BroadcastReceiver() {
+    private val currentBatteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             val level = p1?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
             level?.let { batteryCapacity.onNext(it) }
@@ -44,20 +44,20 @@ class ShareViewModel(val context: Context) {
     }
 
     companion object {
-        private val ONE_MINUTE_VALUE = 60
-        private val ONE_HOUR_VALUE = 3600
-        private val HOUR_VALUE = 3599
-        private val NUMBER_FOUR = 4.0
+        private const val ONE_MINUTE_VALUE = 60
+        private const val ONE_HOUR_VALUE = 3600
+        private const val HOUR_VALUE = 3599
+        private const val NUMBER_FOUR = 4.0
     }
 
     init {
-        context.registerReceiver(mCurrentBatteryReceiver, IntentFilter(Intent
+        context.registerReceiver(currentBatteryReceiver, IntentFilter(Intent
                 .ACTION_BATTERY_CHANGED))
     }
 
-    internal fun getLocationDistance(origins: String, destinations: String)
-            : Observable<List<Rows>> {
-        return wayRepository.getLocationDistance(origins, destinations)
+    internal fun getLocationDistance(origin: String, destination: String)
+            : Observable<List<Row>> {
+        return wayRepository.getLocationDistance(origin, destination)
                 .observeOnUiThread()
                 .map { it.rows }
     }
@@ -65,7 +65,7 @@ class ShareViewModel(val context: Context) {
     internal fun getListLocationWhenReOpen(url: String): Observable<List<LocationRoad>> {
         return wayRepository.getListLocation(url)
                 .observeOnUiThread()
-                .map { it.snappedPoints }
+                .map { it.locationRoads }
     }
 
     internal fun getTrackingURL(): Observable<String> {
@@ -76,7 +76,8 @@ class ShareViewModel(val context: Context) {
                 if (response.responseObject != null) {
                     val action = response.responseObject as? Action
                     HyperTrack.clearServiceNotificationParams()
-                    link.onNext(action?.trackingURL.toString())
+                    val url = action?.trackingURL
+                    url?.let { link.onNext(it) }
                 }
             }
 
@@ -131,6 +132,14 @@ class ShareViewModel(val context: Context) {
         return result
     }
 
+    /**
+     * This method return distance moving per second
+     *
+     * @param source start LatLng
+     * @param destination destination LatLng
+     *
+     * @return list contain speed and distance value
+     */
     internal fun getDistancePerSecond(source: LatLng, destination: LatLng): Observable<List<Float>> {
         val des = Location("Point")
         des.latitude = source.latitude
@@ -156,17 +165,13 @@ class ShareViewModel(val context: Context) {
         return resultTimeDuring
     }
 
-    private fun radians(n: Double) = n * (Math.PI / (AppConstants.RADIUS / 2))
-
-    private fun degrees(n: Double) = n * ((AppConstants.RADIUS / 2) / Math.PI)
-
     internal fun getAngleMarker(startLatLong: LatLng, endLatLong: LatLng): Observable<Float> {
         val startLat = radians(startLatLong.latitude)
         val startLong = radians(startLatLong.longitude)
         val endLat = radians(endLatLong.latitude)
         val endLong = radians(endLatLong.longitude)
         var deltaLong = endLong - startLong
-        val deltaPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / ShareViewModel.NUMBER_FOUR) / Math.tan
+        val deltaPi = Math.log(Math.tan(endLat / 2.0 + Math.PI / ShareViewModel.NUMBER_FOUR) / Math.tan
         (startLat / 2.0 + Math.PI / ShareViewModel.NUMBER_FOUR))
         if (Math.abs(deltaLong) > Math.PI) {
             deltaLong = if (deltaLong > 0.0) {
@@ -176,7 +181,7 @@ class ShareViewModel(val context: Context) {
             }
         }
         val result = BehaviorSubject.create<Float>()
-        result.onNext(((degrees(Math.atan2(deltaLong, deltaPhi)) + AppConstants.RADIUS) %
+        result.onNext(((degrees(Math.atan2(deltaLong, deltaPi)) + AppConstants.RADIUS) %
                 AppConstants.RADIUS).toFloat())
         return result
     }
@@ -186,4 +191,8 @@ class ShareViewModel(val context: Context) {
         LocationUtil(context).getCurrentLocation()?.let { result.onSuccess(it) }
         return result
     }
+
+    private fun radians(n: Double) = n * (Math.PI / (AppConstants.RADIUS / 2))
+
+    private fun degrees(n: Double) = n * ((AppConstants.RADIUS / 2) / Math.PI)
 }

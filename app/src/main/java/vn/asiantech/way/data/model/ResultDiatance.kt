@@ -6,17 +6,17 @@ package vn.asiantech.way.data.model
  */
 data class ResultDistance(val destination_addresses: List<String>,
                           val origin_addresses: List<String>,
-                          val rows: List<Rows>)
+                          val rows: List<Row>)
 
 /**
  *  List result ETA
  */
-data class Rows(val elements: List<Elements>)
+data class Row(val elements: List<Element>)
 
 /**
  *  ETA distance and duration return from Google Api.
  */
-data class Elements(val distance: ElementInfo, val duration: ElementInfo)
+data class Element(val distance: ElementInfo, val duration: ElementInfo)
 
 /**
  *  Element of class Elements.
