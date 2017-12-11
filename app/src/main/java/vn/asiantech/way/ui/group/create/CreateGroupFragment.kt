@@ -1,11 +1,10 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.create
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.hypertrack.lib.models.User
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
@@ -14,8 +13,11 @@ import retrofit2.Response
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.group.BodyAddUserToGroup
 import vn.asiantech.way.data.model.group.Group
+import vn.asiantech.way.data.model.group.GroupInfo
 import vn.asiantech.way.data.remote.hypertrackremote.HypertrackApi
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.GroupActivity
+import vn.asiantech.way.ui.group.info.GroupInfoFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -75,12 +77,14 @@ class CreateGroupFragment : BaseFragment() {
                         val userId = user?.id
                         if (group != null && userId != null) {
                             addUserToGroup(group, userId)
+                            val groupRef = firebaseDatabase.getReference("group/"
+                                    + group.id + "/info")
+                            groupRef.setValue(GroupInfo(group.id, userId, group.name))
                         }
                     }
 
                     override fun onFailure(call: Call<Group>?, t: Throwable?) {
-                        Toast.makeText(context, getString(R.string.error_message),
-                                Toast.LENGTH_LONG).show()
+                        showToast(R.string.error_message)
                     }
                 })
     }
@@ -100,8 +104,7 @@ class CreateGroupFragment : BaseFragment() {
                     }
 
                     override fun onFailure(call: Call<User>?, t: Throwable?) {
-                        Toast.makeText(context, getString(R.string.error_message),
-                                Toast.LENGTH_LONG).show()
+                        showToast(R.string.error_message)
                     }
                 })
     }

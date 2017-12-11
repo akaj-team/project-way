@@ -83,7 +83,8 @@ class SearchLocationActivity : BaseActivity() {
                                         val result = response?.body()?.predictions
                                         result?.forEach {
                                             mMyLocations.add(MyLocation(it.id, it.placeId,
-                                                    it.structuredFormatting.mainText, it.description))
+                                                    it.structuredFormatting.mainText,
+                                                    it.description))
                                         }
                                         mAdapter?.notifyDataSetChanged()
                                     }

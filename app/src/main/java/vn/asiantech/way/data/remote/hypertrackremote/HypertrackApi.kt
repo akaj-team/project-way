@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.remote.hypertrackremote
 
+import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -30,9 +31,10 @@ object HypertrackApi {
             })
 
             val client = httpClientBuilder.build()
+            val gson = GsonBuilder().serializeNulls().create()
             instance = Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build()
         }

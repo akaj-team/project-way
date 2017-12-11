@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.info
 
 import android.content.Intent
 import android.graphics.Color

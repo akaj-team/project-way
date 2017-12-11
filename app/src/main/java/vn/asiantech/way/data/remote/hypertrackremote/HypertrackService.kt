@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import vn.asiantech.way.data.model.group.BodyAddUserToGroup
 import vn.asiantech.way.data.model.group.Group
+import vn.asiantech.way.data.model.group.SearchGroupResult
 import vn.asiantech.way.data.model.group.UserListResult
 
 /**
@@ -39,6 +40,14 @@ interface HypertrackService {
     fun getMembersList(@Query("group_id") groupId: String): Call<UserListResult>
 
     /**
+     *  This method used to search groups by name.
+     *
+     *  @param name - name of group.
+     */
+    @GET("groups/")
+    fun searchGroup(@Query("name") name: String): Call<SearchGroupResult>
+
+    /**
      * This method used to add a user to given group.
      *
      * @param userId - id of  user you wanna add.
@@ -54,5 +63,22 @@ interface HypertrackService {
      * @param body - data contain id of given group.
      */
     @PATCH("users/{userId}/")
-    fun removeUserFromGroup(@Path("userId") userId: String, @Body body: BodyAddUserToGroup): Call<User>
+    fun removeUserFromGroup(@Path("userId") userId: String,
+                            @Body body: BodyAddUserToGroup): Call<User>
+
+    /**
+     * This method used to search users by name.
+     *
+     * @param name - query to search.
+     */
+    @GET("users/")
+    fun searchUser(@Query("name") name: String): Call<UserListResult>
+
+    /**
+     * This method used to get user profile of a given user.
+     *
+     * @param userid - id of given user.
+     */
+    @GET("users/{userId}")
+    fun getUserProfile(@Path("userId") userId: String): Call<User>
 }
