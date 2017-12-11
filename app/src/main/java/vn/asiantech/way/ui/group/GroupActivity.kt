@@ -18,7 +18,6 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        supportFragmentManager.beginTransaction().replace(R.id.group_activity_ui_fr_content, ViewInviteFragment.getInstance("0f3831a1-8131-4e70-be02-f6f85b1936f6")).commit()
     }
 
     override fun onBindViewModel() {
