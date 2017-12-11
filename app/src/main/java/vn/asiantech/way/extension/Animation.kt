@@ -20,6 +20,5 @@ fun Animation.setAnimation(onAnimationEnd: (Animation?) -> Unit = {}) {
         override fun onAnimationStart(p0: Animation?) {
             Unit
         }
-
     })
 }
