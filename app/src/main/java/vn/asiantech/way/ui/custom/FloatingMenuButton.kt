@@ -94,16 +94,14 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
                             view.visibility = View.INVISIBLE
                         }
                         is TextView -> view.gravity = Gravity.CENTER
-                        is ImageButton -> {
-                            view.onClick {
-                                if (view.id == R.id.floating_btn_menu) {
-                                    onMenuClick()
-                                    frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
-                                } else {
-                                    setGoneOverLay()
-                                    visibilityAllChildView(View.INVISIBLE)
-                                    onMenuClickListener.eventItemMenuClicked(view)
-                                }
+                        is ImageButton -> view.onClick {
+                            if (view.id == R.id.floating_btn_menu) {
+                                onMenuClick()
+                                frOverlay.visibility = if (isExpand) View.VISIBLE else View.GONE
+                            } else {
+                                setGoneOverLay()
+                                visibilityAllChildView(View.INVISIBLE)
+                                onMenuClickListener.eventItemMenuClicked(view)
                             }
                         }
                     }
