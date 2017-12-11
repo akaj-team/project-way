@@ -14,12 +14,15 @@ import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.LocationRoad
 import vn.asiantech.way.data.model.Rows
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
+import vn.asiantech.way.utils.LocationUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -105,7 +108,7 @@ class ShareViewModel(val context: Context) {
         return result
     }
 
-    internal fun getCurrentLocation() {
+    internal fun getCurrentLocationHypertrack() {
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
                 val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
@@ -175,6 +178,12 @@ class ShareViewModel(val context: Context) {
         val result = BehaviorSubject.create<Float>()
         result.onNext(((degrees(Math.atan2(deltaLong, deltaPhi)) + AppConstants.RADIUS) %
                 AppConstants.RADIUS).toFloat())
+        return result
+    }
+
+    internal fun getCurrentLocation(): Single<Location> {
+        val result = SingleSubject.create<Location>()
+        LocationUtil(context).getCurrentLocation()?.let { result.onSuccess(it) }
         return result
     }
 }

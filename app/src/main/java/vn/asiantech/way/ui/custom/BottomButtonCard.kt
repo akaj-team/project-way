@@ -40,8 +40,6 @@ class BottomButtonCard(context: Context) :
 
     var onBottomCardListener: OnBottomCardListener? = null
 
-    var onCopyButtonClick: () -> Unit = {}
-
     // TODO: Will use in future
 //    val isActionTypeConfirmLocation: Boolean
 //        get() = actionType == ActionType.CONFIRM_LOCATION
@@ -71,8 +69,7 @@ class BottomButtonCard(context: Context) :
                     visibility = View.GONE
                     id = R.id.bottom_button_card_btn_close
                     bottomPadding = dimen(R.dimen.padding_medium)
-                    leftPadding = dimen(R.dimen.padding_medium)
-                    rightPadding = dimen(R.dimen.padding_medium)
+                    horizontalPadding = dimen(R.dimen.padding_medium)
 
                     setOnRippleCompleteListener {
                         onBottomCardListener?.onCloseButtonClick()
@@ -82,7 +79,7 @@ class BottomButtonCard(context: Context) :
                         imageResource = R.drawable.ic_navigation_close
                     }.lparams(dimen(R.dimen.image_size), dimen(R.dimen.image_size))
 
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams {
                     alignParentRight()
                 }
 
@@ -91,7 +88,7 @@ class BottomButtonCard(context: Context) :
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
                     typeface = Typeface.DEFAULT_BOLD
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams {
                     centerHorizontally()
                     topMargin = dimen(R.dimen.margin_low)
                 }
@@ -103,8 +100,7 @@ class BottomButtonCard(context: Context) :
                 }.lparams(matchParent, wrapContent) {
                     centerHorizontally()
                     below(R.id.bottom_button_card_tv_title)
-                    leftMargin = dimen(R.dimen.margin_huge)
-                    rightMargin = dimen(R.dimen.margin_huge)
+                    horizontalMargin = dimen(R.dimen.margin_huge)
                     topMargin = dimen(R.dimen.margin_base)
                 }
 
@@ -118,21 +114,20 @@ class BottomButtonCard(context: Context) :
 
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
                         textSize = px2dip(dimen(R.dimen.text_large))
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerInParent()
                     }
 
                     imgLoader = imageView(R.drawable.ic_live_location_loading) {
                         visibility = View.GONE
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerInParent()
                     }
                 }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     centerHorizontally()
                     below(R.id.bottom_button_card_tv_description)
+                    horizontalMargin = dimen(R.dimen.margin_huge)
                     bottomMargin = dimen(R.dimen.margin_low)
-                    leftMargin = dimen(R.dimen.margin_huge)
-                    rightMargin = dimen(R.dimen.margin_huge)
                     topMargin = dimen(R.dimen.margin_high)
                 }
 
@@ -143,7 +138,7 @@ class BottomButtonCard(context: Context) :
                     tvURL = textView(R.string.bottom_button_card_link_text) {
                         textColor = ContextCompat.getColor(context, R.color.colorWhite)
                         setTextIsSelectable(true)
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerVertically()
                         visibility = View.GONE
                         leftMargin = dimen(R.dimen.margin_xxhigh)
@@ -155,19 +150,18 @@ class BottomButtonCard(context: Context) :
                         padding = dimen(R.dimen.padding_base)
 
                         onClick {
-                            onCopyButtonClick
+                            onBottomCardListener?.onCopyButtonClick()
                             tvCopyLink.isEnabled = false
                             tvCopyLink.text = context.getString(R.string.share_textview_text_copied)
                         }
 
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
                     }
                 }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     below(R.id.bottom_button_card_btn_sharing)
-                    leftMargin = dimen(R.dimen.margin_medium)
-                    rightMargin = dimen(R.dimen.margin_medium)
+                    horizontalMargin = dimen(R.dimen.margin_medium)
                     topMargin = dimen(R.dimen.margin_medium)
                 }
             }

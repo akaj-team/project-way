@@ -38,13 +38,10 @@ import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.ArrivedDialog
-import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
-import vn.asiantech.way.ui.custom.TrackingProgressInfo
 import vn.asiantech.way.ui.search.SearchActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.DateTimeUtil
-import vn.asiantech.way.utils.LocationUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -60,7 +57,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         private const val SECOND_VALUE = 1000L
         private const val STEP_ETA = 3
         private const val REQUEST_CODE = 200
-        private const val ZINDEX_VALUE = 8f
+        private const val Z_INDEX_VALUE = 8f
         private const val POLYLINE_WIDTH = 20f
 
         const val ACTION_SEND_WAY_LOCATION = "action_send_way_location"
@@ -69,51 +66,48 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         const val ACTION_CURRENT_LOCATION = "action_current_location"
     }
 
-    private lateinit var shareActivityUI: ShareActivityUI
-    private lateinit var shareViewModel: ShareViewModel
-    private lateinit var ui: ShareActivityUI
     private lateinit var supportMapFragment: SupportMapFragment
-    private lateinit var countTimer: Disposable
-
-    private var mCurrentMarker: Marker? = null
-    private var mIsStopTracking = false
-    private var mLocationUpdates: MutableList<LatLng>? = mutableListOf()
-    private var mLocations: MutableList<TrackingInformation>? = mutableListOf()
-    private var mCurrentLocation: Location? = null
-    private var mCountTimer = SECOND_VALUE
-    private lateinit var mDestinationLatLng: LatLng
-    private var mCurrentLatLng: LatLng? = null
-    private var mDistanceTravel = 0f
-    private var mAverageSpeed = 0f
-    private var mEtaUpdate = 0.0f
-    private var mEtaMaximum = 0.0f
-    private var mAngle = 0.0f
-    private var distance = 0.0f
-    private var mCurrentStatus = "STOP"
-    private var mEndStatus = 0L
-    private var mIsArrived: Boolean = false
-    private var mIsSetETA: Boolean = false
-    private var mEtaTime: String? = null
-    private var mEtaDistance: String? = null
-    private var mTimeStart: String? = null
-
-    private var mTimeArrived: String? = null
-    private var mStartPosition = 0
-    private lateinit var mGoogleMap: GoogleMap
-    private lateinit var mGoogleApiClient: GoogleApiClient
-    private lateinit var mLocationRequest: LocationRequest
-    private var mDestinationName: String? = null
-    private var mLatLng: LatLng? = null
-    private var mMyLocation: WayLocation? = null
-    private var mAction: String? = null
-    private var mIsReTracking: Boolean = false
-    private var mIsConfirm: Boolean = false
-    private var mIsStartTracking: Boolean = false
-    private var mMarker: Marker? = null
-    private var mGroundOverlay: GroundOverlay? = null
-    private var mLine: Polyline? = null
-    private var mLine1: Polyline? = null
+    private lateinit var handleTrackingProgress: Disposable
+    private lateinit var googleApiClient: GoogleApiClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var shareViewModel: ShareViewModel
+    private lateinit var destinationLatLng: LatLng
+    private lateinit var googleMap: GoogleMap
+    private lateinit var ui: ShareActivityUI
+    private var locations: MutableList<TrackingInformation>? = mutableListOf()
+    private var locationUpdates: MutableList<LatLng>? = ArrayList()
+    private var currentMarker: Marker? = null
+    private var marker: Marker? = null
+    private var locationLatLng: LatLng? = null
+    private var currentLatLng: LatLng? = null
+    private var currentLocation: Location? = null
+    private var currentStatus = "STOP"
+    private var isStartTracking: Boolean = false
+    private var isReTracking: Boolean = false
+    private var isArrived: Boolean = false
+    private var isConfirm: Boolean = false
+    private var isSetETA: Boolean = false
+    private var isStopTracking = false
+    private var destinationName: String? = null
+    private var etaDistance: String? = null
+    private var timeArrived: String? = null
+    private var timeStart: String? = null
+    private var etaTime: String? = null
+    private var action: String? = null
     private var time: String? = null
+    private var groundOverlay: GroundOverlay? = null
+    private var myLocation: WayLocation? = null
+    private var lineSmall: Polyline? = null
+    private var lineLarge: Polyline? = null
+    private var distanceTravel = 0f
+    private var averageSpeed = 0f
+    private var etaMaximum = 0.0f
+    private var etaUpdate = 0.0f
+    private var distance = 0.0f
+    private var endStatus = 0L
+    private var angle = 0.0f
+    private var startPosition = 0
+    private var countTimer = SECOND_VALUE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,19 +115,451 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         ui.setContentView(this)
         shareViewModel = ShareViewModel(this)
         supportMapFragment = SupportMapFragment()
-        mLocationUpdates = ArrayList()
-        mLocations = mutableListOf()
         if (intent.extras != null) {
-            mMyLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
+            myLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
         }
-        mAction = intent.action
-        initializeUIViews()
+        action = intent.action
         initMap()
         configMap()
         initLocationRequest()
         initGoogleApiClient()
-        initBottomButtonCard(true, mAction)
+        initBottomButtonCard(true, action)
         setEnableRlSearchLocation()
+    }
+
+    override fun onBindViewModel() {
+        addDisposables(shareViewModel.batteryCapacity
+                .observeOnUiThread()
+                .subscribe(this::handleShowBatteryCapacity),
+                shareViewModel.getCalendarDateTime()
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetCurrentDateTime),
+                shareViewModel.result
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetCurrentLocation))
+    }
+
+    override fun onLocationChanged(location: Location) {
+        if (!isStartTracking) {
+            if (marker != null && groundOverlay != null) {
+                val latLng = LatLng(location.latitude, location.longitude)
+                marker?.position = latLng
+                groundOverlay?.position = latLng
+            }
+        }
+    }
+
+    override fun onCameraIdle() {
+        locationLatLng = googleMap.cameraPosition?.target
+        if (!isConfirm) {
+            if (myLocation?.geometry?.location == null || action == AppConstants.ACTION_CHOOSE_ON_MAP) {
+                addDisposables(shareViewModel.getLocationName(locationLatLng!!)
+                        .observeOnUiThread()
+                        .subscribe(this::getLocationName))
+            } else {
+                val lat = myLocation?.geometry?.location?.lat
+                val lng = myLocation?.geometry?.location?.lng
+                if (lat != null && lng != null) {
+                    locationLatLng = LatLng(lat, lng)
+                    addDisposables(shareViewModel.getLocationName(locationLatLng!!)
+                            .observeOnUiThread()
+                            .subscribe(this::getLocationName))
+                }
+                isConfirm = true
+            }
+        }
+    }
+
+    override fun onConnected(p0: Bundle?) {
+        if (!HyperTrack.checkLocationPermission(this)) {
+            HyperTrack.requestPermissions(this)
+        }
+
+        if (!HyperTrack.checkLocationServices(this)) {
+            HyperTrack.requestLocationServices(this)
+        }
+
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                LocationServices.FusedLocationApi
+                        .requestLocationUpdates(googleApiClient, locationRequest, this)
+            }
+        }
+    }
+
+    override fun onConnectionSuspended(p0: Int) = Unit
+
+    override fun onResume() {
+        super.onResume()
+        googleApiClient.connect()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        googleApiClient.disconnect()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, SearchActivity::class.java))
+        this.finish()
+    }
+
+    internal fun eventCopyLinkToClipboard() {
+        (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
+                ClipData.newPlainText("tracking_url", ui.bottomCard.tvURL.text)
+    }
+
+    internal fun eventActionButtonClicked() {
+        when (action) {
+            AppConstants.ACTION_CHOOSE_ON_MAP -> {
+                action = AppConstants.ACTION_SEND_WAY_LOCATION
+                initBottomButtonCard(true, action)
+                destinationLatLng = locationLatLng!!
+                addDestinationMarker(destinationLatLng)
+                isConfirm = true
+            }
+        // Click sharing
+            AppConstants.ACTION_SEND_WAY_LOCATION, AppConstants.ACTION_CURRENT_LOCATION -> {
+                action = null
+                ui.bottomCard.startProgress()
+                addDisposables(shareViewModel.getTrackingURL()
+                        .observeOnUiThread()
+                        .subscribe(this::handleTrackingUrlComplete))
+                isStartTracking = true
+                handlerProgressTracking()
+            }
+            else -> shareLocation()
+        }
+        setEnableRlSearchLocation()
+    }
+
+    internal fun eventRlSearchLocationClicked() {
+        startActivity(Intent(this, SearchActivity::class.java))
+    }
+
+    internal fun eventButtonBackClicked() {
+        onBackPressed()
+    }
+
+    internal fun eventConfirmStopDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.share_textview_text_dialog_title))
+        builder.setMessage(resources.getString(R.string.share_textview_text_dialog_message))
+        builder.setCancelable(true)
+        builder.setNegativeButton("No") { dialog, _ -> dialog?.cancel() }
+        builder.setPositiveButton("Stop") { _, _ ->
+            isStopTracking = true
+            handleTrackingProgress.dispose()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    internal fun eventShowDialog() {
+        val dialog = ArrivedDialog.newInstance(formatInterval(countTimer), etaDistance)
+        val fragmentManager = supportFragmentManager
+        dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
+    }
+
+    private fun setEnableRlSearchLocation() {
+        if (action != AppConstants.ACTION_CHOOSE_ON_MAP) {
+            ui.rlSearchLocation.isEnabled = false
+        }
+    }
+
+    // Get ETA Distance and duration
+    private fun handleDistanceETA(row: List<Rows>) {
+        ui.trackingInfo.tvTime.text = resources.getString(R.string.eta, row[0].elements[0]
+                .duration.text)
+        ui.trackingInfo.tvDistance.text = resources.getString(R.string.open_parentheses,
+                row[0].elements[0].distance.text)
+        etaDistance = row[0].elements[0].distance.text
+    }
+
+    // Get list lat lng direction
+    private fun handleListLocationWhenReOpen(list: List<LocationRoad>) {
+    }
+
+    // Show dialog when arrived
+    private fun setArrived() {
+        val handleStartAddress: (string: String) -> Unit = { ui.trackingInfo.tvStartAddress.text = it }
+        val handleEndAddress: (string: String) -> Unit = { ui.trackingInfo.tvEndAddress.text = it }
+        val handleStartTime: (string: String) -> Unit = { ui.trackingInfo.tvTime.text = it }
+        val handleEndTime: (string: String) -> Unit = {
+            ui.trackingInfo.tvEndTime.text = it
+            timeArrived = it
+        }
+        ui.bottomCard.hideBottomCardLayout()
+        ui.trackingInfo.showTrackingProgress()
+        ui.trackingInfo.hideTrackingInfor()
+        ui.trackingInfo.showArrivedInfor()
+        ui.trackingInfo.circleProgressBar.progress = TYPE_PROGRESS_MAX
+        ui.trackingInfo.circleProgressBar.circleProgressColor = resources.getColor(R.color
+                .violet)
+        ui.trackingInfo.tvStartTime.text = timeStart
+        addDisposables(shareViewModel.getLocationName(locationLatLng!!)
+                .observeOnUiThread()
+                .subscribe(handleStartAddress),
+                shareViewModel.getLocationName(destinationLatLng)
+                        .observeOnUiThread()
+                        .subscribe(handleEndAddress),
+                shareViewModel.getCalendarDateTime()
+                        .observeOnUiThread()
+                        .subscribe(handleEndTime),
+                shareViewModel.getTimeDuringStatus(countTimer / AppConstants.TIME_ZOOM_CAMERA)
+                        .observeOnUiThread()
+                        .subscribe(handleStartTime))
+        ui.trackingInfo.tvDistance.text = etaDistance
+        ui.trackingInfo.imgBtnCall.imageResource = R.drawable.ic_reached
+        eventShowDialog()
+    }
+
+    private fun shareLocation() {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        val message = "My Location is ${ui.bottomCard.tvURL.text}"
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message)
+        startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), REQUEST_CODE)
+    }
+
+    private fun addDestinationMarker(latLng: LatLng?) {
+        if (latLng != null) {
+            googleMap.addMarker(MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
+                    .title(destinationName)
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
+                    ?.showInfoWindow()
+            ui.imgPickLocation.visibility = View.INVISIBLE
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                    .target(latLng)
+                    .zoom(ZOOM_SIZE)
+                    .build()), AppConstants.TIME_ZOOM_CAMERA, object : GoogleMap.CancelableCallback {
+                override fun onFinish() = Unit
+
+                override fun onCancel() = Unit
+            })
+        }
+    }
+
+    private fun drawCurrentMaker(location: Location) {
+        val currentLocation = LatLng(location.latitude, location.longitude)
+        if (!isStartTracking) {
+            googleMap.clear()
+            marker = googleMap.addMarker(MarkerOptions()
+                    .position(currentLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
+                    .title(getString(R.string.current_location))
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
+            addPulseRing(currentLocation)
+            if (action == AppConstants.ACTION_CHOOSE_ON_MAP)
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
+                        .target(currentLocation)
+                        .zoom(ZOOM_SIZE)
+                        .build()), AppConstants.TIME_ZOOM_CAMERA, object : GoogleMap.CancelableCallback {
+                    override fun onFinish() = Unit
+
+                    override fun onCancel() = Unit
+                })
+        } else {
+            marker?.remove()
+        }
+    }
+
+    private fun addPulseRing(latLng: LatLng) {
+        val drawable = GradientDrawable()
+        drawable.shape = GradientDrawable.OVAL
+        drawable.setSize(AppConstants.KEY_DRAWABLE_SIZE, AppConstants.KEY_DRAWABLE_SIZE)
+        drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
+
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        groundOverlay = googleMap.addGroundOverlay(GroundOverlayOptions()
+                .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
+                .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
+        val groundAnimation = RadiusAnimation(groundOverlay)
+        groundAnimation.repeatCount = Animation.INFINITE
+        groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
+        supportMapFragment.view?.startAnimation(groundAnimation)
+    }
+
+    private fun getLocationName(locationName: String) {
+        ui.tvLocation.text = locationName
+    }
+
+    private fun initLocationRequest() {
+        locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = ShareActivity.INTERVAL
+        locationRequest.fastestInterval = ShareActivity.INTERVAL
+    }
+
+    private fun initGoogleApiClient() {
+        googleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build()
+    }
+
+    private fun requestLocation() {
+        shareViewModel.getCurrentLocationHypertrack()
+    }
+
+    private fun updateCurrentTimeView() {
+        ui.trackingInfo.tvSpeed.text = String.format("%.2f", averageSpeed).plus(" km/h")
+        ui.trackingInfo.circleProgressBar.progress = AppConstants.PROGRESS_BAR_MAX
+    }
+
+    private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
+        val latLng = hyperTrackLocation.geoJSONLocation.latLng
+        currentLatLng = latLng
+        // get location distance estimate
+        addDisposables(shareViewModel
+                .getLocationDistance("${latLng.latitude},${latLng.longitude}",
+                        "${destinationLatLng.latitude},${destinationLatLng.longitude}")
+                .observeOnUiThread()
+                .subscribe(this::handleDistanceETA),
+                shareViewModel.compareLocation(latLng,
+                        destinationLatLng)
+                        .observeOnUiThread()
+                        .subscribe(this::handleCompareLocation),
+                shareViewModel.getCalendarDateTime()
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetCurrentDateTime))
+
+        if (locationUpdates != null) {
+            if (latLng != null) {
+                if (isReTracking && locationLatLng != latLng) {
+                    isReTracking = false
+                } else {
+                    locationUpdates?.add(latLng)
+                }
+            }
+
+            if (locationUpdates!!.size > 1) {
+                getListLocation(latLng, locationUpdates!!.size - 1)
+            }
+            updateView()
+            updateMapView(latLng)
+        }
+    }
+
+    private fun updateView() {
+        if (!isStopTracking) {
+            ui.trackingInfo.tvActionStatus.text = resources.getString(R.string.leaving)
+        }
+        ui.trackingInfo.tvSpeed.text = String.format("%.2f", averageSpeed).plus(" km/h")
+        ui.trackingInfo.tvElapsedTime.text = formatInterval(countTimer)
+        ui.trackingInfo.tvDistanceTravelled.text = String.format("%.2f", distanceTravel).plus(" km")
+        if (etaMaximum - etaUpdate > STEP_ETA) {
+            ui.trackingInfo.circleProgressBar.progress = (etaMaximum - (etaUpdate /
+                    etaMaximum) * AppConstants.PROGRESS_BAR_MAX).toInt()
+        }
+        drawLine()
+    }
+
+    private fun formatInterval(millis: Long): String = String.format("%02d:%02d:%02d"
+            , TimeUnit.MILLISECONDS.toHours(millis)
+            , TimeUnit.MILLISECONDS.toMinutes(millis)
+            - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
+            , TimeUnit.MILLISECONDS.toSeconds(millis)
+            - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
+
+    private fun drawLine() {
+        if (locationUpdates != null) {
+            if (locationUpdates!!.size > 1) {
+                val option = PolylineOptions()
+                        .width(POLYLINE_WIDTH)
+                        .geodesic(true)
+                        .color(Color.parseColor("#1976D2"))
+                        .zIndex(Z_INDEX_VALUE)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                        .jointType(JointType.BEVEL)
+                        .addAll(locationUpdates)
+                val option1 = PolylineOptions()
+                        .width(ZOOM_SIZE)
+                        .geodesic(true)
+                        .color(Color.parseColor("#2196F3"))
+                        .zIndex(Z_INDEX_VALUE)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                        .jointType(JointType.BEVEL)
+                        .addAll(locationUpdates)
+                lineSmall?.remove()
+                lineSmall = googleMap.addPolyline(option)
+                lineSmall?.pattern = null
+                lineLarge?.remove()
+                lineLarge = googleMap.addPolyline(option1)
+                lineLarge?.pattern = null
+            }
+        }
+    }
+
+    private fun updateMapView(latLng: LatLng) {
+        if (locationUpdates!!.size > 1) {
+            addDisposables(shareViewModel.getAngleMarker(locationUpdates!![locationUpdates!!.size - 2], locationUpdates!![locationUpdates!!.size - 1])
+                    .observeOnUiThread()
+                    .subscribe(this::handleAngleMarker))
+        }
+        if (currentMarker == null) {
+            currentMarker = googleMap.addMarker(MarkerOptions().
+                    position(latLng).
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
+                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
+                    .flat(true))
+        } else {
+            currentMarker!!.position = latLng
+            currentMarker!!.rotation = angle
+        }
+        MarkerAnimation.animateMarker(currentMarker, latLng)
+    }
+
+    private fun checkStatus(speed: Float): String {
+        return if (speed <= AppConstants.MIN_SPEED) {
+            "STOP"
+        } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
+            "MOVING"
+        } else "DRIVER"
+    }
+
+    private fun getListLocation(latLng: LatLng, position: Int) {
+        val status = checkStatus(averageSpeed)
+        var description: String? = null
+        val handleDescription: (string: String) -> Unit = { description = it }
+        if (currentStatus != status) {
+            if (status == "STOP") {
+                addDisposables(shareViewModel.getLocationName(latLng)
+                        .observeOnUiThread()
+                        .subscribe(handleDescription))
+            } else {
+                // Time during status
+                addDisposables(shareViewModel.getTimeDuringStatus((countTimer - endStatus) /
+                        AppConstants.TIME_ZOOM_CAMERA)
+                        .observeOnUiThread()
+                        .subscribe(this::handleTimeDuringStatus))
+                for (i in 0..(position - 1)) {
+                    addDisposables(shareViewModel
+                            .getDistancePerSecond(locationUpdates!![i], locationUpdates!![i + 1])
+                            .observeOnUiThread()
+                            .subscribe(this::handleDistancePerSecond))
+                }
+                endStatus = countTimer
+                description = time.plus(" | ").plus(distance.toString()).plus("km")
+            }
+        }
+        val location = TrackingInformation(DateTimeUtil().getTimeChangeStatus(),
+                status, description, latLng)
+        locations?.add(location)
+        currentStatus = status
+        startPosition = position
+    }
+
+    private fun deleteListTrackingLatLng() {
+        locationUpdates?.clear()
     }
 
     private fun initMap() {
@@ -143,98 +569,22 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private fun configMap() {
         supportMapFragment.getMapAsync { googleMap ->
             googleMap.setOnCameraIdleListener(this)
-            mGoogleMap = googleMap
+            this.googleMap = googleMap
             mapEvent()
         }
     }
 
     private fun mapEvent() {
-        mCurrentLocation = LocationUtil(this).getCurrentLocation()
-        mCurrentLatLng = mCurrentLocation?.longitude?.let { mCurrentLocation?.latitude?.let { it1 -> LatLng(it1, it) } }
-        mCurrentLocation?.let { drawCurrentMaker(it) }
+        handleDrawCurrentMarker()
+    }
 
-        mGoogleMap.setOnCameraIdleListener(this)
-        val lat = mMyLocation?.geometry?.location?.lat
-        val lng = mMyLocation?.geometry?.location?.lng
+    private fun drawMarkerWhenClickItemSearch() {
+        val lat = myLocation?.geometry?.location?.lat
+        val lng = myLocation?.geometry?.location?.lng
         if (lat != null && lng != null) {
-            mLatLng = LatLng(lat, lng)
-            addDestinationMarker(mLatLng)
+            locationLatLng = LatLng(lat, lng)
+            addDestinationMarker(locationLatLng)
         }
-        if (mAction == AppConstants.ACTION_CURRENT_LOCATION) {
-            mLatLng = mCurrentLocation?.latitude?.let { mCurrentLocation?.longitude?.let { it1 -> LatLng(it, it1) } }
-            addDestinationMarker(mLatLng)
-            addDisposables(shareViewModel.getLocationName(mLatLng!!)
-                    .observeOnUiThread()
-                    .subscribe(this::getLocationName))
-            mIsConfirm = true
-        }
-        if (mLatLng != null) {
-            mLatLng?.let { mDestinationLatLng = it }
-        }
-        addDisposables(shareViewModel.getLocationName(mCurrentLatLng!!)
-                .observeOnUiThread()
-                .subscribe(this::getLocationName))
-    }
-
-    private fun initializeUIViews() {
-        ui.bottomCard.onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
-            override fun onCloseButtonClick() {
-                ui.bottomCard.hideBottomCardLayout()
-                ui.trackingInfo.showTrackingProgress()
-            }
-
-            override fun onActionButtonClick() {
-                eventActionButtonClicked()
-            }
-
-            override fun onCopyButtonClick() {
-                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
-                        ClipData.newPlainText("tracking_url", ui.bottomCard.tvURL.text)
-            }
-        }
-
-        ui.trackingInfo.onTrackingInfoListener = object : TrackingProgressInfo.OnTrackingProgressListener {
-            override fun onStopButtonClick() {
-                confirmStopDialog()
-            }
-
-            override fun onShareButtonClick() {
-                ui.bottomCard.showBottomCardLayout()
-                ui.trackingInfo.hideTrackingProgress()
-            }
-
-            override fun onCallButtonClick() {
-                // No-Op
-            }
-
-            override fun onSummaryButtonClick() {
-                showDialog()
-            }
-        }
-    }
-
-    private fun eventActionButtonClicked() {
-        when (mAction) {
-            AppConstants.ACTION_CHOOSE_ON_MAP -> {
-                mAction = AppConstants.ACTION_SEND_WAY_LOCATION
-                initBottomButtonCard(true, mAction)
-                mDestinationLatLng = mLatLng!!
-                addDestinationMarker(mDestinationLatLng)
-                mIsConfirm = true
-            }
-        // Click sharing
-            AppConstants.ACTION_SEND_WAY_LOCATION, AppConstants.ACTION_CURRENT_LOCATION -> {
-                mAction = null
-                ui.bottomCard.startProgress()
-                addDisposables(shareViewModel.getTrackingURL()
-                        .observeOnUiThread()
-                        .subscribe(this::handleTrackingUrlComplete))
-                mIsStartTracking = true
-                handlerProgressTracking()
-            }
-            else -> shareLocation()
-        }
-        setEnableRlSearchLocation()
     }
 
     private fun initBottomButtonCard(show: Boolean, action: String?) {
@@ -266,338 +616,71 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                 ui.bottomCard.showTitle()
             }
         }
-        if (show && !mIsArrived) {
+        if (show && !isArrived) {
             ui.bottomCard.showBottomCardLayout()
             ui.trackingInfo.hideTrackingProgress()
         }
     }
 
-    override fun onBindViewModel() {
-        addDisposables(shareViewModel.batteryCapacity
-                .observeOnUiThread()
-                .subscribe(this::handleShowBatteryCapacity),
-                shareViewModel.getCalendarDateTime()
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetCurrentDateTime),
-                shareViewModel.result
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetCurrentLocation))
-    }
-
-    override fun onLocationChanged(location: Location) {
-        if (!mIsStartTracking) {
-            if (mMarker != null && mGroundOverlay != null) {
-                val latLng = LatLng(location.latitude, location.longitude)
-                mMarker?.position = latLng
-                mGroundOverlay?.position = latLng
-            }
-        }
-    }
-
-    override fun onCameraIdle() {
-        mLatLng = mGoogleMap.cameraPosition?.target
-        if (!mIsConfirm) {
-            if (mMyLocation?.geometry?.location == null || mAction == AppConstants.ACTION_CHOOSE_ON_MAP) {
-                addDisposables(shareViewModel.getLocationName(mLatLng!!)
-                        .observeOnUiThread()
-                        .subscribe(this::getLocationName))
-            } else {
-                val lat = mMyLocation?.geometry?.location?.lat
-                val lng = mMyLocation?.geometry?.location?.lng
-                if (lat != null && lng != null) {
-                    mLatLng = LatLng(lat, lng)
-                    addDisposables(shareViewModel.getLocationName(mLatLng!!)
-                            .observeOnUiThread()
-                            .subscribe(this::getLocationName))
+    private fun getCurrentLocation(location: Location) {
+        currentLocation = location
+        currentLatLng = currentLocation?.longitude?.
+                let {
+                    currentLocation?.latitude?.
+                            let { it1 -> LatLng(it1, it) }
                 }
-                mIsConfirm = true
-            }
-        }
-    }
+        currentLocation?.let { drawCurrentMaker(it) }
 
-    internal fun eventRlSearchLocationClicked() {
-        startActivity(Intent(this, SearchActivity::class.java))
-    }
+        drawMarkerWhenClickItemSearch()
 
-    internal fun eventButtonBackClicked() {
-        onBackPressed()
-    }
-
-    private fun setEnableRlSearchLocation() {
-        if (mAction != AppConstants.ACTION_CHOOSE_ON_MAP) {
-            ui.rlSearchLocation.isEnabled = false
-        }
-    }
-
-    // Get ETA Distance and duration
-    private fun handleDistanceETA(row: List<Rows>) {
-        ui.trackingInfo.tvTime.text = resources.getString(R.string.eta, row[0].elements[0]
-                .duration.text)
-        ui.trackingInfo.tvDistance.text = resources.getString(R.string.open_parentheses,
-                row[0].elements[0].distance.text)
-    }
-
-    // Get list lat lng direction
-    private fun handleListLocationWhenReOpen(list: List<LocationRoad>) {
-    }
-
-    // Show dialog when arrived
-    private fun setArrived() {
-        val handleStartAddress: (string: String) -> Unit = { ui.trackingInfo.tvStartAddress.text = it }
-        val handleEndAddress: (string: String) -> Unit = { ui.trackingInfo.tvEndAddress.text = it }
-        val handleStartTime: (string: String) -> Unit = { ui.trackingInfo.tvTime.text = it }
-        val handleEndTime: (string: String) -> Unit = {
-            ui.trackingInfo.tvEndTime.text = it
-            mTimeArrived = it
-        }
-        ui.bottomCard.hideBottomCardLayout()
-        ui.trackingInfo.showTrackingProgress()
-        ui.trackingInfo.hideTrackingInfor()
-        ui.trackingInfo.showArrivedInfor()
-        ui.trackingInfo.circleProgressBar.progress = TYPE_PROGRESS_MAX
-        ui.trackingInfo.circleProgressBar.circleProgressColor = resources.getColor(R.color
-                .violet)
-        ui.trackingInfo.tvStartTime.text = mTimeStart
-        addDisposables(shareViewModel.getLocationName(mLatLng!!)
-                .observeOnUiThread()
-                .subscribe(handleStartAddress),
-                shareViewModel.getLocationName(mDestinationLatLng)
-                        .observeOnUiThread()
-                        .subscribe(handleEndAddress),
-                shareViewModel.getCalendarDateTime()
-                        .observeOnUiThread()
-                        .subscribe(handleEndTime),
-                shareViewModel.getTimeDuringStatus(mCountTimer / AppConstants.TIME_ZOOM_CAMERA)
-                        .observeOnUiThread()
-                        .subscribe(handleStartTime))
-        ui.trackingInfo.tvDistance.text = mEtaDistance
-        ui.trackingInfo.imgBtnCall.imageResource = R.drawable.ic_reached
-        showDialog()
-    }
-
-    private fun showDialog() {
-        val dialog = ArrivedDialog.newInstance(mTimeArrived, mEtaDistance)
-        val fragmentManager = supportFragmentManager
-        dialog.show(fragmentManager, resources.getString(R.string.arrived_dialog_tag))
-    }
-
-    private fun shareLocation() {
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        val message = "My Location is ${ui.bottomCard.tvURL.text}"
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message)
-        startActivityForResult(Intent.createChooser(sharingIntent, "Share via"), REQUEST_CODE)
-    }
-
-    private fun addDestinationMarker(latLng: LatLng?) {
-        if (latLng != null) {
-            mGoogleMap.addMarker(MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_expected_place_marker))
-                    .title(mDestinationName)
-                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
-                    ?.showInfoWindow()
-            ui.imgPickLocation.visibility = View.INVISIBLE
-            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
-                    .target(latLng)
-                    .zoom(ZOOM_SIZE)
-                    .build()), AppConstants.TIME_ZOOM_CAMERA, object : GoogleMap.CancelableCallback {
-                override fun onFinish() = Unit
-
-                override fun onCancel() = Unit
-            })
-        }
-    }
-
-    private fun drawCurrentMaker(location: Location) {
-        val currentLocation = LatLng(location.latitude, location.longitude)
-        if (!mIsStartTracking) {
-            mGoogleMap.clear()
-            mMarker = mGoogleMap.addMarker(MarkerOptions()
-                    .position(currentLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_point))
-                    .title(getString(R.string.current_location))
-                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR))
-            addPulseRing(currentLocation)
-            if (mAction == AppConstants.ACTION_CHOOSE_ON_MAP)
-                mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder()
-                        .target(currentLocation)
-                        .zoom(ZOOM_SIZE)
-                        .build()), AppConstants.TIME_ZOOM_CAMERA, object : GoogleMap.CancelableCallback {
-                    override fun onFinish() = Unit
-
-                    override fun onCancel() = Unit
-                })
-        } else {
-            mMarker?.remove()
-        }
-    }
-
-    private fun addPulseRing(latLng: LatLng) {
-        val drawable = GradientDrawable()
-        drawable.shape = GradientDrawable.OVAL
-        drawable.setSize(AppConstants.KEY_DRAWABLE_SIZE, AppConstants.KEY_DRAWABLE_SIZE)
-        drawable.setColor(ContextCompat.getColor(this, R.color.pulse_color))
-
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        mGroundOverlay = mGoogleMap.addGroundOverlay(GroundOverlayOptions()
-                .position(latLng, AppConstants.KEY_GROUND_OVERLAY_POSITION)
-                .image(BitmapDescriptorFactory.fromBitmap(bitmap)))
-        val groundAnimation = RadiusAnimation(mGroundOverlay)
-        groundAnimation.repeatCount = Animation.INFINITE
-        groundAnimation.duration = AppConstants.KEY_GR_ANIMATION_DUR
-        supportMapFragment.view?.startAnimation(groundAnimation)
-    }
-
-    private fun getLocationName(locationName: String) {
-        ui.tvLocation.text = locationName
-    }
-
-    private fun initLocationRequest() {
-        mLocationRequest = LocationRequest.create()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = ShareActivity.INTERVAL
-        mLocationRequest.fastestInterval = ShareActivity.INTERVAL
-    }
-
-    override fun onConnected(p0: Bundle?) {
-        if (!HyperTrack.checkLocationPermission(this)) {
-            HyperTrack.requestPermissions(this)
+        if (action == AppConstants.ACTION_CURRENT_LOCATION) {
+            locationLatLng = currentLocation?.latitude?.
+                    let {
+                        currentLocation?.longitude?.
+                                let { it1 -> LatLng(it, it1) }
+                    }
+            addDestinationMarker(locationLatLng)
+            addDisposables(shareViewModel.getLocationName(currentLatLng!!)
+                    .observeOnUiThread()
+                    .subscribe(this::getLocationName))
+            isConfirm = true
         }
 
-        if (!HyperTrack.checkLocationServices(this)) {
-            HyperTrack.requestLocationServices(this)
-        }
-
-        if (HyperTrackUtils.isInternetConnected(this)) {
-            if (HyperTrackUtils.isLocationEnabled(this)) {
-                LocationServices.FusedLocationApi
-                        .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
-            }
+        if (locationLatLng != null) {
+            locationLatLng?.let { destinationLatLng = it }
         }
     }
-
-    override fun onConnectionSuspended(p0: Int) = Unit
-
-    private fun initGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build()
-    }
-
-    private fun confirmStopDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.share_textview_text_dialog_title))
-        builder.setMessage(resources.getString(R.string.share_textview_text_dialog_message))
-        builder.setCancelable(true)
-        builder.setNegativeButton("No") { dialog, _ -> dialog?.cancel() }
-        builder.setPositiveButton("Stop") { _, _ ->
-            mIsStopTracking = true
-            countTimer.dispose()
-        }
-        val alertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun requestLocation() {
-        shareViewModel.getCurrentLocation()
-    }
-
-    private fun updateCurrentTimeView() {
-        ui.trackingInfo.tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
-        ui.trackingInfo.circleProgressBar.progress = AppConstants.PROGRESS_BAR_MAX
-    }
-
-    private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
-        val latLng = hyperTrackLocation.geoJSONLocation.latLng
-        mCurrentLatLng = latLng
-        // get location distance estimate
-        addDisposables(shareViewModel
-                .getLocationDistance("${latLng.latitude},${latLng.longitude}",
-                        "${mDestinationLatLng.latitude},${mDestinationLatLng.longitude}")
-                .observeOnUiThread()
-                .subscribe(this::handleDistanceETA),
-                shareViewModel.compareLocation(latLng,
-                        mDestinationLatLng)
-                        .observeOnUiThread()
-                        .subscribe(this::handleCompareLocation),
-                shareViewModel.getCalendarDateTime()
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetCurrentDateTime))
-
-        if (mLocationUpdates != null) {
-            if (latLng != null) {
-                if (mIsReTracking && mLatLng != latLng) {
-                    mIsReTracking = false
-                } else {
-                    mLocationUpdates?.add(latLng)
-                }
-            }
-
-            if (mLocationUpdates!!.size > 1) {
-                getListLocation(latLng, mLocationUpdates!!.size - 1)
-            }
-            updateView()
-            updateMapView(latLng)
-        }
-    }
-
-    private fun updateView() {
-        if (!mIsStopTracking) {
-            ui.trackingInfo.tvActionStatus.text = resources.getString(R.string.leaving)
-        }
-        ui.trackingInfo.tvSpeed.text = String.format("%.2f", mAverageSpeed).plus(" km/h")
-        ui.trackingInfo.tvElapsedTime.text = formatInterval(mCountTimer)
-        ui.trackingInfo.tvDistanceTravelled.text = String.format("%.2f", mDistanceTravel).plus(" km")
-        if (mEtaMaximum - mEtaUpdate > STEP_ETA) {
-            ui.trackingInfo.circleProgressBar.progress = (mEtaMaximum - (mEtaUpdate /
-                    mEtaMaximum) * AppConstants.PROGRESS_BAR_MAX).toInt()
-        }
-        drawLine()
-    }
-
-    private fun formatInterval(millis: Long): String = String.format("%02d:%02d:%02d"
-            , TimeUnit.MILLISECONDS.toHours(millis)
-            , TimeUnit.MILLISECONDS.toMinutes(millis)
-            - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
-            , TimeUnit.MILLISECONDS.toSeconds(millis)
-            - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
-
 
     private fun handleShowBatteryCapacity(batteryCapacity: Int) {
         ui.trackingInfo.tvBattery.text = batteryCapacity.toString()
     }
 
     private fun handleGetCurrentDateTime(dateTime: String) {
-        mTimeStart = dateTime
+        timeStart = dateTime
     }
 
     private fun handleTrackingUrlComplete(link: String) {
         ui.bottomCard.tvURL.text = link
         ui.bottomCard.hideProgress()
-        initBottomButtonCard(true, mAction)
+        initBottomButtonCard(true, action)
     }
 
     private fun handlerProgressTracking() {
-        countTimer = Observable.interval(SECOND_VALUE, TimeUnit.MILLISECONDS)
+        handleTrackingProgress = Observable.interval(SECOND_VALUE, TimeUnit.MILLISECONDS)
                 .observeOnUiThread()
                 .subscribe({
-                    if (mLocationUpdates != null) {
-                        if (mIsArrived) {
-                            mEtaUpdate = 0f
-                            mAverageSpeed = 0f
-                            mCurrentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
-                            mCurrentMarker?.setAnchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
+                    if (locationUpdates != null) {
+                        if (isArrived) {
+                            etaUpdate = 0f
+                            averageSpeed = 0f
+                            currentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
+                            currentMarker?.setAnchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
                             updateCurrentTimeView()
                             setArrived()
                             deleteListTrackingLatLng()
-                            countTimer.dispose()
+                            handleTrackingProgress.dispose()
                         }
-                        mCountTimer += SECOND_VALUE
+                        countTimer += SECOND_VALUE
                         requestLocation()
                     }
                 })
@@ -608,102 +691,14 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun handleDistancePerSecond(list: List<Float>) {
-        mAverageSpeed += list[0]
+        averageSpeed += list[0]
         distance += list[1]
     }
 
-    private fun drawLine() {
-        if (mLocationUpdates != null) {
-            if (mLocationUpdates!!.size > 1) {
-                val option = PolylineOptions()
-                        .width(POLYLINE_WIDTH)
-                        .geodesic(true)
-                        .color(Color.parseColor("#1976D2"))
-                        .zIndex(ZINDEX_VALUE)
-                        .startCap(RoundCap())
-                        .endCap(RoundCap())
-                        .jointType(JointType.BEVEL)
-                        .addAll(mLocationUpdates)
-                val option1 = PolylineOptions()
-                        .width(ZOOM_SIZE)
-                        .geodesic(true)
-                        .color(Color.parseColor("#2196F3"))
-                        .zIndex(ZINDEX_VALUE)
-                        .startCap(RoundCap())
-                        .endCap(RoundCap())
-                        .jointType(JointType.BEVEL)
-                        .addAll(mLocationUpdates)
-                mLine?.remove()
-                mLine = mGoogleMap.addPolyline(option)
-                mLine?.pattern = null
-                mLine1?.remove()
-                mLine1 = mGoogleMap.addPolyline(option1)
-                mLine1?.pattern = null
-            }
-        }
-    }
-
-    private fun updateMapView(latLng: LatLng) {
-        if (mLocationUpdates!!.size > 1) {
-            addDisposables(shareViewModel.getAngleMarker(mLocationUpdates!![mLocationUpdates!!.size - 2], mLocationUpdates!![mLocationUpdates!!.size - 1])
-                    .observeOnUiThread()
-                    .subscribe(this::handleAngleMarker))
-        }
-        if (mCurrentMarker == null) {
-            mCurrentMarker = mGoogleMap.addMarker(MarkerOptions().
-                    position(latLng).
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ht_hero_marker))
-                    .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
-                    .flat(true))
-        } else {
-            mCurrentMarker!!.position = latLng
-            mCurrentMarker!!.rotation = mAngle
-        }
-        MarkerAnimation.animateMarker(mCurrentMarker, latLng)
-    }
-
-    private fun checkStatus(speed: Float): String {
-        return if (speed <= AppConstants.MIN_SPEED) {
-            "STOP"
-        } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
-            "MOVING"
-        } else "DRIVER"
-    }
-
-    private fun getListLocation(latLng: LatLng, position: Int) {
-        val status = checkStatus(mAverageSpeed)
-        var description: String? = null
-        val handleDescription: (string: String) -> Unit = { description = it }
-        if (mCurrentStatus != status) {
-            if (status == "STOP") {
-                addDisposables(shareViewModel.getLocationName(latLng)
-                        .observeOnUiThread()
-                        .subscribe(handleDescription))
-            } else {
-                // Time during status
-                addDisposables(shareViewModel.getTimeDuringStatus((mCountTimer - mEndStatus) /
-                        AppConstants.TIME_ZOOM_CAMERA)
-                        .observeOnUiThread()
-                        .subscribe(this::handleTimeDuringStatus))
-                for (i in 0..(position - 1)) {
-                    addDisposables(shareViewModel
-                            .getDistancePerSecond(mLocationUpdates!![i], mLocationUpdates!![i + 1])
-                            .observeOnUiThread()
-                            .subscribe(this::handleDistancePerSecond))
-                }
-                mEndStatus = mCountTimer
-                description = time.plus(" | ").plus(distance.toString()).plus("km")
-            }
-        }
-        val location = TrackingInformation(DateTimeUtil().getTimeChangeStatus(),
-                status, description, latLng)
-        mLocations?.add(location)
-        mCurrentStatus = status
-        mStartPosition = position
-    }
-
-    private fun deleteListTrackingLatLng() {
-        mLocationUpdates?.clear()
+    private fun handleDrawCurrentMarker() {
+        addDisposables(shareViewModel.getCurrentLocation()
+                .observeOnUiThread()
+                .subscribe(this::getCurrentLocation))
     }
 
     private fun handleTimeDuringStatus(stringTime: String) {
@@ -711,20 +706,10 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun handleCompareLocation(isArrived: Boolean) {
-        mIsArrived = isArrived
+        this.isArrived = isArrived
     }
 
     private fun handleAngleMarker(float: Float) {
-        mAngle = float
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mGoogleApiClient.connect()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mGoogleApiClient.disconnect()
+        angle = float
     }
 }

@@ -128,9 +128,41 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
 
             bottomCard = bottomCard {
                 visibility = View.GONE
+                onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
+                    override fun onCloseButtonClick() {
+                        bottomCard.hideBottomCardLayout()
+                        trackingInfo.showTrackingProgress()
+                    }
+
+                    override fun onActionButtonClick() {
+                        owner.eventActionButtonClicked()
+                    }
+
+                    override fun onCopyButtonClick() {
+                        owner.eventCopyLinkToClipboard()
+                    }
+                }
             }
 
             trackingInfo = trackingProgressInfo {
+                onTrackingInfoListener = object : TrackingProgressInfo.OnTrackingProgressListener {
+                    override fun onStopButtonClick() {
+                        owner.eventConfirmStopDialog()
+                    }
+
+                    override fun onShareButtonClick() {
+                        bottomCard.showBottomCardLayout()
+                        trackingInfo.hideTrackingProgress()
+                    }
+
+                    override fun onCallButtonClick() {
+                        // No-Op
+                    }
+
+                    override fun onSummaryButtonClick() {
+                        owner.eventShowDialog()
+                    }
+                }
             }
         }
     }

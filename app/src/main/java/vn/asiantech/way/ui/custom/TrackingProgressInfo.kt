@@ -179,8 +179,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                             rlExpandedInfo = relativeLayout {
                                 lparams(matchParent, wrapContent) {
-                                    leftMargin = dimen(R.dimen.track_margin_value_low)
-                                    rightMargin = dimen(R.dimen.track_margin_value_low)
+                                    horizontalMargin = dimen(R.dimen.track_margin_value_low)
                                     bottomOf(R.id.tracking_progress_info_rl_collapse)
                                 }
                                 backgroundResource = R.color.colorWhite
