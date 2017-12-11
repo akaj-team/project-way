@@ -5,12 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
-import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.AnkoContext
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
-import vn.asiantech.way.utils.AppConstants
-import java.util.concurrent.TimeUnit
 
 /**
  * Invite Fragment
@@ -43,7 +40,6 @@ class InviteFragment : BaseFragment() {
     private var groupName = ""
     private var ownerId = ""
     private val users = mutableListOf<User>()
-    private val searchInviteObservable = PublishSubject.create<String>()
     private lateinit var ui: InviteFragmentUI
     private lateinit var inviteViewModel: InviteViewModel
     private lateinit var adapter: InviteUserListAdapter
@@ -64,19 +60,13 @@ class InviteFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(searchInviteObservable
+        addDisposables(inviteViewModel.triggerSearchListUser()
                 .observeOnUiThread()
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .filter { it.isNotEmpty() }
-                .subscribe({
-                    inviteViewModel
-                            .searchListUser(it)
-                            .subscribe(this::onGetListUserInviteComplete)
-                }),
+                .subscribe(this::onGetListUserInviteComplete),
                 inviteViewModel.resetDataStatus
                         .observeOnUiThread()
                         .subscribe(this::onResetDataListWhenStartSearch))
+        inviteViewModel.searchListUser()
     }
 
     /**
@@ -90,7 +80,7 @@ class InviteFragment : BaseFragment() {
      * On get list user invite from search action
      */
     internal fun onGetListUserInvite(name: String) {
-        searchInviteObservable.onNext(name)
+        inviteViewModel.searchListUser(name)
     }
 
     /**
