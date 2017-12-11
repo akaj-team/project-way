@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -24,7 +25,6 @@ import vn.asiantech.way.extension.onTextChangeListener
  */
 class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
 
-    private lateinit var dialogInterface: DialogInterface
     internal lateinit var frAvatar: FrameLayout
     internal lateinit var progressBarAvatar: ProgressBar
     internal lateinit var imgAvatar: ImageView
@@ -36,6 +36,8 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
     internal lateinit var tvSkip: TextView
     internal lateinit var progressBar: ProgressBar
 
+    private lateinit var dialogInterface: DialogInterface
+
     override fun createView(ui: AnkoContext<RegisterActivity>) = with(ui) {
         relativeLayout {
             lparams(matchParent, matchParent)
@@ -46,8 +48,6 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                     backgroundResource = R.drawable.ic_default_avatar
                     lparams(dimen(R.dimen.register_screen_avatar_size),
                             dimen(R.dimen.register_screen_avatar_size))
-                    borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dimen(R.dimen.border)
                 }
 
                 progressBarAvatar = progressBar {
@@ -58,19 +58,24 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
                 circleImageView {
                     backgroundResource = R.drawable.ic_profile_camera
-                    borderColor = ContextCompat.getColor(context, R.color.white)
-                    borderWidth = dimen(R.dimen.border)
                 }.lparams {
                     rightMargin = dimen(R.dimen.register_screen_avatar_margin)
                     gravity = Gravity.END
                 }
 
                 onClick {
-                    owner.eventOnViewClicked(frAvatar)
+                    owner.eventOnViewClicked(it!!)
                 }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
                 centerHorizontally()
+            }.applyRecursively {
+                when (it) {
+                    is CircleImageView -> {
+                        it.borderColor = ContextCompat.getColor(ctx, R.color.white)
+                        it.borderWidth = dimen(R.dimen.border)
+                    }
+                }
             }
 
             textView(R.string.register_description) {
@@ -79,10 +84,9 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_fr_avatar)
-                val margin = resources.getDimension(R.dimen.margin_xxhigh).toInt()
+                val margin = dimen(R.dimen.margin_xxhigh)
                 topMargin = margin
-                leftMargin = margin
-                rightMargin = margin
+                horizontalMargin = margin
             }
 
             relativeLayout {
@@ -91,29 +95,30 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
                 edtName = editText {
                     id = R.id.register_activity_edt_name
-                    backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
+                    backgroundResource = android.R.color.transparent
                     hint = resources.getString(R.string.register_hint_name)
                     textSize = px2dip(dimen(R.dimen.register_screen_name_text_size))
                     gravity = Gravity.CENTER
+                    inputType = InputType.TYPE_CLASS_TEXT
+                    singleLine = true
+                    horizontalPadding = dimen(R.dimen.register_screen_edt_name_padding)
 
                     onEditorAction { _, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                            requestFocus()
+                            edtPhone.requestFocus()
                         }
                     }
                 }.lparams(matchParent, dimen(R.dimen.register_screen_edit_text_height))
 
                 view {
                     id = R.id.register_activity_view_line
-                    backgroundColor = ContextCompat.getColor(context, R.color.grayLight)
+                    backgroundResource = R.color.grayLight
                 }.lparams(matchParent, dimen(R.dimen.border)) {
                     below(R.id.register_activity_edt_name)
                 }
 
                 linearLayout {
-                    val padding = dimen(R.dimen.register_screen_ll_phone_padding)
-                    leftPadding = padding
-                    rightPadding = padding
+                    horizontalPadding = dimen(R.dimen.register_screen_ll_phone_padding)
                     imgFlag = imageView(R.drawable.ic_vn).lparams {
                         gravity = Gravity.CENTER_VERTICAL
                     }
@@ -123,10 +128,10 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                             dialogInterface = alert {
                                 customView {
                                     recyclerView {
-                                        layoutManager = LinearLayoutManager(context)
+                                        layoutManager = LinearLayoutManager(ctx)
                                         adapter = countryAdapter
                                         countryAdapter.onItemClick = { country ->
-                                            Picasso.with(context).load(country.flagFilePath).into(imgFlag)
+                                            Picasso.with(ctx).load(country.flagFilePath).into(imgFlag)
                                             owner.isoCode = country.iso
                                             tvTel.text = resources.getString(R.string.register_plus).plus(country.tel)
                                             dialogInterface.dismiss()
@@ -147,15 +152,16 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
 
                     edtPhone = editText {
                         id = R.id.register_activity_edt_phone
-                        backgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
+                        backgroundResource = android.R.color.transparent
                         hint = resources.getString(R.string.register_hint_phone)
                         inputType = InputType.TYPE_CLASS_PHONE
                         textSize = px2dip(dimen(R.dimen.register_screen_phone_text_size))
                         gravity = Gravity.CENTER_VERTICAL
+                        singleLine = true
 
                         onEditorAction { _, actionId, _ ->
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                hideKeyboard(getContext())
+                                hideKeyboard(ctx)
                             }
                         }
                     }.lparams(matchParent, matchParent)
@@ -166,28 +172,26 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 below(R.id.register_activity_tv_description)
                 val margin = dimen(R.dimen.margin_high)
                 bottomMargin = dimen(R.dimen.margin_huge)
-                leftMargin = margin
-                rightMargin = margin
                 topMargin = margin
+                horizontalMargin = margin
             }
 
             btnRegister = button(R.string.register_button_save_text) {
                 id = R.id.register_activity_btn_save
                 backgroundResource = R.drawable.custom_button_save
                 setAllCaps(false)
-                textColor = ContextCompat.getColor(context, R.color.white)
+                textColor = ContextCompat.getColor(ctx, R.color.white)
                 textSize = px2dip(dimen(R.dimen.register_screen_save_button_text_size))
                 isEnabled = false
 
                 onClick {
-                    owner.eventOnViewClicked(btnRegister)
+                    owner.eventOnViewClicked(it!!)
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
                 below(R.id.register_activity_rl_information)
-                leftMargin = margin
                 topMargin = margin
-                rightMargin = margin
+                horizontalMargin = margin
             }
 
             tvSkip = textView(R.string.register_skip) {
@@ -196,7 +200,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 gravity = Gravity.CENTER
 
                 onClick {
-                    owner.eventOnViewClicked(tvSkip)
+                    owner.eventOnViewClicked(it!!)
                 }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
