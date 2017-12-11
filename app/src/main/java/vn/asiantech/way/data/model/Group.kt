@@ -1,6 +1,5 @@
 package vn.asiantech.way.data.model
 
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 /**
@@ -8,5 +7,4 @@ import java.io.Serializable
  * Created by cuongcaov on 09/11/2017
  */
 data class Group(val id: String, var name: String, var token: String,
-                 var ownerId: String, @SerializedName("created_at") val createAt: String,
-                 @SerializedName("modified_at") var modifiedAt: String) : Serializable
+                 var ownerId: String, val createAt: String, var modifiedAt: String) : Serializable
