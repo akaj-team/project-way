@@ -116,7 +116,6 @@ class ViewInviteFragment : BaseFragment() {
     private fun handleAcceptInviteSuccess(isOwner: Boolean) {
         if (isOwner) {
             //TODO : send broadcast to Group Activity
-            toast("owner success")
         } else {
             toast(R.string.notify_success)
         }

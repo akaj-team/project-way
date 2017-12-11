@@ -1,7 +1,7 @@
 package vn.asiantech.way.ui.group.showinvite
 
-import android.graphics.Color
 import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import org.jetbrains.anko.*
@@ -20,7 +20,7 @@ class ViewInviteFragmentUI(private val inviteListAdapter: InviteListAdapter) : A
             textView(R.string.invite_list) {
                 padding = dimen(R.dimen.group_invite_fragment_padding_title)
                 backgroundResource = R.color.colorGrayLight
-                textColor = Color.BLACK
+                textColor = ContextCompat.getColor(context, R.color.colorBlack)
                 gravity = Gravity.CENTER_VERTICAL
                 textSize = px2dip(dimen(R.dimen.text_size_normal))
                 typeface = Typeface.DEFAULT_BOLD
