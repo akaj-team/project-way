@@ -125,12 +125,15 @@
     <string name="leave_group_notification">You have left %s.</string>
     <string name="call_intent">tel:+84%s</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="join">join</string>
     <string name="group_screen_invite_request">Invite requests</string>
     <string name="group_name_empty">Group name must not empty</string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>
     <string name="arrived_dialog_total_distance">7 km</string>
+    <string name="enter_group_name">Enter group name</string>
+    <string name="success">success</string>
 
     <!--Invite Screen-->
     <string name="invite_text_ok">OK</string>

@@ -5,8 +5,9 @@ import android.text.TextWatcher
 import android.widget.EditText
 
 /**
- *
+ * Copyright © 2017 AsianTech inc.
  * Created by haingoq on 06/12/2017.
+ * Function for EditText when text changed
  */
 fun EditText.onTextChangeListener(beforeTextChanged: (CharSequence?) -> Unit = {},
                                   onTextChanged: (CharSequence?) -> Unit = {},
