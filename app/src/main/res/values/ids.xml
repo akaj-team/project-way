@@ -22,6 +22,7 @@
     <!-- View ids for SplashActivityUI -->
     <item name="splash_activity_img_location" type="id" />
     <item name="splash_activity_tv_application_name" type="id" />
+    <item name="splash_activity_rl_container" type="id" />
 
     <!-- View ids for HomeAdapter -->
     <item name="home_activity_fr_map" type="id" />
@@ -95,4 +96,15 @@
     <item name="create_group_fragment_ui_btn_create" type="id" />
     <item name="create_group_fragment_ui_btn_back" type="id" />
 
+
+    <!-- id views on clInviteFragmentUIteUI -->
+    <item name="invite_recycle_view" type="id" />
+    <item name="item_invite_name" type="id" />
+    <item name="item_invite_tv_ok" type="id" />
+    <item name="item_invite_tv_cancel" type="id" />
+
+    <!-- id views on class ItemUserUI -->
+    <item name="item_user_img_avatar" type="id" />
+    <item name="item_user_tv_name" type="id" />
+    <item name="item_user_tv_invite" type="id" />
 </resources>

@@ -134,4 +134,10 @@
     <string name="arrived_dialog_total_distance">7 km</string>
     <string name="enter_group_name">Enter group name</string>
     <string name="success">success</string>
+
+    <!--Invite Screen-->
+    <string name="invite_text_ok">OK</string>
+    <string name="invite_text_cancel">Cancel</string>
+    <string name="item_user_invite">Invite</string>
+    <string name="item_user_text_hint">Enter user name</string>
 </resources>

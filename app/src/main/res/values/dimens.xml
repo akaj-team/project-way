@@ -115,4 +115,12 @@
     <dimen name="track_top_margin">4dp</dimen>
     <dimen name="track_view_height">2dp</dimen>
     <dimen name="track_btn_call_margin">3dp</dimen>
+
+    <!--Invite screen-->
+    <dimen name="invite_screen_padding">10dp</dimen>
+    <dimen name="invite_screen_top_margin">20dp</dimen>
+    <dimen name="item_user_bottom_or_top_padding">5dp</dimen>
+    <dimen name="item_user_left_or_right_padding">10dp</dimen>
+    <dimen name="item_user_img_avatar_width_or_height">48dp</dimen>
+    <dimen name="item_user_left_right_margin">15dp</dimen>
 </resources>

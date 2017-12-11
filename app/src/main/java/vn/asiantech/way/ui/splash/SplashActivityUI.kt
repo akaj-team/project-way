@@ -27,6 +27,7 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
     internal lateinit var btnEnableLocation: Button
     override fun createView(ui: AnkoContext<SplashActivity>): View = with(ui) {
         relativeLayout {
+            id = R.id.splash_activity_rl_container
             lparams(matchParent, matchParent)
             frameLayout {
                 lparams(matchParent, matchParent)
