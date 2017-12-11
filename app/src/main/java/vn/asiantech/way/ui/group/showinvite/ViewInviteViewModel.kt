@@ -26,10 +26,10 @@ class ViewInviteViewModel(private val userId: String) {
                 .deleteUserInvite(userId, invite)
                 .observeOnUiThread()
                 .doOnSubscribe {
-                    progressDialogObservable.onNext(false)
+                    progressDialogObservable.onNext(true)
                 }
                 .doFinally {
-                    progressDialogObservable.onNext(true)
+                    progressDialogObservable.onNext(false)
                 }
     }
 
@@ -38,10 +38,10 @@ class ViewInviteViewModel(private val userId: String) {
                 .acceptInvite(userId, invite)
                 .observeOnUiThread()
                 .doOnSubscribe {
-                    progressDialogObservable.onNext(false)
+                    progressDialogObservable.onNext(true)
                 }
                 .doFinally {
-                    progressDialogObservable.onNext(true)
+                    progressDialogObservable.onNext(false)
                 }
     }
 }

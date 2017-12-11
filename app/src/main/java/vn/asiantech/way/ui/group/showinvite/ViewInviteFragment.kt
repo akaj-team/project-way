@@ -76,11 +76,11 @@ class ViewInviteFragment : BaseFragment() {
         toast(error.message.toString())
     }
 
-    private fun updateProgressDialog(isShow: Boolean) {
-        if (isShow) {
-            hideProgressDialog()
-        } else {
+    private fun updateProgressDialog(show: Boolean) {
+        if (show) {
             showProgressDialog()
+        } else {
+            hideProgressDialog()
         }
     }
 

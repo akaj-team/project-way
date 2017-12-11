@@ -33,7 +33,7 @@ abstract class BaseFragment : Fragment() {
         ds.forEach { subscription.add(it) }
     }
 
-    protected fun setProgressDialog(message: String, title: String) {
+    protected fun showProgressDialog(message: String, title: String) {
         progressDialog.setMessage(message)
         progressDialog.setTitle(title)
     }
