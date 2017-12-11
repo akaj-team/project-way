@@ -11,6 +11,7 @@ import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
@@ -21,6 +22,7 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val wayRepository = WayRepository()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -297,7 +299,7 @@ class GroupRemoteDataSource : GroupDataSource {
         val userRequest = firebaseDatabase.getReference("user/$userId/request")
         if (invite.request) {
             // This case hanlde when invite sent by group owner.
-            HypertrackApi.instance.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+            wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
                     .subscribeOn(Schedulers.io())
                     .subscribe({
                         result.onSuccess(true)
@@ -327,7 +329,7 @@ class GroupRemoteDataSource : GroupDataSource {
         currentGroupRequestRef.removeValue().addOnSuccessListener {
             if (invite.request) {
                 // This case handle when invite sent by group owner.
-                HypertrackApi.instance.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
                         .subscribeOn(Schedulers.io())
                         .subscribe({
                             result.onSuccess(true)
@@ -342,8 +344,7 @@ class GroupRemoteDataSource : GroupDataSource {
                 invite.request = true
                 userRequest.setValue(invite)
                         .addOnSuccessListener {
-                            val newGroupRef = firebaseDatabase
-                                    .getReference("group/${invite.to}/request/$userId")
+                            val newGroupRef = firebaseDatabase.getReference("group/${invite.to}/request/$userId")
                             invite.to = userId
                             newGroupRef.setValue(invite)
                                     .addOnSuccessListener {
@@ -356,7 +357,6 @@ class GroupRemoteDataSource : GroupDataSource {
                         .addOnFailureListener {
                             result.onError(it)
                         }
-
             }
         }.addOnFailureListener {
             result.onError(it)
