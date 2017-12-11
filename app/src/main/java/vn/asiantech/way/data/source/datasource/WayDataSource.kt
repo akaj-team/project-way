@@ -51,7 +51,7 @@ internal interface WayDataSource {
      *  @param placeId the id of location.
      *  @return ResultPlaceDetail object which is Observable.
      */
-    fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail>
+    fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail>
 
     /**
      *  This method to search location by name.
@@ -61,6 +61,7 @@ internal interface WayDataSource {
      *  @return AutoCompleteResult object which is Observable.
      */
     fun searchLocations(input: String,
+                        key: String,
                         language: String = "vi",
                         sensor: Boolean = false): Observable<AutoCompleteResult>
 

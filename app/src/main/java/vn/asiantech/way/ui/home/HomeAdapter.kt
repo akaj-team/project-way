@@ -49,6 +49,26 @@ class HomeAdapter(private val context: Context,
         private val imgPoint: ImageView = item.find(R.id.home_adapter_img_point)
         private val llItemLocation: LinearLayout = item.find(R.id.home_adapter_ll_location)
 
+        init {
+            llItemLocation.onClick {
+                onClickItem(adapterPosition)
+            }
+
+            imgArrowDown.onClick {
+                expTvDescription.toggle()
+            }
+
+            expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
+                override fun onExpand(view: ExpandableTextView) {
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
+                }
+
+                override fun onCollapse(view: ExpandableTextView) {
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
+                }
+            }
+        }
+
         internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
                 tvTime.text = time
@@ -68,24 +88,6 @@ class HomeAdapter(private val context: Context,
                         imgPoint.backgroundResource = R.drawable.ic_point_pink
                         imgArrowDown.visibility = View.GONE
                     }
-                }
-            }
-
-            llItemLocation.onClick {
-                onClickItem(adapterPosition)
-            }
-
-            imgArrowDown.onClick {
-                expTvDescription.toggle()
-            }
-
-            expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
-                override fun onExpand(view: ExpandableTextView) {
-                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
-                }
-
-                override fun onCollapse(view: ExpandableTextView) {
-                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
                 }
             }
         }

@@ -2,14 +2,13 @@ package vn.asiantech.way.ui.home
 
 import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewManager
-import android.widget.FrameLayout
 import org.jetbrains.anko.*
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import vn.asiantech.way.R
-import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
+import vn.asiantech.way.ui.custom.FloatingMenuButton
+import vn.asiantech.way.ui.custom.floatingButton
 
 /**
  * Created at 11 / 2017
@@ -17,8 +16,8 @@ import vn.asiantech.way.ui.custom.FloatingButtonHorizontal
  */
 class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeActivity> {
 
-    internal lateinit var fabMenuGroup: FloatingButtonHorizontal
-    internal lateinit var frOverlay: FrameLayout
+    internal lateinit var fabMenuGroup: FloatingMenuButton
+    internal lateinit var recycleViewLocation: RecyclerView
 
     override fun createView(ui: AnkoContext<HomeActivity>) = with(ui) {
 
@@ -26,13 +25,11 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
             lparams(matchParent, matchParent)
             relativeLayout {
                 lparams(matchParent, matchParent)
-
                 frameLayout {
                     lparams(matchParent, matchParent)
                     id = R.id.home_activity_fr_map
                 }
-
-                recyclerView {
+                recycleViewLocation = recyclerView {
                     backgroundColor = Color.TRANSPARENT
                     layoutManager = LinearLayoutManager(context)
                     adapter = homeAdapter
@@ -43,26 +40,17 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
                     rightMargin = dimen(R.dimen.home_screen_recyclerView_margin)
                 }
             }
+            fabMenuGroup = floatingButton(object : FloatingMenuButton.OnMenuClickListener {
+                override fun eventItemMenuClicked(view: View) {
+                    owner.eventOnClickItemMenu(view)
+                }
 
-            frOverlay = frameLayout {
-                visibility = View.GONE
-                backgroundResource = R.color.colorOverlay
-            }.lparams(matchParent, matchParent)
-
-            fabMenuGroup = floatingButton {}
-                    .lparams {
-                        alignParentBottom()
-                        alignParentRight()
-                        margin = dimen(R.dimen.home_screen_floating_button_margin)
-                    }
+            }) {
+            }.lparams {
+                alignParentBottom()
+                alignParentRight()
+            }
         }
     }
 }
 
-/**
- * Function to custom floatingButton
- */
-inline fun ViewManager.floatingButton(init: FloatingButtonHorizontal.() -> Unit)
-        : FloatingButtonHorizontal {
-    return ankoView({ FloatingButtonHorizontal(it) }, theme = 0, init = init)
-}

@@ -17,7 +17,6 @@ import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
-import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  * Anko layout for RegisterActivity
@@ -64,7 +63,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 }
 
                 onClick {
-                    owner.eventOnViewClicked(it!!)
+                    owner.checkPermissionGallery()
                 }
             }.lparams {
                 topMargin = dimen(R.dimen.margin_huge)
@@ -185,7 +184,16 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 isEnabled = false
 
                 onClick {
-                    owner.eventOnViewClicked(it!!)
+                    val user = owner.registerViewModel
+                            .generateUserInformation(edtName.text.toString().trim(),
+                                    edtPhone.text.toString().trim(),
+                                    owner.isoCode,
+                                    owner.avatarBitmap)
+                    if (owner.registerViewModel.isRegister) {
+                        owner.createUser(user)
+                    } else {
+                        owner.onUpdateUserInformation(user)
+                    }
                 }
             }.lparams(matchParent, dimen(R.dimen.register_screen_save_button_height)) {
                 val margin = dimen(R.dimen.register_screen_btn_register_margin)
@@ -200,7 +208,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
                 gravity = Gravity.CENTER
 
                 onClick {
-                    owner.eventOnViewClicked(it!!)
+                    owner.onSkipClick()
                 }
             }.lparams(matchParent, wrapContent) {
                 below(R.id.register_activity_btn_save)
@@ -214,11 +222,14 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             }
         }.applyRecursively { view: View ->
             if (view is EditText) {
-                when (view) {
-                    edtName, edtPhone -> view.onTextChangeListener {
-                        owner.onHandleTextChange(edtName.text.toString().trim(),
-                                edtPhone.text.toString().trim())
-                    }
+                when (view.id) {
+                    R.id.register_activity_edt_name,
+                    R.id.register_activity_edt_phone ->
+                        view.addTextChangedListener(object : OnWayTextChangeListener {
+                            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                                owner.onHandleTextChange()
+                            }
+                        })
                 }
             }
         }

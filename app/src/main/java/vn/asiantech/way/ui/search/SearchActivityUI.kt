@@ -51,7 +51,11 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                         textSizeDimen = R.dimen.search_screen_text_size
                         addTextChangedListener(object : TextChangeListener {
                             override fun afterTextChanged(editable: Editable) {
-                                owner.eventSearchTextChanged(editable.toString())
+                                if (editable.toString().trim().isNotEmpty()) {
+                                    owner.searchLocations(editable.toString().trim())
+                                } else {
+                                    owner.loadSearchHistory()
+                                }
                             }
                         })
                     }.lparams(matchParent, matchParent) {
@@ -64,7 +68,7 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                         gravity = Gravity.CENTER_VERTICAL
                         backgroundColor = Color.WHITE
                         onClick {
-                            owner.eventItemGetCurrentLocationClicked()
+                            owner.getCurrentLocation()
                         }
 
                         imageView(R.drawable.ic_my_location) {
@@ -95,7 +99,7 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                         gravity = Gravity.CENTER_VERTICAL
                         backgroundColor = Color.WHITE
                         onClick {
-                            owner.eventItemChooseLocationOnMapClicked()
+                            owner.chooseOnMap()
                         }
 
                         imageView(R.drawable.ic_choose_on_map) {
@@ -116,7 +120,7 @@ class SearchActivityUI(private val locations: MutableList<WayLocation>)
                     recyclerView {
                         id = R.id.search_activity_ui_recycler_view_location
                         locationAdapter.onItemClick = {
-                            owner.eventSearchItemClicked(it)
+                            owner.onItemClick(it)
                         }
                         layoutManager = LinearLayoutManager(context)
                         adapter = locationAdapter

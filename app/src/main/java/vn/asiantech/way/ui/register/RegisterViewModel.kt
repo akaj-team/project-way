@@ -22,13 +22,11 @@ import vn.asiantech.way.utils.AppConstants
  * Created by tien.hoang on 11/29/17.
  */
 class RegisterViewModel(val context: Context, val isRegister: Boolean) {
-    internal val createDefaultUserStatus = PublishSubject.create<UserParams>()
     internal val progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     internal val backStatus: PublishSubject<Boolean> = PublishSubject.create()
     private val wayRepository = WayRepository()
     private val assetDataRepository = LocalRepository(context)
     private var lastClickTime = 0L
-    private lateinit var user: User
 
     internal fun getCountries(): Observable<List<Country>> {
         return assetDataRepository.getCountries()
@@ -48,23 +46,15 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
                 .doOnError { progressBarStatus.onNext(false) }
     }
 
-    internal fun isEnableUpdateButton(name: String, phone: String, avatar: Bitmap?): Boolean {
-        if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)
-                && avatar != null) {
-            return false
-        }
-        return true
-    }
-
     internal fun getUser(): Single<User> {
-        progressBarStatus.onNext(true)
-        return wayRepository.getUser()
-                .observeOnUiThread()
-                .doOnSuccess {
-                    user = it
-                    progressBarStatus.onNext(false)
-                }
-                .doOnError { progressBarStatus.onNext(false) }
+        val result = wayRepository.getUser()
+        if (!isRegister) {
+            progressBarStatus.onNext(true)
+            result.observeOnUiThread()
+                    .doOnSuccess { progressBarStatus.onNext(false) }
+                    .doOnError { progressBarStatus.onNext(false) }
+        }
+        return result
     }
 
     internal fun saveLoginStatus(isLogin: Boolean) {
@@ -72,19 +62,15 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
     }
 
     internal fun generateUserInformation(name: String, phone: String,
-                                         isoCode: String?, avatar: Bitmap?) = UserParams()
-            .setName(name)
-            .setPhoto(avatar?.toBase64())
-            .setPhone(isoCode.plus("/").plus(phone))
-            .setLookupId(phone)
-
-    internal fun createUserDefault(userName: String) {
-        val userParam = UserParams()
-        userParam.name = userName
-        createDefaultUserStatus.onNext(userParam)
+                                         isoCode: String?, avatar: Bitmap?): UserParams {
+        return UserParams()
+                .setName(name)
+                .setPhoto(avatar?.toBase64())
+                .setPhone(isoCode.plus("/").plus(phone))
+                .setLookupId(phone)
     }
 
-    internal fun eventBackPressed() {
+    internal fun onBackPress() {
         backStatus.onNext(handleBackKeyEvent())
     }
 

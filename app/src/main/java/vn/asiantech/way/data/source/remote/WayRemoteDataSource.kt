@@ -77,13 +77,13 @@ internal class WayRemoteDataSource : WayDataSource {
         return ApiClient.instance.getAddressLocation(latLng).toObservable().map { it.results }
     }
 
-    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> {
-        return ApiClient.instance.getLocationDetail(placeId).toObservable()
+    override fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail> {
+        return ApiClient.instance.getLocationDetail(placeId, key).toObservable()
     }
 
-    override fun searchLocations(input: String, language: String, sensor: Boolean)
+    override fun searchLocations(input: String, key: String, language: String, sensor: Boolean)
             : Observable<AutoCompleteResult> {
-        return ApiClient.instance.searchLocations(input, language, sensor).toObservable()
+        return ApiClient.instance.searchLocations(input, key, language, sensor).toObservable()
     }
 
     override fun createGroup(name: String): Observable<Group> {
@@ -107,11 +107,9 @@ internal class WayRemoteDataSource : WayDataSource {
                 }
                 .addOnSuccessListener {
                     HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
-                            .subscribe({
+                            .subscribe {
                                 result.onNext(it)
-                            }, {
-                                result.onError(it)
-                            })
+                            }
                 }
         return result
     }

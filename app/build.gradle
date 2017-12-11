@@ -65,8 +65,7 @@ android {
                 variant.buildConfigField "String", "HYPERTRACK_BASE_URL", '"https://api.hypertrack.com/api/v1/"'
                 variant.resValue "string", "deeplink_scheme", "com.hypertracklive"
                 variant.resValue "string", "tracking_url", "www.trck.at"
-                variant.buildConfigField "String", "GOOGLE_MAP_API_KEY", '"AIzaSyDcXFSC2I6ZqxQeAbUMFvJKMrA98217H9U"'
-                break
+                break;
             case "release":
                 def APP_NAME = "WAY"
                 variant.resValue("string", "app_name", "${APP_NAME}")
@@ -74,7 +73,6 @@ android {
                 variant.resValue "string", "tracking_url", "www.trck.at"
                 variant.buildConfigField "String", "HYPERTRACK_PK", keyProperties['HYPERTRACK_PUBLISHABLE_KEY']
                 variant.buildConfigField "String", "HYPERTRACK_BASE_URL", '"https://api.hypertrack.com/api/v1/"'
-                variant.buildConfigField "String", "GOOGLE_MAP_API_KEY", '""'
         }
     }
 

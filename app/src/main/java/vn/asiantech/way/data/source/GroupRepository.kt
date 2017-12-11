@@ -32,7 +32,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.getGroupRequest(groupId)
     }
 
-    override fun postGroupInfo(group: Group): Single<Boolean> {
+    override fun postGroupInfo(group: Group): Observable<Boolean> {
         return remoteDataSource.postGroupInfo(group)
     }
 
@@ -48,7 +48,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.postInvite(userId, invite)
     }
 
-    override fun removeUserFromGroup(userId: String): Single<User> {
+    override fun removeUserFromGroup(userId: String): Single<Boolean> {
         return remoteDataSource.removeUserFromGroup(userId)
     }
 
@@ -86,9 +86,5 @@ class GroupRepository : GroupDataSource {
 
     override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
         return remoteDataSource.createGroup(groupName, ownerId)
-    }
-
-    override fun getMemberList(groupId: String): Single<MutableList<User>> {
-        return remoteDataSource.getMemberList(groupId)
     }
 }
