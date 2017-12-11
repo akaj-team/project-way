@@ -39,7 +39,7 @@ class InviteFragmentUI(val userListAdapter: InviteUserListAdapter) : AnkoCompone
                         contentDescription = null
                         padding = dimen(R.dimen.item_user_bottom_or_top_padding)
                         onClick {
-                            owner.onBackPressed()
+                            owner.eventBackButtonPressed()
                         }
                     }.lparams(wrapContent, wrapContent) {
                         topMargin = dimen(R.dimen.invite_screen_padding)
@@ -55,7 +55,7 @@ class InviteFragmentUI(val userListAdapter: InviteUserListAdapter) : AnkoCompone
                         textSize = px2dip(dimen(R.dimen.invite_screen_edt_user_name_text_size))
                         gravity = Gravity.CENTER_VERTICAL
                         onTextChangeListener({}, {
-                            owner.onGetListUserInvite(it.toString())
+                            owner.eventUserNameTextChanged(it.toString())
                         }, {})
                     }.lparams(matchParent, matchParent) {
                         topMargin = dimen(R.dimen.invite_screen_padding)
@@ -69,7 +69,7 @@ class InviteFragmentUI(val userListAdapter: InviteUserListAdapter) : AnkoCompone
                     clipToPadding = false
                     backgroundResource = R.color.colorWhite
                     userListAdapter.onItemInviteClick = {
-                        owner.onItemInviteClick(it)
+                        owner.eventItemInviteClicked(it)
                     }
                     layoutManager = LinearLayoutManager(context)
                     adapter = userListAdapter

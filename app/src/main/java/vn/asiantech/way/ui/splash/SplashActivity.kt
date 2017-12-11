@@ -63,7 +63,7 @@ class SplashActivity : BaseActivity() {
         setScaleForCircle()
         requestPermission()
         // Open fragment
-        replaceFragment(InviteFragment.getInstance("1", "1", "ngoc","1"))
+        replaceFragment(InviteFragment.getInstance("", "", "",""))
 
     }
 
