@@ -37,10 +37,10 @@ class InviteFragment : BaseFragment() {
         }
     }
 
-    private lateinit var userId : String
-    private lateinit var groupId : String
-    private lateinit var groupName : String
-    private lateinit var ownerId : String
+    private lateinit var userId: String
+    private lateinit var groupId: String
+    private lateinit var groupName: String
+    private lateinit var ownerId: String
     private lateinit var ui: InviteFragmentUI
     private lateinit var viewModel: InviteViewModel
     private lateinit var adapter: InviteUserListAdapter
@@ -59,10 +59,10 @@ class InviteFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-
         addDisposables(viewModel.triggerSearchListUser()
                 .observeOnUiThread()
                 .subscribe(this::handleGetListUserInviteComplete),
+
                 viewModel.resetDataStatus
                         .observeOnUiThread()
                         .subscribe(this::handleClearDataListWhenStartSearch))
