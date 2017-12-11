@@ -16,7 +16,6 @@ import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 import vn.asiantech.way.utils.AppConstants
 
-
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 11/12/2017
