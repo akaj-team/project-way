@@ -30,11 +30,11 @@ class InviteViewModel(val context: Context) {
                 .distinctUntilChanged()
                 .filter { it.isNotEmpty() }
                 .flatMap {
-                    getListUserInvite(it)
+                    getListUser(it)
                 }
     }
 
-    private fun getListUserInvite(name: String): Observable<List<User>> {
+    private fun getListUser(name: String): Observable<List<User>> {
         return groupRepository
                 .searchUser(name)
                 .doOnSubscribe { resetDataStatus.onNext(true) }

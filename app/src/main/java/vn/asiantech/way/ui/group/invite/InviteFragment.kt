@@ -46,17 +46,14 @@ class InviteFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        ui = InviteFragmentUI(adapter)
-        return ui.createView(AnkoContext.create(context, this))
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         // Init invite view model
         inviteViewModel = InviteViewModel(context)
         onGetInformationOfUserInvite()
         // Init adapter
         adapter = InviteUserListAdapter(users)
+        // Init UI
+        ui = InviteFragmentUI(adapter)
+        return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
