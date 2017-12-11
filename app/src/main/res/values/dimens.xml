@@ -31,6 +31,7 @@
     <dimen name="register_screen_tv_tel_width">45dp</dimen>
     <dimen name="register_screen_btn_register_margin">20dp</dimen>
     <dimen name="register_screen_tv_skip_margin">15dp</dimen>
+    <dimen name="register_screen_edt_name_padding">20dp</dimen>
 
     <!--Home screen-->
     <dimen name="toolbar_height">56dp</dimen>
