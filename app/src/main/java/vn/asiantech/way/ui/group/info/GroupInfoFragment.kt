@@ -51,11 +51,11 @@ class GroupInfoFragment : BaseFragment() {
         groupId = arguments.getString(AppConstants.KEY_GROUP_ID)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ui = GroupInfoFragmentUI(userId, "", members)
         return ui.createView(AnkoContext.create(context, this))
     }
+
 
     override fun onBindViewModel() {
         addDisposables(
@@ -99,7 +99,6 @@ class GroupInfoFragment : BaseFragment() {
                 addDisposables(groupInfoViewModel.leaveGroup(userId)
                         .observeOnUiThread()
                         .subscribe(this@GroupInfoFragment::handleLeaveGroupCompleted))
-
             }
             noButton { dialog -> dialog.dismiss() }
         }.show()
