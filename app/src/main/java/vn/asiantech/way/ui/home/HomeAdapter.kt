@@ -49,6 +49,26 @@ class HomeAdapter(private val context: Context,
         private val imgPoint: ImageView = item.find(R.id.home_adapter_img_point)
         private val llItemLocation: LinearLayout = item.find(R.id.home_adapter_ll_location)
 
+        init {
+            llItemLocation.onClick {
+                onClickItem(adapterPosition)
+            }
+
+            imgArrowDown.onClick {
+                expTvDescription.toggle()
+            }
+
+            expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
+                override fun onExpand(view: ExpandableTextView) {
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
+                }
+
+                override fun onCollapse(view: ExpandableTextView) {
+                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
+                }
+            }
+        }
+
         internal fun bindHomeViewHolder(location: TrackingInformation) {
             with(location) {
                 tvTime.text = time
@@ -70,24 +90,6 @@ class HomeAdapter(private val context: Context,
                     }
                 }
             }
-
-            llItemLocation.onClick {
-                onClickItem(adapterPosition)
-            }
-
-            imgArrowDown.onClick {
-                expTvDescription.toggle()
-            }
-
-            expTvDescription.onExpandListener = object : ExpandableTextView.OnExpandListener {
-                override fun onExpand(view: ExpandableTextView) {
-                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_right_black_18dp
-                }
-
-                override fun onCollapse(view: ExpandableTextView) {
-                    imgArrowDown.imageResource = R.drawable.ic_keyboard_arrow_down_black_18dp
-                }
-            }
         }
     }
 
@@ -102,8 +104,7 @@ class HomeAdapter(private val context: Context,
                     id = R.id.home_adapter_ll_location
                     gravity = Gravity.CENTER_VERTICAL
                     lparams(matchParent, wrapContent) {
-                        bottomMargin = dimen(R.dimen.home_screen_linearLayout_margin)
-                        topMargin = dimen(R.dimen.home_screen_linearLayout_margin)
+                        verticalMargin = dimen(R.dimen.home_screen_linearLayout_margin)
                         padding = dimen(R.dimen.home_screen_linearLayout_padding)
                     }
 
@@ -171,12 +172,14 @@ class HomeAdapter(private val context: Context,
             return itemView
         }
     }
+
+    /**
+     * Function to custom expandableTextView
+     */
+    inline fun ViewManager.expandableTextView(init: ExpandableTextView.() -> Unit)
+            : ExpandableTextView {
+        return ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
+    }
 }
 
-/**
- * Function to custom expandableTextView
- */
-inline fun ViewManager.expandableTextView(init: ExpandableTextView.() -> Unit)
-        : ExpandableTextView {
-    return ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
-}
+
