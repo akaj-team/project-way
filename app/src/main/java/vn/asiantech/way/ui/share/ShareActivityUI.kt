@@ -57,7 +57,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                     }
 
                     rlSearchLocation = relativeLayout {
-                        backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                        backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
 
                         onClick {
                             owner.eventRlSearchLocationClicked()
@@ -108,7 +108,7 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         centerInParent()
                     }
                 }.lparams(matchParent, matchParent) {
-                    backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                 }
 
                 imgPickLocation = imageView(R.drawable.select_expected_place) {

@@ -64,6 +64,9 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         const val KEY_LOCATION = "location"
         const val ACTION_CHOOSE_ON_MAP = "action_choose_on_map"
         const val ACTION_CURRENT_LOCATION = "action_current_location"
+        const val STOP_STATUS = "STOP"
+        const val MOVING_STATUS = "MOVING"
+        const val DRIVER_STATUS = "DRIVER"
     }
 
     private lateinit var supportMapFragment: SupportMapFragment
@@ -81,9 +84,6 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private var locationLatLng: LatLng? = null
     private var currentLatLng: LatLng? = null
     private var currentLocation: Location? = null
-    private var currentStatus = "STOP"
-    private var movingStatus = "MOVING"
-    private var driverStatus = "DRIVER"
     private var isStartTracking = false
     private var isStopTracking = false
     private var isReTracking = false
@@ -91,6 +91,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private var isConfirm = false
     private var isSetETA = false
     private var action: String? = null
+    private var currentStatus = ""
     private var destinationName = ""
     private var etaDistance = ""
     private var timeArrived = ""
@@ -517,18 +518,18 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     private fun checkStatus(speed: Float): String {
         return if (speed <= AppConstants.MIN_SPEED) {
-            currentStatus
+            STOP_STATUS
         } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
-            movingStatus
-        } else driverStatus
+            MOVING_STATUS
+        } else DRIVER_STATUS
     }
 
     private fun getListLocation(latLng: LatLng, position: Int) {
         val status = checkStatus(averageSpeed)
         var description = ""
         val handleDescription: (string: String) -> Unit = { description = it }
-        if (currentStatus != status) {
-            if (status == currentStatus) {
+        if (STOP_STATUS != status) {
+            if (status == STOP_STATUS) {
                 addDisposables(shareViewModel.getLocationName(latLng)
                         .observeOnUiThread()
                         .subscribe(handleDescription))

@@ -100,8 +100,8 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 }
 
                                 id = R.id.tracking_progress_info_circle_progress_bar
-                                circleColor = ContextCompat.getColor(context, R.color.progressRestColor)
-                                circleProgressColor = ContextCompat.getColor(context, R.color.tracking_experience)
+                                circleColor = ContextCompat.getColor(ctx, R.color.progressRestColor)
+                                circleProgressColor = ContextCompat.getColor(ctx, R.color.tracking_experience)
                                 max = AppConstants.PROGRESS_BAR_MAX
                                 progress = 0
                                 isLockEnabled = true
@@ -136,7 +136,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 tvActionStatus = textView(R.string.leaving) {
                                     id = R.id.tracking_progress_info_tv_action_status
                                     maxLines = 1
-                                    textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                    textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                     textSize = px2dip(dimen(R.dimen.text_medium))
                                 }.lparams(matchParent, wrapContent) {
                                     bottomMargin = dimen(R.dimen.margin_base)
@@ -160,14 +160,14 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                     gravity = Gravity.CENTER_VERTICAL
 
                                     tvTime = textView(resources.getString(R.string.mask)) {
-                                        textColor = ContextCompat.getColor(context, R.color.tracking_experience)
+                                        textColor = ContextCompat.getColor(ctx, R.color.tracking_experience)
                                         textSize = px2dip(dimen(R.dimen.text_base))
                                     }
 
                                     tvDistance = textView(resources.getString(R.string.mask)) {
                                         gravity = Gravity.CENTER_VERTICAL
                                         textSize = px2dip(dimen(R.dimen.text_base))
-                                        textColor = ContextCompat.getColor(context, R.color.gray)
+                                        textColor = ContextCompat.getColor(ctx, R.color.gray)
                                     }.lparams {
                                         leftMargin = dimen(R.dimen.margin_base)
                                     }
@@ -275,7 +275,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         tvStartAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_start_address
-                                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                            textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_medium)
                                             alignStart(R.id.tracking_progress_info_tv_start_time)
@@ -345,7 +345,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         tvEndAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_end_address
-                                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                            textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_high)
                                             alignStart(R.id.tracking_progress_info_tv_end_time)
@@ -373,7 +373,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                         }.lparams(matchParent, matchParent) { weight = LAYOUT_WEIGHT }
 
                         view {
-                            backgroundColor = ContextCompat.getColor(context, R.color.divider_light)
+                            backgroundColor = ContextCompat.getColor(ctx, R.color.divider_light)
                         }.lparams(dip(2), matchParent)
 
                         btnShare = button(R.string.share) {
@@ -381,7 +381,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 onTrackingInfoListener?.onShareButtonClick()
                             }
                             gravity = Gravity.CENTER
-                            backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                            backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                         }.lparams(matchParent, matchParent) { weight = LAYOUT_WEIGHT }
                     }
 

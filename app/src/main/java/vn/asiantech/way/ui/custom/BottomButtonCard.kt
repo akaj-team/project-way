@@ -85,7 +85,7 @@ class BottomButtonCard(context: Context) :
 
                 tvTitle = textView(R.string.share_textview_text_look_good) {
                     id = R.id.bottom_button_card_tv_title
-                    textColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    textColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
                     typeface = Typeface.DEFAULT_BOLD
                 }.lparams {
@@ -136,7 +136,7 @@ class BottomButtonCard(context: Context) :
                     padding = dimen(R.dimen.padding_very_low)
 
                     tvURL = textView(R.string.bottom_button_card_link_text) {
-                        textColor = ContextCompat.getColor(context, R.color.colorWhite)
+                        textColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                         setTextIsSelectable(true)
                     }.lparams {
                         centerVertically()
@@ -145,14 +145,14 @@ class BottomButtonCard(context: Context) :
                     }
 
                     tvCopyLink = textView(R.string.bottom_button_card_text_copy_link) {
-                        textColor = ContextCompat.getColor(context, R.color.black)
+                        textColor = ContextCompat.getColor(ctx, R.color.black)
                         backgroundResource = R.drawable.custom_bg_button_copy
                         padding = dimen(R.dimen.padding_base)
 
                         onClick {
                             onBottomCardListener?.onCopyButtonClick()
                             tvCopyLink.isEnabled = false
-                            tvCopyLink.text = context.getString(R.string.share_textview_text_copied)
+                            tvCopyLink.text = ctx.getString(R.string.share_textview_text_copied)
                         }
 
                     }.lparams {
