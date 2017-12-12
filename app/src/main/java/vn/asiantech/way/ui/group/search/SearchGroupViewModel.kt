@@ -1,14 +1,13 @@
 package vn.asiantech.way.ui.group.search
 
-import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
-import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
 
@@ -26,6 +25,7 @@ class SearchGroupViewModel(private val userId: String) {
     private fun searchGroup(query: String): Observable<List<Group>> {
         return groupRepository
                 .searchGroup(query)
+                .subscribeOn(Schedulers.io())
     }
 
     internal fun eventAfterTextChanged(query: String) {
