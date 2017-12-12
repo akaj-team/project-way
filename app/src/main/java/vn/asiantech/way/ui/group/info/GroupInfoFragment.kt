@@ -77,9 +77,9 @@ class GroupInfoFragment : BaseFragment() {
         alert(R.string.confirm_message_change_owner, R.string.confirm) {
             yesButton {
                 it.dismiss()
-                groupInfoViewModel.changeGroupOwner(groupId, userId)
+                addDisposables(groupInfoViewModel.changeGroupOwner(groupId, userId)
                         .observeOnUiThread()
-                        .subscribe(this@GroupInfoFragment::handleChangeGroupOwnerCompleted)
+                        .subscribe(this@GroupInfoFragment::handleChangeGroupOwnerCompleted))
             }
             noButton {
                 it.dismiss()
@@ -115,7 +115,8 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getMemberList(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleGetMemberListCompleted, this::handleGetMemberListFailed)
+                        .subscribe(this::handleGetMemberListCompleted,
+                                this::handleGetMemberListFailed)
         )
     }
 
@@ -143,7 +144,6 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun handleGetMemberListFailed(throwable: Throwable) {
-        throwable.printStackTrace()
         toast(R.string.error_message)
         ui.swipeRefreshLayout.isRefreshing = false
     }
@@ -166,8 +166,7 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun reloadGroupInfo() {
-        groupInfoViewModel.getGroupInfo(groupId)
-                .observeOnUiThread()
-                .subscribe(this::handleGetGroupInfoCompleted)
+        addDisposables(groupInfoViewModel.getGroupInfo(groupId).observeOnUiThread()
+                .subscribe(this::handleGetGroupInfoCompleted))
     }
 }
