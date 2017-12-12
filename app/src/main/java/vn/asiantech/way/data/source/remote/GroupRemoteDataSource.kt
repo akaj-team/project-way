@@ -5,11 +5,13 @@ import com.google.gson.Gson
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
@@ -20,6 +22,7 @@ import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 class GroupRemoteDataSource : GroupDataSource {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val wayRepository = WayRepository()
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
@@ -223,7 +226,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val inviteRef = firebaseDatabase.getReference("user/$userId/invite/${invite.to}")
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
         inviteRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
@@ -262,6 +265,102 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getMemberList(groupId: String): Single<MutableList<User>> {
         return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
+    }
+
+    override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
+        val result = SingleSubject.create<Boolean>()
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
+        val userRequest = firebaseDatabase.getReference("user/$userId/request/to")
+        inviteRef.removeValue().addOnSuccessListener {
+            userRequest.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError?) {
+                    result.onError(Throwable(p0?.message))
+                }
+
+                override fun onDataChange(p0: DataSnapshot?) {
+                    if (p0?.value == null) {
+                        acceptInviteWhenUserDoNotHaveRequestAtTime(result, userId, invite)
+                    } else {
+                        acceptInviteWhenUserHaveAnotherRequestAtTime(result, userId, invite, p0.value.toString())
+                    }
+                }
+            })
+        }.addOnFailureListener {
+            result.onError(it)
+        }
+        return result
+    }
+
+    override fun getUserInfo(userId: String): Single<User> {
+        return HypertrackApi.instance.getUserInfo(userId)
+    }
+
+    private fun acceptInviteWhenUserDoNotHaveRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite) {
+        val userRequest = firebaseDatabase.getReference("user/$userId/request")
+        if (invite.request) {
+            // This case hanlde when invite sent by group owner.
+            wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        result.onSuccess(true)
+                    }, {
+                        result.onError(it)
+                    })
+        } else {
+            // This case hanlde when invite sent by group member.
+            // We will create a request to group and set value for current request of user.
+            userRequest.setValue(invite)
+            invite.request = true
+            val requestRef = firebaseDatabase.getReference("group/${invite.to}" +
+                    "/request/${invite.to}")
+            invite.to = userId
+            requestRef.setValue(invite).addOnSuccessListener {
+                result.onSuccess(true)
+            }.addOnFailureListener {
+                result.onError(it)
+            }
+        }
+    }
+
+    private fun acceptInviteWhenUserHaveAnotherRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite,
+                                                             currentGroupRequestId: String) {
+        val userRequest = firebaseDatabase.getReference("user/$userId/request")
+        val currentGroupRequestRef = firebaseDatabase.getReference("group/$currentGroupRequestId/request/$userId")
+        currentGroupRequestRef.removeValue().addOnSuccessListener {
+            if (invite.request) {
+                // This case handle when invite sent by group owner.
+                wayRepository.addUserToGroup(userId, BodyAddUserToGroup(invite.to))
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({
+                            result.onSuccess(true)
+                        }, {
+                            result.onError(it)
+                        })
+                // Delete current request of user.
+                userRequest.removeValue()
+            } else {
+                // This case hanlde when invite sent by group member.
+                // We will create a request to group and set value for current request of user.
+                invite.request = true
+                userRequest.setValue(invite)
+                        .addOnSuccessListener {
+                            val newGroupRef = firebaseDatabase.getReference("group/${invite.to}/request/$userId")
+                            invite.to = userId
+                            newGroupRef.setValue(invite)
+                                    .addOnSuccessListener {
+                                        result.onSuccess(true)
+                                    }
+                                    .addOnFailureListener {
+                                        result.onError(it)
+                                    }
+                        }
+                        .addOnFailureListener {
+                            result.onError(it)
+                        }
+            }
+        }.addOnFailureListener {
+            result.onError(it)
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.group
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.source.GroupRepository
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
 
 /**
@@ -12,6 +13,7 @@ import vn.asiantech.way.extension.observeOnUiThread
 class GroupActivityViewModel {
 
     private val groupDataSource = GroupRepository()
+    private val wayRepository = WayRepository()
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {
         return groupDataSource.getGroupInfo(groupId)
