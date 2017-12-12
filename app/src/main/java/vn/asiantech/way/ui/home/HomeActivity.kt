@@ -40,7 +40,7 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     private var locations = mutableListOf<TrackingInformation>()
     private var position = -1
@@ -53,18 +53,18 @@ class HomeActivity : BaseActivity() {
         ui.setContentView(this)
         initViews()
         initMap()
-        homeViewModel = HomeViewModel(this)
+        viewModel = HomeViewModel(this)
     }
 
     override fun onBackPressed() {
-        homeViewModel.eventBackPressed()
+        viewModel.eventBackPressed()
     }
 
     override fun onBindViewModel() {
-        addDisposables(homeViewModel.getTrackingHistory()
+        addDisposables(viewModel.getTrackingHistory()
                 .observeOnUiThread()
                 .subscribe(this::setDataForRecyclerView),
-                homeViewModel.backStatus.subscribe(this::handleEventBackPressed))
+                viewModel.backStatus.subscribe(this::handleEventBackPressed))
     }
 
     internal fun eventOnClickItemMenu(view: View) {
