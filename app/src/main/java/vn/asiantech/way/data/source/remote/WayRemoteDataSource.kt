@@ -9,6 +9,7 @@ import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
@@ -133,9 +134,12 @@ internal class WayRemoteDataSource : WayDataSource {
                 }
                 .addOnSuccessListener {
                     HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
-                            .subscribe {
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
                                 result.onNext(it)
-                            }
+                            }, {
+                                result.onError(it)
+                            })
                 }
         return result
     }

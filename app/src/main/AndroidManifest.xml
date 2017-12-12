@@ -76,8 +76,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.share.ShareActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.share.ShareActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.group.GroupActivity" />
