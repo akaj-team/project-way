@@ -26,7 +26,7 @@ class MemberListAdapter(val userId: String, val users: MutableList<User>)
     : RecyclerView.Adapter<MemberListAdapter.MemberItemViewHolder>() {
 
     var groupOwnerId: String = ""
-    var onImageUpToAdminClick: (userId: String) -> Unit = {}
+    var onImageUpToAdminClick: (String) -> Unit = {}
 
     override fun getItemCount() = users.size
 

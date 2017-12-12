@@ -50,7 +50,6 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
 
             tvMembersCount = textViewInfo()
             tvCreateAt = textViewInfo()
-            textViewInfo(R.string.members_list)
 
             relativeLayout {
                 lparams(matchParent, wrapContent)
@@ -58,7 +57,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
 
                 imageView(R.drawable.ic_person_add_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_invite
-                    onClick { it ->
+                    onClick {
                         owner.eventViewOnClicked(it!!)
                     }
                 }
@@ -66,7 +65,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 imgApprove = imageView(R.drawable.ic_spellcheck_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_approve
                     visibility = View.GONE
-                    onClick { it ->
+                    onClick {
                         owner.eventViewOnClicked(it!!)
                     }
                 }.lparams {
@@ -76,7 +75,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
 
                 imageView(R.drawable.ic_exit_to_app_deep_purple_a200_36dp) {
                     id = R.id.group_info_img_leave_group
-                    onClick { it ->
+                    onClick {
                         owner.eventViewOnClicked(it!!)
                     }
                 }.lparams {
@@ -84,6 +83,8 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                     rightOf(R.id.group_info_img_approve)
                 }
             }
+
+            textViewInfo(R.string.members_list)
 
             swipeRefreshLayout = swipeRefreshLayout {
                 onRefresh {

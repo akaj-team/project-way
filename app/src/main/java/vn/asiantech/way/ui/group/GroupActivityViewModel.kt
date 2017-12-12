@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group
 
-import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
@@ -14,32 +13,21 @@ import vn.asiantech.way.extension.observeOnUiThread
  */
 class GroupActivityViewModel {
 
-    private val groupRepository = GroupRepository()
+    private val groupDataSource = GroupRepository()
     private val wayRepository = WayRepository()
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {
-        return groupRepository.getGroupInfo(groupId)
+        return groupDataSource.getGroupInfo(groupId)
                 .observeOnUiThread()
     }
 
     internal fun getGroupId(userId: String): Observable<String> {
-        return groupRepository.listenerForGroupChange(userId)
+        return groupDataSource.listenerForGroupChange(userId)
                 .observeOnUiThread()
     }
 
     internal fun getInviteList(userId: String): Observable<Invite> {
-        return groupRepository.getInvite(userId)
-                .observeOnUiThread()
-    }
-
-    internal fun getUser(): Observable<User> {
-        return wayRepository.getUser()
-                .observeOnUiThread()
-                .toObservable()
-    }
-
-    internal fun listenerForGroupChange(userId: String): Observable<String> {
-        return groupRepository.listenerForGroupChange(userId)
+        return groupDataSource.getInvite(userId)
                 .observeOnUiThread()
     }
 }

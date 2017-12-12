@@ -19,18 +19,15 @@ class GroupInfoViewModel {
     private val groupRepository = GroupRepository()
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {
-        return groupRepository.getGroupInfo(groupId)
-                .observeOnUiThread()
+        return groupRepository.getGroupInfo(groupId).observeOnUiThread()
     }
 
-    internal fun getMemberList(groupId: String): Observable<MutableList<User>> {
-        return groupRepository.getMemberList(groupId)
-                .toObservable()
-                .observeOnUiThread()
+    internal fun getMemberList(groupId: String): Single<MutableList<User>> {
+        return groupRepository.getMemberList(groupId).observeOnUiThread()
     }
 
-    internal fun leaveGroup(userId: String): Observable<User> {
-        return groupRepository.removeUserFromGroup(userId).toObservable()
+    internal fun leaveGroup(userId: String): Single<User> {
+        return groupRepository.removeUserFromGroup(userId).observeOnUiThread()
     }
 
     internal fun changeGroupOwner(groupId: String, newOwnerId: String): Single<Boolean> {

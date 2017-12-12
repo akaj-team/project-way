@@ -55,7 +55,6 @@ class GroupInfoFragment : BaseFragment() {
         return ui.createView(AnkoContext.create(context, this))
     }
 
-
     override fun onBindViewModel() {
         addDisposables(
                 groupInfoViewModel.getGroupInfo(groupId)
@@ -93,14 +92,22 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     private fun handleLeaveGroupOnClicked() {
-        alert(R.string.confirm_message_leave_group, R.string.confirm) {
-            yesButton {
-                addDisposables(groupInfoViewModel.leaveGroup(userId)
-                        .observeOnUiThread()
-                        .subscribe(this@GroupInfoFragment::handleLeaveGroupCompleted))
-            }
-            noButton { dialog -> dialog.dismiss() }
-        }.show()
+        if (userId == group.ownerId) {
+            alert(R.string.admin_leave_group, R.string.confirm) {
+                yesButton {
+                    it.dismiss()
+                }
+            }.show()
+        } else {
+            alert(R.string.confirm_message_leave_group, R.string.confirm) {
+                yesButton {
+                    addDisposables(groupInfoViewModel.leaveGroup(userId)
+                            .observeOnUiThread()
+                            .subscribe(this@GroupInfoFragment::handleLeaveGroupCompleted))
+                }
+                noButton { it.dismiss() }
+            }.show()
+        }
     }
 
     private fun handleGetGroupInfoCompleted(groupToBind: Group) {
@@ -108,10 +115,7 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getMemberList(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleGetMemberListCompleted, {
-                            toast(R.string.error_message)
-                            ui.swipeRefreshLayout.isRefreshing = false
-                        })
+                        .subscribe(this::handleGetMemberListCompleted, this::handleGetMemberListFailed)
         )
     }
 
@@ -136,6 +140,12 @@ class GroupInfoFragment : BaseFragment() {
         this.users.clear()
         this.users.addAll(users)
         ui.memberListAdapter.notifyDataSetChanged()
+    }
+
+    private fun handleGetMemberListFailed(throwable: Throwable) {
+        throwable.printStackTrace()
+        toast(R.string.error_message)
+        ui.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun handleLeaveGroupCompleted(user: User) {

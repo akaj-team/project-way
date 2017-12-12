@@ -137,6 +137,7 @@
     <string name="empty_string" />
     <string name="confirm_message_change_owner">Do you want to take this person is admin?</string>
     <string name="success">Success</string>
+    <string name="admin_leave_group">Before leave this group, you must choose new admin for it.</string>
 
     <!--Arrived dialog-->
     <string name="arrived_dialog_total_time">14 min</string>
