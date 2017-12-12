@@ -6,6 +6,7 @@
     <item name="floating_btn_menu_img_btn_profile" type="id" />
     <item name="floating_btn_menu_img_btn_calendar" type="id" />
     <item name="floating_btn_menu_img_btn_share" type="id" />
+    <item name="floating_btn_menu" type="id" />
 
     <!--View ids for GroupInfoFragmentUI-->
     <item name="group_info_id_img_invite" type="id" />
