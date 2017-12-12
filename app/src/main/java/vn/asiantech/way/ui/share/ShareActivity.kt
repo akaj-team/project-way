@@ -91,7 +91,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private var isConfirm = false
     private var isSetETA = false
     private var action: String? = null
-    private var currentStatus = ""
+    private var currentStatus = STOP_STATUS
     private var destinationName = ""
     private var etaDistance = ""
     private var timeArrived = ""
@@ -528,7 +528,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         val status = checkStatus(averageSpeed)
         var description = ""
         val handleDescription: (string: String) -> Unit = { description = it }
-        if (STOP_STATUS != status) {
+        if (currentStatus != status) {
             if (status == STOP_STATUS) {
                 addDisposables(shareViewModel.getLocationName(latLng)
                         .observeOnUiThread()
