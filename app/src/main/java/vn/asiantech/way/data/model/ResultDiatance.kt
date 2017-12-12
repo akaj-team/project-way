@@ -4,8 +4,8 @@ package vn.asiantech.way.data.model
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 04/12/2017.
  */
-data class ResultDistance(val destination_addresses: List<String>,
-                          val origin_addresses: List<String>,
+data class ResultDistance(val destinationAddresses: List<String>,
+                          val originAddresses: List<String>,
                           val rows: List<Row>)
 
 /**

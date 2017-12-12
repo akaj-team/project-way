@@ -38,11 +38,11 @@ import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.ArrivedDialog
+import vn.asiantech.way.ui.custom.BottomButtonCard
 import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.ui.search.SearchActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.DateTimeUtil
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -74,27 +74,29 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private lateinit var destinationLatLng: LatLng
     private lateinit var googleMap: GoogleMap
     private val ui = ShareActivityUI()
-    private var locations: MutableList<TrackingInformation>? = mutableListOf()
-    private var locationUpdates: MutableList<LatLng>? = ArrayList()
+    private var locations = mutableListOf<TrackingInformation>()
+    private var locationUpdates = mutableListOf<LatLng>()
     private var currentMarker: Marker? = null
     private var marker: Marker? = null
     private var locationLatLng: LatLng? = null
     private var currentLatLng: LatLng? = null
     private var currentLocation: Location? = null
     private var currentStatus = "STOP"
+    private var movingStatus = "MOVING"
+    private var driverStatus = "DRIVER"
     private var isStartTracking = false
     private var isStopTracking = false
     private var isReTracking = false
     private var isArrived = false
     private var isConfirm = false
     private var isSetETA = false
-    private var destinationName: String? = null
-    private var etaDistance: String? = null
-    private var timeArrived: String? = null
-    private var timeStart: String? = null
-    private var etaTime: String? = null
     private var action: String? = null
-    private var time: String? = null
+    private var destinationName = ""
+    private var etaDistance = ""
+    private var timeArrived = ""
+    private var timeStart = ""
+    private var etaTime = ""
+    private var time = ""
     private var groundOverlay: GroundOverlay? = null
     private var myLocation: WayLocation? = null
     private var lineSmall: Polyline? = null
@@ -282,10 +284,10 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     // Show dialog when arrived
     private fun setArrived() {
-        val handleStartAddress: (string: String) -> Unit = { ui.trackingInfo.tvStartAddress.text = it }
-        val handleEndAddress: (string: String) -> Unit = { ui.trackingInfo.tvEndAddress.text = it }
-        val handleStartTime: (string: String) -> Unit = { ui.trackingInfo.tvTime.text = it }
-        val handleEndTime: (string: String) -> Unit = {
+        val handleStartAddress: (String) -> Unit = { ui.trackingInfo.tvStartAddress.text = it }
+        val handleEndAddress: (String) -> Unit = { ui.trackingInfo.tvEndAddress.text = it }
+        val handleStartTime: (String) -> Unit = { ui.trackingInfo.tvTime.text = it }
+        val handleEndTime: (String) -> Unit = {
             ui.trackingInfo.tvEndTime.text = it
             timeArrived = it
         }
@@ -294,8 +296,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         ui.trackingInfo.hideTrackingInfor()
         ui.trackingInfo.showArrivedInfor()
         ui.trackingInfo.circleProgressBar.progress = TYPE_PROGRESS_MAX
-        ui.trackingInfo.circleProgressBar.circleProgressColor = resources.getColor(R.color
-                .violet)
+        ui.trackingInfo.circleProgressBar.circleProgressColor = ContextCompat.getColor(this, R.color.violet)
         ui.trackingInfo.tvStartTime.text = timeStart
         addDisposables(shareViewModel.getLocationName(locationLatLng!!)
                 .observeOnUiThread()
@@ -415,7 +416,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private fun updateUI(hyperTrackLocation: HyperTrackLocation) {
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
         currentLatLng = latLng
-        // get location distance estimate
+        // Get location distance estimate
         addDisposables(shareViewModel
                 .getLocationDistance("${latLng.latitude},${latLng.longitude}",
                         "${destinationLatLng.latitude},${destinationLatLng.longitude}")
@@ -429,21 +430,19 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                         .observeOnUiThread()
                         .subscribe(this::handleGetCurrentDateTime))
 
-        if (locationUpdates != null) {
-            if (latLng != null) {
-                if (isReTracking && locationLatLng != latLng) {
-                    isReTracking = false
-                } else {
-                    locationUpdates?.add(latLng)
-                }
+        if (latLng != null) {
+            if (isReTracking && locationLatLng != latLng) {
+                isReTracking = false
+            } else {
+                locationUpdates.add(latLng)
             }
-
-            if (locationUpdates!!.size > 1) {
-                getListLocation(latLng, locationUpdates!!.size - 1)
-            }
-            updateView()
-            updateMapView(latLng)
         }
+
+        if (locationUpdates.size > 1) {
+            getListLocation(latLng, locationUpdates.size - 1)
+        }
+        updateView()
+        updateMapView(latLng)
     }
 
     private fun updateView() {
@@ -468,39 +467,38 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
             - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)))
 
     private fun drawLine() {
-        if (locationUpdates != null) {
-            if (locationUpdates!!.size > 1) {
-                val option = PolylineOptions()
-                        .width(POLYLINE_WIDTH)
-                        .geodesic(true)
-                        .color(Color.parseColor("#1976D2"))
-                        .zIndex(Z_INDEX_VALUE)
-                        .startCap(RoundCap())
-                        .endCap(RoundCap())
-                        .jointType(JointType.BEVEL)
-                        .addAll(locationUpdates)
-                val option1 = PolylineOptions()
-                        .width(ZOOM_SIZE)
-                        .geodesic(true)
-                        .color(Color.parseColor("#2196F3"))
-                        .zIndex(Z_INDEX_VALUE)
-                        .startCap(RoundCap())
-                        .endCap(RoundCap())
-                        .jointType(JointType.BEVEL)
-                        .addAll(locationUpdates)
-                lineSmall?.remove()
-                lineSmall = googleMap.addPolyline(option)
-                lineSmall?.pattern = null
-                lineLarge?.remove()
-                lineLarge = googleMap.addPolyline(option1)
-                lineLarge?.pattern = null
-            }
+        if (locationUpdates.size > 1) {
+            val option = PolylineOptions()
+                    .width(POLYLINE_WIDTH)
+                    .geodesic(true)
+                    .color(Color.parseColor("#1976D2"))
+                    .zIndex(Z_INDEX_VALUE)
+                    .startCap(RoundCap())
+                    .endCap(RoundCap())
+                    .jointType(JointType.BEVEL)
+                    .addAll(locationUpdates)
+            val option1 = PolylineOptions()
+                    .width(ZOOM_SIZE)
+                    .geodesic(true)
+                    .color(Color.parseColor("#2196F3"))
+                    .zIndex(Z_INDEX_VALUE)
+                    .startCap(RoundCap())
+                    .endCap(RoundCap())
+                    .jointType(JointType.BEVEL)
+                    .addAll(locationUpdates)
+            lineSmall?.remove()
+            lineSmall = googleMap.addPolyline(option)
+            lineSmall?.pattern = null
+            lineLarge?.remove()
+            lineLarge = googleMap.addPolyline(option1)
+            lineLarge?.pattern = null
         }
     }
 
     private fun updateMapView(latLng: LatLng) {
-        if (locationUpdates!!.size > 1) {
-            addDisposables(shareViewModel.getAngleMarker(locationUpdates!![locationUpdates!!.size - 2], locationUpdates!![locationUpdates!!.size - 1])
+        if (locationUpdates.size > 1) {
+            addDisposables(shareViewModel.getAngleMarker(locationUpdates[locationUpdates.size - 2],
+                    locationUpdates[locationUpdates.size - 1])
                     .observeOnUiThread()
                     .subscribe(this::handleAngleMarker))
         }
@@ -519,18 +517,18 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     private fun checkStatus(speed: Float): String {
         return if (speed <= AppConstants.MIN_SPEED) {
-            "STOP"
+            currentStatus
         } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
-            "MOVING"
-        } else "DRIVER"
+            movingStatus
+        } else driverStatus
     }
 
     private fun getListLocation(latLng: LatLng, position: Int) {
         val status = checkStatus(averageSpeed)
-        var description: String? = null
+        var description = ""
         val handleDescription: (string: String) -> Unit = { description = it }
         if (currentStatus != status) {
-            if (status == "STOP") {
+            if (status == currentStatus) {
                 addDisposables(shareViewModel.getLocationName(latLng)
                         .observeOnUiThread()
                         .subscribe(handleDescription))
@@ -542,7 +540,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                         .subscribe(this::handleTimeDuringStatus))
                 for (i in 0..(position - 1)) {
                     addDisposables(shareViewModel
-                            .getDistancePerSecond(locationUpdates!![i], locationUpdates!![i + 1])
+                            .getDistancePerSecond(locationUpdates[i], locationUpdates[i + 1])
                             .observeOnUiThread()
                             .subscribe(this::handleDistancePerSecond))
                 }
@@ -552,13 +550,13 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         }
         val location = TrackingInformation(DateTimeUtil().getTimeChangeStatus(),
                 status, description, latLng)
-        locations?.add(location)
+        locations.add(location)
         currentStatus = status
         startPosition = position
     }
 
     private fun deleteListTrackingLatLng() {
-        locationUpdates?.clear()
+        locationUpdates.clear()
     }
 
     private fun initMap() {
@@ -566,9 +564,9 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun configMap() {
-        supportMapFragment.getMapAsync { googleMap ->
-            googleMap.setOnCameraIdleListener(this)
-            this.googleMap = googleMap
+        supportMapFragment.getMapAsync {
+            it.setOnCameraIdleListener(this)
+            this.googleMap = it
             mapEvent()
         }
     }
@@ -589,35 +587,53 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private fun initBottomButtonCard(show: Boolean, action: String?) {
         when (action) {
             AppConstants.ACTION_CHOOSE_ON_MAP -> {
-                ui.bottomCard.hideCloseButton()
-                ui.bottomCard.hideTvTitle()
-                ui.bottomCard.setDescriptionText(getString(R.string.confirm_move_map))
-                ui.bottomCard.setShareButtonText(getString(R.string.confirm_location))
-                ui.bottomCard.showActionButton()
+                setViewBottomCardWhenChooseLocation(ui.bottomCard)
             }
 
             AppConstants.ACTION_CURRENT_LOCATION, AppConstants.ACTION_SEND_WAY_LOCATION -> {
-                ui.bottomCard.hideCloseButton()
-                ui.bottomCard.hideTvDescription()
-                ui.bottomCard.setTitleText(getString(R.string.share_textview_text_look_good))
-                ui.bottomCard.setShareButtonText(getString(R.string.share_textview_text_start_sharing))
-                ui.bottomCard.showActionButton()
+                setViewBottomCardWhenConfirmedLocation(ui.bottomCard)
             }
 
             else -> {
-                ui.imgCurrentLocation.visibility = View.INVISIBLE
-                ui.bottomCard.showCloseButton()
-                ui.bottomCard.showTrackingURLLayout()
-                ui.bottomCard.setTitleText(getString(R.string.bottom_button_card_title_text))
-                ui.bottomCard.setDescriptionText(getString(R.string.bottom_button_card_description_text))
-                ui.bottomCard.setShareButtonText(getString(R.string.share_textview_text_share_link))
-                ui.bottomCard.showActionButton()
-                ui.bottomCard.showTitle()
+                setViewBottomCardWhenShareLink(ui.bottomCard)
             }
         }
         if (show && !isArrived) {
             ui.bottomCard.showBottomCardLayout()
             ui.trackingInfo.hideTrackingProgress()
+        }
+    }
+
+    private fun setViewBottomCardWhenChooseLocation(bottomCard: BottomButtonCard) {
+        with(bottomCard) {
+            hideCloseButton()
+            hideTvTitle()
+            setDescriptionText(getString(R.string.confirm_move_map))
+            setShareButtonText(getString(R.string.confirm_location))
+            showActionButton()
+        }
+    }
+
+    private fun setViewBottomCardWhenConfirmedLocation(bottomCard: BottomButtonCard) {
+        with(bottomCard) {
+            hideCloseButton()
+            hideTvDescription()
+            setTitleText(getString(R.string.share_textview_text_look_good))
+            setShareButtonText(getString(R.string.share_textview_text_start_sharing))
+            showActionButton()
+        }
+    }
+
+    private fun setViewBottomCardWhenShareLink(bottomCard: BottomButtonCard) {
+        with(bottomCard) {
+            ui.imgCurrentLocation.visibility = View.INVISIBLE
+            showCloseButton()
+            showTrackingURLLayout()
+            setTitleText(getString(R.string.bottom_button_card_title_text))
+            setDescriptionText(getString(R.string.bottom_button_card_description_text))
+            setShareButtonText(getString(R.string.share_textview_text_share_link))
+            showActionButton()
+            showTitle()
         }
     }
 
@@ -668,20 +684,18 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         handleTrackingProgress = Observable.interval(SECOND_VALUE, TimeUnit.MILLISECONDS)
                 .observeOnUiThread()
                 .subscribe({
-                    if (locationUpdates != null) {
-                        if (isArrived) {
-                            etaUpdate = 0f
-                            averageSpeed = 0f
-                            currentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
-                            currentMarker?.setAnchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
-                            updateCurrentTimeView()
-                            setArrived()
-                            deleteListTrackingLatLng()
-                            handleTrackingProgress.dispose()
-                        }
-                        countTimer += SECOND_VALUE
-                        requestLocation()
+                    if (isArrived) {
+                        etaUpdate = 0f
+                        averageSpeed = 0f
+                        currentMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location))
+                        currentMarker?.setAnchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
+                        updateCurrentTimeView()
+                        setArrived()
+                        deleteListTrackingLatLng()
+                        handleTrackingProgress.dispose()
                     }
+                    countTimer += SECOND_VALUE
+                    requestLocation()
                 })
     }
 

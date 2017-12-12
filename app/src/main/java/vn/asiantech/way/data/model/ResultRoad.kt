@@ -11,7 +11,7 @@ data class ResultRoad(@SerializedName("snappedPoints") val locationRoads: List<L
 /**
  *  Location return from google map Road api.
  */
-data class LocationRoad(@SerializedName("location") val location: Point,
+data class LocationRoad(@SerializedName("location") val point: Point,
                         @SerializedName("placeId") val placeId: String)
 
 /**

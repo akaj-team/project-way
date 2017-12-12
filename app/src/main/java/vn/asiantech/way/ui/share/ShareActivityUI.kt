@@ -21,13 +21,6 @@ import vn.asiantech.way.ui.custom.trackingProgressInfo
  * Created by datbuit. on 27/11/2017.
  */
 class ShareActivityUI : AnkoComponent<ShareActivity> {
-    companion object {
-        const val MARGIN_VALUE_VERY_SMALL = 5
-        const val MARGIN_VALUE_SMALL = 10
-        const val MARGIN_VALUE_MEDIUM = 15
-        const val MARGIN_VALUE_LARGE = 20
-        const val MARGIN_VALUE_VERY_LARGE = 50
-    }
 
     internal lateinit var trackingInfo: TrackingProgressInfo
     internal lateinit var bottomCard: BottomButtonCard
@@ -58,9 +51,8 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         }
 
                         id = R.id.share_activity_btn_back
-                        imageView(R.drawable.ic_back_icon_button) {
-                        }.lparams(wrapContent, wrapContent)
-                    }.lparams(wrapContent, wrapContent) {
+                        imageView(R.drawable.ic_back_icon_button) { }
+                    }.lparams {
                         margin = dimen(R.dimen.margin_base)
                     }
 
@@ -74,25 +66,25 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         tvTitle = textView(R.string.going_somewhere) {
                             id = R.id.share_activity_tv_title
                             textSize = px2dip(dimen(R.dimen.text_small))
-                            leftPadding = dip(MARGIN_VALUE_LARGE)
-                            topPadding = dip(MARGIN_VALUE_LARGE)
-                            bottomPadding = dip(MARGIN_VALUE_VERY_SMALL)
+                            leftPadding = dimen(R.dimen.share_margin_value_large)
+                            topPadding = dimen(R.dimen.share_margin_value_large)
+                            bottomPadding = dimen(R.dimen.share_margin_value_very_small)
                         }.lparams(matchParent, wrapContent)
 
                         tvLocation = textView(R.string.add_a_destination) {
                             textSize = px2dip(dimen(R.dimen.text_medium))
-                            leftPadding = dip(MARGIN_VALUE_LARGE)
-                            rightPadding = dip(MARGIN_VALUE_VERY_LARGE)
-                            bottomPadding = dip(MARGIN_VALUE_SMALL)
+                            leftPadding = dimen(R.dimen.share_margin_value_large)
+                            rightPadding = dimen(R.dimen.share_margin_value_very_large)
+                            bottomPadding = dimen(R.dimen.share_margin_value_small)
                         }.lparams(matchParent, wrapContent) {
                             below(R.id.share_activity_tv_title)
                         }
 
                         imgEdit = imageView(R.drawable.ic_edit_location) {
-                            leftPadding = dip(MARGIN_VALUE_MEDIUM)
-                            topPadding = dip(MARGIN_VALUE_MEDIUM)
-                            rightPadding = dip(MARGIN_VALUE_LARGE)
-                        }.lparams(wrapContent, wrapContent) {
+                            leftPadding = dimen(R.dimen.share_margin_value_medium)
+                            topPadding = dimen(R.dimen.share_margin_value_medium)
+                            rightPadding = dimen(R.dimen.share_margin_value_large)
+                        }.lparams {
                             alignParentRight()
                         }
                     }.lparams(matchParent, wrapContent) {
@@ -106,13 +98,13 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         alignParentEnd()
                         alignParentRight()
                         alignWithParent = true
-                        margin = dip(MARGIN_VALUE_SMALL)
+                        margin = dimen(R.dimen.share_margin_value_small)
                     }
 
                     imgChooseMarker = imageView(R.drawable.select_expected_place) {
                         visibility = View.GONE
-                        padding = dip(MARGIN_VALUE_SMALL)
-                    }.lparams(wrapContent, wrapContent) {
+                        padding = dimen(R.dimen.share_margin_value_small)
+                    }.lparams {
                         centerInParent()
                     }
                 }.lparams(matchParent, matchParent) {
@@ -120,9 +112,9 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                 }
 
                 imgPickLocation = imageView(R.drawable.select_expected_place) {
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams {
                     centerInParent()
-                    bottomMargin = dip(MARGIN_VALUE_SMALL)
+                    bottomMargin = dimen(R.dimen.share_margin_value_small)
                 }
             }
 
