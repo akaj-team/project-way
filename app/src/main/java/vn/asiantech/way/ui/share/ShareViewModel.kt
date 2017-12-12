@@ -33,8 +33,8 @@ import java.util.*
 class ShareViewModel(val context: Context) {
     var batteryCapacity: BehaviorSubject<Int> = BehaviorSubject.create<Int>()
     val result: BehaviorSubject<HyperTrackLocation> = BehaviorSubject.create<HyperTrackLocation>()
-    private val resultDistancePerSecond = BehaviorSubject.create<List<Float>>()
-    private val resultTimeDuring = BehaviorSubject.create<String>()
+    private val resultDistancePerSecond = SingleSubject.create<List<Float>>()
+    private val resultTimeDuring = SingleSubject.create<String>()
     private val wayRepository = WayRepository()
     private val currentBatteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -68,8 +68,8 @@ class ShareViewModel(val context: Context) {
                 .map { it.locationRoads }
     }
 
-    internal fun getTrackingURL(): Observable<String> {
-        val link = BehaviorSubject.create<String>()
+    internal fun getTrackingURL(): Single<String> {
+        val link = SingleSubject.create<String>()
         val builder = ActionParamsBuilder()
         HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
@@ -77,7 +77,7 @@ class ShareViewModel(val context: Context) {
                     val action = response.responseObject as? Action
                     HyperTrack.clearServiceNotificationParams()
                     val url = action?.trackingURL
-                    url?.let { link.onNext(it) }
+                    url?.let { link.onSuccess(it) }
                 }
             }
 
@@ -88,24 +88,24 @@ class ShareViewModel(val context: Context) {
         return link
     }
 
-    internal fun getLocationName(latLng: LatLng): Observable<String> {
-        val locationName = BehaviorSubject.create<String>()
+    internal fun getLocationName(latLng: LatLng): Single<String> {
+        val locationName = SingleSubject.create<String>()
         val geoCoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty()) {
             val address: Address = addresses[0]
-            locationName.onNext(address.getAddressLine(0))
+            locationName.onSuccess(address.getAddressLine(0))
         } else {
-            locationName.onNext("")
+            locationName.onSuccess("")
         }
         return locationName
     }
 
-    internal fun getCalendarDateTime(): Observable<String> {
-        val result = BehaviorSubject.create<String>()
+    internal fun getCalendarDateTime(): Single<String> {
+        val result = SingleSubject.create<String>()
         val calendar = Calendar.getInstance().time
         val simple = SimpleDateFormat("KK:mm a', Th'MM dd", Locale.ENGLISH)
-        result.onNext(simple.format(calendar))
+        result.onSuccess(simple.format(calendar))
         return result
     }
 
@@ -122,13 +122,13 @@ class ShareViewModel(val context: Context) {
         })
     }
 
-    internal fun compareLocation(currentLatLng: LatLng, destinationLatLng: LatLng): Observable<Boolean> {
+    internal fun compareLocation(currentLatLng: LatLng, destinationLatLng: LatLng): Single<Boolean> {
         val currentLat = String.format("%.3f", currentLatLng.latitude)
         val currentLng = String.format("%.3f", currentLatLng.longitude)
         val destinationLat = String.format("%.3f", destinationLatLng.latitude)
         val destinationLng = String.format("%.3f", destinationLatLng.longitude)
-        val result = BehaviorSubject.create<Boolean>()
-        result.onNext(currentLat == destinationLat && currentLng == destinationLng)
+        val result = SingleSubject.create<Boolean>()
+        result.onSuccess(currentLat == destinationLat && currentLng == destinationLng)
         return result
     }
 
@@ -140,7 +140,7 @@ class ShareViewModel(val context: Context) {
      *
      * @return list contain speed and distance value
      */
-    internal fun getDistancePerSecond(source: LatLng, destination: LatLng): Observable<List<Float>> {
+    internal fun getDistancePerSecond(source: LatLng, destination: LatLng): Single<List<Float>> {
         val des = Location("Point")
         des.latitude = source.latitude
         des.longitude = source.longitude
@@ -150,22 +150,22 @@ class ShareViewModel(val context: Context) {
         val list = mutableListOf<Float>()
         list.add((src.distanceTo(des) * AppConstants.TIME_CONVERT).toFloat())
         list.add(src.distanceTo(des) / AppConstants.SECOND_VALUE)
-        resultDistancePerSecond.onNext(list)
+        resultDistancePerSecond.onSuccess(list)
         return resultDistancePerSecond
     }
 
-    internal fun getTimeDuringStatus(time: Long): Observable<String> {
+    internal fun getTimeDuringStatus(time: Long): Single<String> {
         val stringTime: String = when {
             time in ShareViewModel.ONE_MINUTE_VALUE..ShareViewModel.HOUR_VALUE -> (time / ShareViewModel
                     .ONE_MINUTE_VALUE).toString().plus("min")
             time < ShareViewModel.ONE_MINUTE_VALUE -> time.toString().plus("second")
             else -> (time / ShareViewModel.ONE_HOUR_VALUE).toString().plus("hour")
         }
-        resultTimeDuring.onNext(stringTime)
+        resultTimeDuring.onSuccess(stringTime)
         return resultTimeDuring
     }
 
-    internal fun getAngleMarker(startLatLong: LatLng, endLatLong: LatLng): Observable<Float> {
+    internal fun getAngleMarker(startLatLong: LatLng, endLatLong: LatLng): Single<Float> {
         val startLat = radians(startLatLong.latitude)
         val startLong = radians(startLatLong.longitude)
         val endLat = radians(endLatLong.latitude)
@@ -180,8 +180,8 @@ class ShareViewModel(val context: Context) {
                 (2.0 * Math.PI + deltaLong)
             }
         }
-        val result = BehaviorSubject.create<Float>()
-        result.onNext(((degrees(Math.atan2(deltaLong, deltaPi)) + AppConstants.RADIUS) %
+        val result = SingleSubject.create<Float>()
+        result.onSuccess(((degrees(Math.atan2(deltaLong, deltaPi)) + AppConstants.RADIUS) %
                 AppConstants.RADIUS).toFloat())
         return result
     }
