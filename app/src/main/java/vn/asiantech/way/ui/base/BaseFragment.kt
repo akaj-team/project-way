@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.jetbrains.anko.support.v4.indeterminateProgressDialog
+import vn.asiantech.way.R
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -12,6 +14,12 @@ import io.reactivex.disposables.Disposable
  */
 abstract class BaseFragment : Fragment() {
     private val subscription: CompositeDisposable = CompositeDisposable()
+    private val progressDialog by lazy {
+        indeterminateProgressDialog(
+                getString(R.string.progress_dialog_message),
+                getString(R.string.progress_dialog_title)
+        )
+    }
 
     override fun onPause() {
         super.onPause()
@@ -27,12 +35,25 @@ abstract class BaseFragment : Fragment() {
         ds.forEach { subscription.add(it) }
     }
 
-    internal fun sendBroadCast(action: String, bundle: Bundle? = null) {
+    protected fun sendBroadCast(action: String, bundle: Bundle? = null) {
         val intent = Intent(action)
         if (bundle != null) {
             intent.putExtras(bundle)
         }
         activity.sendBroadcast(intent)
+    }
+
+    protected fun showProgressDialog(message: String, title: String) {
+        progressDialog.setMessage(message)
+        progressDialog.setTitle(title)
+    }
+
+    protected fun showProgressDialog() {
+        progressDialog.show()
+    }
+
+    protected fun hideProgressDialog() {
+        progressDialog.hide()
     }
 
     /**
