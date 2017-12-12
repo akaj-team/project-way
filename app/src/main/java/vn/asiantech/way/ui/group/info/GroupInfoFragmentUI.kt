@@ -92,7 +92,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
                 }
                 recyclerView {
                     lparams(matchParent, matchParent)
-                    layoutManager = LinearLayoutManager(context)
+                    layoutManager = LinearLayoutManager(ctx)
                     backgroundResource = android.R.color.darker_gray
                     topPadding = dimen(R.dimen.group_screen_recycler_view_padding)
                     memberListAdapter.onImageUpToAdminClick = {

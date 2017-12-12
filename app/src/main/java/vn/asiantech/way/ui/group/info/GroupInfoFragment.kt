@@ -23,10 +23,10 @@ import vn.asiantech.way.utils.AppConstants
 class GroupInfoFragment : BaseFragment() {
 
     private lateinit var ui: GroupInfoFragmentUI
-    private val groupInfoViewModel = GroupInfoViewModel()
+    private lateinit var group: Group
     private var userId = ""
     private var groupId = ""
-    private lateinit var group: Group
+    private val groupInfoViewModel = GroupInfoViewModel()
     private val users = mutableListOf<User>()
 
     companion object {
