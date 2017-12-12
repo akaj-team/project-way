@@ -32,18 +32,15 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
 
     internal fun getCountries(): Observable<List<Country>> {
         return assetDataRepository.getCountries()
-                .observeOnUiThread()
     }
 
     internal fun createUser(userParams: UserParams): Observable<ResponseStatus> {
         return wayRepository.createUser(userParams)
-                .observeOnUiThread()
     }
 
     internal fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
         progressBarStatus.onNext(true)
         return wayRepository.updateUser(userParams)
-                .observeOnUiThread()
                 .doOnNext { progressBarStatus.onNext(false) }
                 .doOnError { progressBarStatus.onNext(false) }
     }
@@ -59,7 +56,6 @@ class RegisterViewModel(val context: Context, val isRegister: Boolean) {
     internal fun getUser(): Single<User> {
         progressBarStatus.onNext(true)
         return wayRepository.getUser()
-                .observeOnUiThread()
                 .doOnSuccess {
                     user = it
                     progressBarStatus.onNext(false)

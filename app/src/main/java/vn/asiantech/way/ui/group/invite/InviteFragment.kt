@@ -18,7 +18,7 @@ class InviteFragment : BaseFragment() {
     companion object {
         private const val KEY_USER = "key_user_id"
         private const val KEY_GROUP = "key_group_id"
-        private const val KEY_FROUP_NAME = "key_group_name"
+        private const val KEY_GROUP_NAME = "key_group_name"
         private const val KEY_GROUP_OWNER = "key_group_owner"
 
         /**
@@ -30,7 +30,7 @@ class InviteFragment : BaseFragment() {
             val bundle = Bundle()
             bundle.putString(KEY_USER, userId)
             bundle.putString(KEY_GROUP, groupId)
-            bundle.putString(KEY_FROUP_NAME, groupName)
+            bundle.putString(KEY_GROUP_NAME, groupName)
             bundle.putString(KEY_GROUP_OWNER, ownerId)
             instance.arguments = bundle
             return instance
@@ -106,8 +106,8 @@ class InviteFragment : BaseFragment() {
     private fun initInvitedUser() {
         userId = arguments.getString(KEY_USER)
         groupId = arguments.getString(KEY_GROUP)
-        groupName = arguments.getString("KEY_GROUP_NAME")
-        ownerId = arguments.getString("KEY_GROUP_OWNER")
+        groupName = arguments.getString(KEY_GROUP_NAME)
+        ownerId = arguments.getString(KEY_GROUP_OWNER)
     }
 
     /**

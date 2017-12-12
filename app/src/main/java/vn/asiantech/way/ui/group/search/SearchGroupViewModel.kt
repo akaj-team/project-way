@@ -26,7 +26,6 @@ class SearchGroupViewModel(private val userId: String) {
     private fun searchGroup(query: String): Observable<List<Group>> {
         return groupRepository
                 .searchGroup(query)
-                .observeOnUiThread()
     }
 
     internal fun eventAfterTextChanged(query: String) {
@@ -37,7 +36,6 @@ class SearchGroupViewModel(private val userId: String) {
         val invite = Invite(userId, group.id, group.name, true)
         return groupRepository
                 .postRequestToGroup(group.id, invite)
-                .observeOnUiThread()
                 .doOnSubscribe {
                     progressDialogObservable.onNext(false)
                 }
@@ -50,7 +48,6 @@ class SearchGroupViewModel(private val userId: String) {
     internal fun triggerSearchGroup(): Observable<List<Group>> {
         return groupRepository
                 .getCurrentRequestOfUser(userId)
-                .observeOnUiThread()
                 .doOnNext { currentRequest = it }
                 .flatMap {
                     searchGroupQuery()
@@ -59,7 +56,6 @@ class SearchGroupViewModel(private val userId: String) {
 
     private fun searchGroupQuery(): Observable<List<Group>> {
         return searchGroupObservable
-                .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .flatMap { searchGroup(it) }
