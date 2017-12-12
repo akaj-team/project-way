@@ -1,5 +1,6 @@
 package vn.asiantech.way.data.source.remote
 
+import android.util.Log
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
@@ -291,8 +292,38 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun getUserInfo(userId: String): Single<User> {
-        return HypertrackApi.instance.getUserInfo(userId)
+    override fun getUserInfo(groupId: String): Observable<User> {
+        Log.d("aaa", "getUserInfo")
+        val result = PublishSubject.create<User>()
+        val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
+        inviteRef.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                Log.d("aaa","onCancelled")
+            }
+
+            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+                Log.d("aaa","onChildMoved")
+            }
+
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
+                Log.d("aaa","onChildChanged")
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot?) {
+                Log.d("aaa","onChildRemoved")
+            }
+
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                Log.d("aaa", "onChildAdded")
+                val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
+                if (invite != null) {
+                    HypertrackApi.instance
+                            .getUserInfo(invite.to)
+                            .subscribe { result.onNext(it) }
+                }
+            }
+        })
+        return result
     }
 
     private fun acceptInviteWhenUserDoNotHaveRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite) {

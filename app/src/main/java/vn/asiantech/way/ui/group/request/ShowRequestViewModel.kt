@@ -2,7 +2,6 @@ package vn.asiantech.way.ui.group.request
 
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.source.GroupRepository
@@ -14,19 +13,24 @@ import vn.asiantech.way.extension.observeOnUiThread
  * @author NgocTTN
  */
 class ShowRequestViewModel {
-    internal var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
+    internal var progressDialogObservable: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val wayRepository = WayRepository()
     private val groupRepository = GroupRepository()
 
-    internal fun addUserToGroup(userId: String, groupId: String): Observable<User> {
-        progressBarStatus.onNext(true)
-        return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
-                .doOnNext { progressBarStatus.onNext(false) }
+    internal fun getRequestsOfUser(userId: String): Observable<User> {
+        return groupRepository
+                .getUserInfo(userId)
                 .observeOnUiThread()
     }
 
-    internal fun getRequestUsers(userId: String): Single<User> {
-        return groupRepository.getUserInfo(userId)
+    internal fun addUserToGroup(userId: String, groupId: String): Observable<User> {
+        return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
                 .observeOnUiThread()
+                .doOnSubscribe {
+                    progressDialogObservable.onNext(true)
+                }
+                .doFinally {
+                    progressDialogObservable.onNext(false)
+                }
     }
 }
