@@ -11,6 +11,7 @@ import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Country
+import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.data.source.datasource.LocalDataSource
 import vn.asiantech.way.utils.AppConstants
@@ -77,6 +78,19 @@ class LocalRepository(val context: Context) : LocalDataSource {
         return BehaviorSubject.create<List<Country>> {
             it.onNext(getCountries(rawData))
             it.onComplete()
+        }
+    }
+
+    override fun getTrackingHistory(): MutableList<TrackingInformation>? {
+        val result = mutableListOf<TrackingInformation>()
+        return try {
+            val history = pref.getString(AppConstants.KEY_TRACKING_HISTORY, "[]")
+            val jsonArray = JSONArray(history)
+            (0 until jsonArray.length())
+                    .mapTo(result) { Gson().fromJson(jsonArray.getJSONObject(it).toString(), TrackingInformation::class.java) }
+            result.toMutableList()
+        } catch (e: JsonSyntaxException) {
+            null
         }
     }
 

@@ -9,10 +9,11 @@ object AppConstants {
     const val KEY_SEARCH_SCREEN_WAY_LOCATION_HISTORY = "key_history"
     const val SEARCH_SCREEN_HISTORY_MAX_SIZE = 10
     const val WAITING_TIME_FOR_SEARCH_FUNCTION = 300L
-
-
+    const val TIME_EXIT_APP = 3000L
     const val BACK_PRESS_DELAY = 1500L
     const val TYPE_UNIT_DIALOG_HEIGHT = 5
     const val TYPE_DIALOG_MARGIN_WIDTH = 80
     const val NUM_CHAR_REMOVE = 3
+    // Key SharePref Tracking
+    const val KEY_TRACKING_HISTORY = "tracking_history"
 }
