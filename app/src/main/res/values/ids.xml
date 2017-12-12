@@ -14,6 +14,11 @@
     <item name="group_id_image_button_accept" type="id" />
     <item name="group_id_image_button_cancel" type="id" />
 
+    <!--View ids ViewInviteFragmentUIntUI-->
+    <item name="group_show_invite_adapter_tv_name_group" type="id" />
+    <item name="group_show_invite_adapter_tv_ok" type="id" />
+    <item name="group_show_invite_adapter_tv_cancel" type="id" />
+
     <!--View ids for SearchGroupActivity-->
     <item name="group_search_adapter_view_break_line" type="id" />
     <item name="group_search_adapter_tv_name_user" type="id" />
