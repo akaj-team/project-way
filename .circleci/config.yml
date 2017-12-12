@@ -42,7 +42,7 @@ jobs:
 #Run gradle tasks
       - run:
           name: Lint and detekt
-          command: ./gradlew :app:check --no-daemon
+          command: ./gradlew :app:check
 
       - persist_to_workspace:
           root: ~/code
