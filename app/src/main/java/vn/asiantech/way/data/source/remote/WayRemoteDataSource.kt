@@ -9,6 +9,7 @@ import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
@@ -77,13 +78,13 @@ internal class WayRemoteDataSource : WayDataSource {
         return ApiClient.instance.getAddressLocation(latLng).toObservable().map { it.results }
     }
 
-    override fun getLocationDetail(placeId: String?, key: String): Observable<ResultPlaceDetail> {
-        return ApiClient.instance.getLocationDetail(placeId, key).toObservable()
+    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> {
+        return ApiClient.instance.getLocationDetail(placeId).toObservable()
     }
 
-    override fun searchLocations(input: String, key: String, language: String, sensor: Boolean)
+    override fun searchLocations(input: String, language: String, sensor: Boolean)
             : Observable<AutoCompleteResult> {
-        return ApiClient.instance.searchLocations(input, key, language, sensor).toObservable()
+        return ApiClient.instance.searchLocations(input, language, sensor).toObservable()
     }
 
     override fun createGroup(name: String): Observable<Group> {
@@ -107,9 +108,11 @@ internal class WayRemoteDataSource : WayDataSource {
                 }
                 .addOnSuccessListener {
                     HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
-                            .subscribe {
+                            .subscribe({
                                 result.onNext(it)
-                            }
+                            }, {
+                                result.onError(it)
+                            })
                 }
         return result
     }
@@ -123,9 +126,12 @@ internal class WayRemoteDataSource : WayDataSource {
                 }
                 .addOnSuccessListener {
                     HypertrackApi.instance.removeUserFromGroup(userId, body).toObservable()
-                            .subscribe {
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
                                 result.onNext(it)
-                            }
+                            }, {
+                                result.onError(it)
+                            })
                 }
         return result
     }

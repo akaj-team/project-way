@@ -53,7 +53,7 @@ interface GroupDataSource {
      *
      * @param group - upload group.
      */
-    fun postGroupInfo(group: Group): Observable<Boolean>
+    fun postGroupInfo(group: Group): Single<Boolean>
 
     /**
      * This method used to change owner of a given group to a given user
@@ -83,7 +83,7 @@ interface GroupDataSource {
      *
      * @param userId - id of given user.
      */
-    fun removeUserFromGroup(userId: String): Single<Boolean>
+    fun removeUserFromGroup(userId: String): Single<User>
 
     /**
      * This method used to search group by name.
@@ -132,14 +132,26 @@ interface GroupDataSource {
      * This method used to delete a given request when group owner refuse it.
      *
      * @param groupId - id of given group.
-     * @param invite - given request.
+     * @param request - given request.
      */
     fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
 
     /**
-     *
+     * This method used to delete request of user to group.
      */
     fun deleteCurrentRequestOfUserFromGroup(userId: String, request: Invite): Single<Boolean>
+
+    /**
+     * This method used to get member list of a given group.
+     *
+     * @param groupId - id of given group.
+     */
+    fun getMemberList(groupId: String): Single<MutableList<User>>
+
+    /**
+     * This method used to handle when a given user accept a given invite.
+     */
+    fun acceptInvite(userId: String, invite: Invite): Single<Boolean>
 
     /**
      * This method used to get user info by userId
