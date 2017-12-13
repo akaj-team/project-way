@@ -305,29 +305,31 @@ class GroupRemoteDataSource : GroupDataSource {
                 val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
                 Log.d("aaa", "invite" + invite)
                 if (invite != null) {
+                    Log.d("aaa","start tracking")
                     HypertrackApi.instance
                             .getUserInfo(invite.to)
-                            .subscribe(object : Subscriber<User>{
-                                override fun onSubscribe(s: Subscription?) {
-                                    Log.d("aaa","onSubscribe")
-                                }
-
+                            .subscribe(object : Subscriber<User> {
                                 override fun onComplete() {
-                                    Log.d("aaa","onComplete")
+                                    Log.d("aaa","onComplete" )
                                 }
 
                                 override fun onError(t: Throwable?) {
-                                    Log.d("aaa","onError")
+                                    Log.d("aaa","onError" )
+                                }
+
+                                override fun onSubscribe(s: Subscription?) {
+                                    Log.d("aaa","onSubscribe" )
                                 }
 
                                 override fun onNext(t: User?) {
-                                    Log.d("aaa","user" + t)
-
+                                    Log.d("aaa","onNext" )
+                                    result.onNext(t!!)
                                 }
                             })
                 }
             }
         })
+        Log.d("aaa","result: " + result)
         return result
     }
 

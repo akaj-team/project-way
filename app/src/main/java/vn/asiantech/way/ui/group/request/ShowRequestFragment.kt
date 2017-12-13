@@ -8,6 +8,7 @@ import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.R
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 import java.util.*
 
@@ -56,10 +57,12 @@ class ShowRequestFragment : BaseFragment() {
         addDisposables(
                 viewModel
                         .getRequestsOfUser(groupId)
+                        .observeOnUiThread()
                         .subscribe(this::handleGetRequestsOfUserSuccess),
 
                 viewModel
                         .progressDialogObservable
+                        .observeOnUiThread()
                         .subscribe(this::updateProgressDialog)
         )
     }
@@ -68,6 +71,7 @@ class ShowRequestFragment : BaseFragment() {
         addDisposables(
                 viewModel
                         .addUserToGroup(userId, groupId)
+                        .observeOnUiThread()
                         .subscribe(this::handleAddUserToGroupSuccess)
         )
     }

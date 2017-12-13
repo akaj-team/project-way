@@ -6,7 +6,6 @@ import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.data.source.WayRepository
-import vn.asiantech.way.extension.observeOnUiThread
 
 /**
  * Request View Model
@@ -20,12 +19,10 @@ class ShowRequestViewModel {
     internal fun getRequestsOfUser(groupId: String): Observable<User> {
         return groupRepository
                 .getUserInfo(groupId)
-                .observeOnUiThread()
     }
 
     internal fun addUserToGroup(userId: String, groupId: String): Observable<User> {
         return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
-                .observeOnUiThread()
                 .doOnSubscribe {
                     progressDialogObservable.onNext(true)
                 }
