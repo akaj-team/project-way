@@ -54,6 +54,7 @@ class RegisterActivity : BaseActivity() {
         } else {
             registerViewModel = RegisterViewModel(this, false)
             addDisposables(registerViewModel.getUser()
+                    .observeOnUiThread()
                     .subscribe(this::handleGetUserCompleted, this::handleGetUserError))
             ui.btnRegister.text = getString(R.string.register_update)
             ui.tvSkip.text = getString(R.string.cancel)
@@ -63,6 +64,7 @@ class RegisterActivity : BaseActivity() {
     override fun onBindViewModel() {
         addDisposables(
                 registerViewModel.getCountries()
+                        .observeOnUiThread()
                         .subscribe(this::handleGetCountriesCompleted),
 
                 registerViewModel.progressBarStatus
@@ -151,12 +153,14 @@ class RegisterActivity : BaseActivity() {
                 if (registerViewModel.isRegister) {
                     // Register user
                     addDisposables(registerViewModel.createUser(userParam)
+                            .observeOnUiThread()
                             .subscribe(this::handleCreateUserCompleted))
                     // Save login status to SharePreference
                     registerViewModel.saveLoginStatus(true)
                 } else {
                     // Update user
                     addDisposables(registerViewModel.updateUser(userParam)
+                            .observeOnUiThread()
                             .subscribe(this::handleUpdateUserCompleted))
                 }
             }

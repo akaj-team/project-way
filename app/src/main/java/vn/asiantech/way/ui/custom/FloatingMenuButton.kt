@@ -175,13 +175,12 @@ class FloatingMenuButton(private var onMenuClickListener: OnMenuClickListener,
         rlGroup.visibility = visibilityState
     }
 
-    private fun checkItemViewVisibility(): Boolean {
-        return rlShare.visibility == View.INVISIBLE ||
-                rlProfile.visibility == View.INVISIBLE ||
-                rlCalendar.visibility == View.INVISIBLE ||
-                rlSearch.visibility == View.INVISIBLE ||
-                rlGroup.visibility == View.INVISIBLE
-    }
+    private fun checkItemViewVisibility(): Boolean =
+            rlShare.visibility == View.INVISIBLE ||
+                    rlProfile.visibility == View.INVISIBLE ||
+                    rlCalendar.visibility == View.INVISIBLE ||
+                    rlSearch.visibility == View.INVISIBLE ||
+                    rlGroup.visibility == View.INVISIBLE
 
     private fun setGoneOverLay() {
         frOverlay.visibility = View.GONE

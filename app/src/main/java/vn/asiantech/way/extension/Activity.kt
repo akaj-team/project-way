@@ -27,9 +27,9 @@ internal fun Activity.toast(message: CharSequence, duration: Int = Toast.LENGTH_
 /**
  * Extension method to inflate layout for ViewGroup.
  */
-internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-}
+internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View
+        = LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+
 
 internal fun FragmentActivity.replaceFragment(@IdRes containerId: Int, fragment: Fragment) {
     this.supportFragmentManager.beginTransaction().replace(containerId, fragment).commit()
