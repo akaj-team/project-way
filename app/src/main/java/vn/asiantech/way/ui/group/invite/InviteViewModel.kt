@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.group.invite
 
-import android.content.Context
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -15,11 +14,11 @@ import java.util.concurrent.TimeUnit
  * Invite View Model
  * @author NgocTTN
  */
-class InviteViewModel(val context: Context, private val groupRepository: GroupRepository) {
+class InviteViewModel(private val groupRepository: GroupRepository) {
     internal var resetDataStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val searchInviteObservable = PublishSubject.create<String>()
 
-    constructor(context: Context) : this(context, GroupRepository())
+    constructor() : this(GroupRepository())
 
     internal fun searchListUser(query: String = "") {
         searchInviteObservable.onNext(query)

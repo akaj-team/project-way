@@ -50,7 +50,7 @@ class InviteFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Init invite view model
-        viewModel = InviteViewModel(context)
+        viewModel = InviteViewModel()
         initInvitedUser()
         // Init adapter
         adapter = InviteUserListAdapter(users)
