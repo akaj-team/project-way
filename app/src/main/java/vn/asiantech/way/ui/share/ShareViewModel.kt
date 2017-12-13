@@ -19,6 +19,7 @@ import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -101,8 +102,12 @@ class ShareViewModel(val context: Context) {
     internal fun getCurrentLocationHypertrack() {
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
-                val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
-                result.onNext(hyperTrackLocation)
+                try {
+                    val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
+                    result.onNext(hyperTrackLocation)
+                } catch (e: IOException) {
+                    Log.d("zxc", "ErrorResponse: " + e.message)
+                }
             }
 
             override fun onError(p0: ErrorResponse) {

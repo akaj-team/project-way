@@ -12,6 +12,7 @@ import android.location.Location
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -43,6 +44,7 @@ import vn.asiantech.way.ui.custom.RadiusAnimation
 import vn.asiantech.way.ui.search.SearchActivity
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.DateTimeUtil
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -154,25 +156,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     override fun onCameraIdle() {
         locationLatLng = googleMap.cameraPosition?.target
         if (!isConfirm) {
-            if (myLocation?.geometry?.location == null || action == AppConstants.ACTION_CHOOSE_ON_MAP) {
-                locationLatLng?.let {
-                    addDisposables(shareViewModel.getLocationName(it)
-                            .observeOnUiThread()
-                            .subscribe(this::getLocationName))
-                }
-            } else {
-                val lat = myLocation?.geometry?.location?.lat
-                val lng = myLocation?.geometry?.location?.lng
-                if (lat != null && lng != null) {
-                    locationLatLng = LatLng(lat, lng)
-                    locationLatLng?.let {
-                        addDisposables(shareViewModel.getLocationName(it)
-                                .observeOnUiThread()
-                                .subscribe(this::getLocationName))
-                    }
-                }
-                isConfirm = true
-            }
+            setLocationNameWhenCameraMoving()
         }
     }
 
@@ -212,8 +196,12 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     internal fun eventCopyLinkToClipboard() {
-        (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
-                ClipData.newPlainText("tracking_url", ui.bottomCard.tvURL.text)
+        try {
+            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
+                    ClipData.newPlainText("tracking_url", ui.bottomCard.tvURL.text)
+        } catch (e: IOException) {
+            Log.d("zxc", "ErrorResponse: " + e.message)
+        }
     }
 
     internal fun eventActionButtonClicked() {
@@ -591,17 +579,13 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     private fun initBottomButtonCard(show: Boolean, action: String?) {
         when (action) {
-            AppConstants.ACTION_CHOOSE_ON_MAP -> {
+            AppConstants.ACTION_CHOOSE_ON_MAP ->
                 setViewBottomCardWhenChooseLocation(ui.bottomCard)
-            }
 
-            AppConstants.ACTION_CURRENT_LOCATION, AppConstants.ACTION_SEND_WAY_LOCATION -> {
+            AppConstants.ACTION_CURRENT_LOCATION, AppConstants.ACTION_SEND_WAY_LOCATION ->
                 setViewBottomCardWhenConfirmedLocation(ui.bottomCard)
-            }
 
-            else -> {
-                setViewBottomCardWhenShareLink(ui.bottomCard)
-            }
+            else -> setViewBottomCardWhenShareLink(ui.bottomCard)
         }
         if (show && !isArrived) {
             ui.bottomCard.showBottomCardLayout()
@@ -642,7 +626,6 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         }
     }
 
-    //todo here
     private fun getCurrentLocation(location: Location) {
         currentLocation = location
         currentLatLng = currentLocation?.longitude?.
@@ -671,6 +654,28 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
         if (locationLatLng != null) {
             locationLatLng?.let { destinationLatLng = it }
+        }
+    }
+
+    private fun setLocationNameWhenCameraMoving() {
+        if (myLocation?.geometry?.location == null || action == AppConstants.ACTION_CHOOSE_ON_MAP) {
+            locationLatLng?.let {
+                addDisposables(shareViewModel.getLocationName(it)
+                        .observeOnUiThread()
+                        .subscribe(this::getLocationName))
+            }
+        } else {
+            val lat = myLocation?.geometry?.location?.lat
+            val lng = myLocation?.geometry?.location?.lng
+            if (lat != null && lng != null) {
+                locationLatLng = LatLng(lat, lng)
+                locationLatLng?.let {
+                    addDisposables(shareViewModel.getLocationName(it)
+                            .observeOnUiThread()
+                            .subscribe(this::getLocationName))
+                }
+            }
+            isConfirm = true
         }
     }
 
