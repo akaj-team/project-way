@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -24,13 +25,16 @@ class GroupActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         addDisposables(
-                groupViewModel.getUser().subscribe(this::handleAfterLoadUserCompleted)
+                groupViewModel.getUser()
+                        .observeOnUiThread()
+                        .subscribe(this::handleAfterLoadUserCompleted)
         )
     }
 
     private fun handleAfterLoadUserCompleted(user: User) {
         Log.i("tag11", "111111111111")
         addDisposables(groupViewModel.listenerForGroupChange(user.id)
+                .observeOnUiThread()
                 .subscribe {
                     groupViewModel.getUser()
                             .subscribe(this::handleUserInfo)
