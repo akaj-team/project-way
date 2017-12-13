@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
-gem 'saddler'
-gem 'saddler-reporter-github'
+gem 'danger'
+gem 'danger-android_lint'
+gem 'danger-checkstyle_format'
 gem 'android_lint_translate_checkstyle_format'
-gem 'checkstyle_filter-git'

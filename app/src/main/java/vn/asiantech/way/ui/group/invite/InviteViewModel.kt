@@ -25,7 +25,6 @@ class InviteViewModel(val context: Context) {
 
     internal fun triggerSearchListUser(): Observable<List<User>> {
         return searchInviteObservable
-                .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .filter { it.isNotEmpty() }
@@ -38,6 +37,5 @@ class InviteViewModel(val context: Context) {
         return groupRepository
                 .searchUser(name)
                 .doOnSubscribe { resetDataStatus.onNext(true) }
-                .observeOnUiThread()
     }
 }

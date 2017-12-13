@@ -30,7 +30,6 @@ class SearchViewModel(val context: Context) {
     internal fun triggerSearchLocationResult(language: String = "vi", sensor: Boolean = false):
             Observable<List<WayLocation>> {
         return searchObservable
-                .observeOnUiThread()
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .flatMap {
@@ -45,7 +44,6 @@ class SearchViewModel(val context: Context) {
 
     internal fun getLocationDetail(placeId: String): Observable<WayLocation> {
         return wayRepository.getLocationDetail(placeId)
-                .observeOnUiThread()
                 .map { it.result }
     }
 
