@@ -28,24 +28,20 @@ class SearchViewModel(val context: Context) {
     }
 
     internal fun triggerSearchLocationResult(language: String = "vi", sensor: Boolean = false):
-            Observable<List<WayLocation>> {
-        return searchObservable
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .flatMap {
-                    if (it.isBlank()) {
-                        loadSearchHistories().toObservable()
-                    } else {
-                        searchLocationsApi(it, language, sensor)
-                    }
-
+            Observable<List<WayLocation>> = searchObservable
+            .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .flatMap {
+                if (it.isBlank()) {
+                    loadSearchHistories().toObservable()
+                } else {
+                    searchLocationsApi(it, language, sensor)
                 }
-    }
 
-    internal fun getLocationDetail(placeId: String): Observable<WayLocation> {
-        return wayRepository.getLocationDetail(placeId)
-                .map { it.result }
-    }
+            }
+
+    internal fun getLocationDetail(placeId: String): Observable<WayLocation>
+            = wayRepository.getLocationDetail(placeId).map { it.result }
 
     internal fun saveSearchHistories(location: WayLocation) {
         localRepository.saveSearchHistory(location)
