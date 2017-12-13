@@ -18,7 +18,6 @@ import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.invite.InviteFragment
 import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**

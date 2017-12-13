@@ -17,59 +17,42 @@ import vn.asiantech.way.data.source.remote.response.ResponseStatus
 class WayRepository : WayDataSource {
     private val remoteDataSource = WayRemoteDataSource()
 
-    override fun createUser(userParams: UserParams): Observable<ResponseStatus> {
-        return remoteDataSource.createUser(userParams)
-    }
+    override fun createUser(userParams: UserParams): Observable<ResponseStatus>
+            = remoteDataSource.createUser(userParams)
 
-    override fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
-        return remoteDataSource.updateUser(userParams)
-    }
+    override fun updateUser(userParams: UserParams): Observable<ResponseStatus>
+            = remoteDataSource.updateUser(userParams)
 
-    override fun getUser(): Single<User> {
-        return remoteDataSource.getUser()
-    }
+    override fun getUser(): Single<User> = remoteDataSource.getUser()
 
-    override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>> {
-        return remoteDataSource.getAddressLocation(latLng)
-    }
+    override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>>
+            = remoteDataSource.getAddressLocation(latLng)
 
-    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> {
-        return remoteDataSource.getLocationDetail(placeId)
-    }
+    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail>
+            = remoteDataSource.getLocationDetail(placeId)
 
-    override fun searchLocations(input: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
-        return remoteDataSource.searchLocations(input, language, sensor)
-    }
+    override fun searchLocations(input: String, language: String, sensor: Boolean): Observable<AutoCompleteResult>
+            = remoteDataSource.searchLocations(input, language, sensor)
 
-    override fun createGroup(name: String): Observable<Group> {
-        return remoteDataSource.createGroup(name)
-    }
+    override fun createGroup(name: String): Observable<Group> = remoteDataSource.createGroup(name)
 
-    override fun getGroupInfo(groupId: String): Observable<Group> {
-        return remoteDataSource.getGroupInfo(groupId)
-    }
+    override fun getGroupInfo(groupId: String): Observable<Group> = remoteDataSource.getGroupInfo(groupId)
 
-    override fun getGroupMembers(groupId: String): Observable<MutableList<User>> {
-        return remoteDataSource.getGroupMembers(groupId)
-    }
+    override fun getGroupMembers(groupId: String): Observable<MutableList<User>>
+            = remoteDataSource.getGroupMembers(groupId)
 
-    override fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        return remoteDataSource.addUserToGroup(userId, body)
-    }
+    override fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
+            = remoteDataSource.addUserToGroup(userId, body)
 
-    override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
-        return remoteDataSource.removeUserFromGroup(userId, body)
-    }
+    override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
+            = remoteDataSource.removeUserFromGroup(userId, body)
 
-    override fun getCurrentLocation(): Observable<HyperTrackLocation> {
-        return remoteDataSource.getCurrentLocation()
-    }
+    override fun getCurrentLocation(): Observable<HyperTrackLocation>
+            = remoteDataSource.getCurrentLocation()
 
-    override fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float> {
-        return remoteDataSource.getETA(destination, vehicle)
-    }
+    override fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float>
+            = remoteDataSource.getETA(destination, vehicle)
 
-    override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action> {
-        return remoteDataSource.createAndAssignAction(builder)
-    }
+    override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action>
+            = remoteDataSource.createAndAssignAction(builder)
 }

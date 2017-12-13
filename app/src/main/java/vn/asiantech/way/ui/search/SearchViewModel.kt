@@ -58,19 +58,18 @@ class SearchViewModel(val context: Context) {
 
     }
 
-    private fun searchLocationsApi(input: String, language: String, sensor: Boolean): Observable<List<WayLocation>> {
-        return wayRepository
-                .searchLocations(input, language, sensor)
-                .doOnSubscribe { progressBarStatus.onNext(true) }
-                .doOnNext { progressBarStatus.onNext(false) }
-                .map { it.predictions }
-                .flatMapIterable { list -> list }
-                .map {
-                    with(it) {
-                        WayLocation(id, placeId, description, structuredFormatting.mainText)
-                    }
+    private fun searchLocationsApi(input: String, language: String, sensor: Boolean):
+            Observable<List<WayLocation>> = wayRepository
+            .searchLocations(input, language, sensor)
+            .doOnSubscribe { progressBarStatus.onNext(true) }
+            .doOnNext { progressBarStatus.onNext(false) }
+            .map { it.predictions }
+            .flatMapIterable { list -> list }
+            .map {
+                with(it) {
+                    WayLocation(id, placeId, description, structuredFormatting.mainText)
                 }
-                .toList()
-                .toObservable()
-    }
+            }
+            .toList()
+            .toObservable()
 }

@@ -6,7 +6,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.source.GroupRepository
-import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
 
@@ -23,19 +22,15 @@ class InviteViewModel(val context: Context) {
         searchInviteObservable.onNext(query)
     }
 
-    internal fun triggerSearchListUser(): Observable<List<User>> {
-        return searchInviteObservable
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .filter { it.isNotEmpty() }
-                .flatMap {
-                    getListUser(it)
-                }
-    }
+    internal fun triggerSearchListUser(): Observable<List<User>> =
+            searchInviteObservable
+                    .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
+                    .filter { it.isNotEmpty() }
+                    .flatMap {
+                        getListUser(it)
+                    }
 
-    private fun getListUser(name: String): Observable<List<User>> {
-        return groupRepository
-                .searchUser(name)
-                .doOnSubscribe { resetDataStatus.onNext(true) }
-    }
+    private fun getListUser(name: String): Observable<List<User>> =
+            groupRepository.searchUser(name).doOnSubscribe { resetDataStatus.onNext(true) }
 }

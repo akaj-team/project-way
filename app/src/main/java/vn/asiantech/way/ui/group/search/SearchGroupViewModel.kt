@@ -22,11 +22,9 @@ class SearchGroupViewModel(private val userId: String) {
 
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
 
-    private fun searchGroup(query: String): Observable<List<Group>> {
-        return groupRepository
-                .searchGroup(query)
-                .subscribeOn(Schedulers.io())
-    }
+    private fun searchGroup(query: String): Observable<List<Group>> = groupRepository
+            .searchGroup(query)
+            .subscribeOn(Schedulers.io())
 
     internal fun eventAfterTextChanged(query: String) {
         searchGroupObservable.onNext(query)
@@ -45,19 +43,15 @@ class SearchGroupViewModel(private val userId: String) {
                 }
     }
 
-    internal fun triggerSearchGroup(): Observable<List<Group>> {
-        return groupRepository
-                .getCurrentRequestOfUser(userId)
-                .doOnNext { currentRequest = it }
-                .flatMap {
-                    searchGroupQuery()
-                }
-    }
+    internal fun triggerSearchGroup(): Observable<List<Group>> = groupRepository
+            .getCurrentRequestOfUser(userId)
+            .doOnNext { currentRequest = it }
+            .flatMap {
+                searchGroupQuery()
+            }
 
-    private fun searchGroupQuery(): Observable<List<Group>> {
-        return searchGroupObservable
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .flatMap { searchGroup(it) }
-    }
+    private fun searchGroupQuery(): Observable<List<Group>> = searchGroupObservable
+            .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .flatMap { searchGroup(it) }
 }
