@@ -20,7 +20,7 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        replaceFragment(ShowRequestFragment.getInstance(""))
+        replaceFragment(ShowRequestFragment.getInstance("e97b3ba1-0de7-4cef-8322-0f868913f709addclose"))
     }
 
     override fun onBindViewModel() {

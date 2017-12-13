@@ -17,9 +17,9 @@ class ShowRequestViewModel {
     private val wayRepository = WayRepository()
     private val groupRepository = GroupRepository()
 
-    internal fun getRequestsOfUser(userId: String): Observable<User> {
+    internal fun getRequestsOfUser(groupId: String): Observable<User> {
         return groupRepository
-                .getUserInfo(userId)
+                .getUserInfo(groupId)
                 .observeOnUiThread()
     }
 

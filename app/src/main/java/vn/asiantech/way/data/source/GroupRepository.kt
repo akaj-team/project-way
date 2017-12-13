@@ -96,7 +96,7 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.acceptInvite(userId, invite)
     }
 
-    override fun getUserInfo(userId: String): Observable<User> {
-        return remoteDataSource.getUserInfo(userId)
+    override fun getUserInfo(groupId: String): Observable<User> {
+        return remoteDataSource.getUserInfo(groupId)
     }
 }

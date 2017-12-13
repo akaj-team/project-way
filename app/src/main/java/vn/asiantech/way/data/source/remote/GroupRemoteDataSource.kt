@@ -9,12 +9,15 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
+
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -296,30 +299,32 @@ class GroupRemoteDataSource : GroupDataSource {
         Log.d("aaa", "getUserInfo")
         val result = PublishSubject.create<User>()
         val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
-        inviteRef.addChildEventListener(object : ChildEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                Log.d("aaa","onCancelled")
-            }
-
-            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
-                Log.d("aaa","onChildMoved")
-            }
-
-            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
-                Log.d("aaa","onChildChanged")
-            }
-
-            override fun onChildRemoved(p0: DataSnapshot?) {
-                Log.d("aaa","onChildRemoved")
-            }
-
+        inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                 Log.d("aaa", "onChildAdded")
                 val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
+                Log.d("aaa", "invite" + invite)
                 if (invite != null) {
                     HypertrackApi.instance
                             .getUserInfo(invite.to)
-                            .subscribe { result.onNext(it) }
+                            .subscribe(object : Subscriber<User>{
+                                override fun onSubscribe(s: Subscription?) {
+                                    Log.d("aaa","onSubscribe")
+                                }
+
+                                override fun onComplete() {
+                                    Log.d("aaa","onComplete")
+                                }
+
+                                override fun onError(t: Throwable?) {
+                                    Log.d("aaa","onError")
+                                }
+
+                                override fun onNext(t: User?) {
+                                    Log.d("aaa","user" + t)
+
+                                }
+                            })
                 }
             }
         })
@@ -410,3 +415,5 @@ class GroupRemoteDataSource : GroupDataSource {
         override fun onChildRemoved(p0: DataSnapshot?) = Unit
     }
 }
+
+private fun <T> Observable<T>.subscribe(subscriber: Subscriber<T>) {}
