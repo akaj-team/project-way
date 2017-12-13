@@ -20,7 +20,6 @@ import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.LocationRoad
 import vn.asiantech.way.data.model.Row
 import vn.asiantech.way.data.source.WayRepository
-import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
 import java.text.SimpleDateFormat
@@ -58,13 +57,11 @@ class ShareViewModel(val context: Context) {
     internal fun getLocationDistance(origin: String, destination: String)
             : Observable<List<Row>> {
         return wayRepository.getLocationDistance(origin, destination)
-                .observeOnUiThread()
                 .map { it.rows }
     }
 
     internal fun getListLocationWhenReOpen(url: String): Observable<List<LocationRoad>> {
         return wayRepository.getListLocation(url)
-                .observeOnUiThread()
                 .map { it.locationRoads }
     }
 

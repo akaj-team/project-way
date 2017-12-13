@@ -36,25 +36,9 @@ class BottomButtonCard(context: Context) :
     internal lateinit var tvCopyLink: TextView
     internal lateinit var imgLoader: ImageView
 
-    var actionType: ActionType
-
     var onBottomCardListener: OnBottomCardListener? = null
 
-    // TODO: Will use in future
-//    val isActionTypeConfirmLocation: Boolean
-//        get() = actionType == ActionType.CONFIRM_LOCATION
-//
-//    val isActionTypeStartTracking: Boolean
-//        get() = actionType == ActionType.START_TRACKING
-//
-//    val isActionTypeShareTrackingLink: Boolean
-//        get() = actionType == ActionType.SHARE_TRACKING_URL
-//
-//    val isActionTypeShareBackLocation: Boolean
-//        get() = actionType == ActionType.SHARE_BACK_LOCATION
-
     init {
-        actionType = ActionType.START_TRACKING
 
         AnkoContext.createDelegate(this).apply {
             rlBottomCard = relativeLayout {
@@ -72,7 +56,7 @@ class BottomButtonCard(context: Context) :
                     horizontalPadding = dimen(R.dimen.padding_medium)
 
                     setOnRippleCompleteListener {
-                        onBottomCardListener?.onCloseButtonClick()
+                        onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.CLOSE.name)
                     }
 
                     imageView {
@@ -109,7 +93,7 @@ class BottomButtonCard(context: Context) :
                     backgroundResource = R.drawable.custom_bg_button_share
 
                     setOnRippleCompleteListener {
-                        onBottomCardListener?.onActionButtonClick()
+                        onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.ACTION.name)
                     }
 
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
@@ -150,7 +134,7 @@ class BottomButtonCard(context: Context) :
                         padding = dimen(R.dimen.padding_base)
 
                         onClick {
-                            onBottomCardListener?.onCopyButtonClick()
+                            onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.COPY.name)
                             tvCopyLink.isEnabled = false
                             tvCopyLink.text = ctx.getString(R.string.share_textview_text_copied)
                         }
@@ -168,14 +152,11 @@ class BottomButtonCard(context: Context) :
         }
     }
 
-    /*
-     * Enum define for item type
+    /**
+     * Enum define for action type
      */
-    enum class ActionType {
-        START_TRACKING,
-        CONFIRM_LOCATION,
-        SHARE_TRACKING_URL,
-        SHARE_BACK_LOCATION
+    enum class BottomCardActionType {
+        CLOSE, COPY, ACTION
     }
 
     internal fun setTitleText(title: String): BottomButtonCard {
@@ -297,19 +278,9 @@ class BottomButtonCard(context: Context) :
      */
     interface OnBottomCardListener {
         /**
-         * Button close click listener
+         * Bottom card item click listener
          */
-        fun onCloseButtonClick()
-
-        /**
-         * Button share click listener
-         */
-        fun onActionButtonClick()
-
-        /**
-         * Button copy link click listener
-         */
-        fun onCopyButtonClick()
+        fun onBottomCardItemClick(action: String)
     }
 }
 

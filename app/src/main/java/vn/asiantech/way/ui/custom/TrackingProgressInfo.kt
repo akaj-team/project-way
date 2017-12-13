@@ -109,7 +109,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                             imgBtnCall = imageView(R.drawable.ic_phone_icon) {
                                 onClick {
-                                    onTrackingInfoListener?.onCallButtonClick()
+                                    onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.CALL.name)
                                 }
                                 padding = dimen(R.dimen.track_margin_value_low)
                             }.lparams(dimen(R.dimen.phone_icon_size), dimen(R.dimen.phone_icon_size)) {
@@ -367,7 +367,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                             gravity = Gravity.CENTER
                             backgroundResource = R.color.colorWhite
                             onClick {
-                                onTrackingInfoListener?.onStopButtonClick()
+                                onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.STOP.name)
                             }
 
                         }.lparams(matchParent, matchParent) { weight = LAYOUT_WEIGHT }
@@ -378,7 +378,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                         btnShare = button(R.string.share) {
                             onClick {
-                                onTrackingInfoListener?.onShareButtonClick()
+                                onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.SHARE.name)
                             }
                             gravity = Gravity.CENTER
                             backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
@@ -387,7 +387,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                     btnShowSummary = button(R.string.arrived_show_summary) {
                         onClick {
-                            onTrackingInfoListener?.onSummaryButtonClick()
+                            onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.SUMMARY.name)
                         }
                         visibility = View.GONE
                         gravity = Gravity.CENTER
@@ -477,28 +477,20 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
     }
 
     /**
-     * Interface create fun onClickListener for BottomButtonCard
+     * Enum define for action type
+     */
+    enum class TrackingActionType {
+        STOP, SHARE, CALL, SUMMARY
+    }
+
+    /**
+     * Interface create fun onClickListener for TrackingProgressInfo
      */
     interface OnTrackingProgressListener {
         /**
-         * Button stop link click listener
+         * Tracking info item click listener
          */
-        fun onStopButtonClick()
-
-        /**
-         * Button share link click listener
-         */
-        fun onShareButtonClick()
-
-        /**
-         * Button call link click listener
-         */
-        fun onCallButtonClick()
-
-        /**
-         * Button summary click listener
-         */
-        fun onSummaryButtonClick()
+        fun onTrackingProgressItemClick(action: String)
     }
 }
 

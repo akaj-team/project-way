@@ -121,38 +121,43 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
             bottomCard = bottomCard {
                 visibility = View.GONE
                 onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
-                    override fun onCloseButtonClick() {
-                        bottomCard.hideBottomCardLayout()
-                        trackingInfo.showTrackingProgress()
-                    }
+                    override fun onBottomCardItemClick(action: String) {
+                        when (action) {
+                            BottomButtonCard.BottomCardActionType.CLOSE.name -> {
+                                bottomCard.hideBottomCardLayout()
+                                trackingInfo.showTrackingProgress()
+                            }
 
-                    override fun onActionButtonClick() {
-                        owner.eventActionButtonClicked()
-                    }
+                            BottomButtonCard.BottomCardActionType.ACTION.name -> {
+                                owner.eventActionButtonClicked()
+                            }
 
-                    override fun onCopyButtonClick() {
-                        owner.eventCopyLinkToClipboard()
+                            BottomButtonCard.BottomCardActionType.COPY.name -> {
+                                owner.eventCopyLinkToClipboard()
+                            }
+                        }
                     }
                 }
             }
 
             trackingInfo = trackingProgressInfo {
                 onTrackingInfoListener = object : TrackingProgressInfo.OnTrackingProgressListener {
-                    override fun onStopButtonClick() {
-                        owner.eventConfirmStopDialog()
-                    }
-
-                    override fun onShareButtonClick() {
-                        bottomCard.showBottomCardLayout()
-                        trackingInfo.hideTrackingProgress()
-                    }
-
-                    override fun onCallButtonClick() {
-                        // No-Op
-                    }
-
-                    override fun onSummaryButtonClick() {
-                        owner.eventShowDialog()
+                    override fun onTrackingProgressItemClick(action: String) {
+                        when (action) {
+                            TrackingProgressInfo.TrackingActionType.STOP.name -> {
+                                owner.eventConfirmStopDialog()
+                            }
+                            TrackingProgressInfo.TrackingActionType.SHARE.name -> {
+                                bottomCard.showBottomCardLayout()
+                                trackingInfo.hideTrackingProgress()
+                            }
+                            TrackingProgressInfo.TrackingActionType.CALL.name -> {
+                                // No-Op
+                            }
+                            TrackingProgressInfo.TrackingActionType.SUMMARY.name -> {
+                                owner.eventShowDialog()
+                            }
+                        }
                     }
                 }
             }
