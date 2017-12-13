@@ -30,10 +30,8 @@ class MemberListAdapter(val userId: String, val users: MutableList<User>)
 
     override fun getItemCount() = users.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberItemViewHolder? {
-        return MemberItemUI().createView(AnkoContext.create(parent.context, parent,
-                false)).tag as? MemberItemViewHolder
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+            = MemberItemUI().createView(AnkoContext.create(parent.context, parent, false)).tag as? MemberItemViewHolder
 
     override fun onBindViewHolder(holder: MemberItemViewHolder?, position: Int) {
         holder?.onBind()
@@ -142,9 +140,7 @@ class MemberListAdapter(val userId: String, val users: MutableList<User>)
         /*
          * Add circleImageView library
          */
-        private inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
-                CircleImageView {
-            return ankoView({ CircleImageView(it) }, theme, init)
-        }
+        private inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit)
+                = ankoView({ CircleImageView(it) }, theme, init)
     }
 }
