@@ -44,8 +44,8 @@ class GroupRepository : GroupDataSource {
         return remoteDataSource.removeGroup(groupId)
     }
 
-    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
-        return remoteDataSource.postInvite(userId, invite)
+    override fun inviteUserJoinGroup(userId: String, invite: Invite): Single<Boolean> {
+        return remoteDataSource.inviteUserJoinGroup(userId, invite)
     }
 
     override fun removeUserFromGroup(userId: String): Single<User> {

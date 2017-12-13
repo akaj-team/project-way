@@ -125,9 +125,9 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("not implemented")
     }
 
-    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
+    override fun inviteUserJoinGroup(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val inviteRef = firebaseDatabase.getReference("user/$userId/${invite.to}")
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
         inviteRef.setValue(invite) { databaseError, dataSuccess ->
             if (databaseError != null) {
                 result.onSuccess(false)
