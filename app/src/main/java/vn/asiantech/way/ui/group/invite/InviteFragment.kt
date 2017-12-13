@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -72,8 +73,8 @@ class InviteFragment : BaseFragment() {
     /**
      * On item invite click of  RecyclerView list.
      */
-    internal fun eventItemInviteClicked(userInvited: User) {
-        viewModel.inviteUserJoinToGroup(userId, groupId, groupName, ownerId, userInvited)
+    internal fun eventItemInviteClicked(user: User) {
+        viewModel.inviteUserJoinToGroup(user.id, Invite(userId, groupId, groupName, userId == ownerId))
     }
 
     /**
