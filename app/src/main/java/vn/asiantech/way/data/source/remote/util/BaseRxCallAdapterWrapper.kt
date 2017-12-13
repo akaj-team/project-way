@@ -50,5 +50,5 @@ open class BaseRxCallAdapterWrapper<R>(private val retrofit: Retrofit, private v
         return response
     }
 
-    override fun responseType(): Type = wrapped!!.responseType()
+    override fun responseType(): Type? = wrapped?.responseType()
 }

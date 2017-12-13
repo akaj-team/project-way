@@ -137,11 +137,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun removeUserFromGroup(userId: String): Single<User> =
-            HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
+    override fun removeUserFromGroup(userId: String): Single<User>
+            = HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
 
-    override fun searchGroup(groupName: String): Observable<List<Group>> =
-            HypertrackApi.instance.searchGroup(groupName).toObservable().map { it.groups }
+    override fun searchGroup(groupName: String): Observable<List<Group>>
+            = HypertrackApi.instance.searchGroup(groupName).toObservable().map { it.groups }
 
     override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
