@@ -57,7 +57,5 @@ class RegisterViewModelTest {
 
         viewModel.getUser().subscribe(getUserTest)
         getUserTest.assertValue { it == user }
-        getUserTest.assertValue { it == user }
-        getUserTest.assertValue { it == user }
     }
 }

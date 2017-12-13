@@ -8,6 +8,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Invite
+import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
 /**
@@ -57,12 +58,14 @@ class ViewInviteFragment : BaseFragment() {
         addDisposables(
                 viewModel
                         .getInvitesOfUser()
+                        .observeOnUiThread()
                         .subscribe(
                                 this::handleGetInviteSuccess,
                                 this::handleGetInviteError),
 
                 viewModel
                         .progressDialogObservable
+                        .observeOnUiThread()
                         .subscribe(this::updateProgressDialog)
         )
     }
@@ -88,6 +91,7 @@ class ViewInviteFragment : BaseFragment() {
         addDisposables(
                 viewModel
                         .acceptInvite(invite)
+                        .observeOnUiThread()
                         .subscribe(
                                 this::handleAcceptInviteSuccess,
                                 this::handleAcceptInviteError
@@ -98,6 +102,7 @@ class ViewInviteFragment : BaseFragment() {
     private fun eventOnButtonCancelClick(invite: Invite) {
         addDisposables(viewModel
                 .removeInviteUserFromGroup(invite)
+                .observeOnUiThread()
                 .subscribe(
                         this::handleRemoveInviteSuccess,
                         this::handleRemoveInviteError
