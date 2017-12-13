@@ -4,31 +4,35 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
+import com.hypertrack.lib.internal.consumer.view.RippleView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.rippleView
-import vn.asiantech.way.ui.custom.trackingProgress
+import vn.asiantech.way.ui.custom.BottomButtonCard
+import vn.asiantech.way.ui.custom.TrackingProgressInfo
+import vn.asiantech.way.ui.custom.bottomCard
+import vn.asiantech.way.ui.custom.trackingProgressInfo
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 27/11/2017.
  */
 class ShareActivityUI : AnkoComponent<ShareActivity> {
-    companion object {
-        const val MARGIN_VALUE_VERY_SMALL = 5
-        const val MARGIN_VALUE_SMALL = 10
-        const val MARGIN_VALUE_MEDIUM = 15
-        const val MARGIN_VALUE_LARGE = 20
-        const val MARGIN_VALUE_VERY_LARGE = 50
-    }
 
+    internal lateinit var trackingInfo: TrackingProgressInfo
+    internal lateinit var bottomCard: BottomButtonCard
+    internal lateinit var rlSearchLocation: RelativeLayout
     internal lateinit var frMapView: FrameLayout
+    internal lateinit var btnBack: RippleView
     internal lateinit var tvTitle: TextView
     internal lateinit var tvLocation: TextView
     internal lateinit var imgEdit: ImageView
     internal lateinit var imgCurrentLocation: ImageView
     internal lateinit var imgChooseMarker: ImageView
+    internal lateinit var imgPickLocation: ImageView
 
     override fun createView(ui: AnkoContext<ShareActivity>) = with(ui) {
         relativeLayout {
@@ -40,39 +44,47 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         id = R.id.share_activity_map
                     }.lparams(matchParent, matchParent)
 
-                    rippleView {
+                    btnBack = rippleView {
+
+                        onClick {
+                            owner.eventButtonBackClicked()
+                        }
+
                         id = R.id.share_activity_btn_back
-                        imageView(R.drawable.ic_back_icon_button) {
-                        }.lparams(wrapContent, wrapContent)
-                    }.lparams(wrapContent, wrapContent) {
+                        imageView(R.drawable.ic_back_icon_button) { }
+                    }.lparams {
                         margin = dimen(R.dimen.margin_base)
                     }
 
-                    relativeLayout {
-                        backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    rlSearchLocation = relativeLayout {
+                        backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
+
+                        onClick {
+                            owner.eventRlSearchLocationClicked()
+                        }
 
                         tvTitle = textView(R.string.going_somewhere) {
                             id = R.id.share_activity_tv_title
                             textSize = px2dip(dimen(R.dimen.text_small))
-                            leftPadding = dip(MARGIN_VALUE_LARGE)
-                            topPadding = dip(MARGIN_VALUE_LARGE)
-                            bottomPadding = dip(MARGIN_VALUE_VERY_SMALL)
+                            leftPadding = dimen(R.dimen.share_margin_value_large)
+                            topPadding = dimen(R.dimen.share_margin_value_large)
+                            bottomPadding = dimen(R.dimen.share_margin_value_very_small)
                         }.lparams(matchParent, wrapContent)
 
                         tvLocation = textView(R.string.add_a_destination) {
                             textSize = px2dip(dimen(R.dimen.text_medium))
-                            leftPadding = dip(MARGIN_VALUE_LARGE)
-                            rightPadding = dip(MARGIN_VALUE_VERY_LARGE)
-                            bottomPadding = dip(MARGIN_VALUE_SMALL)
+                            leftPadding = dimen(R.dimen.share_margin_value_large)
+                            rightPadding = dimen(R.dimen.share_margin_value_very_large)
+                            bottomPadding = dimen(R.dimen.share_margin_value_small)
                         }.lparams(matchParent, wrapContent) {
                             below(R.id.share_activity_tv_title)
                         }
 
                         imgEdit = imageView(R.drawable.ic_edit_location) {
-                            leftPadding = dip(MARGIN_VALUE_MEDIUM)
-                            topPadding = dip(MARGIN_VALUE_MEDIUM)
-                            rightPadding = dip(MARGIN_VALUE_LARGE)
-                        }.lparams(wrapContent, wrapContent) {
+                            leftPadding = dimen(R.dimen.share_margin_value_medium)
+                            topPadding = dimen(R.dimen.share_margin_value_medium)
+                            rightPadding = dimen(R.dimen.share_margin_value_large)
+                        }.lparams {
                             alignParentRight()
                         }
                     }.lparams(matchParent, wrapContent) {
@@ -86,28 +98,69 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                         alignParentEnd()
                         alignParentRight()
                         alignWithParent = true
-                        margin = dip(MARGIN_VALUE_SMALL)
+                        margin = dimen(R.dimen.share_margin_value_small)
                     }
 
                     imgChooseMarker = imageView(R.drawable.select_expected_place) {
                         visibility = View.GONE
-                        padding = dip(MARGIN_VALUE_SMALL)
-                    }.lparams(wrapContent, wrapContent) {
+                        padding = dimen(R.dimen.share_margin_value_small)
+                    }.lparams {
                         centerInParent()
                     }
                 }.lparams(matchParent, matchParent) {
-                    backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                 }
 
-                imgChooseMarker = imageView(R.drawable.select_expected_place) {
-                }.lparams(wrapContent, wrapContent) {
+                imgPickLocation = imageView(R.drawable.select_expected_place) {
+                }.lparams {
                     centerInParent()
-                    bottomMargin = dip(MARGIN_VALUE_SMALL)
+                    bottomMargin = dimen(R.dimen.share_margin_value_small)
                 }
             }
 
-//           bottomCard {}
-            trackingProgress {}
+            bottomCard = bottomCard {
+                visibility = View.GONE
+                onBottomCardListener = object : BottomButtonCard.OnBottomCardListener {
+                    override fun onBottomCardItemClick(action: String) {
+                        when (action) {
+                            BottomButtonCard.BottomCardActionType.CLOSE.name -> {
+                                bottomCard.hideBottomCardLayout()
+                                trackingInfo.showTrackingProgress()
+                            }
+
+                            BottomButtonCard.BottomCardActionType.ACTION.name -> {
+                                owner.eventActionButtonClicked()
+                            }
+
+                            BottomButtonCard.BottomCardActionType.COPY.name -> {
+                                owner.eventCopyLinkToClipboard()
+                            }
+                        }
+                    }
+                }
+            }
+
+            trackingInfo = trackingProgressInfo {
+                onTrackingInfoListener = object : TrackingProgressInfo.OnTrackingProgressListener {
+                    override fun onTrackingProgressItemClick(action: String) {
+                        when (action) {
+                            TrackingProgressInfo.TrackingActionType.STOP.name -> {
+                                owner.eventConfirmStopDialog()
+                            }
+                            TrackingProgressInfo.TrackingActionType.SHARE.name -> {
+                                bottomCard.showBottomCardLayout()
+                                trackingInfo.hideTrackingProgress()
+                            }
+                            TrackingProgressInfo.TrackingActionType.CALL.name -> {
+                                // No-Op
+                            }
+                            TrackingProgressInfo.TrackingActionType.SUMMARY.name -> {
+                                owner.eventShowDialog()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

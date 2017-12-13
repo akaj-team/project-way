@@ -37,6 +37,10 @@ class WayRepository : WayDataSource {
         return remoteDataSource.getLocationDetail(placeId)
     }
 
+    override fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance> {
+        return remoteDataSource.getLocationDistance(origin, destination)
+    }
+
     override fun searchLocations(input: String, language: String, sensor: Boolean): Observable<AutoCompleteResult> {
         return remoteDataSource.searchLocations(input, language, sensor)
     }
@@ -71,5 +75,9 @@ class WayRepository : WayDataSource {
 
     override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action> {
         return remoteDataSource.createAndAssignAction(builder)
+    }
+
+    override fun getListLocation(url: String): Observable<ResultRoad> {
+        return remoteDataSource.getListLocation(url)
     }
 }

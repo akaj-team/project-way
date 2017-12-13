@@ -87,6 +87,14 @@ internal class WayRemoteDataSource : WayDataSource {
         return ApiClient.instance.searchLocations(input, language, sensor).toObservable()
     }
 
+    override fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance> {
+        return ApiClient.instance.getLocationDistance(origin, destination).toObservable()
+    }
+
+    override fun getListLocation(url: String): Observable<ResultRoad> {
+        return ApiClient.instance.getListLocation(url)
+    }
+
     override fun createGroup(name: String): Observable<Group> {
         return HypertrackApi.instance.createGroup(name).toObservable()
     }

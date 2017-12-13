@@ -13,16 +13,17 @@ import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.circularSeekBar
+import vn.asiantech.way.utils.AppConstants
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 30/11/2017.
  */
 class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
+
     companion object {
         const val ROTATION_VALUE = 90f
         const val LAYOUT_WEIGHT = 1f
-        const val PROGRESS_BAR_MAX = 100
     }
 
     internal lateinit var llTrackingProgress: LinearLayout
@@ -58,15 +59,14 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
     internal lateinit var btnStop: Button
     internal lateinit var btnShare: Button
 
-    val onStopButtonClick: () -> Unit = {}
-    val onShareButtonClick: () -> Unit = {}
-    val onShowSummaryButtonClick: () -> Unit = {}
-    val onCallButtonClick: () -> Unit = {}
+    var onTrackingInfoListener: OnTrackingProgressListener? = null
 
     init {
         AnkoContext.createDelegate(this).apply {
             relativeLayout {
-                lparams(matchParent, wrapContent)
+                lparams(matchParent, wrapContent) {
+                    alignParentBottom()
+                }
 
                 imgResetPosition = imageView(R.drawable.ic_ht_reset_button) {
                     scaleType = ImageView.ScaleType.FIT_CENTER
@@ -79,13 +79,10 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                 llTrackingProgress = verticalLayout {
                     id = R.id.tracking_progress_info_ll_tracking_progress
-                    topPadding = dimen(R.dimen.padding_high)
 
                     verticalLayout {
                         lparams(matchParent, wrapContent) {
-                            topMargin = dimen(R.dimen.track_margin_value_low)
-                            leftMargin = dimen(R.dimen.track_margin_value_low)
-                            rightMargin = dimen(R.dimen.track_margin_value_low)
+                            horizontalMargin = dimen(R.dimen.track_margin_value_low)
                         }
 
                         padding = dimen(R.dimen.track_margin_value_medium)
@@ -103,18 +100,18 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 }
 
                                 id = R.id.tracking_progress_info_circle_progress_bar
-                                circleColor = ContextCompat.getColor(context, R.color.progressRestColor)
-                                circleProgressColor = ContextCompat.getColor(context, R.color.tracking_experience)
-                                max = PROGRESS_BAR_MAX
+                                circleColor = ContextCompat.getColor(ctx, R.color.progressRestColor)
+                                circleProgressColor = ContextCompat.getColor(ctx, R.color.tracking_experience)
+                                max = AppConstants.PROGRESS_BAR_MAX
                                 progress = 0
                                 isLockEnabled = true
                             }
 
                             imgBtnCall = imageView(R.drawable.ic_phone_icon) {
                                 onClick {
-                                    onCallButtonClick
+                                    onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.CALL.name)
                                 }
-                                padding = dimen(R.dimen.track_margin_value_high)
+                                padding = dimen(R.dimen.track_margin_value_low)
                             }.lparams(dimen(R.dimen.phone_icon_size), dimen(R.dimen.phone_icon_size)) {
                                 alignStart(R.id.tracking_progress_info_circle_progress_bar)
                                 margin = dimen(R.dimen.track_btn_call_margin)
@@ -122,7 +119,8 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                             rlCollapse = relativeLayout {
                                 id = R.id.tracking_progress_info_rl_collapse
-                                lparams {
+                                lparams(wrapContent, dimen(R.dimen.seekBar_width)) {
+                                    margin = dimen(R.dimen.margin_very_low)
                                     rightOf(R.id.tracking_progress_info_circle_progress_bar)
                                 }
                                 onClick {
@@ -138,7 +136,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                 tvActionStatus = textView(R.string.leaving) {
                                     id = R.id.tracking_progress_info_tv_action_status
                                     maxLines = 1
-                                    textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                    textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                     textSize = px2dip(dimen(R.dimen.text_medium))
                                 }.lparams(matchParent, wrapContent) {
                                     bottomMargin = dimen(R.dimen.margin_base)
@@ -162,14 +160,14 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                     gravity = Gravity.CENTER_VERTICAL
 
                                     tvTime = textView(resources.getString(R.string.mask)) {
-                                        textColor = ContextCompat.getColor(context, R.color.tracking_experience)
+                                        textColor = ContextCompat.getColor(ctx, R.color.tracking_experience)
                                         textSize = px2dip(dimen(R.dimen.text_base))
-                                    }.lparams(matchParent, wrapContent)
+                                    }
 
                                     tvDistance = textView(resources.getString(R.string.mask)) {
                                         gravity = Gravity.CENTER_VERTICAL
                                         textSize = px2dip(dimen(R.dimen.text_base))
-                                        textColor = ContextCompat.getColor(context, R.color.gray)
+                                        textColor = ContextCompat.getColor(ctx, R.color.gray)
                                     }.lparams {
                                         leftMargin = dimen(R.dimen.margin_base)
                                     }
@@ -181,9 +179,8 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                             rlExpandedInfo = relativeLayout {
                                 lparams(matchParent, wrapContent) {
-                                    leftMargin = dimen(R.dimen.track_margin_value_low)
-                                    rightMargin = dimen(R.dimen.track_margin_value_low)
-                                    below(R.id.tracking_progress_info_rl_collapse)
+                                    horizontalMargin = dimen(R.dimen.track_margin_value_low)
+                                    bottomOf(R.id.tracking_progress_info_rl_collapse)
                                 }
                                 backgroundResource = R.color.colorWhite
                                 visibility = View.GONE
@@ -194,8 +191,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 
                                 llTrackingInfo = linearLayout {
                                     lparams(matchParent, dimen(R.dimen.track_layout_height)) {
-                                        bottomMargin = dimen(R.dimen.margin_medium)
-                                        topMargin = dimen(R.dimen.margin_medium)
+                                        verticalMargin = dimen(R.dimen.margin_medium)
                                     }
                                     id = R.id.tracking_progress_info_ll_tracking_info
                                     isBaselineAligned = false
@@ -279,7 +275,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         tvStartAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_start_address
-                                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                            textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_medium)
                                             alignStart(R.id.tracking_progress_info_tv_start_time)
@@ -289,6 +285,9 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         imgArrowRightStartItem = imageView(
                                                 R.drawable.ic_keyboard_arrow_right_black_18dp) {
                                             id = R.id.tracking_progress_info_img_arrow_right_start_item
+                                            onClick {
+                                                setArrowRightStartItemClick()
+                                            }
                                         }.lparams {
                                             alignParentRight()
                                             topOf(R.id.tracking_progress_info_tv_start_address)
@@ -299,6 +298,9 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         imgArrowRightEndItem = imageView(
                                                 R.drawable.ic_keyboard_arrow_right_black_18dp) {
                                             id = R.id.tracking_progress_info_img_arrow_right_end_item
+                                            onClick {
+                                                setArrowRightEndItemClick()
+                                            }
                                         }.lparams {
                                             alignParentRight()
                                             alignParentEnd()
@@ -310,6 +312,9 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         imgArrowDropDownStartItem = imageView(
                                                 R.drawable.ic_keyboard_arrow_down_black_18dp) {
                                             visibility = View.GONE
+                                            onClick {
+                                                setArrowDropDownStartItemClick()
+                                            }
                                         }.lparams {
                                             alignParentRight()
                                             topOf(R.id.tracking_progress_info_tv_start_address)
@@ -320,6 +325,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         imgArrowDropDownEndItem = imageView(
                                                 R.drawable.ic_keyboard_arrow_down_black_18dp) {
                                             visibility = View.GONE
+                                            onClick { setArrowDropDownEndItemClick() }
                                         }.lparams {
                                             alignParentRight()
                                             bottomOf(R.id.tracking_progress_info_tv_start_address)
@@ -339,7 +345,7 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                                         tvEndAddress = textView {
                                             visibility = View.GONE
                                             id = R.id.tracking_progress_info_tv_end_address
-                                            textColor = ContextCompat.getColor(context, R.color.colorBlack)
+                                            textColor = ContextCompat.getColor(ctx, R.color.colorBlack)
                                         }.lparams {
                                             bottomMargin = dimen(R.dimen.track_margin_value_high)
                                             alignStart(R.id.tracking_progress_info_tv_end_time)
@@ -361,27 +367,27 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
                             gravity = Gravity.CENTER
                             backgroundResource = R.color.colorWhite
                             onClick {
-                                onStopButtonClick
+                                onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.STOP.name)
                             }
 
                         }.lparams(matchParent, matchParent) { weight = LAYOUT_WEIGHT }
 
                         view {
-                            backgroundColor = ContextCompat.getColor(context, R.color.divider_light)
+                            backgroundColor = ContextCompat.getColor(ctx, R.color.divider_light)
                         }.lparams(dip(2), matchParent)
 
                         btnShare = button(R.string.share) {
                             onClick {
-                                onShareButtonClick
+                                onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.SHARE.name)
                             }
                             gravity = Gravity.CENTER
-                            backgroundColor = ContextCompat.getColor(context, R.color.colorWhite)
+                            backgroundColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                         }.lparams(matchParent, matchParent) { weight = LAYOUT_WEIGHT }
                     }
 
                     btnShowSummary = button(R.string.arrived_show_summary) {
                         onClick {
-                            onShowSummaryButtonClick
+                            onTrackingInfoListener?.onTrackingProgressItemClick(TrackingActionType.SUMMARY.name)
                         }
                         visibility = View.GONE
                         gravity = Gravity.CENTER
@@ -445,9 +451,52 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
         llDetailArrived.visibility = View.VISIBLE
         return this
     }
+
+    private fun setArrowRightStartItemClick() {
+        imgArrowRightStartItem.visibility = View.GONE
+        imgArrowDropDownStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.VISIBLE
+    }
+
+    private fun setArrowDropDownEndItemClick() {
+        imgArrowDropDownEndItem.visibility = View.GONE
+        imgArrowRightEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.GONE
+    }
+
+    private fun setArrowDropDownStartItemClick() {
+        imgArrowDropDownStartItem.visibility = View.GONE
+        imgArrowRightStartItem.visibility = View.VISIBLE
+        tvStartAddress.visibility = View.GONE
+    }
+
+    private fun setArrowRightEndItemClick() {
+        imgArrowRightEndItem.visibility = View.GONE
+        imgArrowDropDownEndItem.visibility = View.VISIBLE
+        tvEndAddress.visibility = View.VISIBLE
+    }
+
+    /**
+     * Enum define for action type
+     */
+    enum class TrackingActionType {
+        STOP, SHARE, CALL, SUMMARY
+    }
+
+    /**
+     * Interface create fun onClickListener for TrackingProgressInfo
+     */
+    interface OnTrackingProgressListener {
+        /**
+         * Tracking info item click listener
+         */
+        fun onTrackingProgressItemClick(action: String)
+    }
 }
 
-internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
+internal fun ViewManager.trackingProgressInfo() = trackingProgressInfo {}
+
+internal fun ViewManager.trackingProgressInfo(init: TrackingProgressInfo.() -> Unit):
         TrackingProgressInfo {
     return ankoView({ TrackingProgressInfo(it) }, 0, init)
 }
