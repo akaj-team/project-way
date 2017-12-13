@@ -500,3 +500,5 @@ internal fun ViewManager.trackingProgressInfo(init: TrackingProgressInfo.() -> U
         TrackingProgressInfo {
     return ankoView({ TrackingProgressInfo(it) }, 0, init)
 }
+internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
+        TrackingProgressInfo = ankoView({ TrackingProgressInfo(it) }, 0, init)

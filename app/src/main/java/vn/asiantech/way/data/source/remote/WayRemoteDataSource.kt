@@ -74,18 +74,12 @@ internal class WayRemoteDataSource : WayDataSource {
         return result
     }
 
-    override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>> {
-        return ApiClient.instance.getAddressLocation(latLng).toObservable().map { it.results }
-    }
+    override fun getAddressLocation(latLng: String): Observable<MutableList<LocationAddress>> = ApiClient.instance.getAddressLocation(latLng).toObservable().map { it.results }
 
-    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> {
-        return ApiClient.instance.getLocationDetail(placeId).toObservable()
-    }
+    override fun getLocationDetail(placeId: String?): Observable<ResultPlaceDetail> = ApiClient.instance.getLocationDetail(placeId).toObservable()
 
     override fun searchLocations(input: String, language: String, sensor: Boolean)
-            : Observable<AutoCompleteResult> {
-        return ApiClient.instance.searchLocations(input, language, sensor).toObservable()
-    }
+            : Observable<AutoCompleteResult> = ApiClient.instance.searchLocations(input, language, sensor).toObservable()
 
     override fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance> =
             ApiClient.instance.getLocationDistance(origin, destination).toObservable()
@@ -93,17 +87,11 @@ internal class WayRemoteDataSource : WayDataSource {
     override fun getListLocation(url: String): Observable<ResultRoad> =
             ApiClient.instance.getListLocation(url)
 
-    override fun createGroup(name: String): Observable<Group> {
-        return HypertrackApi.instance.createGroup(name).toObservable()
-    }
+    override fun createGroup(name: String): Observable<Group> = HypertrackApi.instance.createGroup(name).toObservable()
 
-    override fun getGroupInfo(groupId: String): Observable<Group> {
-        return HypertrackApi.instance.getGroupInfo(groupId).toObservable()
-    }
+    override fun getGroupInfo(groupId: String): Observable<Group> = HypertrackApi.instance.getGroupInfo(groupId).toObservable()
 
-    override fun getGroupMembers(groupId: String): Observable<MutableList<User>> {
-        return HypertrackApi.instance.getGroupMembers(groupId).toObservable().map { it.results }
-    }
+    override fun getGroupMembers(groupId: String): Observable<MutableList<User>> = HypertrackApi.instance.getGroupMembers(groupId).toObservable().map { it.results }
 
     override fun addUserToGroup(userId: String, body: BodyAddUserToGroup): Observable<User> {
         val result = PublishSubject.create<User>()

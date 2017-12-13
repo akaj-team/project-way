@@ -76,7 +76,7 @@ interface GroupDataSource {
      * @param userId - given user.
      * @param invite - given invite.
      */
-    fun postInvite(userId: String, invite: Invite): Single<Boolean>
+    fun inviteUserJoinGroup(userId: String, invite: Invite): Single<Boolean>
 
     /**
      * This method used to remove a given user from his/her group.
