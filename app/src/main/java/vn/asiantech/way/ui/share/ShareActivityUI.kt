@@ -128,13 +128,11 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                                 trackingInfo.showTrackingProgress()
                             }
 
-                            BottomButtonCard.BottomCardActionType.ACTION.name -> {
+                            BottomButtonCard.BottomCardActionType.ACTION.name ->
                                 owner.eventActionButtonClicked()
-                            }
 
-                            BottomButtonCard.BottomCardActionType.COPY.name -> {
+                            BottomButtonCard.BottomCardActionType.COPY.name ->
                                 owner.eventCopyLinkToClipboard()
-                            }
                         }
                     }
                 }
@@ -144,19 +142,16 @@ class ShareActivityUI : AnkoComponent<ShareActivity> {
                 onTrackingInfoListener = object : TrackingProgressInfo.OnTrackingProgressListener {
                     override fun onTrackingProgressItemClick(action: String) {
                         when (action) {
-                            TrackingProgressInfo.TrackingActionType.STOP.name -> {
+                            TrackingProgressInfo.TrackingActionType.STOP.name ->
                                 owner.eventConfirmStopDialog()
-                            }
+
                             TrackingProgressInfo.TrackingActionType.SHARE.name -> {
                                 bottomCard.showBottomCardLayout()
                                 trackingInfo.hideTrackingProgress()
                             }
-                            TrackingProgressInfo.TrackingActionType.CALL.name -> {
-                                // No-Op
-                            }
-                            TrackingProgressInfo.TrackingActionType.SUMMARY.name -> {
+
+                            TrackingProgressInfo.TrackingActionType.SUMMARY.name ->
                                 owner.eventShowDialog()
-                            }
                         }
                     }
                 }

@@ -13,12 +13,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.callbacks.HyperTrackCallback
 import com.hypertrack.lib.models.*
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
-import vn.asiantech.way.data.model.LocationRoad
-import vn.asiantech.way.data.model.Row
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.utils.AppConstants
 import vn.asiantech.way.utils.LocationUtil
@@ -54,16 +51,11 @@ class ShareViewModel(val context: Context) {
                 .ACTION_BATTERY_CHANGED))
     }
 
-    internal fun getLocationDistance(origin: String, destination: String)
-            : Observable<List<Row>> {
-        return wayRepository.getLocationDistance(origin, destination)
-                .map { it.rows }
-    }
+    internal fun getLocationDistance(origin: String, destination: String) =
+            wayRepository.getLocationDistance(origin, destination).map { it.rows }
 
-    internal fun getListLocationWhenReOpen(url: String): Observable<List<LocationRoad>> {
-        return wayRepository.getListLocation(url)
-                .map { it.locationRoads }
-    }
+    internal fun getListLocationWhenReOpen(url: String) =
+            wayRepository.getListLocation(url).map { it.locationRoads }
 
     internal fun getTrackingURL(): Single<String> {
         val link = SingleSubject.create<String>()

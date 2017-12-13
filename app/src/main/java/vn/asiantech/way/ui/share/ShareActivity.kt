@@ -155,17 +155,21 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         locationLatLng = googleMap.cameraPosition?.target
         if (!isConfirm) {
             if (myLocation?.geometry?.location == null || action == AppConstants.ACTION_CHOOSE_ON_MAP) {
-                addDisposables(shareViewModel.getLocationName(locationLatLng!!)
-                        .observeOnUiThread()
-                        .subscribe(this::getLocationName))
+                locationLatLng?.let {
+                    addDisposables(shareViewModel.getLocationName(it)
+                            .observeOnUiThread()
+                            .subscribe(this::getLocationName))
+                }
             } else {
                 val lat = myLocation?.geometry?.location?.lat
                 val lng = myLocation?.geometry?.location?.lng
                 if (lat != null && lng != null) {
                     locationLatLng = LatLng(lat, lng)
-                    addDisposables(shareViewModel.getLocationName(locationLatLng!!)
-                            .observeOnUiThread()
-                            .subscribe(this::getLocationName))
+                    locationLatLng?.let {
+                        addDisposables(shareViewModel.getLocationName(it)
+                                .observeOnUiThread()
+                                .subscribe(this::getLocationName))
+                    }
                 }
                 isConfirm = true
             }
@@ -217,7 +221,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
             AppConstants.ACTION_CHOOSE_ON_MAP -> {
                 action = AppConstants.ACTION_SEND_WAY_LOCATION
                 initBottomButtonCard(true, action)
-                destinationLatLng = locationLatLng!!
+                locationLatLng?.let { destinationLatLng = it }
                 addDestinationMarker(destinationLatLng)
                 isConfirm = true
             }
@@ -299,18 +303,20 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         ui.trackingInfo.circleProgressBar.progress = TYPE_PROGRESS_MAX
         ui.trackingInfo.circleProgressBar.circleProgressColor = ContextCompat.getColor(this, R.color.violet)
         ui.trackingInfo.tvStartTime.text = timeStart
-        addDisposables(shareViewModel.getLocationName(locationLatLng!!)
-                .observeOnUiThread()
-                .subscribe(handleStartAddress),
-                shareViewModel.getLocationName(destinationLatLng)
-                        .observeOnUiThread()
-                        .subscribe(handleEndAddress),
-                shareViewModel.getCalendarDateTime()
-                        .observeOnUiThread()
-                        .subscribe(handleEndTime),
-                shareViewModel.getTimeDuringStatus(countTimer / AppConstants.TIME_ZOOM_CAMERA)
-                        .observeOnUiThread()
-                        .subscribe(handleStartTime))
+        locationLatLng?.let {
+            addDisposables(shareViewModel.getLocationName(it)
+                    .observeOnUiThread()
+                    .subscribe(handleStartAddress),
+                    shareViewModel.getLocationName(destinationLatLng)
+                            .observeOnUiThread()
+                            .subscribe(handleEndAddress),
+                    shareViewModel.getCalendarDateTime()
+                            .observeOnUiThread()
+                            .subscribe(handleEndTime),
+                    shareViewModel.getTimeDuringStatus(countTimer / AppConstants.TIME_ZOOM_CAMERA)
+                            .observeOnUiThread()
+                            .subscribe(handleStartTime))
+        }
         ui.trackingInfo.tvDistance.text = etaDistance
         ui.trackingInfo.imgBtnCall.imageResource = R.drawable.ic_reached
         eventShowDialog()
@@ -510,19 +516,17 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                     .anchor(AppConstants.KEY_DEFAULT_ANCHOR, AppConstants.KEY_DEFAULT_ANCHOR)
                     .flat(true))
         } else {
-            currentMarker!!.position = latLng
-            currentMarker!!.rotation = angle
+            currentMarker?.position = latLng
+            currentMarker?.rotation = angle
         }
         MarkerAnimation.animateMarker(currentMarker, latLng)
     }
 
-    private fun checkStatus(speed: Float): String {
-        return if (speed <= AppConstants.MIN_SPEED) {
-            STOP_STATUS
-        } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
-            MOVING_STATUS
-        } else DRIVER_STATUS
-    }
+    private fun checkStatus(speed: Float) = if (speed <= AppConstants.MIN_SPEED) {
+        STOP_STATUS
+    } else if (speed > AppConstants.MIN_SPEED && speed <= AppConstants.MAX_SPEED) {
+        MOVING_STATUS
+    } else DRIVER_STATUS
 
     private fun getListLocation(latLng: LatLng, position: Int) {
         val status = checkStatus(averageSpeed)
@@ -638,6 +642,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         }
     }
 
+    //todo here
     private fun getCurrentLocation(location: Location) {
         currentLocation = location
         currentLatLng = currentLocation?.longitude?.
@@ -656,9 +661,11 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                                 let { it1 -> LatLng(it, it1) }
                     }
             addDestinationMarker(locationLatLng)
-            addDisposables(shareViewModel.getLocationName(currentLatLng!!)
-                    .observeOnUiThread()
-                    .subscribe(this::getLocationName))
+            currentLatLng?.let {
+                addDisposables(shareViewModel.getLocationName(it)
+                        .observeOnUiThread()
+                        .subscribe(this::getLocationName))
+            }
             isConfirm = true
         }
 
