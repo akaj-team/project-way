@@ -1,10 +1,12 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.content.Context
+import com.google.firebase.database.FirebaseDatabase
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.utils.AppConstants
@@ -32,6 +34,12 @@ class InviteViewModel(val context: Context) {
                 .flatMap {
                     getListUser(it)
                 }
+    }
+
+    internal fun inviteUserJoinToGroup(userId: String, groupId: String, groupName: String,
+                                       ownerId: String, userInvited: User) {
+        val inviteRef = FirebaseDatabase.getInstance().getReference("user/${userInvited.id}/invites/$groupId")
+        inviteRef.setValue(Invite(userId, groupId, groupName, userId == ownerId))
     }
 
     private fun getListUser(name: String): Observable<List<User>> {
