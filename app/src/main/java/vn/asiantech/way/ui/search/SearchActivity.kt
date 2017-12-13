@@ -76,6 +76,7 @@ class SearchActivity : BaseActivity() {
         val placeId = location.placeId
         if (placeId != null) {
             viewModel.getLocationDetail(placeId)
+                    .observeOnUiThread()
                     .subscribe(this::startSharedActivity, {
                         it.printStackTrace()
                         toast(getString(R.string.error_message))
