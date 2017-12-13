@@ -1,6 +1,5 @@
 package vn.asiantech.way.data.source.remote
 
-import android.util.Log
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.hypertrack.lib.models.User
@@ -10,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
@@ -296,40 +294,22 @@ class GroupRemoteDataSource : GroupDataSource {
     }
 
     override fun getUserInfo(groupId: String): Observable<User> {
-        Log.d("aaa", "getUserInfo")
         val result = PublishSubject.create<User>()
         val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
-                Log.d("aaa", "onChildAdded")
                 val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
-                Log.d("aaa", "invite" + invite)
                 if (invite != null) {
-                    Log.d("aaa","start tracking")
                     HypertrackApi.instance
                             .getUserInfo(invite.to)
-                            .subscribe(object : Subscriber<User> {
-                                override fun onComplete() {
-                                    Log.d("aaa","onComplete" )
-                                }
-
-                                override fun onError(t: Throwable?) {
-                                    Log.d("aaa","onError" )
-                                }
-
-                                override fun onSubscribe(s: Subscription?) {
-                                    Log.d("aaa","onSubscribe" )
-                                }
-
-                                override fun onNext(t: User?) {
-                                    Log.d("aaa","onNext" )
-                                    result.onNext(t!!)
-                                }
+                            .subscribe({
+                                result.onNext(it)
+                            }, {
+                                result.onError(it)
                             })
                 }
             }
         })
-        Log.d("aaa","result: " + result)
         return result
     }
 

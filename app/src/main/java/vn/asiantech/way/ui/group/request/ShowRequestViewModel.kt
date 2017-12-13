@@ -11,10 +11,10 @@ import vn.asiantech.way.data.source.WayRepository
  * Request View Model
  * @author NgocTTN
  */
-class ShowRequestViewModel {
+class ShowRequestViewModel(private val wayRepository: WayRepository, private val groupRepository: GroupRepository) {
     internal var progressDialogObservable: BehaviorSubject<Boolean> = BehaviorSubject.create()
-    private val wayRepository = WayRepository()
-    private val groupRepository = GroupRepository()
+
+    constructor() : this(WayRepository(), GroupRepository())
 
     internal fun getRequestsOfUser(groupId: String): Observable<User> {
         return groupRepository
