@@ -26,3 +26,4 @@ internal fun Activity.toast(message: CharSequence, duration: Int = Toast.LENGTH_
  */
 internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View
         = LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+

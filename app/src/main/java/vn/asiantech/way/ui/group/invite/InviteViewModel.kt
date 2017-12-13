@@ -31,6 +31,6 @@ class InviteViewModel(val context: Context) {
                         getListUser(it)
                     }
 
-    private fun getListUser(name: String): Observable<List<User>> =
-            groupRepository.searchUser(name).doOnSubscribe { resetDataStatus.onNext(true) }
+    private fun getListUser(name: String): Observable<List<User>>
+            = groupRepository.searchUser(name).doOnSubscribe { resetDataStatus.onNext(true) }
 }

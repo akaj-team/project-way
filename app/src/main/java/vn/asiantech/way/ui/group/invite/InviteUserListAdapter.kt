@@ -25,8 +25,8 @@ class InviteUserListAdapter(val users: MutableList<User>)
         holder?.onBind()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder? =
-            UserViewHolder(InviteItemUserUI().createView(AnkoContext.create(parent.context, parent)))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder?
+            = UserViewHolder(InviteItemUserUI().createView(AnkoContext.create(parent.context, parent)))
 
 
     override fun getItemCount() = users.size

@@ -101,5 +101,6 @@ class LocalRepository(val context: Context) : LocalDataSource {
         return byteStream.toString()
     }
 
-    private fun getCountries(json: String): List<Country> = Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
+    private fun getCountries(json: String): List<Country>
+            = Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
 }
