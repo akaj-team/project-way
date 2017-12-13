@@ -19,6 +19,7 @@ import vn.asiantech.way.R
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.group.invite.InviteFragment
+import vn.asiantech.way.ui.group.search.SearchGroupFragment
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -63,7 +64,7 @@ class SplashActivity : BaseActivity() {
         setScaleForCircle()
         requestPermission()
         // Open fragment
-        replaceFragment(InviteFragment.getInstance("", "", "",""))
+        replaceFragment(SearchGroupFragment.getInstance(""))
 
     }
 
