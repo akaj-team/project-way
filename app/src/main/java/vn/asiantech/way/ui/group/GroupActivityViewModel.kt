@@ -18,16 +18,13 @@ class GroupActivityViewModel {
 
     internal fun getGroupInfo(groupId: String): Observable<Group> {
         return groupDataSource.getGroupInfo(groupId)
-                .observeOnUiThread()
     }
 
     internal fun getGroupId(userId: String): Observable<String> {
         return groupDataSource.listenerForGroupChange(userId)
-                .observeOnUiThread()
     }
 
     internal fun getInviteList(userId: String): Observable<Invite> {
         return groupDataSource.getInvite(userId)
-                .observeOnUiThread()
     }
 }
