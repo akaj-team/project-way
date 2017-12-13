@@ -12,8 +12,10 @@ import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.yesButton
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.extension.addFragment
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.invite.InviteFragment
 import vn.asiantech.way.utils.AppConstants
 
 /**
@@ -65,9 +67,9 @@ class GroupInfoFragment : BaseFragment() {
 
     internal fun eventViewOnClicked(view: View) {
         when (view.id) {
-            R.id.group_info_img_invite -> sendBroadCast(AppConstants.ACTION_CALL_INVITE_FRAGMENT)
+            R.id.group_info_img_invite -> handleInviteOnClicked()
 
-            R.id.group_info_img_approve -> sendBroadCast(AppConstants.ACTION_CALL_VIEW_GROUP_REQUEST_FRAGMENT)
+            R.id.group_info_img_approve -> handleApproveOnClicked()
 
             R.id.group_info_img_leave_group -> handleLeaveGroupOnClicked()
         }
@@ -91,6 +93,11 @@ class GroupInfoFragment : BaseFragment() {
         reloadGroupInfo()
     }
 
+    private fun handleInviteOnClicked() {
+        activity.addFragment((this.view?.parent as View).id,
+                InviteFragment.getInstance(userId, group.id, group.name, group.ownerId))
+    }
+
     private fun handleLeaveGroupOnClicked() {
         if (userId == group.ownerId) {
             alert(R.string.admin_leave_group, R.string.confirm) {
@@ -108,6 +115,10 @@ class GroupInfoFragment : BaseFragment() {
                 noButton { it.dismiss() }
             }.show()
         }
+    }
+
+    private fun handleApproveOnClicked() {
+        // TODO: Add ShowRequestFragment to container view.
     }
 
     private fun handleGetGroupInfoCompleted(groupToBind: Group) {
@@ -151,7 +162,6 @@ class GroupInfoFragment : BaseFragment() {
     private fun handleLeaveGroupCompleted(user: User) {
         if (user.groupId != groupId) {
             toast(getString(R.string.leave_group_notification, group.name))
-            sendBroadCast(AppConstants.ACTION_RELOAD)
         } else {
             toast(R.string.error_message)
         }
