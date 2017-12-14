@@ -28,8 +28,7 @@ class SearchGroupViewModelTest {
     @Before
     fun initTest() {
         MockitoAnnotations.initMocks(this)
-        val userId = ""
-        viewModel = SearchGroupViewModel(groupRepository, userId)
+        viewModel = SearchGroupViewModel(groupRepository, "")
     }
 
     @Test
@@ -37,45 +36,46 @@ class SearchGroupViewModelTest {
         /* Given */
         val testGroup = TestObserver<List<Group>>()
         val groups = mutableListOf<Group>()
-        val groupName = ""
-        val invite = Invite("", "", "", true)
-
-        /* When */
+        val groupName = "groupName"
+        val invite = Invite("from", "to", "groupName", true)
         `when`(groupRepository.getCurrentRequestOfUser(TestUtil.any())).thenReturn(Observable.just(invite))
         `when`(groupRepository.searchGroup(TestUtil.any())).thenReturn(Observable.just(groups))
 
-        /* Then */
+
+        /* When */
         groupRepository.searchGroup(groupName).subscribe(testGroup)
         viewModel.triggerSearchGroup().subscribe(testGroup)
+
+        /* Then */
         testGroup.assertValue { it == groups }
     }
 
     @Test
-    fun `Given a group - When call post request to group - Then return success`() {
+    fun `Given a group - When call post request to group - Then return true`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val group = Group("", "", "", "", "", "")
-
-        /* When */
+        val group = Group("id", "name", "token", "ownerId", "createAt", "modifiedAt")
         `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
-        /* Then */
+        /* When */
         viewModel.postRequestToGroup(group).subscribe(test)
+
+        /* Then */
         test.assertValue(true)
     }
 
     @Test
-    fun `Given progressDialog - When call post request to group - Then hide progressDialog`() {
+    fun `Given progressDialog - When call post request to group - Then progress dialog should show then hide`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val group = Group("", "", "", "", "", "")
+        val group = Group("id", "name", "token", "ownerId", "createAt", "modifiedAt")
+        `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
-        `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
-
-        /* Then */
         viewModel.progressDialogObservable.subscribe(test)
         viewModel.postRequestToGroup(group).subscribe()
+
+        /* Then */
         test.assertValues(true, false)
     }
 }
