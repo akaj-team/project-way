@@ -61,6 +61,7 @@ class SearchGroupViewModelTest {
 
         /* Then */
         viewModel.postRequestToGroup(group).subscribe(test)
+        test.assertResult(false)
         test.assertValue(false)
     }
 
