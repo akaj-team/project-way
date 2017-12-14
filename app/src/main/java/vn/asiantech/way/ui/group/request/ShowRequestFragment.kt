@@ -37,7 +37,6 @@ class ShowRequestFragment : BaseFragment() {
     private lateinit var adapter: RequestAdapter
     private lateinit var viewModel: ShowRequestViewModel
     private lateinit var groupId: String
-
     private var requestsUser = mutableListOf<User>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
