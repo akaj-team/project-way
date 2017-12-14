@@ -84,39 +84,24 @@ class ShowRequestFragment : BaseFragment() {
         handleRemoveRequestInGroup(userId)
     }
 
-    /**
-     * On handle after get request list of user completed
-     */
     private fun handleGetRequestsOfUserSuccess(user: User) {
         requestsUser.clear()
         requestsUser.add(user)
         adapter.notifyItemInserted(requestsUser.size - 1)
     }
 
-    /**
-     * On handle after get request list of user failed
-     */
     private fun handleGetRequestsOfUserFailed(error: Throwable) {
         toast(error.message.toString())
     }
 
-    /**
-     * On handle after add user to group success
-     */
     private fun handleAddUserToGroupSuccess(user: User) {
         handleRemoveRequestInGroup(user.id)
     }
 
-    /**
-     * On handle after add user to group failed
-     */
     private fun handleAddUserToGroupFailed(error: Throwable) {
         toast(error.message.toString())
     }
 
-    /**
-     * On remove request in group
-     */
     private fun handleRemoveRequestInGroup(userId: String) {
         addDisposables(
                 viewModel
@@ -126,23 +111,14 @@ class ShowRequestFragment : BaseFragment() {
         )
     }
 
-    /**
-     * On handle after emove request in group success
-     */
     private fun handleRemoveRequestInGroupSuccess(isSuccess: Boolean) {
         toast(R.string.success)
     }
 
-    /**
-     * On handle after emove request in group success
-     */
     private fun handleRemoveRequestInGroupFailed(error: Throwable) {
         toast(error.message.toString())
     }
 
-    /**
-     * On handle update progress
-     */
     private fun updateProgressDialog(show: Boolean) {
         if (show) {
             showProgressDialog()
