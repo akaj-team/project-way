@@ -75,7 +75,12 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     internal fun eventOnButtonCancelClick(userId: String) {
-        handleCancelAddUserToGroup(userId)
+        addDisposables(
+                viewModel
+                        .removeRequestInGroup(userId, groupId)
+                        .observeOnUiThread()
+                        .subscribe(this :: handleCancelAddUserToGroupSuccess, this :: handleCancelAddUserToGroupFailed)
+        )
     }
 
     private fun handleGetRequestsOfUserSuccess(user: User) {
@@ -91,15 +96,19 @@ class ShowRequestFragment : BaseFragment() {
         }
     }
 
-    private fun handleCancelAddUserToGroup(userId: String) {
-        viewModel.removeRequestInGroup(groupId, userId)
-    }
-
     private fun handleAddUserToGroupSuccess(user: User) {
-        viewModel.removeRequestInGroup(groupId, user.id).doFinally { toast(R.string.success) }
+        viewModel.removeRequestInGroup(groupId, user.id)
     }
 
     private fun handleAddUserToGroupFailed(error: Throwable) {
+        toast(error.message.toString())
+    }
+
+    private fun handleCancelAddUserToGroupSuccess(isSuccess: Boolean) {
+        toast(R.string.success)
+    }
+
+    private fun handleCancelAddUserToGroupFailed(error: Throwable) {
         toast(error.message.toString())
     }
 }

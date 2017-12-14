@@ -24,6 +24,8 @@ class ShowRequestViewModel(private val wayRepository: WayRepository, private val
 
     internal fun addUserToGroup(groupId: String, userId: String): Observable<User> {
         return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
+                .doOnSubscribe { progressDialogObservable.onNext(true) }
+                .doFinally { progressDialogObservable.onNext(false) }
     }
 
     internal fun removeRequestInGroup(groupId: String, userId: String): Single<Boolean> {
