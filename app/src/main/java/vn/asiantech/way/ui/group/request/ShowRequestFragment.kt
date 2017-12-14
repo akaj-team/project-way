@@ -56,7 +56,7 @@ class ShowRequestFragment : BaseFragment() {
                 viewModel
                         .getRequestsOfUser(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleGetRequestsOfUserSuccess),
+                        .subscribe(this::handleGetRequestsOfUserSuccess, this::handleGetRequestsOfUserFailed),
 
                 viewModel
                         .progressDialogObservable
@@ -91,6 +91,13 @@ class ShowRequestFragment : BaseFragment() {
         requestsUser.clear()
         requestsUser.add(user)
         adapter.notifyItemInserted(requestsUser.size - 1)
+    }
+
+    /**
+     * On handle  after get request list of user failed
+     */
+    private fun handleGetRequestsOfUserFailed(error: Throwable) {
+        toast(error.message.toString())
     }
 
     /**
