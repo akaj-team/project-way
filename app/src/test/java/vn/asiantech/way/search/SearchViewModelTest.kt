@@ -79,6 +79,4 @@ class SearchViewModelTest {
         viewModel.triggerSearchLocationResult(input, sensor).subscribe(triggerSearchLocationResultTest)
         triggerSearchLocationResultTest.assertValue { it == autoCompleteResult.predictions }
     }
-
 }
-
