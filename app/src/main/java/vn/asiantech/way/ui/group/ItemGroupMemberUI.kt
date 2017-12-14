@@ -57,7 +57,5 @@ class ItemGroupMemberUI : AnkoComponent<ViewGroup> {
      * Add circleImageView library
      */
     private inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
-            CircleImageView {
-        return ankoView({ CircleImageView(it) }, theme, init)
-    }
+            CircleImageView = ankoView({ CircleImageView(it) }, theme, init)
 }

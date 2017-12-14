@@ -299,6 +299,5 @@ class BottomButtonCard(context: Context) :
     }
 }
 
-internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard {
-    return ankoView({ BottomButtonCard(it) }, 0, init)
-}
+internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard
+        = ankoView({ BottomButtonCard(it) }, 0, init)

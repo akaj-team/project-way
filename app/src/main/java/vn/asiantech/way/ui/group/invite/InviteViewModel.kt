@@ -24,24 +24,21 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
         searchInviteObservable.onNext(query)
     }
 
-    internal fun triggerSearchListUser(): Observable<List<User>> {
-        return searchInviteObservable
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .filter { it.isNotEmpty() }
-                .flatMap {
-                    getListUser(it)
-                }
-    }
+    internal fun triggerSearchListUser(): Observable<List<User>> =
+            searchInviteObservable
+                    .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
+                    .filter { it.isNotEmpty() }
+                    .flatMap {
+                        getListUser(it)
+                    }
 
     internal fun inviteUserJoinToGroup(userId: String, invite: Invite) {
         groupRepository.inviteUserJoinGroup(userId, invite)
     }
 
-    private fun getListUser(name: String): Observable<List<User>> {
-        return groupRepository
-                .searchUser(name)
-                .doOnSubscribe { resetDataStatus.onNext(true) }
-                .subscribeOn(Schedulers.io())
-    }
+    private fun getListUser(name: String): Observable<List<User>> = groupRepository
+            .searchUser(name)
+            .doOnSubscribe { resetDataStatus.onNext(true) }
+            .subscribeOn(Schedulers.io())
 }

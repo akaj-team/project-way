@@ -26,10 +26,9 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
         holder?.onBind()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? {
-        return LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context,
-                parent, false)).tag as? LocationViewHolder
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? =
+            LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context,
+                    parent, false)).tag as? LocationViewHolder
 
     /**
      * View holder of RecyclerView's item.
@@ -41,6 +40,7 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
                 = itemView.find(R.id.location_adapter_ui_tv_location_name)
         private val tvLocationAddress: TextView
                 = itemView.find(R.id.location_adapter_ui_tv_location_format_address)
+
         init {
             itemView.onClick {
                 onItemClick(locations[adapterPosition])

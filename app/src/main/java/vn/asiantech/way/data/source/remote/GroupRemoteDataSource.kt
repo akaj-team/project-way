@@ -16,7 +16,6 @@ import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.datasource.GroupDataSource
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackApi
 
-
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 04/12/2017
@@ -139,15 +138,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun removeUserFromGroup(userId: String): Single<User> {
-        return HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
-    }
+    override fun removeUserFromGroup(userId: String): Single<User>
+            = HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
 
-    override fun searchGroup(groupName: String): Observable<List<Group>> {
-        return HypertrackApi.instance.searchGroup(groupName)
-                .toObservable()
-                .map { it.groups }
-    }
+    override fun searchGroup(groupName: String): Observable<List<Group>>
+            = HypertrackApi.instance.searchGroup(groupName).toObservable().map { it.groups }
 
     override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
@@ -222,9 +217,8 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun searchUser(name: String): Observable<List<User>> {
-        return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
-    }
+    override fun searchUser(name: String): Observable<List<User>>
+            = HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
 
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
@@ -254,20 +248,18 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("Init later")
     }
 
-    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        return HypertrackApi.instance.createGroup(groupName)
-                .flatMap { group ->
-                    group.ownerId = ownerId
-                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
-                            .flatMap {
-                                postGroupInfo(group)
-                            }
-                }
-    }
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean>
+            = HypertrackApi.instance.createGroup(groupName)
+            .flatMap { group ->
+                group.ownerId = ownerId
+                HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                        .flatMap {
+                            postGroupInfo(group)
+                        }
+            }
 
-    override fun getMemberList(groupId: String): Single<MutableList<User>> {
-        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
-    }
+    override fun getMemberList(groupId: String): Single<MutableList<User>>
+            = HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
 
     override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
