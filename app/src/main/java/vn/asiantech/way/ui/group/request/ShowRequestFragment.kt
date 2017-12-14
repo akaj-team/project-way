@@ -10,7 +10,6 @@ import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
-import java.util.*
 
 /**
  *
@@ -39,7 +38,7 @@ class ShowRequestFragment : BaseFragment() {
     private lateinit var viewModel: ShowRequestViewModel
     private lateinit var groupId: String
 
-    private var requestsUser: MutableList<User> = ArrayList()
+    private var requestsUser = mutableListOf<User>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Init groupID
@@ -49,7 +48,7 @@ class ShowRequestFragment : BaseFragment() {
         // Init view model
         viewModel = ShowRequestViewModel()
         // Init UI
-        ui = ShowRequestFragmentUI(RequestAdapter(requestsUser))
+        ui = ShowRequestFragmentUI(adapter)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -82,7 +81,7 @@ class ShowRequestFragment : BaseFragment() {
 
     private fun handleGetRequestsOfUserSuccess(user: User) {
         requestsUser.add(user)
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemInserted(requestsUser.size - 1)
     }
 
     private fun updateProgressDialog(show: Boolean) {
@@ -94,24 +93,10 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     private fun handleCancelAddUserToGroup(userId: String) {
-        val requestRef = firebaseDatabase.getReference("group/$groupId" +
-                "/request/$userId")
-        requestRef.removeValue()
-        val userRequestRef = firebaseDatabase.getReference("user/$userId" +
-                "/request")
-        userRequestRef.removeValue()
+        viewModel.removeRequestInGroup(groupId, userId)
     }
 
     private fun handleAddUserToGroupSuccess(user: User) {
-        val userId = user.id
-        val requestRef = firebaseDatabase.getReference("group/$groupId" +
-                "/request/$userId")
-        requestRef.removeValue()
-        val userRequestRef = firebaseDatabase.getReference("user/$userId" +
-                "/request")
-        userRequestRef.removeValue()
-        val userGroup = firebaseDatabase.getReference("user/$userId/groupId")
-        userGroup.setValue(groupId)
-        toast(R.string.success)
+        viewModel.removeRequestInGroup(groupId, user.id).doFinally {  toast(R.string.success) }
     }
 }

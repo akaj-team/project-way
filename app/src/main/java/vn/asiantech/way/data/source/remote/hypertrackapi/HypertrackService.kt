@@ -1,7 +1,6 @@
 package vn.asiantech.way.data.source.remote.hypertrackapi
 
 import com.hypertrack.lib.models.User
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.*
 import vn.asiantech.way.data.model.BodyAddUserToGroup
@@ -79,5 +78,5 @@ interface HypertrackService {
      * This method used to get user info by user id.
      */
     @GET("users/{userId}")
-    fun getUserInfo(@Path("userId") userId: String): Observable<User>
+    fun getUserInfo(@Path("userId") userId: String): Single<User>
 }

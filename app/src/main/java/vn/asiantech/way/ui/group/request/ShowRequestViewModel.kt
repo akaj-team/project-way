@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.group.request
 
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.source.GroupRepository
@@ -21,13 +22,11 @@ class ShowRequestViewModel(private val wayRepository: WayRepository, private val
                 .getUserInfo(groupId)
     }
 
-    internal fun addUserToGroup(userId: String, groupId: String): Observable<User> {
+    internal fun addUserToGroup(groupId: String, userId: String): Observable<User> {
         return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
-                .doOnSubscribe {
-                    progressDialogObservable.onNext(true)
-                }
-                .doFinally {
-                    progressDialogObservable.onNext(false)
-                }
+    }
+
+    internal fun removeRequestInGroup(groupId: String, userId: String): Single<Boolean> {
+        return groupRepository.deleteGroupRequest(groupId, userId)
     }
 }

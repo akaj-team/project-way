@@ -48,8 +48,8 @@ class GroupRepository : GroupDataSource {
 
     override fun searchUser(name: String): Observable<List<User>> = remoteDataSource.searchUser(name)
 
-    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
-            = remoteDataSource.deleteGroupRequest(groupId, request)
+    override fun deleteGroupRequest(groupId: String, userId: String): Single<Boolean>
+            = remoteDataSource.deleteGroupRequest(groupId, userId)
 
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean>
             = remoteDataSource.deleteUserInvite(userId, invite)

@@ -19,10 +19,10 @@ import vn.asiantech.way.extension.circleImageView
  * Request Adapter
  * Created by haingoq on 05/12/2017.
  */
-class RequestAdapter(private val users: List<User>) : RecyclerView.Adapter<RequestAdapter.RequestHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemRequestUI()
-            .createView(AnkoContext.create(parent.context, parent, false))
-            .tag as? RequestHolder
+class RequestAdapter(val users: MutableList<User>) : RecyclerView.Adapter<RequestAdapter.RequestHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestHolder?
+            = RequestHolder(ItemRequestUI().createView(AnkoContext.create(parent.context, parent)))
 
     override fun onBindViewHolder(holder: RequestHolder?, position: Int) {
         holder?.bindHolder(users[position])

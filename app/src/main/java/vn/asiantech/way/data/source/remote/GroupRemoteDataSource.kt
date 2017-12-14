@@ -231,11 +231,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+    override fun deleteGroupRequest(groupId: String, userId: String): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        val userRequestRef = firebaseDatabase.getReference("user/$userId" + "/request")
         userRequestRef.removeValue()
-        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId" + "/request/$userId")
         groupRequestRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
@@ -294,6 +294,8 @@ class GroupRemoteDataSource : GroupDataSource {
                 if (invite != null) {
                     HypertrackApi.instance
                             .getUserInfo(invite.to)
+                            .toObservable()
+                            .subscribeOn(Schedulers.io())
                             .subscribe({
                                 result.onNext(it)
                             }, {
