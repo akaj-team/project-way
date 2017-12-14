@@ -114,11 +114,11 @@ class SearchGroupFragment : BaseFragment() {
         toast(error.message.toString())
     }
 
-    private fun updateProgressDialog(isShow: Boolean) {
-        if (isShow) {
-            progressDialog.dismiss()
-        } else {
+    private fun updateProgressDialog(show: Boolean) {
+        if (show) {
             progressDialog.show()
+        } else {
+            progressDialog.dismiss()
         }
     }
 }
