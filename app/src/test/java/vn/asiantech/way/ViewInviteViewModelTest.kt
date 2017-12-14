@@ -33,16 +33,16 @@ class ViewInviteViewModelTest {
     @Test
     fun `Given invites of user - When call get invites of user - then return right invite`() {
         val inviteTest = TestObserver<Invite>()
-        val invite = Invite("", "", "", true)
+        val invite = Invite("from", "to", "groupName", true)
         `when`(groupRepository.getInvite(TestUtil.any())).thenReturn(Observable.just(invite))
         viewModel.getInvitesOfUser().subscribe(inviteTest)
         inviteTest.assertValue { it == invite }
     }
 
     @Test
-    fun `Given remove invite user - When call remove invite user from group - then return progressbar show then hide`() {
+    fun ` Given a invite - When call remove invite user from group - then return progressbar show then hide`() {
         val statusTest = TestObserver<Boolean>()
-        val invite = Invite("", "", "", true)
+        val invite = Invite("from", "to", "groupName", true)
         `when`(groupRepository.deleteUserInvite(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
         viewModel.progressDialogObservable.subscribe(statusTest)
         viewModel.removeInviteUserFromGroup(invite).subscribe()
@@ -50,9 +50,9 @@ class ViewInviteViewModelTest {
     }
 
     @Test
-    fun `Given accept invite user - When call accept invite - then return progressbar show then hide`() {
+    fun `Given a invite user - When call accept invite - then return progressbar show then hide`() {
         val statusTest = TestObserver<Boolean>()
-        val invite = Invite("", "", "", true)
+        val invite = Invite("from", "to", "groupName", true)
         `when`(groupRepository.acceptInvite(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
         viewModel.progressDialogObservable.subscribe(statusTest)
         viewModel.acceptInvite(invite).subscribe()
