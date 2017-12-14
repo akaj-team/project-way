@@ -8,8 +8,8 @@ import vn.asiantech.way.data.source.GroupRepository
  *
  * @author at-ToanNguyen
  */
-class CreateGroupViewModel {
-    private val groupRepository = GroupRepository()
+class CreateGroupViewModel(private val groupRepository: GroupRepository) {
+    constructor() : this(GroupRepository())
 
     internal fun createGroup(name: String, userId: String): Single<Boolean> {
         return groupRepository.createGroup(name, userId)
