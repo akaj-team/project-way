@@ -39,7 +39,7 @@ class CreateGroupViewModelTest {
 
         /* Then */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { it == true }
+        test.assertValue { it }
     }
 
     @Test
@@ -54,7 +54,7 @@ class CreateGroupViewModelTest {
 
         /* Then */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { it == false }
+        test.assertValue { !it }
     }
 
     @Test
@@ -69,7 +69,7 @@ class CreateGroupViewModelTest {
 
         /* Then */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { it == false }
+        test.assertValue { !it }
     }
 
     @Test
@@ -84,6 +84,6 @@ class CreateGroupViewModelTest {
 
         /* Then */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { it == false }
+        test.assertValue { !it }
     }
 }
