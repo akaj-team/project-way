@@ -29,21 +29,14 @@ class RegisterViewModel(private val wayRepository: WayRepository, private val as
 
     constructor(context: Context, isRegister: Boolean) : this(WayRepository(), LocalRepository(context), isRegister)
 
-    internal fun getCountries(): Observable<List<Country>> {
-        return assetDataRepository.getCountries()
-    }
+    internal fun getCountries(): Observable<List<Country>> = assetDataRepository.getCountries()
 
-    internal fun createUser(userParams: UserParams): Observable<ResponseStatus> {
-        return wayRepository.createUser(userParams)
-    }
+    internal fun createUser(userParams: UserParams): Observable<ResponseStatus> = wayRepository.createUser(userParams)
 
-    internal fun updateUser(userParams: UserParams): Observable<ResponseStatus> {
-
-        return wayRepository.updateUser(userParams)
-                .doOnSubscribe { progressBarStatus.onNext(true) }
-                .doOnNext { progressBarStatus.onNext(false) }
-                .doOnError { progressBarStatus.onNext(false) }
-    }
+    internal fun updateUser(userParams: UserParams): Observable<ResponseStatus> = wayRepository.updateUser(userParams)
+            .doOnSubscribe { progressBarStatus.onNext(true) }
+            .doOnNext { progressBarStatus.onNext(false) }
+            .doOnError { progressBarStatus.onNext(false) }
 
     internal fun isEnableUpdateButton(name: String, phone: String, avatar: Bitmap?): Boolean {
         if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)
