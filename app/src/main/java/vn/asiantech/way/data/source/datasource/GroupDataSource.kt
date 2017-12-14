@@ -156,5 +156,5 @@ interface GroupDataSource {
     /**
      * This method used to get user info by userId
      */
-    fun getUserInfo(userId: String): Observable<User>
+    fun getUserInfo(groupId: String): Observable<User>
 }

@@ -37,13 +37,13 @@ class ShowRequestFragment : BaseFragment() {
     private lateinit var adapter: RequestAdapter
     private lateinit var viewModel: ShowRequestViewModel
     private lateinit var groupId: String
-    private var requestsUser = mutableListOf<User>()
+    private var users = mutableListOf<User>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Init groupID
         groupId = arguments.getString(ShowRequestFragment.KEY_GROUP_ID)
         // Init adapter
-        adapter = RequestAdapter(requestsUser)
+        adapter = RequestAdapter(users)
         // Init view model
         viewModel = ShowRequestViewModel()
         // Init UI
@@ -85,9 +85,9 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     private fun handleGetRequestsOfUserSuccess(user: User) {
-        requestsUser.clear()
-        requestsUser.add(user)
-        adapter.notifyItemInserted(requestsUser.size - 1)
+        users.clear()
+        users.add(user)
+        adapter.notifyItemInserted(users.size - 1)
     }
 
     private fun handleGetRequestsOfUserFailed(error: Throwable) {
