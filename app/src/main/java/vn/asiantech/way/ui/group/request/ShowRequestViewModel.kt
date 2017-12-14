@@ -30,5 +30,7 @@ class ShowRequestViewModel(private val wayRepository: WayRepository, private val
 
     internal fun removeRequestInGroup(groupId: String, userId: String): Single<Boolean> {
         return groupRepository.deleteGroupRequest(groupId, userId)
+                .doOnSubscribe { progressDialogObservable.onNext(true) }
+                .doOnSuccess { progressDialogObservable.onNext(false) }
     }
 }

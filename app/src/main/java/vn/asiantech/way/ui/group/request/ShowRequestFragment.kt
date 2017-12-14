@@ -75,17 +75,38 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     internal fun eventOnButtonCancelClick(userId: String) {
+        handleRemoveRequestInGroup(userId)
+    }
+
+    private fun handleGetRequestsOfUserSuccess(user: User) {
+        requestsUser.clear()
+        requestsUser.add(user)
+        adapter.notifyItemInserted(requestsUser.size - 1)
+    }
+
+    private fun handleAddUserToGroupSuccess(user: User) {
+        handleRemoveRequestInGroup(user.id)
+    }
+
+    private fun handleAddUserToGroupFailed(error: Throwable) {
+        toast(error.message.toString())
+    }
+
+    private fun handleRemoveRequestInGroup(userId: String) {
         addDisposables(
                 viewModel
                         .removeRequestInGroup(userId, groupId)
                         .observeOnUiThread()
-                        .subscribe(this :: handleCancelAddUserToGroupSuccess, this :: handleCancelAddUserToGroupFailed)
+                        .subscribe(this::handleRemoveRequestInGroupSuccess, this::handleRemoveRequestInGroupFailed)
         )
     }
 
-    private fun handleGetRequestsOfUserSuccess(user: User) {
-        requestsUser.add(user)
-        adapter.notifyItemInserted(requestsUser.size - 1)
+    private fun handleRemoveRequestInGroupSuccess(isSuccess: Boolean) {
+        toast(R.string.success)
+    }
+
+    private fun handleRemoveRequestInGroupFailed(error: Throwable) {
+        toast(error.message.toString())
     }
 
     private fun updateProgressDialog(show: Boolean) {
@@ -94,21 +115,5 @@ class ShowRequestFragment : BaseFragment() {
         } else {
             hideProgressDialog()
         }
-    }
-
-    private fun handleAddUserToGroupSuccess(user: User) {
-        viewModel.removeRequestInGroup(groupId, user.id)
-    }
-
-    private fun handleAddUserToGroupFailed(error: Throwable) {
-        toast(error.message.toString())
-    }
-
-    private fun handleCancelAddUserToGroupSuccess(isSuccess: Boolean) {
-        toast(R.string.success)
-    }
-
-    private fun handleCancelAddUserToGroupFailed(error: Throwable) {
-        toast(error.message.toString())
     }
 }
