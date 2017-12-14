@@ -28,7 +28,7 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given valid groupName and valid userId - When get name and userId - Then return true`() {
+    fun `Given valid groupName and valid userId - When create group - Then return true`() {
         /* Given */
         val groupName = "name"
         val userId = "userid"
@@ -43,7 +43,7 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given valid groupName and invalid userId - When get name and userId - Then return false`() {
+    fun `Given valid groupName and invalid userId - When create group - Then return false`() {
         /* Given */
         val groupName = "name"
         val userId = ""
@@ -58,7 +58,7 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given invalid groupName and valid userId - When get groupName and userId - Then return false`() {
+    fun `Given invalid groupName and valid userId - When create group - Then return false`() {
         /* Given */
         val groupName = ""
         val userId = "user 01"
@@ -73,7 +73,7 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given invalid groupName and invalid userId - When get groupName and userId - Then return false`() {
+    fun `Given invalid groupName and invalid userId - When create group - Then return false`() {
         /* Given */
         val groupName = ""
         val userId = ""
