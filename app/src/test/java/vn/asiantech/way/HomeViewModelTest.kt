@@ -19,7 +19,6 @@ import vn.asiantech.way.ui.home.HomeViewModel
 class HomeViewModelTest {
     @Mock
     private lateinit var assetDataRepository: LocalRepository
-
     private lateinit var viewModel: HomeViewModel
 
     @Before
@@ -29,7 +28,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `Given tracking history - When get tracking history - Then return right list tracking history`() {
+    fun `Given a list tracking history - When get tracking history - Then return right list tracking history`() {
         val trackingHistory = mutableListOf<TrackingInformation>()
         val test = TestObserver<MutableList<TrackingInformation>>()
         `when`(assetDataRepository.getTrackingHistory()).thenReturn(trackingHistory)
