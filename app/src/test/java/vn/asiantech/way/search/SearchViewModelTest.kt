@@ -74,7 +74,7 @@ class SearchViewModelTest {
                 .flatMapIterable { list -> list }
                 .map {
                     with(it) {
-                        vn.asiantech.way.data.model.WayLocation(id, placeId, description, structuredFormatting.mainText)
+                        WayLocation(id, placeId, description, structuredFormatting.mainText)
                     }
                 }
                 .toList()
