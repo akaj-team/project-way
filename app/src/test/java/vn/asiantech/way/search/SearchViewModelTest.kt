@@ -59,12 +59,15 @@ class SearchViewModelTest {
     fun `Given input ,language, sensor  - When call trigger search location result  - Then return list location `() {
         /* Given */
 
+        val input = "a"
+        val language = "vi"
+        val sensor = false
         val autoCompleteResult = AutoCompleteResult(listOf())
         val triggerSearchLocationResultTest = TestObserver<List<WayLocation>>()
 
         /* When */
 
-        `when`(wayRepository.searchLocations("a", "vi", false))
+        `when`(wayRepository.searchLocations(input, language, sensor))
                 .thenReturn(Observable.just(autoCompleteResult))
 
         /* Then */
@@ -82,7 +85,7 @@ class SearchViewModelTest {
                 .subscribe(triggerSearchLocationResultTest)
 
 
-        viewModel.triggerSearchLocationResult("vi", false).subscribe(triggerSearchLocationResultTest)
+        viewModel.triggerSearchLocationResult(input, sensor).subscribe(triggerSearchLocationResultTest)
         triggerSearchLocationResultTest.assertValue { it == autoCompleteResult.predictions }
 
 
