@@ -108,7 +108,7 @@ class RegisterViewModelTest {
 
     @Test
     fun `Given an information - When create new UserParam - Then return UserParams`() {
-        val name = "Test"
+        val name = "Name"
         val phone = "0123456789"
         val isoCode = "+84"
         val avatar = null
