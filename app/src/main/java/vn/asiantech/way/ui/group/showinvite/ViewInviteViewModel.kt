@@ -11,20 +11,19 @@ import vn.asiantech.way.extension.observeOnUiThread
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 06/12/2017.
  */
-class ViewInviteViewModel(private val userId: String) {
+class ViewInviteViewModel(private val userId: String, private val groupRepository: GroupRepository) {
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
-    private val groupRepository = GroupRepository()
+
+    constructor(userId: String) : this(userId, GroupRepository())
 
     internal fun getInvitesOfUser(): Observable<Invite> {
         return groupRepository
                 .getInvite(userId)
-                .observeOnUiThread()
     }
 
     internal fun removeInviteUserFromGroup(invite: Invite): Single<Boolean> {
         return groupRepository
                 .deleteUserInvite(userId, invite)
-                .observeOnUiThread()
                 .doOnSubscribe {
                     progressDialogObservable.onNext(true)
                 }
@@ -36,7 +35,6 @@ class ViewInviteViewModel(private val userId: String) {
     internal fun acceptInvite(invite: Invite): Single<Boolean> {
         return groupRepository
                 .acceptInvite(userId, invite)
-                .observeOnUiThread()
                 .doOnSubscribe {
                     progressDialogObservable.onNext(true)
                 }
