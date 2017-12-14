@@ -85,7 +85,7 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     /**
-     * On handle  after get request list of user completed
+     * On handle after get request list of user completed
      */
     private fun handleGetRequestsOfUserSuccess(user: User) {
         requestsUser.clear()
@@ -94,21 +94,21 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     /**
-     * On handle  after get request list of user failed
+     * On handle after get request list of user failed
      */
     private fun handleGetRequestsOfUserFailed(error: Throwable) {
         toast(error.message.toString())
     }
 
     /**
-     * On handle  after add user to group success
+     * On handle after add user to group success
      */
     private fun handleAddUserToGroupSuccess(user: User) {
         handleRemoveRequestInGroup(user.id)
     }
 
     /**
-     * On handle  after add user to group failed
+     * On handle after add user to group failed
      */
     private fun handleAddUserToGroupFailed(error: Throwable) {
         toast(error.message.toString())
