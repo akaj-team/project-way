@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.base
 
 import android.support.v4.app.Fragment
-import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.jetbrains.anko.support.v4.indeterminateProgressDialog
@@ -19,7 +18,6 @@ abstract class BaseFragment : Fragment() {
                 getString(R.string.progress_dialog_title)
         )
     }
-    val firebaseDatabase = FirebaseDatabase.getInstance()
 
     override fun onPause() {
         super.onPause()
