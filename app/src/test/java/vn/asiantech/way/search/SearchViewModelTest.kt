@@ -40,25 +40,20 @@ class SearchViewModelTest {
     @Test
     fun `Given place id - When call get location detail - Then return result location`() {
         /* Given */
-
         val resultPlace = ResultPlaceDetail(WayLocation("abcde", "abcde", "abcde", "abcde"))
         val getLocationDetailTest = TestObserver<WayLocation>()
 
         /* When */
-
         `when`(wayRepository.getLocationDetail(TestUtil.any())).thenReturn(Observable.just(resultPlace))
 
         /* Then */
-
         viewModel.getLocationDetail(resultPlace.result.placeId!!).subscribe(getLocationDetailTest)
         getLocationDetailTest.assertValue { it == resultPlace.result }
     }
 
-
     @Test
     fun `Given input ,language, sensor  - When call trigger search location result  - Then return list location `() {
         /* Given */
-
         val input = "a"
         val language = "vi"
         val sensor = false
@@ -66,12 +61,10 @@ class SearchViewModelTest {
         val triggerSearchLocationResultTest = TestObserver<List<WayLocation>>()
 
         /* When */
-
         `when`(wayRepository.searchLocations(input, language, sensor))
                 .thenReturn(Observable.just(autoCompleteResult))
 
         /* Then */
-
         wayRepository.searchLocations("a", "vi", false)
                 .map { it.predictions }
                 .flatMapIterable { list -> list }
@@ -83,12 +76,8 @@ class SearchViewModelTest {
                 .toList()
                 .toObservable()
                 .subscribe(triggerSearchLocationResultTest)
-
-
         viewModel.triggerSearchLocationResult(input, sensor).subscribe(triggerSearchLocationResultTest)
         triggerSearchLocationResultTest.assertValue { it == autoCompleteResult.predictions }
-
-
     }
 
 }
