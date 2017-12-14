@@ -8,7 +8,6 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
-import org.reactivestreams.Subscriber
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
@@ -391,5 +390,3 @@ class GroupRemoteDataSource : GroupDataSource {
         override fun onChildRemoved(p0: DataSnapshot?) = Unit
     }
 }
-
-private fun <T> Observable<T>.subscribe(subscriber: Subscriber<T>) {}
