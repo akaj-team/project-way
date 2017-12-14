@@ -21,7 +21,6 @@ import vn.asiantech.way.ui.group.showinvite.ViewInviteViewModel
 class ViewInviteViewModelTest {
     @Mock
     private lateinit var groupRepository: GroupRepository
-
     private lateinit var viewModel: ViewInviteViewModel
     private lateinit var userId: String
     @Before
@@ -35,7 +34,7 @@ class ViewInviteViewModelTest {
     fun `Given invites of user - When call get invites of user - then return right invite`() {
         val inviteTest = TestObserver<Invite>()
         val invite = Invite("", "", "", true)
-        `when`(groupRepository.getInvite(userId)).thenReturn(Observable.just(invite))
+        `when`(groupRepository.getInvite(TestUtil.any())).thenReturn(Observable.just(invite))
         viewModel.getInvitesOfUser().subscribe(inviteTest)
         inviteTest.assertValue { it == invite }
     }
@@ -44,7 +43,7 @@ class ViewInviteViewModelTest {
     fun `Given remove invite user - When call remove invite user from group - then return progressbar show then hide`() {
         val statusTest = TestObserver<Boolean>()
         val invite = Invite("", "", "", true)
-        `when`(groupRepository.deleteUserInvite(userId, invite)).thenReturn(Single.just(true))
+        `when`(groupRepository.deleteUserInvite(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
         viewModel.progressDialogObservable.subscribe(statusTest)
         viewModel.removeInviteUserFromGroup(invite).subscribe()
         statusTest.assertValues(true, false)
@@ -54,7 +53,7 @@ class ViewInviteViewModelTest {
     fun `Given accept invite user - When call accept invite - then return progressbar show then hide`() {
         val statusTest = TestObserver<Boolean>()
         val invite = Invite("", "", "", true)
-        `when`(groupRepository.acceptInvite(userId, invite)).thenReturn(Single.just(true))
+        `when`(groupRepository.acceptInvite(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
         viewModel.progressDialogObservable.subscribe(statusTest)
         viewModel.acceptInvite(invite).subscribe()
         statusTest.assertValues(true, false)

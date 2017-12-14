@@ -65,13 +65,9 @@ class LocalRepository(val context: Context) : LocalDataSource {
         editor?.apply()
     }
 
-    override fun getLoginStatus(): Boolean {
-        return pref.getBoolean(KEY_LOGIN_TOKEN, false)
-    }
+    override fun getLoginStatus(): Boolean = pref.getBoolean(KEY_LOGIN_TOKEN, false)
 
-    override fun setLoginStatus(isLogin: Boolean) {
-        pref.edit().putBoolean(KEY_LOGIN_TOKEN, isLogin).apply()
-    }
+    override fun setLoginStatus(isLogin: Boolean) = pref.edit().putBoolean(KEY_LOGIN_TOKEN, isLogin).apply()
 
     override fun getCountries(): Observable<List<Country>> {
         val rawData = readJsonFromDirectory(COUNTRIES_RAW_ID)
@@ -105,7 +101,6 @@ class LocalRepository(val context: Context) : LocalDataSource {
         return byteStream.toString()
     }
 
-    private fun getCountries(json: String): List<Country> {
-        return Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
-    }
+    private fun getCountries(json: String): List<Country>
+            = Gson().fromJson(json, object : TypeToken<List<Country>>() {}.type)
 }
