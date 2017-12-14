@@ -23,6 +23,7 @@ class CustomHyperTrackCallAdapterFactory : CallAdapter.Factory() {
         fun create(): CallAdapter.Factory = CustomHyperTrackCallAdapterFactory()
     }
 
-    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *>?
+    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit)
+            : CallAdapter<*, *>?
             = BaseRxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit))
 }
