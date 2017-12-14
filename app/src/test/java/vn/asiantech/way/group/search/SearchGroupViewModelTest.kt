@@ -37,8 +37,8 @@ class SearchGroupViewModelTest {
         /* Given */
         val testGroup = TestObserver<List<Group>>()
         val groups = mutableListOf<Group>()
-        val groupName = "AAA"
-        val invite = Invite("", "", "", false)
+        val groupName = ""
+        val invite = Invite("", "", "", true)
 
         /* When */
         `when`(groupRepository.getCurrentRequestOfUser(TestUtil.any())).thenReturn(Observable.just(invite))
@@ -51,29 +51,10 @@ class SearchGroupViewModelTest {
     }
 
     @Test
-    fun `Given a wrong group - When call post request to group - Then return failure`() {
+    fun `Given a group - When call post request to group - Then return success`() {
         /* Given */
         val test = TestObserver<Boolean>()
         val group = Group("", "", "", "", "", "")
-
-        /* When */
-        `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
-
-        /* Then */
-        viewModel.postRequestToGroup(group).subscribe(test)
-        test.assertValue(false)
-    }
-
-    @Test
-    fun `Given a right group - When call post request to group  - Then return success`() {
-        /* Given */
-        val test = TestObserver<Boolean>()
-        val group = Group("03cf844c-beec-4066-9ff2-e5d5b7ed2fbf",
-                "AAA",
-                "gk_e1e3669ab26e063dd9f97a5e77a00a512c56446f",
-                "543984f6-2642-4c24-97f8-79c92adf1630",
-                "2017-12-07T09:32:01.691802Z",
-                "2017-12-07T09:32:01.697798Z")
 
         /* When */
         `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
@@ -81,11 +62,7 @@ class SearchGroupViewModelTest {
         /* Then */
         viewModel.postRequestToGroup(group).subscribe(test)
         test.assertValue(true)
-
-
-
     }
-
 
     @Test
     fun `Given progressDialog - When call post request to group - Then hide progressDialog`() {
