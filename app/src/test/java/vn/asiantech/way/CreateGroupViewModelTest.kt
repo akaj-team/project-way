@@ -27,13 +27,12 @@ class CreateGroupViewModelTest {
         viewModel = CreateGroupViewModel(groupRepository)
     }
 
-
     @Test
-    fun `Given name and userId - When get name and userId - Then return right`() {
+    fun `Given name and userId - When get name and userId - Then return true`() {
         /* Given */
-        val test = TestObserver<Boolean>()
         val name = "name"
         val userId = "userid"
+        val test = TestObserver<Boolean>()
 
         /* When */
         `when`(groupRepository.createGroup(name, userId)).thenReturn(Single.just(true))
@@ -44,17 +43,47 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given name and userId - When get name and userId - Then return wrong`() {
+    fun `Given name and userId - When get name and userId - Then return false`() {
         /* Given */
-        val test = TestObserver<Boolean>()
         val name = ""
         val userId = ""
+        val test = TestObserver<Boolean>()
 
         /* When */
         `when`(groupRepository.createGroup(name, userId)).thenReturn(Single.just(false))
 
         /* Then */
         viewModel.createGroup(name, userId).subscribe(test)
+        test.assertValue { it == false }
+    }
+
+    @Test
+    fun `Given valid groupName and userId - When get groupName and userId - Then return true`() {
+        /* Given */
+        val groupName = "Friends Group"
+        val userId = "user 01"
+        val test = TestObserver<Boolean>()
+
+        /* When */
+        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(true))
+
+        /* Then */
+        viewModel.createGroup(groupName, userId).subscribe(test)
+        test.assertValue { it == true }
+    }
+
+    @Test
+    fun `Given invalid groupName and userId - When get groupName and userId - Then return false`() {
+        /* Given */
+        val groupName = "@$%%"
+        val userId = "5#@4"
+        val test = TestObserver<Boolean>()
+
+        /* When */
+        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
+
+        /* Then */
+        viewModel.createGroup(groupName, userId).subscribe(test)
         test.assertValue { it == false }
     }
 }
