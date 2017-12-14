@@ -17,20 +17,16 @@ class ShowRequestViewModel(private val wayRepository: WayRepository, private val
 
     constructor() : this(WayRepository(), GroupRepository())
 
-    internal fun getRequestsOfUser(groupId: String): Observable<User> {
-        return groupRepository
-                .getUserInfo(groupId)
-    }
+    internal fun getRequestsOfUser(groupId: String): Observable<User> = groupRepository
+            .getUserInfo(groupId)
 
-    internal fun addUserToGroup(groupId: String, userId: String): Observable<User> {
-        return wayRepository.addUserToGroup(userId, BodyAddUserToGroup(groupId))
-                .doOnSubscribe { progressDialogObservable.onNext(true) }
-                .doFinally { progressDialogObservable.onNext(false) }
-    }
+    internal fun addUserToGroup(groupId: String, userId: String): Observable<User> = wayRepository
+            .addUserToGroup(userId, BodyAddUserToGroup(groupId))
+            .doOnSubscribe { progressDialogObservable.onNext(true) }
+            .doFinally { progressDialogObservable.onNext(false) }
 
-    internal fun removeRequestInGroup(groupId: String, userId: String): Single<Boolean> {
-        return groupRepository.deleteGroupRequest(groupId, userId)
-                .doOnSubscribe { progressDialogObservable.onNext(true) }
-                .doOnSuccess { progressDialogObservable.onNext(false) }
-    }
+    internal fun removeRequestInGroup(groupId: String, userId: String): Single<Boolean> = groupRepository
+            .deleteGroupRequest(groupId, userId)
+            .doOnSubscribe { progressDialogObservable.onNext(true) }
+            .doOnSuccess { progressDialogObservable.onNext(false) }
 }
