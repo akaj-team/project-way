@@ -95,7 +95,7 @@ internal class WayRemoteDataSource : WayDataSource {
                     result.onError(it)
                 }
                 .addOnSuccessListener {
-                    HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
+                    HypertrackApi.instance.addUserToGroup(userId, body)
                             .subscribeOn(Schedulers.io())
                             .subscribe({
                                 result.onNext(it)

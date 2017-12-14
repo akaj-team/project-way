@@ -70,7 +70,7 @@ class ShowRequestFragment : BaseFragment() {
                 viewModel
                         .addUserToGroup(userId, groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleAddUserToGroupSuccess)
+                        .subscribe(this::handleAddUserToGroupSuccess, this::handleAddUserToGroupFailed)
         )
     }
 
@@ -96,6 +96,10 @@ class ShowRequestFragment : BaseFragment() {
     }
 
     private fun handleAddUserToGroupSuccess(user: User) {
-        viewModel.removeRequestInGroup(groupId, user.id).doFinally {  toast(R.string.success) }
+        viewModel.removeRequestInGroup(groupId, user.id).doFinally { toast(R.string.success) }
+    }
+
+    private fun handleAddUserToGroupFailed(error: Throwable) {
+        toast(error.message.toString())
     }
 }
