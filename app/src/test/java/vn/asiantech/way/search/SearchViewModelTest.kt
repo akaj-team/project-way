@@ -52,7 +52,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `Given input,language, sensor - When call trigger search location result - Then return list location`() {
+    fun `Given input, language, sensor - When call trigger search location result - Then return list location`() {
         /* Given */
         val input = "input"
         val language = "vi"
