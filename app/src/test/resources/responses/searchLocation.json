@@ -1,0 +1,92 @@
+
+{
+  "predictions" : [
+    {
+      "description" : "xxx, Port Loko, Phía Bắc, Si-ê-ra Lê-ôn",
+      "id" : "4ff79643b4436ddb162cfa77da29cd1b17d083ac",
+      "matched_substrings" : [
+        {
+          "length" : 3,
+          "offset" : 0
+        }
+      ],
+      "place_id" : "ChIJDxMGRSaWBA8Ra3bExYjY4NQ",
+      "reference" : "ClRFAAAAPlopf2T0UNWFbhU4qNbbWYG4rCiX258iAa1MyJbquGSt19T1mFc7TT0_sGXRuY-fFeD3Lv2K2YbiIbS_qiEOogxqGKKmmYmaCK9U4O690MQSEPT_5bwZQjLsvujs2SpJOQAaFOawDQlZ3CtcmiG4VWsmBHqBomBP",
+      "structured_formatting" : {
+        "main_text" : "xxx",
+        "main_text_matched_substrings" : [
+          {
+            "length" : 3,
+            "offset" : 0
+          }
+        ],
+        "secondary_text" : "Port Loko, Phía Bắc, Si-ê-ra Lê-ôn"
+      },
+      "terms" : [
+        {
+          "offset" : 0,
+          "value" : "xxx"
+        },
+        {
+          "offset" : 5,
+          "value" : "Port Loko"
+        },
+        {
+          "offset" : 16,
+          "value" : "Phía Bắc"
+        },
+        {
+          "offset" : 26,
+          "value" : "Si-ê-ra Lê-ôn"
+        }
+      ],
+      "types" : [ "natural_feature", "establishment", "geocode" ]
+    },
+    {
+      "description" : "Xxxx, San Francisco, Bô-gô-ta - Bogotá, Cô-lôm-bi-a",
+      "id" : "2d32b2235e93bdb0389c310da8b10205011f719a",
+      "matched_substrings" : [
+        {
+          "length" : 3,
+          "offset" : 0
+        }
+      ],
+      "place_id" : "ChIJvWudikKfP44R_AUiV1n7DkY",
+      "reference" : "ClRGAAAARLzgzcU2qWZt4H4pfR3Ckxjv3GImOYYJgExzhJb_VGXfo-K6Zy3W5kSb-ezNbWwsK8m5hSCVEEMeeS4x5oShG5ur_Y03pOwNZ0n6F4VIcTwSECeBRHmOy8rz3mgqLiIALJ8aFDSsFS1MkHBnKOHfPs69FJP3M_x_",
+      "structured_formatting" : {
+        "main_text" : "Xxxx",
+        "main_text_matched_substrings" : [
+          {
+            "length" : 3,
+            "offset" : 0
+          }
+        ],
+        "secondary_text" : "San Francisco, Bô-gô-ta - Bogotá, Cô-lôm-bi-a"
+      },
+      "terms" : [
+        {
+          "offset" : 0,
+          "value" : "Xxxx"
+        },
+        {
+          "offset" : 6,
+          "value" : "San Francisco"
+        },
+        {
+          "offset" : 21,
+          "value" : "Bô-gô-ta"
+        },
+        {
+          "offset" : 32,
+          "value" : "Bogotá"
+        },
+        {
+          "offset" : 40,
+          "value" : "Cô-lôm-bi-a"
+        }
+      ],
+      "types" : [ "transit_station", "point_of_interest", "establishment", "geocode" ]
+    }
+  ],
+  "status" : "OK"
+}
