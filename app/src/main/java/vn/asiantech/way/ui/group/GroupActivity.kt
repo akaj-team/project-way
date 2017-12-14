@@ -1,11 +1,8 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import org.jetbrains.anko.setContentView
-import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.request.ShowRequestFragment
 
 /**
  *
@@ -20,16 +17,9 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        replaceFragment(ShowRequestFragment.getInstance("03cf844c-beec-4066-9ff2-e5d5b7ed2fbf"))
     }
 
     override fun onBindViewModel() {
         // TODO: handle later
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.group_activity_ui_fr_content, fragment)
-        transaction.commit()
     }
 }
