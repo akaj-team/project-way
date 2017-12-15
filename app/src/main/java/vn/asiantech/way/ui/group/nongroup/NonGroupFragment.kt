@@ -30,19 +30,15 @@ class NonGroupFragment : BaseFragment() {
 
     override fun onBindViewModel() {}
 
-    internal fun onEventClick(view: View) {
-        when (view) {
-            ui.btnCreateGroup -> {
-                // Todo handle create group
-            }
+    internal fun eventButtonCreateGroupClick() {
+        // Todo handle create group
+    }
 
-            ui.btnViewInvite -> {
-                // Todo handle invite
-            }
+    internal fun eventViewInviteClick() {
+        // Todo handle invite
+    }
 
-            ui.btnBack -> {
-                // Todo handle button back
-            }
-        }
+    internal fun eventButtonBackClick() {
+        // Todo handle button back
     }
 }

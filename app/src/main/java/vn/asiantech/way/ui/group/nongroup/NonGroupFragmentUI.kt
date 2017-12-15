@@ -34,17 +34,17 @@ class NonGroupFragmentUI : AnkoComponent<NonGroupFragment> {
             btnCreateGroup = buttonNonGroup(R.string.create_new_group, R.color.blue)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }.apply { onClick { owner.onEventClick(it!!) } }
+                    }.apply { onClick { owner.eventButtonCreateGroupClick() } }
 
             btnViewInvite = buttonNonGroup(R.string.view_invites, R.color.colorPinkLight)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }.apply { onClick { owner.onEventClick(it!!) } }
+                    }.apply { onClick { owner.eventViewInviteClick() } }
 
             btnBack = buttonNonGroup(R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }.apply { onClick { owner.onEventClick(it!!) } }
+                    }.apply { onClick { owner.eventButtonBackClick() } }
 
         }
     }
