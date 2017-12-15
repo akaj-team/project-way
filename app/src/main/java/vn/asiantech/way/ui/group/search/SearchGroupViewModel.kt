@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupViewModel(private val userId: String) {
+class SearchGroupViewModel(private val groupRepository: GroupRepository, private val userId: String) {
     private val searchGroupObservable = PublishSubject.create<String>()
-    private val groupRepository = GroupRepository()
     internal var currentRequest: Invite = Invite("", "", "", false)
-
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
+
+    constructor(userId: String) : this(GroupRepository(), userId)
 
     private fun searchGroup(query: String): Observable<List<Group>> = groupRepository
             .searchGroup(query)
@@ -35,11 +35,11 @@ class SearchGroupViewModel(private val userId: String) {
         return groupRepository
                 .postRequestToGroup(group.id, invite)
                 .doOnSubscribe {
-                    progressDialogObservable.onNext(false)
+                    progressDialogObservable.onNext(true)
                 }
                 .doOnSuccess {
                     currentRequest = invite
-                    progressDialogObservable.onNext(true)
+                    progressDialogObservable.onNext(false)
                 }
     }
 
