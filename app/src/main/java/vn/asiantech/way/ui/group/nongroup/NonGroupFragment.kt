@@ -19,9 +19,7 @@ class NonGroupFragment : BaseFragment() {
         /**
          * Get instance of NonGroupFragment.
          */
-        fun getInstance(): NonGroupFragment {
-            return NonGroupFragment()
-        }
+        fun getInstance(): NonGroupFragment = NonGroupFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
