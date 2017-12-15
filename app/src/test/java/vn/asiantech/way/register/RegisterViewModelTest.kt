@@ -85,7 +85,7 @@ class RegisterViewModelTest {
     @Test
     fun `Given countries - When get countries - Then return right countries`() {
         /* Given */
-        val countries = listOf<Country>()
+        val countries = listOf(Country("84", "12345"), Country("12", "123456789"))
         val getCountriesTest = TestObserver<List<Country>>()
         `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(countries))
 
@@ -93,7 +93,11 @@ class RegisterViewModelTest {
         viewModel.getCountries().subscribe(getCountriesTest)
 
         /* Then */
-        getCountriesTest.assertValue { it == countries }
+        getCountriesTest.assertValue { it.size == countries.size }
+        getCountriesTest.assertValue { it[0].iso == countries[0].iso }
+        getCountriesTest.assertValue { it[0].tel == countries[0].tel }
+        getCountriesTest.assertValue { it[1].iso == countries[1].iso }
+        getCountriesTest.assertValue { it[1].tel == countries[1].tel }
     }
 
     @Test
@@ -107,7 +111,7 @@ class RegisterViewModelTest {
         viewModel.createUser(params).subscribe(test)
 
         /* Then */
-        test.assertValue { it.status }
+        test.assertValue { true }
     }
 
     @Test
@@ -121,7 +125,7 @@ class RegisterViewModelTest {
         viewModel.updateUser(params).subscribe(test)
 
         /* Then */
-        test.assertValue { it.status }
+        test.assertValue { true }
     }
 
     @Test
@@ -141,6 +145,4 @@ class RegisterViewModelTest {
         Assert.assertEquals(userParams.photo, avatar)
         Assert.assertEquals(userParams.lookupId, phone)
     }
-
-    //TODO Test method isEnableUpdateButton in RegisterViewModel
 }
