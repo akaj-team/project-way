@@ -448,6 +448,4 @@ class TrackingProgressInfo(context: Context) : RelativeLayout(context) {
 }
 
 internal fun ViewManager.trackingProgress(init: TrackingProgressInfo.() -> Unit):
-        TrackingProgressInfo {
-    return ankoView({ TrackingProgressInfo(it) }, 0, init)
-}
+        TrackingProgressInfo = ankoView({ TrackingProgressInfo(it) }, 0, init)

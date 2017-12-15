@@ -1,4 +1,4 @@
-package vn.asiantech.way
+package vn.asiantech.way.home
 
 import io.reactivex.observers.TestObserver
 import org.junit.Before
@@ -29,10 +29,15 @@ class HomeViewModelTest {
 
     @Test
     fun `Given a list tracking history - When get tracking history - Then return right list tracking history`() {
+        /* Given */
         val trackingHistory = mutableListOf<TrackingInformation>()
         val test = TestObserver<MutableList<TrackingInformation>>()
         `when`(assetDataRepository.getTrackingHistory()).thenReturn(trackingHistory)
+
+        /* When */
         viewModel.getTrackingHistory().subscribe(test)
+
+        /* Then */
         test.assertValue { it == trackingHistory }
     }
 }

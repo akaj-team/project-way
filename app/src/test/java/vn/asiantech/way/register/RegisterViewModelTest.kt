@@ -1,4 +1,4 @@
-package vn.asiantech.way
+package vn.asiantech.way.register
 
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
@@ -10,6 +10,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import vn.asiantech.way.TestUtil
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
@@ -24,7 +25,6 @@ import vn.asiantech.way.ui.register.RegisterViewModel
 class RegisterViewModelTest {
     @Mock
     private lateinit var wayRepository: WayRepository
-
     @Mock
     private lateinit var assetDataRepository: LocalRepository
 
@@ -38,26 +38,30 @@ class RegisterViewModelTest {
 
     @Test
     fun `Given progress bar - When call update user - Then progress bar should show then hide`() {
+        /* Given */
         val test = TestObserver<Boolean>()
-
         val param = UserParams()
-        `when`(wayRepository.updateUser(param)).thenReturn(Observable.just(ResponseStatus(true)))
+        `when`(wayRepository.updateUser(TestUtil.any())).thenReturn(Observable.just(ResponseStatus(true)))
 
+        /* When */
         viewModel.progressBarStatus.subscribe(test)
         viewModel.updateUser(param).subscribe()
+
+        /* Then */
         test.assertValues(true, false)
     }
 
     @Test
     fun `Given an user - When get current user - Then return right user`() {
+        /* Given */
         val user = User()
-
         val getUserTest = TestObserver<User>()
         `when`(wayRepository.getUser()).thenReturn(SingleSubject.just(user))
 
+        /* When */
         viewModel.getUser().subscribe(getUserTest)
-        getUserTest.assertValue { it == user }
-        getUserTest.assertValue { it == user }
+
+        /* Then */
         getUserTest.assertValue { it == user }
     }
 }

@@ -177,7 +177,5 @@ class HomeAdapter(private val context: Context,
      * Function to custom expandableTextView
      */
     inline fun ViewManager.expandableTextView(init: ExpandableTextView.() -> Unit)
-            : ExpandableTextView {
-        return ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
-    }
+            : ExpandableTextView = ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
 }
