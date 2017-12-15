@@ -35,6 +35,7 @@
 
     <!--Home screen-->
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_height_2">112dp</dimen>
     <dimen name="home_screen_linearLayout_margin">10dp</dimen>
     <dimen name="home_screen_linearLayout_padding">5dp</dimen>
     <dimen name="home_screen_view_margin">10dp</dimen>
@@ -79,13 +80,13 @@
     <dimen name="group_invite_fragment_margin_recyclerview">5dp</dimen>
     <dimen name="invite_list_adapter_margin_tv_name_group">5dp</dimen>
     <dimen name="invite_list_adapter_padding">10dp</dimen>
-    <item name="invite_list_adapter_view_height" type="dimen" format="float">0.5</item>
+    <item name="invite_list_adapter_view_height" format="float" type="dimen">0.5</item>
     <dimen name="search_screen_text_size">18dp</dimen>
     <dimen name="search_group_height_ll">20dp</dimen>
     <dimen name="search_group_padding">10dp</dimen>
     <dimen name="search_group_left_margin">64dp</dimen>
     <dimen name="search_group_top_margin">20dp</dimen>
-    <item name="search_group_height_view" type="dimen" format="float">0.5</item>
+    <item name="search_group_height_view" format="float" type="dimen">0.5</item>
     <dimen name="search_group_adapter_vertical_margin">2dp</dimen>
 
     <!--BottomButtonCard-->
@@ -130,4 +131,5 @@
     <dimen name="item_user_left_or_right_padding">10dp</dimen>
     <dimen name="item_user_img_avatar_width_or_height">48dp</dimen>
     <dimen name="item_user_left_right_margin">15dp</dimen>
+    <dimen name="height_256">356dp</dimen>
 </resources>

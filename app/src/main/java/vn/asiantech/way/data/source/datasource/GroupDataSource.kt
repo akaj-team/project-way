@@ -134,7 +134,7 @@ interface GroupDataSource {
      * @param groupId - id of given group.
      * @param request - given request.
      */
-    fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean>
+    fun deleteGroupRequest(groupId: String, userId: String): Single<Boolean>
 
     /**
      * This method used to delete request of user to group.
@@ -156,5 +156,5 @@ interface GroupDataSource {
     /**
      * This method used to get user info by userId
      */
-    fun getUserInfo(userId: String): Single<User>
+    fun getUserInfo(userId: String): Observable<User>
 }

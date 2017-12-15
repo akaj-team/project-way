@@ -230,11 +230,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+    override fun deleteGroupRequest(groupId: String, userId: String): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        val userRequestRef = firebaseDatabase.getReference("user/$userId" + "/request")
         userRequestRef.removeValue()
-        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId" + "/request/$userId")
         groupRequestRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
@@ -284,7 +284,27 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun getUserInfo(userId: String): Single<User> = HypertrackApi.instance.getUserInfo(userId)
+    override fun getUserInfo(groupId: String): Observable<User> {
+        val result = PublishSubject.create<User>()
+        val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
+        inviteRef.addChildEventListener(object : SimpleChildEventListener {
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
+                if (invite != null) {
+                    HypertrackApi.instance
+                            .getUserInfo(invite.to)
+                            .toObservable()
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
+                                result.onNext(it)
+                            }, {
+                                result.onError(it)
+                            })
+                }
+            }
+        })
+        return result
+    }
 
     private fun acceptInviteWhenUserDoNotHaveRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite) {
         val userRequest = firebaseDatabase.getReference("user/$userId/request")
