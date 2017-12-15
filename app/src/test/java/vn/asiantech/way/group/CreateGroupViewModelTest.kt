@@ -7,6 +7,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import vn.asiantech.way.TestUtil
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.ui.group.create.CreateGroupViewModel
 
@@ -28,60 +29,26 @@ class CreateGroupViewModelTest {
     }
 
     @Test
-    fun `Given valid groupName and valid userId - When create group - Then return true`() {
+    fun `Given any groupName and any userId - When create group - Then return true`() {
         /* Given */
-        val groupName = "name"
-        val userId = "userid"
         val test = TestObserver<Boolean>()
-        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(true))
+        `when`(groupRepository.createGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
-        viewModel.createGroup(groupName, userId).subscribe(test)
+        viewModel.createGroup("groupName","userId").subscribe(test)
 
         /* Then */
-        test.assertValue { it }
+        test.assertValue { it == true }
     }
 
     @Test
-    fun `Given valid groupName and invalid userId - When create group - Then return false`() {
+    fun `Given any groupName and any userId - When create group - Then return false`() {
         /* Given */
-        val groupName = "name"
-        val userId = ""
         val test = TestObserver<Boolean>()
-        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
+        `when`(groupRepository.createGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
 
         /* When */
-        viewModel.createGroup(groupName, userId).subscribe(test)
-
-        /* Then */
-        test.assertValue { it == false }
-    }
-
-    @Test
-    fun `Given invalid groupName and valid userId - When create group - Then return false`() {
-        /* Given */
-        val groupName = ""
-        val userId = "user 01"
-        val test = TestObserver<Boolean>()
-        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
-
-        /* When */
-        viewModel.createGroup(groupName, userId).subscribe(test)
-
-        /* Then */
-        test.assertValue { it == false }
-    }
-
-    @Test
-    fun `Given invalid groupName and invalid userId - When create group - Then return false`() {
-        /* Given */
-        val groupName = ""
-        val userId = ""
-        val test = TestObserver<Boolean>()
-        `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
-
-        /* When */
-        viewModel.createGroup(groupName, userId).subscribe(test)
+        viewModel.createGroup("1","1").subscribe(test)
 
         /* Then */
         test.assertValue { it == false }
