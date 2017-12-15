@@ -71,7 +71,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/code
-
+      - run:
+          name: Run danger
+          command: bundle exec danger
 
 workflows:
   version: 2

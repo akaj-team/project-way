@@ -54,7 +54,7 @@ class GoogleApiTest {
 
         test.assertValue {
             val item = it.predictions[0]
-            assertThat(it.predictions.size, `is`(3))
+            assertThat(it.predictions.size, `is`(2))
             assertThat(item.id, `is`("4ff79643b4436ddb162cfa77da29cd1b17d083ac"))
             assertThat(item.description, `is`("xxx, Port Loko, Phía Bắc, Si-ê-ra Lê-ôn"))
             assertThat(item.placeId, `is`("ChIJDxMGRSaWBA8Ra3bExYjY4NQ"))
