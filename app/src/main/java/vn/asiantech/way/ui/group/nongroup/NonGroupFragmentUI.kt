@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.group
+package vn.asiantech.way.ui.group.nongroup
 
 import android.graphics.Color
 import android.support.v4.app.ActivityCompat
@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.ViewManager
 import android.widget.Button
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 
 /**
@@ -33,17 +34,18 @@ class NonGroupFragmentUI : AnkoComponent<NonGroupFragment> {
             btnCreateGroup = buttonNonGroup(R.string.create_new_group, R.color.blue)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }
+                    }.apply { onClick { owner.onEventClick(btnCreateGroup) } }
 
             btnViewInvite = buttonNonGroup(R.string.view_invites, R.color.colorPinkLight)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }
+                    }.apply { onClick { owner.onEventClick(btnViewInvite) } }
 
             btnBack = buttonNonGroup(R.string.back, android.R.color.darker_gray)
                     .lparams(matchParent, wrapContent) {
                         topMargin = dimen((R.dimen.group_screen_group_name_padding))
-                    }
+                    }.apply { onClick { owner.onEventClick(btnBack) } }
+
         }
     }
 
