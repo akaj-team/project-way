@@ -6,6 +6,7 @@ import io.reactivex.subjects.SingleSubject
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
+import vn.asiantech.way.R
 import java.lang.reflect.Type
 
 /**
@@ -24,35 +25,23 @@ open class BaseRxCallAdapterWrapper<R>(private val retrofit: Retrofit, private v
 
     }
 
-    private fun handleMaybeRetrofitError(t: Throwable): MaybeSource<R>? {
-        return MaybeSubject.error<R> { convertRetrofitExceptionToCustomException(t) }
-    }
+    private fun handleMaybeRetrofitError(t: Throwable): MaybeSource<R>? = MaybeSubject.error<R> { convertRetrofitExceptionToCustomException(t) }
 
-    private fun handleSingleRetrofitError(t: Throwable): SingleSource<R>? {
-        return SingleSubject.error<R> { convertRetrofitExceptionToCustomException(t) }
-    }
+    private fun handleSingleRetrofitError(t: Throwable): SingleSource<R>? = SingleSubject.error<R> { convertRetrofitExceptionToCustomException(t) }
 
-    private fun handleFlowableRetrofitError(t: Throwable): Flowable<R>? {
-        return Flowable.error<R> { convertRetrofitExceptionToCustomException(t) }
-    }
+    private fun handleFlowableRetrofitError(t: Throwable): Flowable<R>? = Flowable.error<R> { convertRetrofitExceptionToCustomException(t) }
 
-    private fun handleObservableRetrofitError(t: Throwable): ObservableSource<R>? {
-        return Observable.error { convertRetrofitExceptionToCustomException(t) }
-    }
+    private fun handleObservableRetrofitError(t: Throwable): ObservableSource<R>? = Observable.error { convertRetrofitExceptionToCustomException(t) }
 
     /**
      * Generate app api exception
      */
-    open fun convertRetrofitExceptionToCustomException(throwable: Throwable): Throwable {
-        return throwable
-    }
+    open fun convertRetrofitExceptionToCustomException(throwable: Throwable): Throwable = throwable
 
     /**
      * Some resful api handle error in success response, this method is used to return exception
      */
-    open fun createExceptionForSuccessResponse(response: Any?): Throwable? {
-        return null
-    }
+    open fun createExceptionForSuccessResponse(response: Any?): Throwable? = null
 
     private fun handleCustomError(response: Any): Any {
         if (createExceptionForSuccessResponse(response) != null) {
@@ -61,7 +50,5 @@ open class BaseRxCallAdapterWrapper<R>(private val retrofit: Retrofit, private v
         return response
     }
 
-    override fun responseType(): Type {
-        return wrapped!!.responseType()
-    }
+    override fun responseType(): Type? = wrapped?.responseType()
 }

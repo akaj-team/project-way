@@ -14,20 +14,12 @@ import vn.asiantech.way.extension.observeOnUiThread
 class GroupActivityViewModel {
 
     private val groupDataSource = GroupRepository()
+
     private val wayRepository = WayRepository()
 
-    internal fun getGroupInfo(groupId: String): Observable<Group> {
-        return groupDataSource.getGroupInfo(groupId)
-                .observeOnUiThread()
-    }
+    internal fun getGroupInfo(groupId: String): Observable<Group> = groupDataSource.getGroupInfo(groupId)
 
-    internal fun getGroupId(userId: String): Observable<String> {
-        return groupDataSource.listenerForGroupChange(userId)
-                .observeOnUiThread()
-    }
+    internal fun getGroupId(userId: String): Observable<String> = groupDataSource.listenerForGroupChange(userId)
 
-    internal fun getInviteList(userId: String): Observable<Invite> {
-        return groupDataSource.getInvite(userId)
-                .observeOnUiThread()
-    }
+    internal fun getInviteList(userId: String): Observable<Invite> = groupDataSource.getInvite(userId)
 }

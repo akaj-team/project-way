@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.AnkoContext
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -49,7 +50,7 @@ class InviteFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Init invite view model
-        viewModel = InviteViewModel(context)
+        viewModel = InviteViewModel()
         initInvitedUser()
         // Init adapter
         adapter = InviteUserListAdapter(users)
@@ -73,7 +74,7 @@ class InviteFragment : BaseFragment() {
      * On item invite click of  RecyclerView list.
      */
     internal fun eventItemInviteClicked(user: User) {
-        // TODO: Handle save database firebase
+        viewModel.inviteUserJoinToGroup(user.id, Invite(userId, groupId, groupName, userId == ownerId))
     }
 
     /**

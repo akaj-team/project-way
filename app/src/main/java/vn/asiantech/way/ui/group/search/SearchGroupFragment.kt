@@ -56,6 +56,7 @@ class SearchGroupFragment : BaseFragment() {
     override fun onBindViewModel() {
         addDisposables(viewModel
                 .triggerSearchGroup()
+                .observeOnUiThread()
                 .subscribe(
                         this::handleRecyclerViewGroupWhenSearchSuccess,
                         this::handleSearchGroupError
@@ -95,6 +96,7 @@ class SearchGroupFragment : BaseFragment() {
         addDisposables(
                 viewModel
                         .postRequestToGroup(group)
+                        .observeOnUiThread()
                         .subscribe(
                                 this::handlePostRequestToGroupSuccess,
                                 this::handlePostRequestToGroupError

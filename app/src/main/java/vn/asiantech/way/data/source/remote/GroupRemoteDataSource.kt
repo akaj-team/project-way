@@ -123,9 +123,9 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("not implemented")
     }
 
-    override fun postInvite(userId: String, invite: Invite): Single<Boolean> {
+    override fun inviteUserJoinGroup(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val inviteRef = firebaseDatabase.getReference("user/$userId/${invite.to}")
+        val inviteRef = firebaseDatabase.getReference("user/$userId/invites/${invite.to}")
         inviteRef.setValue(invite) { databaseError, dataSuccess ->
             if (databaseError != null) {
                 result.onSuccess(false)
@@ -137,15 +137,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun removeUserFromGroup(userId: String): Single<User> {
-        return HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
-    }
+    override fun removeUserFromGroup(userId: String): Single<User>
+            = HypertrackApi.instance.removeUserFromGroup(userId, BodyAddUserToGroup(null))
 
-    override fun searchGroup(groupName: String): Observable<List<Group>> {
-        return HypertrackApi.instance.searchGroup(groupName)
-                .toObservable()
-                .map { it.groups }
-    }
+    override fun searchGroup(groupName: String): Observable<List<Group>>
+            = HypertrackApi.instance.searchGroup(groupName).toObservable().map { it.groups }
 
     override fun getCurrentRequestOfUser(userId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
@@ -220,9 +216,8 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun searchUser(name: String): Observable<List<User>> {
-        return HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
-    }
+    override fun searchUser(name: String): Observable<List<User>>
+            = HypertrackApi.instance.searchUser(name).toObservable().map { it.users }
 
     override fun deleteUserInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
@@ -235,11 +230,11 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun deleteGroupRequest(groupId: String, request: Invite): Single<Boolean> {
+    override fun deleteGroupRequest(groupId: String, userId: String): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val userRequestRef = firebaseDatabase.getReference("user/${request.to}/request")
+        val userRequestRef = firebaseDatabase.getReference("user/$userId" + "/request")
         userRequestRef.removeValue()
-        val groupRequestRef = firebaseDatabase.getReference("group/$groupId/request/${request.to}")
+        val groupRequestRef = firebaseDatabase.getReference("group/$groupId" + "/request/$userId")
         groupRequestRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
@@ -252,20 +247,18 @@ class GroupRemoteDataSource : GroupDataSource {
         TODO("Init later")
     }
 
-    override fun createGroup(groupName: String, ownerId: String): Single<Boolean> {
-        return HypertrackApi.instance.createGroup(groupName)
-                .flatMap { group ->
-                    group.ownerId = ownerId
-                    HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
-                            .flatMap {
-                                postGroupInfo(group)
-                            }
-                }
-    }
+    override fun createGroup(groupName: String, ownerId: String): Single<Boolean>
+            = HypertrackApi.instance.createGroup(groupName)
+            .flatMap { group ->
+                group.ownerId = ownerId
+                HypertrackApi.instance.addUserToGroup(ownerId, BodyAddUserToGroup(group.id))
+                        .flatMap {
+                            postGroupInfo(group)
+                        }
+            }
 
-    override fun getMemberList(groupId: String): Single<MutableList<User>> {
-        return HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
-    }
+    override fun getMemberList(groupId: String): Single<MutableList<User>>
+            = HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
 
     override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
@@ -291,8 +284,26 @@ class GroupRemoteDataSource : GroupDataSource {
         return result
     }
 
-    override fun getUserInfo(userId: String): Single<User> {
-        return HypertrackApi.instance.getUserInfo(userId)
+    override fun getUserInfo(groupId: String): Observable<User> {
+        val result = PublishSubject.create<User>()
+        val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
+        inviteRef.addChildEventListener(object : SimpleChildEventListener {
+            override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
+                val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
+                if (invite != null) {
+                    HypertrackApi.instance
+                            .getUserInfo(invite.to)
+                            .toObservable()
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
+                                result.onNext(it)
+                            }, {
+                                result.onError(it)
+                            })
+                }
+            }
+        })
+        return result
     }
 
     private fun acceptInviteWhenUserDoNotHaveRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite) {
