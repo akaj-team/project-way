@@ -1,4 +1,4 @@
-package vn.asiantech.way
+package vn.asiantech.way.group
 
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
@@ -33,12 +33,12 @@ class CreateGroupViewModelTest {
         val groupName = "name"
         val userId = "userid"
         val test = TestObserver<Boolean>()
-
-        /* When */
         `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(true))
 
-        /* Then */
+        /* When */
         viewModel.createGroup(groupName, userId).subscribe(test)
+
+        /* Then */
         test.assertValue { it }
     }
 
@@ -48,13 +48,13 @@ class CreateGroupViewModelTest {
         val groupName = "name"
         val userId = ""
         val test = TestObserver<Boolean>()
-
-        /* When */
         `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
 
-        /* Then */
+        /* When */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { !it }
+
+        /* Then */
+        test.assertValue { it == false }
     }
 
     @Test
@@ -63,13 +63,13 @@ class CreateGroupViewModelTest {
         val groupName = ""
         val userId = "user 01"
         val test = TestObserver<Boolean>()
-
-        /* When */
         `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
 
-        /* Then */
+        /* When */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { !it }
+
+        /* Then */
+        test.assertValue { it == false }
     }
 
     @Test
@@ -78,12 +78,12 @@ class CreateGroupViewModelTest {
         val groupName = ""
         val userId = ""
         val test = TestObserver<Boolean>()
-
-        /* When */
         `when`(groupRepository.createGroup(groupName, userId)).thenReturn(Single.just(false))
 
-        /* Then */
+        /* When */
         viewModel.createGroup(groupName, userId).subscribe(test)
-        test.assertValue { !it }
+
+        /* Then */
+        test.assertValue { it == false }
     }
 }
