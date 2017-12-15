@@ -56,11 +56,15 @@ class RegisterViewModelTest {
 
     @Test
     fun `Given progress bar - When call get user - Then progress bar should show then hide`() {
+        /* Given */
         val test = TestObserver<Boolean>()
         `when`(wayRepository.getUser()).thenReturn(Single.just(User()))
 
+        /* When */
         viewModel.progressBarStatus.subscribe(test)
         viewModel.getUser().subscribe()
+
+        /* Then */
         test.assertValues(true, false)
     }
 
@@ -73,47 +77,65 @@ class RegisterViewModelTest {
 
         /* When */
         viewModel.getUser().subscribe(getUserTest)
+
+        /* Then */
         getUserTest.assertValue { it == user }
     }
 
     @Test
     fun `Given countries - When get countries - Then return right countries`() {
+        /* Given */
         val countries = listOf<Country>()
         val getCountriesTest = TestObserver<List<Country>>()
         `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(countries))
 
+        /* When */
         viewModel.getCountries().subscribe(getCountriesTest)
+
+        /* Then */
         getCountriesTest.assertValue { it == countries }
     }
 
     @Test
     fun `Given an user params - When create new user - Then return true response status`() {
+        /* Given */
         val test = TestObserver<ResponseStatus>()
         val params = UserParams()
         `when`(wayRepository.createUser(TestUtil.any())).thenReturn(Observable.just(ResponseStatus(true)))
 
+        /* When */
         viewModel.createUser(params).subscribe(test)
+
+        /* Then */
         test.assertValue { it.status }
     }
 
     @Test
     fun `Given an user params - When update user - Then return true response status`() {
+        /* Given */
         val test = TestObserver<ResponseStatus>()
         val params = UserParams()
         `when`(wayRepository.updateUser(TestUtil.any())).thenReturn(Observable.just(ResponseStatus(true)))
 
+        /* When */
         viewModel.updateUser(params).subscribe(test)
+
+        /* Then */
         test.assertValue { it.status }
     }
 
     @Test
     fun `Given an information - When create new UserParam - Then return UserParams`() {
+        /* Given */
         val name = "Name"
         val phone = "0123456789"
         val isoCode = "+84"
         val avatar = null
 
+        /* When */
         val userParams = viewModel.generateUserInformation(name, phone, isoCode, avatar)
+
+        /* Then */
         Assert.assertEquals(userParams.name, name)
         Assert.assertEquals(userParams.phone, isoCode.plus("/").plus(phone))
         Assert.assertEquals(userParams.photo, avatar)
