@@ -3,6 +3,7 @@ package vn.asiantech.way.ui.search
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.util.DiffUtil.DiffResult
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.WayLocation
@@ -19,27 +20,28 @@ class SearchActivity : BaseActivity() {
 
     private lateinit var ui: SearchActivityUI
     private lateinit var viewModel: SearchViewModel
-    private var locations = mutableListOf<WayLocation>()
     private lateinit var startShareActivityIntent: Intent
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = SearchActivityUI(locations)
-        ui.setContentView(this)
         viewModel = SearchViewModel(this)
+        ui = SearchActivityUI(viewModel.locations)
+        ui.setContentView(this)
         initViews()
+        viewModel.searchLocations()
     }
 
     override fun onBindViewModel() {
-        addDisposables(viewModel.progressBarStatus
-                .observeOnUiThread()
-                .subscribe(this::handleProgressBarStatus),
-
-                viewModel.triggerSearchLocationResult()
+        addDisposables(
+                //Update progress bar status
+                viewModel.progressBarStatus
                         .observeOnUiThread()
-                        .subscribe(this::handleSearchLocationComplete))
-        viewModel.searchLocations()
+                        .subscribe(this::handleProgressBarStatus),
+                //Update search list view
+                viewModel.updateAutocompleteList
+                        .observeOnUiThread()
+                        .subscribe(this::handleUpdateSearchAutocompleteList))
     }
 
     /**
@@ -87,10 +89,8 @@ class SearchActivity : BaseActivity() {
     /**
      * Show search location data or load data from history
      */
-    private fun handleSearchLocationComplete(data: List<WayLocation>) {
-        locations.clear()
-        locations.addAll(data)
-        ui.locationAdapter.notifyDataSetChanged()
+    private fun handleUpdateSearchAutocompleteList(diff: DiffResult) {
+        diff.dispatchUpdatesTo(ui.locationAdapter)
     }
 
     private fun handleProgressBarStatus(isShow: Boolean) {
