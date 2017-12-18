@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.base
 
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -35,4 +36,10 @@ abstract class BaseActivity : AppCompatActivity() {
      * This function is used to define subscription
      */
     abstract fun onBindViewModel()
+
+    internal fun replaceFragment(@IdRes containerId: Int, fragment: BaseFragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(containerId, fragment)
+        transaction.commit()
+    }
 }
