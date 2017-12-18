@@ -3,19 +3,18 @@ package vn.asiantech.way.api
 import com.hypertrack.lib.models.User
 import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.hasItems
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.RestClient
 import vn.asiantech.way.data.model.BodyAddUserToGroup
 import vn.asiantech.way.data.model.SearchGroupResult
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  *  Copyright © 2017 AsianTech inc.
@@ -46,7 +45,7 @@ class HypertrackApiTest {
         server.addResponseBody("searchGroup.json")
 
         /* When */
-//        restClient.searchGroup("nameGroup").subscribe(testSearchGroup)
+        restClient.searchGroup("nameGroup").subscribe(testSearchGroup)
 
         /* Then */
         val request = server.takeRequest()
@@ -74,10 +73,11 @@ class HypertrackApiTest {
         server.addResponseBody("removeUserFromGroup.json")
 
         /* When */
-        restClient.removeUserFromGroup( "userId", BodyAddUserToGroup("groupId")).subscribe(testRemoveUserGroup)
+        restClient.removeUserFromGroup("userId", BodyAddUserToGroup("groupId")).subscribe(testRemoveUserGroup)
 
         /* Then */
         val request = server.takeRequest()
+        print(request.body.toString())
         assertThat(request.method.toUpperCase(), `is`("PATCH"))
         assertThat(request.requestUrl.pathSegments(), hasItems("userId"))
         assertThat(request.body.readUtf8(), `is`("{\"group_id\":\"groupId\"}"))
@@ -85,6 +85,8 @@ class HypertrackApiTest {
         testRemoveUserGroup.assertValue {
             assertThat(it.id, `is`("8f525af5-05fa-44a3-8c6e-d7a0180e259f"))
             assertThat(it.name, `is`("haiiiiaaa"))
+            assertThat(it.lookupId,`is`("123456"))
+            assertThat(it.photo,`is`("https://core-api-prod-assets.s3.amazonaws.com/uploads/photos/drivers/driver_0df3cd1e-82ce-44f5-918e-d41884a8892b_image_name"))
             true
         }
     }
