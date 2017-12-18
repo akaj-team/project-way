@@ -19,10 +19,8 @@ import java.util.concurrent.TimeUnit
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 01/12/2017
  */
-class SearchViewModel(val context: Context) {
+class SearchViewModel(private val wayRepository: WayRepository, private val localRepository: LocalRepository) {
     internal var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
-    private val wayRepository = WayRepository()
-    private val localRepository = LocalRepository(context)
     private val searchObservable = PublishSubject.create<String>()
     internal val updateAutocompleteList = PublishSubject.create<DiffUtil.DiffResult>()
     internal var locations = mutableListOf<WayLocation>()
@@ -30,6 +28,8 @@ class SearchViewModel(val context: Context) {
     init {
         initSearchLocations()
     }
+
+    constructor(context: Context) : this(WayRepository(), LocalRepository(context))
 
     internal fun searchLocations(query: String = "") {
         searchObservable.onNext(query)
