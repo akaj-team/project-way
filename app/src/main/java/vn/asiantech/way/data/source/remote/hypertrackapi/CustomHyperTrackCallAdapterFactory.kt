@@ -20,12 +20,27 @@ class CustomHyperTrackCallAdapterFactory : CallAdapter.Factory() {
         /**
          * Create instance
          */
-        fun create(): CallAdapter.Factory {
-            return CustomHyperTrackCallAdapterFactory()
-        }
+        fun create(): CallAdapter.Factory = CustomHyperTrackCallAdapterFactory()
     }
 
-    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *>? {
-        return BaseRxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit))
-    }
+    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit)
+            : CallAdapter<*, *>?
+            = BaseRxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit))
+
+//    private inner class RxCallAdapterWrapper<R>(private val retrofit: Retrofit, private val wrapped: CallAdapter<R, *>?) : BaseRxCallAdapterWrapper<R>(retrofit, wrapped) {
+//        override fun convertRetrofitExceptionToCustomException(throwable: Throwable): Throwable {
+//            if (throwable is HttpException) {
+//            }
+//            return throwable
+//        }
+//
+//        override fun createExceptionForSuccessResponse(response: Any?): Throwable? {
+//            if (response is Group) {
+//                if (response.name == "testingGroup") {
+//                    return ApiException("ttteeesss")
+//                }
+//            }
+//            return super.createExceptionForSuccessResponse(response)
+//        }
+//    }
 }

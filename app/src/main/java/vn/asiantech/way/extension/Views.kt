@@ -22,10 +22,7 @@ fun View.hideKeyboard(context: Context) {
     imm?.hideSoftInputFromWindow(this.windowToken, 0)
 }
 
-internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView {
-    return ankoView(
-            { RippleView(it, null) }, 0, init)
-}
+internal fun ViewManager.rippleView(init: RippleView.() -> Unit): RippleView = ankoView({ RippleView(it, null) }, 0, init)
 
 internal fun Dialog.setDialogScreenSize(context: Context) {
     val displayMetrics: DisplayMetrics = context.resources.displayMetrics
@@ -38,11 +35,8 @@ internal fun Dialog.setDialogScreenSize(context: Context) {
     this.window.attributes = windowParams
 }
 
-internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar {
-    return ankoView({ CircularSeekBar(it) }, 0, init)
-}
+internal fun ViewManager.circularSeekBar(init: CircularSeekBar.() -> Unit): CircularSeekBar
+        = ankoView({ CircularSeekBar(it) }, 0, init)
 
 internal inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit):
-        CircleImageView {
-    return ankoView({ CircleImageView(it) }, theme, init)
-}
+        CircleImageView = ankoView({ CircleImageView(it) }, theme, init)

@@ -15,18 +15,16 @@ import java.util.concurrent.TimeUnit
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupViewModel(private val userId: String) {
+class SearchGroupViewModel(private val groupRepository: GroupRepository, private val userId: String) {
     private val searchGroupObservable = PublishSubject.create<String>()
-    private val groupRepository = GroupRepository()
     internal var currentRequest: Invite = Invite("", "", "", false)
-
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
 
-    private fun searchGroup(query: String): Observable<List<Group>> {
-        return groupRepository
-                .searchGroup(query)
-                .subscribeOn(Schedulers.io())
-    }
+    constructor(userId: String) : this(GroupRepository(), userId)
+
+    private fun searchGroup(query: String): Observable<List<Group>> = groupRepository
+            .searchGroup(query)
+            .subscribeOn(Schedulers.io())
 
     internal fun eventAfterTextChanged(query: String) {
         searchGroupObservable.onNext(query)
@@ -37,27 +35,23 @@ class SearchGroupViewModel(private val userId: String) {
         return groupRepository
                 .postRequestToGroup(group.id, invite)
                 .doOnSubscribe {
-                    progressDialogObservable.onNext(false)
+                    progressDialogObservable.onNext(true)
                 }
                 .doOnSuccess {
                     currentRequest = invite
-                    progressDialogObservable.onNext(true)
+                    progressDialogObservable.onNext(false)
                 }
     }
 
-    internal fun triggerSearchGroup(): Observable<List<Group>> {
-        return groupRepository
-                .getCurrentRequestOfUser(userId)
-                .doOnNext { currentRequest = it }
-                .flatMap {
-                    searchGroupQuery()
-                }
-    }
+    internal fun triggerSearchGroup(): Observable<List<Group>> = groupRepository
+            .getCurrentRequestOfUser(userId)
+            .doOnNext { currentRequest = it }
+            .flatMap {
+                searchGroupQuery()
+            }
 
-    private fun searchGroupQuery(): Observable<List<Group>> {
-        return searchGroupObservable
-                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .flatMap { searchGroup(it) }
-    }
+    private fun searchGroupQuery(): Observable<List<Group>> = searchGroupObservable
+            .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .flatMap { searchGroup(it) }
 }

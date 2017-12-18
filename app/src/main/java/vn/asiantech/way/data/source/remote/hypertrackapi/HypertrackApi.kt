@@ -12,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object HypertrackApi {
     private const val BASE_URL = "https://api.hypertrack.com/api/v1/"
     private const val TOKEN = "token sk_test_3b4f98fbf6b58eb9d6f710c98c7fcb7a52d2acb6"
-//    private var instance: Retrofit? = null
 
+    //  private var instance: Retrofit? = null
 
     val instance: HypertrackService by lazy {
         val httpClientBuilder = OkHttpClient.Builder()

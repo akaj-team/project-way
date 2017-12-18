@@ -14,14 +14,15 @@ import vn.asiantech.way.utils.AppConstants
  *
  * @author at-ToanNguyen
  */
-class HomeViewModel(val context: Context) {
+class HomeViewModel(private val assetDataRepository: LocalRepository) {
     internal val backStatus: PublishSubject<Boolean> = PublishSubject.create()
-    private val localRepository = LocalRepository(context)
     private var lastClickTime = 0L
+
+    constructor(context: Context) : this(LocalRepository(context))
 
     internal fun getTrackingHistory(): Single<MutableList<TrackingInformation>> {
         val subject = SingleSubject.create<MutableList<TrackingInformation>>()
-        localRepository.getTrackingHistory()?.let { subject.onSuccess(it) }
+        assetDataRepository.getTrackingHistory()?.let { subject.onSuccess(it) }
         return subject
     }
 
