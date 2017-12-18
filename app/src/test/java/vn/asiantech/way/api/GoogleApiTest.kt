@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.RestClient
+import vn.asiantech.way.util.RestClient
 import vn.asiantech.way.data.model.AutoCompleteResult
 import vn.asiantech.way.data.source.remote.googleapi.ApiService
 import vn.asiantech.way.extension.addResponseBody
