@@ -1,0 +1,62 @@
+
+{
+  "html_attributions" : [],
+  "result" : {
+    "address_components" : [
+      {
+        "long_name" : "Nại Thịnh 5",
+        "short_name" : "Nại Thịnh 5",
+        "types" : [ "route" ]
+      },
+      {
+        "long_name" : "Nại Hiên Đông",
+        "short_name" : "Nại Hiên Đông",
+        "types" : [ "sublocality_level_1", "sublocality", "political" ]
+      },
+      {
+        "long_name" : "Sơn Trà",
+        "short_name" : "Sơn Trà",
+        "types" : [ "administrative_area_level_2", "political" ]
+      },
+      {
+        "long_name" : "Đà Nẵng",
+        "short_name" : "Đà Nẵng",
+        "types" : [ "administrative_area_level_1", "political" ]
+      },
+      {
+        "long_name" : "Vietnam",
+        "short_name" : "VN",
+        "types" : [ "country", "political" ]
+      }
+    ],
+    "adr_address" : "Nại Thịnh 5, Nại Hiên Đông, Đà Nẵng, Vietnam",
+    "formatted_address" : "Nại Thịnh 5, Nại Hiên Đông, Sơn Trà, Đà Nẵng, Vietnam",
+    "geometry" : {
+      "location" : {
+        "lat" : 16.0873565,
+        "lng" : 108.2329276
+      },
+      "viewport" : {
+        "northeast" : {
+          "lat" : 16.08870548029151,
+          "lng" : 108.2342765802915
+        },
+        "southwest" : {
+          "lat" : 16.0860075197085,
+          "lng" : 108.2315786197085
+        }
+      }
+    },
+    "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+    "id" : "b4e0c93e867aae145f8e107b6a080293c8382239",
+    "name" : "Nại Thịnh 5",
+    "place_id" : "ChIJ8bYoOR8YQjERMiVjLDsw3Kg",
+    "reference" : "CmRbAAAASEBvDBIfkzEQTnPiCp-SOaBQ-bd5U_ayFz5OUbq22ojO0sK4Szdeu4fkNceU-A-goV2nmtdXdosCmAKgDvaXYPj4NCjlbyyEatn0kQ4cuSn-zuLLfBs_3N4ZG79GLSkEEhDVhHj9xY37o_4NQxRounlTGhRx3M_651XZ0uegbB4NnBvBU4bfrA",
+    "scope" : "GOOGLE",
+    "types" : [ "route" ],
+    "url" : "https://maps.google.com/?q=N%E1%BA%A1i+Th%E1%BB%8Bnh+5,+N%E1%BA%A1i+Hi%C3%AAn+%C4%90%C3%B4ng,+S%C6%A1n+Tr%C3%A0,+%C4%90%C3%A0+N%E1%BA%B5ng,+Vietnam&ftid=0x3142181f3928b6f1:0xa8dc303b2c632532",
+    "utc_offset" : 420,
+    "vicinity" : "Nại Hiên Đông"
+  },
+  "status" : "OK"
+}
