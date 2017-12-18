@@ -110,7 +110,6 @@ class ShowRequestViewModelTest {
         viewModel.progressDialogObservable.subscribe(test)
         viewModel.removeRequestInGroup(groupId, userId).subscribe()
 
-
         /* Then */
         test.assertValues(true, false)
     }
