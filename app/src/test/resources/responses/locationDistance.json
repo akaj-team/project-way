@@ -1,0 +1,26 @@
+{
+  "destination_addresses": [
+    "Trần Quang Khải, Mân Thái, Sơn Trà, Đà Nẵng, Vietnam"
+  ],
+  "origin_addresses": [
+    "Bằng Lang, Phước Mỹ, Sơn Trà, Đà Nẵng, Vietnam"
+  ],
+  "rows": [
+    {
+      "elements": [
+        {
+          "distance": {
+            "text": "0.4 km",
+            "value": 351
+          },
+          "duration": {
+            "text": "1 min",
+            "value": 76
+          },
+          "status": "OK"
+        }
+      ]
+    }
+  ],
+  "status": "OK"
+}
