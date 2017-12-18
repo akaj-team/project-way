@@ -122,4 +122,7 @@
     <item name="item_member_tv_name" type="id" />
     <item name="item_member_img_up_to_admin" type="id" />
     <item name="item_member_img_call" type="id" />
+
+
+    <item name="toolbar" type="id" />
 </resources>
