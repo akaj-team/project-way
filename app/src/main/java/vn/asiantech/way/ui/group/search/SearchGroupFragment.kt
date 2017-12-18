@@ -2,6 +2,8 @@ package vn.asiantech.way.ui.group.search
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,13 +41,12 @@ class SearchGroupFragment : BaseFragment() {
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var viewModel: SearchGroupViewModel
-    private var groups = mutableListOf<Group>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val userId = arguments.getString(KEY_USER)
         viewModel = SearchGroupViewModel(userId)
-        adapter = GroupListAdapter(context, groups, viewModel.currentRequest) {
+        adapter = GroupListAdapter(context, viewModel.groups, viewModel.currentRequest) {
             eventOnJoinButtonClicked(it)
         }
         ui = SearchGroupFragmentUI(adapter)
@@ -54,16 +55,16 @@ class SearchGroupFragment : BaseFragment() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(viewModel
-                .triggerSearchGroup()
-                .observeOnUiThread()
-                .subscribe(
-                        this::handleRecyclerViewGroupWhenSearchSuccess,
-                        this::handleSearchGroupError
-                ),
+        addDisposables(
                 viewModel.progressDialogObservable
                         .observeOnUiThread()
-                        .subscribe(this::updateProgressDialog)
+                        .subscribe(this::updateProgressDialog),
+                viewModel.updateGroupList
+                        .observeOnUiThread()
+                        .subscribe(
+                                this::handleRecyclerViewGroupWhenSearchSuccess,
+                                this::handleSearchGroupError
+                        )
         )
     }
 
@@ -81,11 +82,9 @@ class SearchGroupFragment : BaseFragment() {
         progressDialog.setMessage(getString(R.string.processing))
     }
 
-    private fun handleRecyclerViewGroupWhenSearchSuccess(data: List<Group>) {
+    private fun handleRecyclerViewGroupWhenSearchSuccess(diff: DiffUtil.DiffResult) {
+        diff.dispatchUpdatesTo(adapter)
         adapter.updateCurrentRequest(viewModel.currentRequest)
-        groups.clear()
-        groups.addAll(data)
-        adapter.notifyDataSetChanged()
     }
 
     private fun handleSearchGroupError(error: Throwable) {
