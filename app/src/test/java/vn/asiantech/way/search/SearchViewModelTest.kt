@@ -1,22 +1,19 @@
 package vn.asiantech.way.search
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.observers.TestObserver
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.TestUtil
-import vn.asiantech.way.data.model.*
+import vn.asiantech.way.data.model.AutoCompleteResult
+import vn.asiantech.way.data.model.ResultPlaceDetail
+import vn.asiantech.way.data.model.WayLocation
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.ui.search.SearchViewModel
-import vn.asiantech.way.utils.AppConstants
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by y.nguyen on 11/28/17.
