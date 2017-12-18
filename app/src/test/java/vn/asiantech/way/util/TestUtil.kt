@@ -1,4 +1,4 @@
-package vn.asiantech.way
+package vn.asiantech.way.util
 
 import org.mockito.Mockito
 
