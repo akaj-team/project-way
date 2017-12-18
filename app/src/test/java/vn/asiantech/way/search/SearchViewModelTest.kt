@@ -74,7 +74,7 @@ class SearchViewModelTest {
                 .toList()
                 .toObservable()
                 .subscribe(triggerSearchLocationResultTest)
-        viewModel.triggerSearchLocationResult(input, sensor).subscribe(triggerSearchLocationResultTest)
+//        viewModel.triggerSearchLocationResult(input, sensor).subscribe(triggerSearchLocationResultTest)
 
         /* Then */
         triggerSearchLocationResultTest.assertValue { it == autoCompleteResult.predictions }
