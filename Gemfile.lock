@@ -34,6 +34,9 @@ GEM
     danger-checkstyle_format (0.1.0)
       danger-plugin-api (~> 1.0)
       ox (~> 2.0)
+    danger-junit (0.7.4)
+      danger (> 2.0)
+      ox (~> 2.0)
     danger-plugin-api (1.0.0)
       danger (> 2.0)
     faraday (0.13.1)
@@ -73,6 +76,7 @@ DEPENDENCIES
   danger
   danger-android_lint
   danger-checkstyle_format
+  danger-junit
 
 BUNDLED WITH
    1.16.0
