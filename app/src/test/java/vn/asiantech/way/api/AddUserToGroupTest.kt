@@ -55,7 +55,6 @@ class AddUserToGroupTest {
         test.assertValue {
             assertThat(it.id, `is`("0f3831a1-8131-4e70-be02-f6f85b1936f6"))
             assertThat(it.groupId, `is`("e8a8e87e-1ac4-40ba-a1aa-47543ed1e5d1"))
-
             it.id.isNotEmpty()
         }
     }
