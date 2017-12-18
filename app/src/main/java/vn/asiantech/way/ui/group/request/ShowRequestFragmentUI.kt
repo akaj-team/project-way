@@ -27,6 +27,12 @@ class ShowRequestFragmentUI(private val requestAdapter: RequestAdapter) : AnkoCo
                 lparams(matchParent, matchParent)
                 layoutManager = LinearLayoutManager(context)
                 adapter = requestAdapter
+                requestAdapter.onAcceptClick = {
+                    owner.eventOnButtonOkClick(it)
+                }
+                requestAdapter.onCancelClick = {
+                    owner.eventOnButtonCancelClick(it)
+                }
             }
         }
     }
