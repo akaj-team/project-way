@@ -79,13 +79,13 @@
     <dimen name="group_invite_fragment_margin_recyclerview">5dp</dimen>
     <dimen name="invite_list_adapter_margin_tv_name_group">5dp</dimen>
     <dimen name="invite_list_adapter_padding">10dp</dimen>
-    <item name="invite_list_adapter_view_height" type="dimen" format="float">0.5</item>
+    <item name="invite_list_adapter_view_height" format="float" type="dimen">0.5</item>
     <dimen name="search_screen_text_size">18dp</dimen>
     <dimen name="search_group_height_ll">20dp</dimen>
     <dimen name="search_group_padding">10dp</dimen>
     <dimen name="search_group_left_margin">64dp</dimen>
     <dimen name="search_group_top_margin">20dp</dimen>
-    <item name="search_group_height_view" type="dimen" format="float">0.5</item>
+    <item name="search_group_height_view" format="float" type="dimen">0.5</item>
     <dimen name="search_group_adapter_vertical_margin">2dp</dimen>
 
     <!--BottomButtonCard-->
@@ -122,6 +122,11 @@
     <dimen name="track_top_margin">4dp</dimen>
     <dimen name="track_view_height">2dp</dimen>
     <dimen name="track_btn_call_margin">3dp</dimen>
+    <dimen name="share_margin_value_very_small">5dp</dimen>
+    <dimen name="share_margin_value_small">10dp</dimen>
+    <dimen name="share_margin_value_medium">15dp</dimen>
+    <dimen name="share_margin_value_large">20dp</dimen>
+    <dimen name="share_margin_value_very_large">50dp</dimen>
 
     <!--Invite screen-->
     <dimen name="invite_screen_padding">10dp</dimen>
