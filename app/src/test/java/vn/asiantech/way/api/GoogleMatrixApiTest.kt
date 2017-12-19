@@ -5,9 +5,10 @@ import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.junit.*
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.RestClient
+import vn.asiantech.way.data.model.ResultDistance
 import vn.asiantech.way.data.source.remote.googleapi.ApiService
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
