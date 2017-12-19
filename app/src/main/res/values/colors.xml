@@ -23,4 +23,5 @@
     <color name="colorBlueLight">#64b5f6</color>
     <color name="colorCyan">#e0f7fa</color>
     <color name="colorEdtSearchBackground">#FFFFFF</color>
+    <color name="colorGray">#E0E0E0</color>
 </resources>

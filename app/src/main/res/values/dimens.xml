@@ -130,4 +130,7 @@
     <dimen name="item_user_left_or_right_padding">10dp</dimen>
     <dimen name="item_user_img_avatar_width_or_height">48dp</dimen>
     <dimen name="item_user_left_right_margin">15dp</dimen>
+
+    <!--TextSearch screen-->
+    <dimen name="text_search_padding">10dp</dimen>
 </resources>

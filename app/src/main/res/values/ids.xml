@@ -123,6 +123,7 @@
     <item name="item_member_img_up_to_admin" type="id" />
     <item name="item_member_img_call" type="id" />
 
-
+    <!-- View ids on class TextSearchActivityUI -->
     <item name="toolbar" type="id" />
+    <item name="text_search_edt_query" type="id" />
 </resources>

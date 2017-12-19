@@ -1,7 +1,7 @@
 package vn.asiantech.way.ui.test
 
 import android.os.Bundle
-import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -10,12 +10,17 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class TestActivity : BaseActivity() {
 
-    private val ui = TestActivityUI()
+//    private val ui = TextSearchActivityUI()
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        ui.setContentView(this)
+//        setSupportActionBar(ui.toolbar)
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ui.setContentView(this)
-        setSupportActionBar(ui.toolbar)
+        setContentView(R.layout.activity_text_search)
     }
 
     override fun onBindViewModel() {
