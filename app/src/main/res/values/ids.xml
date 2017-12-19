@@ -14,6 +14,10 @@
     <item name="group_id_tv_name" type="id" />
     <item name="group_id_image_button_accept" type="id" />
     <item name="group_id_image_button_cancel" type="id" />
+    <item name="group_info_img_invite" type="id" />
+    <item name="group_info_img_approve" type="id" />
+    <item name="group_info_img_leave_group" type="id" />
+
 
     <!--View ids ViewInviteFragmentUIntUI-->
     <item name="group_show_invite_adapter_tv_name_group" type="id" />
@@ -113,4 +117,9 @@
     <item name="item_user_img_avatar" type="id" />
     <item name="item_user_tv_name" type="id" />
     <item name="item_user_tv_invite" type="id" />
+    <!-- View ids on class ItemMemberUI -->
+    <item name="item_member_img_avatar" type="id" />
+    <item name="item_member_tv_name" type="id" />
+    <item name="item_member_img_up_to_admin" type="id" />
+    <item name="item_member_img_call" type="id" />
 </resources>

@@ -4,16 +4,15 @@ import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.*
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.RestClient
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  * HyperTrackApiTest.
@@ -75,7 +74,6 @@ class HyperTrackApiTest {
         val request = server.takeRequest()
         val body=request.body.readUtf8()
         assertThat(request.method.toUpperCase(), `is`("POST"))
-        println(request.utf8Body)
         assertThat(body, containsString("nameGroup"))
 
         test.assertValue {
