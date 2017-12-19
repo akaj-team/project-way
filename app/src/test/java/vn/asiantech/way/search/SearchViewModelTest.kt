@@ -13,12 +13,12 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import vn.asiantech.way.util.RxSchedulersOverrideRule
-import vn.asiantech.way.util.TestUtil
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.ui.search.SearchViewModel
+import vn.asiantech.way.util.RxSchedulersOverrideRule
+import vn.asiantech.way.util.TestUtil
 
 
 /**
