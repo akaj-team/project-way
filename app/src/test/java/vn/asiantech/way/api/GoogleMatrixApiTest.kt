@@ -37,10 +37,12 @@ class GoogleMatrixApiTest {
     fun `Given mock two lat lng point - When request google distance matrix api - Then return resultDistance object`() {
         /* Given */
         val test = TestObserver<ResultDistance>()
+        val origin = "16.083833,108.243501"
+        val destination = "16.084153,108.242214"
         server.addResponseBody("locationDistance.json")
 
         /* When */
-        restClient.getLocationDistance("16.083833,108.243501", "16.084153,108.242214").subscribe(test)
+        restClient.getLocationDistance(origin, destination).subscribe(test)
 
         /* Then */
         val request = server.takeRequest()
@@ -50,8 +52,8 @@ class GoogleMatrixApiTest {
         Assert.assertThat(request.requestUrl.queryParameter("destinations"), `is`("16.084153,108.242214"))
 
         test.assertValue {
-            val item = it.rows[0].elements[0]
             Assert.assertThat(it.rows.size, `is`(1))
+            val item = it.rows[0].elements[0]
             Assert.assertThat(item.distance.text, `is`("0.4 km"))
             Assert.assertThat(item.distance.value, `is`(351))
             Assert.assertThat(item.duration.text, `is`("1 min"))
