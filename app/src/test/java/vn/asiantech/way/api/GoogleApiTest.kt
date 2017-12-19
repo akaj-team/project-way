@@ -17,7 +17,6 @@ import vn.asiantech.way.data.source.remote.googleapi.ApiService
 import vn.asiantech.way.data.source.remote.response.Response
 import vn.asiantech.way.extension.addResponseBody
 
-
 /**
  *
  * Created by tien.hoang on 12/14/17.
@@ -67,23 +66,24 @@ class GoogleApiTest {
     }
 
     @Test
-    fun `Given mock response -  When request getAddressLocation - Then return response mutablelist LocationAddress`() {
+    fun `Given mock response -  When request getAddressLocation - Then return response mutable list LocationAddress`() {
         /* Given */
         val test = TestObserver<Response<MutableList<LocationAddress>>>()
+        val latLng = "16.087190, 108.232773"
         server.addResponseBody("getAddressLocation.json")
 
         /* When */
-        restClient.getAddressLocation("16.087190, 108.232773").subscribe(test)
+        restClient.getAddressLocation(latLng).subscribe(test)
 
         /* Then */
         val request = server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItem("latlng"))
-        assertThat(request.requestUrl.queryParameter("latlng"), `is`("16.087190, 108.232773"))
+        assertThat(request.requestUrl.queryParameter("latlng"), `is`(latLng))
 
         test.assertValue {
-            val item = it.results?.get(0)
             assertThat(it.results?.size, `is`(3))
+            val item = it.results?.get(0)
             assertThat(item?.address, `is`("Nại Thịnh 5, Nại Hiên Đông, Sơn Trà, Đà Nẵng, Vietnam"))
             assertThat(item?.placeId, `is`("ChIJ8bYoOR8YQjERMiVjLDsw3Kg"))
 
@@ -92,19 +92,20 @@ class GoogleApiTest {
     }
 
     @Test
-    fun `Given mock response -  When request getLocationDetail - Then ResultPlaceDetail`() {
+    fun `Given mock response -  When request getLocationDetail - Then return ResultPlaceDetail`() {
         /* Given */
         val test = TestObserver<ResultPlaceDetail>()
+        val placeId = "ChIJ8bYoOR8YQjERMiVjLDsw3Kg"
         server.addResponseBody("getLocationDetail.json")
 
         /* When */
-        restClient.getLocationDetail("ChIJ8bYoOR8YQjERMiVjLDsw3Kg").subscribe(test)
+        restClient.getLocationDetail(placeId).subscribe(test)
 
         /* Then */
         val request = server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItem("placeid"))
-        assertThat(request.requestUrl.queryParameter("placeid"), `is`("ChIJ8bYoOR8YQjERMiVjLDsw3Kg"))
+        assertThat(request.requestUrl.queryParameter("placeid"), `is`(placeId))
 
         test.assertValue {
             val item = it.result
