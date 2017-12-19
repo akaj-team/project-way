@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.setDialogScreenSize
 
@@ -41,16 +42,16 @@ internal class ArrivedDialog : DialogFragment() {
     }
 
     private lateinit var ui: DialogUI
-    private var mTime: String? = null
-    private var mDistance: String? = null
+    private var time: String? = null
+    private var distance: String? = null
     internal lateinit var btnDoneDialog: Button
     internal lateinit var tvTimeTotal: TextView
     internal lateinit var tvDistance: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mTime = arguments?.getString(TYPE_TIME, "")
-        mDistance = arguments?.getString(TYPE_DISTANCE, "")
+        time = arguments?.getString(TYPE_TIME, "")
+        distance = arguments?.getString(TYPE_DISTANCE, "")
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -101,7 +102,7 @@ internal class ArrivedDialog : DialogFragment() {
                         verticalLayout {
                             lparams(dip(0), wrapContent, LAYOUT_WEIGHT_MEDIUM)
 
-                            tvTimeTotal = tvShowArrivedInfo(R.string.arrived_dialog_total_time).lparams {
+                            tvTimeTotal = tvShowArrivedInfo(time).lparams {
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dimen(R.dimen.margin_very_low)
                             }
@@ -114,7 +115,7 @@ internal class ArrivedDialog : DialogFragment() {
                         verticalLayout {
                             lparams(dip(0), wrapContent, LAYOUT_WEIGHT_MEDIUM)
 
-                            tvDistance = tvShowArrivedInfo(R.string.arrived_dialog_total_distance).lparams {
+                            tvDistance = tvShowArrivedInfo(distance).lparams {
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dimen(R.dimen.margin_very_low)
                             }
@@ -137,6 +138,7 @@ internal class ArrivedDialog : DialogFragment() {
                 }.lparams(matchParent, dip(1))
 
                 btnDoneDialog = button(R.string.arrived_done) {
+                    onClick { dismiss() }
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_size_normal))
                     backgroundResource = R.color.colorAccentLight
@@ -150,7 +152,7 @@ internal class ArrivedDialog : DialogFragment() {
         textSize = px2dip(dimen(R.dimen.text_size_normal))
     }
 
-    private fun ViewManager.tvShowArrivedInfo(string: Int) = textView(string) {
+    private fun ViewManager.tvShowArrivedInfo(string: String?) = textView(string) {
         textColor = ContextCompat.getColor(context, R.color.colorBlack)
         textSize = px2dip(dimen(R.dimen.text_size_normal))
     }

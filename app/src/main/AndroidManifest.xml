@@ -82,6 +82,7 @@
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.group.GroupActivity" />
 
         <!-- Register meta-data here -->
         <!--
