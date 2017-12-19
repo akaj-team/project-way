@@ -81,7 +81,6 @@ class ShowRequestViewModelTest {
         test.assertValue(true)
     }
 
-
     @Test
     fun `Given a group Id and user Id - When call remove request in group - Then return false`() {
         /* Given */
