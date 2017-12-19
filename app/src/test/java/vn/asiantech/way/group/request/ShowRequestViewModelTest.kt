@@ -7,7 +7,7 @@ import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.data.source.WayRepository
@@ -41,7 +41,7 @@ class ShowRequestViewModelTest {
         val testUser = TestObserver<User>()
         val user = User()
         val groupId = "groupId"
-        Mockito.`when`(groupRepository.getUserInfo(TestUtil.any())).thenReturn(Observable.just(user))
+        `when`(groupRepository.getUserInfo(TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
         groupRepository.getUserInfo(groupId).subscribe(testUser)
@@ -57,7 +57,7 @@ class ShowRequestViewModelTest {
         val user = User()
         val groupId = "groupId"
         val userId = "userId"
-        Mockito.`when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
+        `when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
         viewModel.addUserToGroup(groupId, userId).subscribe(testUser)
@@ -72,7 +72,7 @@ class ShowRequestViewModelTest {
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
         val userId = "userId"
-        Mockito.`when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
+        `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
         viewModel.removeRequestInGroup(groupId, userId).subscribe(test)
@@ -87,7 +87,7 @@ class ShowRequestViewModelTest {
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
         val userId = "userId"
-        Mockito.`when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
+        `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
 
         /* When */
         viewModel.removeRequestInGroup(groupId, userId).subscribe(test)
@@ -103,7 +103,7 @@ class ShowRequestViewModelTest {
         val user = User()
         val groupId = "groupId"
         val userId = "userId"
-        Mockito.`when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
+        `when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
         viewModel.progressDialogObservable.subscribe(test)
@@ -119,7 +119,7 @@ class ShowRequestViewModelTest {
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
         val userId = "userId"
-        Mockito.`when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
+        `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
         viewModel.progressDialogObservable.subscribe(test)
