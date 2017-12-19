@@ -9,10 +9,10 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import vn.asiantech.way.TestUtil
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.ui.group.request.ShowRequestViewModel
+import vn.asiantech.way.util.TestUtil
 
 /**
  * ShowRequestViewModelTest
