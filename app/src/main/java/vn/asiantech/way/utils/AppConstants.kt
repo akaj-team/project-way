@@ -31,4 +31,8 @@ object AppConstants {
     const val NUM_CHAR_REMOVE = 3
     // Key SharePref Tracking
     const val KEY_TRACKING_HISTORY = "tracking_history"
+    const val KEY_USER_ID = "key_user_id"
+    const val KEY_GROUP_ID = "key_group_id"
+    const val MEMBER_ITEM_TEXT_VIEW_NAME_WEIGHT = 1f
+    const val STANDARD_DATE_TIME_LENGTH = 10
 }
