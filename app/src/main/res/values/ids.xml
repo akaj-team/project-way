@@ -126,4 +126,10 @@
     <!-- View ids on class TextSearchActivityUI -->
     <item name="toolbar" type="id" />
     <item name="text_search_edt_query" type="id" />
+    <item name="text_search_img_clear_text" type="id" />
+    <item name="text_search_tv_cancel" type="id" />
+    <item name="text_search_fr_content" type="id" />
+
+    <!-- View ids on class RecentSearchItemUI -->
+    <item name="text_search_recent_item_img_icon" type="id" />
 </resources>

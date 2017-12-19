@@ -133,4 +133,5 @@
 
     <!--TextSearch screen-->
     <dimen name="text_search_padding">10dp</dimen>
+    <dimen name="text_search_edt_text_size">14dp</dimen>
 </resources>

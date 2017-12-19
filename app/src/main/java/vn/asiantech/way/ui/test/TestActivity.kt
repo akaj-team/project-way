@@ -1,7 +1,7 @@
 package vn.asiantech.way.ui.test
 
 import android.os.Bundle
-import vn.asiantech.way.R
+import org.jetbrains.anko.setContentView
 import vn.asiantech.way.ui.base.BaseActivity
 
 /**
@@ -10,18 +10,16 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class TestActivity : BaseActivity() {
 
-//    private val ui = TextSearchActivityUI()
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        ui.setContentView(this)
-//        setSupportActionBar(ui.toolbar)
-//    }
-
+    private val ui = RecentSearchItemUI()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_text_search)
+        ui.setContentView(this)
     }
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_text_search)
+//    }
 
     override fun onBindViewModel() {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
