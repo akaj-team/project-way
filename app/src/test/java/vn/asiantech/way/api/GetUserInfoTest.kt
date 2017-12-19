@@ -52,7 +52,7 @@ class GetUserInfoTest {
         Assert.assertThat(request.requestUrl.pathSegments(), hasItems("users", "{userId}"))
 
         test.assertValue {
-            assertThat(it.id, `is`("a7f13570-5e5e-4651-a58d-985bfcfcedf7"))
+            assertThat(it.id, `is`(userId))
             assertThat(it.groupId, `is`("5bb1367e-8941-4874-8897-0bb84f154bfa"))
             assertThat(it.name, `is`("rim"))
             true

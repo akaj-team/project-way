@@ -54,7 +54,7 @@ class SearchUserTest {
             val item = it.users[0]
             Assert.assertThat(it.users.size, `is`(1))
             Assert.assertThat(item.id, `is`("a7f13570-5e5e-4651-a58d-985bfcfcedf7"))
-            Assert.assertThat(item.name, `is`("rim"))
+            Assert.assertThat(item.name, `is`(name))
             it.users.isNotEmpty()
         }
     }
