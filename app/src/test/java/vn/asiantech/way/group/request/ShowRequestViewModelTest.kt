@@ -81,6 +81,22 @@ class ShowRequestViewModelTest {
         test.assertValue(true)
     }
 
+
+    @Test
+    fun `Given a group Id and user Id - When call remove request in group - Then return false`() {
+        /* Given */
+        val test = TestObserver<Boolean>()
+        val groupId = "groupId"
+        val userId = "userId"
+        Mockito.`when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
+
+        /* When */
+        viewModel.removeRequestInGroup(groupId, userId).subscribe(test)
+
+        /* Then */
+        test.assertValue(false)
+    }
+
     @Test
     fun `Given progressDialog - When call add user to group - Then progress dialog should show then hide`() {
         /* Given */
