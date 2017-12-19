@@ -2,7 +2,8 @@ package vn.asiantech.way.api
 
 import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.hasItem
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -36,7 +37,6 @@ class HyperTrackApiTest {
     fun cleanUp() {
         server.shutdown()
     }
-
 
     @Test
     fun `Given mock response - When request getGroupInfo - Then return group`() {
@@ -72,9 +72,9 @@ class HyperTrackApiTest {
 
         /* Then */
         val request = server.takeRequest()
-        val body=request.body.readUtf8()
+        val body = request.body.readUtf8()
         assertThat(request.method.toUpperCase(), `is`("POST"))
-        assertThat(body, containsString("nameGroup"))
+        assertThat(body, `is`("name=nameGroup"))
 
         test.assertValue {
             assertThat(it.id, `is`("f3ead2ae-dc0a-4a7e-85be-74ee51d9d70a"))
