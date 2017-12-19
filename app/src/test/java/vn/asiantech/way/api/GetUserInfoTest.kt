@@ -37,12 +37,14 @@ class GetUserInfoTest {
 
     @Test
     fun `Given mock response - When request getUserInfo - Then return user object`() {
+        val userId = "a7f13570-5e5e-4651-a58d-985bfcfcedf7"
+
         /* Given */
         val test = TestObserver<User>()
         server.addResponseBody("getUserInfo.json")
 
         /* When */
-        restClient.getUserInfo("a7f13570-5e5e-4651-a58d-985bfcfcedf7").subscribe(test)
+        restClient.getUserInfo(userId).subscribe(test)
 
         /* Then */
         val request = server.takeRequest()

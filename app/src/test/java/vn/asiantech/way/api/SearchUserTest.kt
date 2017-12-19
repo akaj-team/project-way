@@ -35,12 +35,14 @@ class SearchUserTest {
 
     @Test
     fun `Given mock response - When request searchUser - Then return UserListResult object`() {
+        val name = "rim"
+
         /* Given */
         val test = TestObserver<UserListResult>()
         server.addResponseBody("searchUser.json")
 
         /* When */
-        restClient.searchUser("rim").subscribe(test)
+        restClient.searchUser(name).subscribe(test)
 
         /* Then */
         val request = server.takeRequest()
