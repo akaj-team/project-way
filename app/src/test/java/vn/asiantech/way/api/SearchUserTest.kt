@@ -6,10 +6,10 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.hasItems
 import org.junit.*
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.RestClient
 import vn.asiantech.way.data.model.UserListResult
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  * Search User Test

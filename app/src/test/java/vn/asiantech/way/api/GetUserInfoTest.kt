@@ -9,9 +9,9 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import vn.asiantech.way.RestClient
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  * Get User Info Test
