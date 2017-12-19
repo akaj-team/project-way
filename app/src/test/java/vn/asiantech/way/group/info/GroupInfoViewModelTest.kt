@@ -69,6 +69,7 @@ class GroupInfoViewModelTest {
         val user = User()
         `when`(groupRepository.removeUserFromGroup(TestUtil.any())).thenReturn(Single.just(user))
 
+
         /* When */
         viewModel.leaveGroup(userId).subscribe(test)
 
