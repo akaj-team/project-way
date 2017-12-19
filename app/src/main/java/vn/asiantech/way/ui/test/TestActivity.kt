@@ -10,7 +10,7 @@ import vn.asiantech.way.ui.base.BaseActivity
  */
 class TestActivity : BaseActivity() {
 
-    private val ui = RecentSearchItemUI()
+    private val ui = TextSearchActivityUI()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui.setContentView(this)

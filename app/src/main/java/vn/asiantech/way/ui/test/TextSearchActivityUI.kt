@@ -1,11 +1,12 @@
 package vn.asiantech.way.ui.test
 
-import android.graphics.Color
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.onTextChangeListener
@@ -82,7 +83,11 @@ class TextSearchActivityUI : AnkoComponent<TestActivity> {
 
             frameLayout {
                 id = R.id.text_search_fr_content
-                backgroundColor = Color.BLUE
+
+                recyclerView {
+                    layoutManager = LinearLayoutManager(ctx)
+                    adapter = RecentSearchAdapter()
+                }
             }.lparams(matchParent, matchParent) {
                 topMargin = dimen(R.dimen.text_search_padding)
             }

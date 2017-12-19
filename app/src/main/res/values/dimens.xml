@@ -134,4 +134,7 @@
     <!--TextSearch screen-->
     <dimen name="text_search_padding">10dp</dimen>
     <dimen name="text_search_edt_text_size">14dp</dimen>
+    <dimen name="text_search_item_icon_height">96dp</dimen>
+    <dimen name="text_search_item_icon_width">72dp</dimen>
+    <dimen name="text_search_item_break_line">1dp</dimen>
 </resources>
