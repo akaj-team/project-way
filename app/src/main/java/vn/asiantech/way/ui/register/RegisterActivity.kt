@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
@@ -32,28 +33,26 @@ import vn.asiantech.way.ui.home.HomeActivity
  */
 class RegisterActivity : BaseActivity() {
     companion object {
-        private const val REQUEST_REGISTER = 1001
+        private const val REQUEST_UPDATE = 1001
         private const val REQUEST_CODE_PICK_IMAGE = 1002
         private const val REQUEST_CODE_GALLERY = 1003
         private const val AVATAR_SIZE = 300
         private const val KEY_FROM_REGISTER = "Register"
     }
 
-    private lateinit var ui: RegisterActivityUI
-    private lateinit var registerViewModel: RegisterViewModel
-    private val countries = mutableListOf<Country>()
     internal var isoCode: String? = null
+    private lateinit var ui: RegisterActivityUI
+    private lateinit var viewModel: RegisterViewModel
     private var avatarBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = RegisterActivityUI(CountryAdapter(this, countries))
+        viewModel = RegisterViewModel(this, true)
+        ui = RegisterActivityUI(viewModel.countries)
         ui.setContentView(this)
-        if (intent.extras != null && intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_REGISTER) {
-            registerViewModel = RegisterViewModel(this, true)
-        } else {
-            registerViewModel = RegisterViewModel(this, false)
-            addDisposables(registerViewModel.getUser()
+        if (intent.extras != null && intent.extras.getInt(KEY_FROM_REGISTER) == REQUEST_UPDATE) {
+            viewModel.isRegister = false
+            addDisposables(viewModel.getUser()
                     .observeOnUiThread()
                     .subscribe(this::handleGetUserCompleted, this::handleGetUserError))
             ui.btnRegister.text = getString(R.string.register_update)
@@ -63,26 +62,30 @@ class RegisterActivity : BaseActivity() {
 
     override fun onBindViewModel() {
         addDisposables(
-                registerViewModel.getCountries()
+                viewModel.getCountries()
                         .observeOnUiThread()
                         .subscribe(this::handleGetCountriesCompleted),
 
-                registerViewModel.progressBarStatus
+                viewModel.progressBarStatus
                         .observeOnUiThread()
                         .subscribe(this::handleGetProgressBarStatusCompleted),
 
-                registerViewModel.createDefaultUserStatus
+                viewModel.createDefaultUserStatus
                         .observeOnUiThread()
                         .subscribe(this::handleSkipClicked),
 
-                registerViewModel.backStatus
+                viewModel.backStatus
                         .observeOnUiThread()
-                        .subscribe(this::handleBackKeyEvent))
+                        .subscribe(this::handleBackKeyEvent),
+
+                viewModel.countryObservable
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetCountryCompleted))
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        registerViewModel.eventBackPressed()
+        viewModel.eventBackPressed()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -123,10 +126,10 @@ class RegisterActivity : BaseActivity() {
     }
 
     internal fun onHandleTextChange(name: String, phone: String) {
-        if (registerViewModel.isRegister) {
+        if (viewModel.isRegister) {
             ui.btnRegister.isEnabled = !(name.isBlank() && phone.isBlank())
         } else {
-            ui.btnRegister.isEnabled = registerViewModel.isEnableUpdateButton(name, phone, avatarBitmap)
+            ui.btnRegister.isEnabled = viewModel.isEnableUpdateButton(name, phone, avatarBitmap)
         }
     }
 
@@ -135,9 +138,9 @@ class RegisterActivity : BaseActivity() {
             ui.frAvatar -> checkPermissionGallery()
 
             ui.tvSkip ->
-                if (registerViewModel.isRegister) {
+                if (viewModel.isRegister) {
                     // Create default user
-                    registerViewModel.createUserDefault(getString(R.string.register_user_name_default))
+                    viewModel.createUserDefault(getString(R.string.register_user_name_default))
                 } else {
                     // Come back Home when cancel update user
                     startActivity<HomeActivity>()
@@ -145,21 +148,22 @@ class RegisterActivity : BaseActivity() {
 
             ui.btnRegister -> {
                 // Create User param
-                val userParam = registerViewModel.generateUserInformation(
+                // TODO
+                val userParam = viewModel.generateUserInformation(
                         ui.edtName.text.toString().trim(),
                         ui.edtPhone.text.toString().trim(),
                         isoCode, avatarBitmap)
 
-                if (registerViewModel.isRegister) {
+                if (viewModel.isRegister) {
                     // Register user
-                    addDisposables(registerViewModel.createUser(userParam)
+                    addDisposables(viewModel.createUser(userParam)
                             .observeOnUiThread()
                             .subscribe(this::handleCreateUserCompleted))
                     // Save login status to SharePreference
-                    registerViewModel.saveLoginStatus(true)
+                    viewModel.saveLoginStatus(true)
                 } else {
                     // Update user
-                    addDisposables(registerViewModel.updateUser(userParam)
+                    addDisposables(viewModel.updateUser(userParam)
                             .observeOnUiThread()
                             .subscribe(this::handleUpdateUserCompleted))
                 }
@@ -190,23 +194,16 @@ class RegisterActivity : BaseActivity() {
         ui.edtPhone.setText(user.phone)
         val basePhone: List<String>? = user.phone?.split("/")
         if (basePhone != null) {
-            if (basePhone.size > 1) {
-                // Set isoCode
-                isoCode = basePhone[0]
-                for (i in 0 until countries.size) {
-                    if (isoCode == countries[i].iso) {
-                        val country = countries[i]
-                        val telephone = country.tel
-                        ui.tvTel.text = getString(R.string.register_plus).plus(telephone)
-                        Picasso.with(this).load(country.flagFilePath).into(ui.imgFlag)
-                        break
-                    }
-                }
-                ui.edtPhone.setText(basePhone[1])
-            } else {
-                ui.edtPhone.setText(basePhone[0])
-            }
+            ui.edtPhone.setText(basePhone[1])
+        } else {
+            ui.edtPhone.setText(getString(R.string.register_unknown))
         }
+    }
+
+    private fun handleGetCountryCompleted(country: Country) {
+        isoCode = country.iso
+        ui.tvTel.text = getString(R.string.register_plus).plus(country.tel)
+        Picasso.with(this).load(country.flagFilePath).into(ui.imgFlag)
     }
 
     private fun handleGetUserError(t: Throwable) {
@@ -221,10 +218,8 @@ class RegisterActivity : BaseActivity() {
         toast(responseStatus.message)
     }
 
-    private fun handleGetCountriesCompleted(list: List<Country>) {
-        countries.clear()
-        countries.addAll(list)
-        ui.countryAdapter.notifyDataSetChanged()
+    private fun handleGetCountriesCompleted(diff: DiffUtil.DiffResult) {
+        diff.dispatchUpdatesTo(ui.countryAdapter)
     }
 
     private fun handleBackKeyEvent(isBack: Boolean) {
@@ -253,7 +248,7 @@ class RegisterActivity : BaseActivity() {
             title = getString(R.string.register_title_dialog)
             message = getString(R.string.register_message_dialog)
             yesButton {
-                addDisposables(registerViewModel.createUser(userParam)
+                addDisposables(viewModel.createUser(userParam)
                         .subscribe(this@RegisterActivity::handleCreateUserCompleted))
                 startActivity<HomeActivity>()
             }

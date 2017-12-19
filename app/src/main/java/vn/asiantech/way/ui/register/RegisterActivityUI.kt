@@ -15,6 +15,7 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onEditorAction
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.extension.circleImageView
 import vn.asiantech.way.extension.hideKeyboard
 import vn.asiantech.way.extension.onTextChangeListener
@@ -23,7 +24,7 @@ import vn.asiantech.way.extension.onTextChangeListener
  * Anko layout for RegisterActivity
  * Created by haingoq on 27/11/2017.
  */
-class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<RegisterActivity> {
+class RegisterActivityUI(countries: List<Country>) : AnkoComponent<RegisterActivity> {
 
     internal lateinit var frAvatar: FrameLayout
     internal lateinit var progressBarAvatar: ProgressBar
@@ -35,6 +36,7 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
     internal lateinit var btnRegister: Button
     internal lateinit var tvSkip: TextView
     internal lateinit var progressBar: ProgressBar
+    internal val countryAdapter = CountryAdapter(countries)
 
     private lateinit var dialogInterface: DialogInterface
 

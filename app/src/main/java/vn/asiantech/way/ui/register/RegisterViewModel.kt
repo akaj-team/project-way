@@ -3,33 +3,54 @@ package vn.asiantech.way.ui.register
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
+import android.support.v7.util.DiffUtil
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.extension.toBase64
+import vn.asiantech.way.ui.base.Diff
 import vn.asiantech.way.utils.AppConstants
 
 /**
  *
  * Created by tien.hoang on 11/29/17.
  */
-class RegisterViewModel(private val wayRepository: WayRepository, private val assetDataRepository: LocalRepository, val isRegister: Boolean) {
+class RegisterViewModel(private val wayRepository: WayRepository, private val assetDataRepository: LocalRepository, var isRegister: Boolean) {
     internal val createDefaultUserStatus = PublishSubject.create<UserParams>()
     internal val progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     internal val backStatus: PublishSubject<Boolean> = PublishSubject.create()
+    internal val countryObservable: SingleSubject<Country> = SingleSubject.create()
+    internal val countries = mutableListOf<Country>()
     private var lastClickTime = 0L
     private lateinit var user: User
 
     constructor(context: Context, isRegister: Boolean) : this(WayRepository(), LocalRepository(context), isRegister)
 
-    internal fun getCountries(): Observable<List<Country>> = assetDataRepository.getCountries()
+    internal fun getCountries(): Observable<DiffUtil.DiffResult> {
+        return assetDataRepository.getCountries()
+                .map {
+                    val diff = Diff(countries, it)
+                            .areItemsTheSame { oldItem, newItem ->
+                                oldItem.iso == newItem.iso
+                            }
+                            .areContentsTheSame { oldItem, newItem ->
+                                oldItem.countryName == newItem.countryName &&
+                                        oldItem.flagFilePath == newItem.flagFilePath
+                            }
+                            .calculateDiff()
+                    countries.clear()
+                    countries.addAll(it)
+                    diff
+                }
+    }
 
     internal fun createUser(userParams: UserParams): Observable<ResponseStatus> = wayRepository.createUser(userParams)
 
@@ -51,6 +72,16 @@ class RegisterViewModel(private val wayRepository: WayRepository, private val as
         return wayRepository.getUser()
                 .doOnSuccess {
                     user = it
+                    val basePhone: List<String>? = user.phone?.split("/")
+                    if (basePhone != null) {
+                        val isoCode = basePhone[0]
+                        for (i in 0 until countries.size) {
+                            if (isoCode == countries[i].iso) {
+                                countryObservable.onSuccess(countries[i])
+                                break
+                            }
+                        }
+                    }
                     progressBarStatus.onNext(false)
                 }
                 .doOnError { progressBarStatus.onNext(false) }

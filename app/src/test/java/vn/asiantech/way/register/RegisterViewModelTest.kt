@@ -1,23 +1,27 @@
 package vn.asiantech.way.register
 
+import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import com.hypertrack.lib.models.User
 import com.hypertrack.lib.models.UserParams
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.SingleSubject
+import org.hamcrest.CoreMatchers
+import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import vn.asiantech.way.util.TestUtil
 import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
 import vn.asiantech.way.ui.register.RegisterViewModel
+import vn.asiantech.way.util.TestUtil
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -86,18 +90,35 @@ class RegisterViewModelTest {
     fun `Given countries - When get countries - Then return right countries`() {
         /* Given */
         val countries = listOf(Country("84", "12345"), Country("12", "123456789"))
-        val getCountriesTest = TestObserver<List<Country>>()
+        val getCountriesTest = TestObserver<DiffUtil.DiffResult>()
         `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(countries))
 
         /* When */
         viewModel.getCountries().subscribe(getCountriesTest)
 
         /* Then */
-        getCountriesTest.assertValue { it.size == countries.size }
-        getCountriesTest.assertValue { it[0].iso == countries[0].iso }
-        getCountriesTest.assertValue { it[0].tel == countries[0].tel }
-        getCountriesTest.assertValue { it[1].iso == countries[1].iso }
-        getCountriesTest.assertValue { it[1].tel == countries[1].tel }
+        getCountriesTest.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    Assert.assertThat(position, CoreMatchers.`is`(0))
+                    Assert.assertThat(count, CoreMatchers.`is`(2))
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+            })
+            true
+        }
+        Assert.assertThat(viewModel.countries.size, `is`(2))
     }
 
     @Test
