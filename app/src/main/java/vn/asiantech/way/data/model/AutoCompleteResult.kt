@@ -19,3 +19,4 @@ data class AutoCompleteLocation(var description: String,
  *  Structured formatting from google map autocomplete api.
  */
 data class StructuredFormatting(@SerializedName("main_text") var mainText: String)
+
