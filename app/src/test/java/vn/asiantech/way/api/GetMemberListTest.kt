@@ -40,7 +40,7 @@ class GetMemberListTest {
     }
 
     @Test
-    fun `Given any group id - When request getGroupMembers - Then return Response Object with results attribute is user mutable list`() {
+    fun `Given any group id - When request getGroupMembers - Then return response object with results attribute is user mutable list`() {
         /* Given */
         val test = TestObserver<Response<MutableList<User>>>()
         server.addResponseBody("groupMemberList.json")

@@ -3,7 +3,6 @@ package vn.asiantech.way.api
 import com.hypertrack.lib.models.User
 import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.After
 import org.junit.Assert.assertThat
@@ -39,7 +38,7 @@ class AddUserToGroupTest {
     }
 
     @Test
-    fun `Given any group id and any user id - When call addUserToGroup - Then return User object`() {
+    fun `Given any group id and any user id - When call addUserToGroup - Then return user object`() {
         /* Given */
         val test = TestObserver<User>()
         server.addResponseBody("addUserToGroupResult.json")
@@ -49,7 +48,7 @@ class AddUserToGroupTest {
 
         /* Then */
         val request = server.takeRequest()
-        assertThat(request.method.toUpperCase(), CoreMatchers.`is`("PATCH"))
+        assertThat(request.method.toUpperCase(), `is`("PATCH"))
         assertThat(request.getHeader("Authorization"), `is`("token sk_test_3b4f98fbf6b58eb9d6f710c98c7fcb7a52d2acb6"))
 
         test.assertValue {
