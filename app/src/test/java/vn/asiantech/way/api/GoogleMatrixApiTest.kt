@@ -2,7 +2,8 @@ package vn.asiantech.way.api
 
 import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.hasItems
 import org.junit.*
 import org.junit.runners.MethodSorters
 import vn.asiantech.way.data.model.ResultDistance
@@ -43,18 +44,18 @@ class GoogleMatrixApiTest {
 
         /* Then */
         val request = server.takeRequest()
-        Assert.assertThat(request.method.toUpperCase(), CoreMatchers.`is`("GET"))
-        Assert.assertThat(request.requestUrl.queryParameterNames(), CoreMatchers.hasItems("units", "origins", "destinations"))
-        Assert.assertThat(request.requestUrl.queryParameter("origins"), CoreMatchers.`is`("16.083833,108.243501"))
-        Assert.assertThat(request.requestUrl.queryParameter("destinations"), CoreMatchers.`is`("16.084153,108.242214"))
+        Assert.assertThat(request.method.toUpperCase(), `is`("GET"))
+        Assert.assertThat(request.requestUrl.queryParameterNames(), hasItems("units", "origins", "destinations"))
+        Assert.assertThat(request.requestUrl.queryParameter("origins"), `is`("16.083833,108.243501"))
+        Assert.assertThat(request.requestUrl.queryParameter("destinations"), `is`("16.084153,108.242214"))
 
         test.assertValue {
             val item = it.rows[0].elements[0]
-            Assert.assertThat(it.rows.size, CoreMatchers.`is`(1))
-            Assert.assertThat(item.distance.text, CoreMatchers.`is`("0.4 km"))
-            Assert.assertThat(item.distance.value, CoreMatchers.`is`(351))
-            Assert.assertThat(item.duration.text, CoreMatchers.`is`("1 min"))
-            Assert.assertThat(item.duration.value, CoreMatchers.`is`(76))
+            Assert.assertThat(it.rows.size, `is`(1))
+            Assert.assertThat(item.distance.text, `is`("0.4 km"))
+            Assert.assertThat(item.distance.value, `is`(351))
+            Assert.assertThat(item.duration.text, `is`("1 min"))
+            Assert.assertThat(item.duration.value, `is`(76))
 
             it.rows.isNotEmpty()
         }

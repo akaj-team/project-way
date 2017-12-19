@@ -2,7 +2,8 @@ package vn.asiantech.way.api
 
 import io.reactivex.observers.TestObserver
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.hasItems
 import org.junit.*
 import org.junit.runners.MethodSorters
 import vn.asiantech.way.data.model.ResultRoad
@@ -44,20 +45,20 @@ class GoogleSnapToRoadApiTest {
 
         /* Then */
         val request = server.takeRequest()
-        Assert.assertThat(request.method.toUpperCase(), CoreMatchers.`is`("GET"))
-        Assert.assertThat(request.requestUrl.queryParameterNames(), CoreMatchers.hasItems("path", "interpolate", "key"))
-        Assert.assertThat(request.requestUrl.queryParameter("path"), CoreMatchers.`is`("16.0798071,108.2364393|16.0803531,108.2354526"))
-        Assert.assertThat(request.requestUrl.queryParameter("interpolate"), CoreMatchers.`is`("true"))
-        Assert.assertThat(request.requestUrl.queryParameter("key"), CoreMatchers.`is`("AIzaSyCZc4PAEpeVC18QnS5fPBt5hk3EFMbFjj8"))
+        Assert.assertThat(request.method.toUpperCase(), `is`("GET"))
+        Assert.assertThat(request.requestUrl.queryParameterNames(), hasItems("path", "interpolate", "key"))
+        Assert.assertThat(request.requestUrl.queryParameter("path"), `is`("16.0798071,108.2364393|16.0803531,108.2354526"))
+        Assert.assertThat(request.requestUrl.queryParameter("interpolate"), `is`("true"))
+        Assert.assertThat(request.requestUrl.queryParameter("key"), `is`("AIzaSyCZc4PAEpeVC18QnS5fPBt5hk3EFMbFjj8"))
 
         test.assertValue {
-            Assert.assertThat(it.locationRoads.size, CoreMatchers.`is`(9))
-            Assert.assertThat(it.locationRoads[0].point.latitude, CoreMatchers.`is`(16.079881331167627))
-            Assert.assertThat(it.locationRoads[0].point.longitude, CoreMatchers.`is`(108.23634932975393))
-            Assert.assertThat(it.locationRoads[0].placeId, CoreMatchers.`is`("ChIJVXmLIycYQjERpY4bM9aTUG8"))
-            Assert.assertThat(it.locationRoads[8].point.latitude, CoreMatchers.`is`(16.080934072276641))
-            Assert.assertThat(it.locationRoads[8].point.longitude, CoreMatchers.`is`(108.23596334365941))
-            Assert.assertThat(it.locationRoads[8].placeId, CoreMatchers.`is`("ChIJnXA9wiAYQjERQ1CTfr7tnSE"))
+            Assert.assertThat(it.locationRoads.size, `is`(9))
+            Assert.assertThat(it.locationRoads[0].point.latitude, `is`(16.079881331167627))
+            Assert.assertThat(it.locationRoads[0].point.longitude, `is`(108.23634932975393))
+            Assert.assertThat(it.locationRoads[0].placeId, `is`("ChIJVXmLIycYQjERpY4bM9aTUG8"))
+            Assert.assertThat(it.locationRoads[8].point.latitude, `is`(16.080934072276641))
+            Assert.assertThat(it.locationRoads[8].point.longitude, `is`(108.23596334365941))
+            Assert.assertThat(it.locationRoads[8].placeId, `is`("ChIJnXA9wiAYQjERQ1CTfr7tnSE"))
 
             it.locationRoads.isNotEmpty()
         }
