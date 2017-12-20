@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.invite
 
+import android.support.v7.util.DiffUtil
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -7,6 +8,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
+import vn.asiantech.way.ui.base.Diff
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
 
@@ -17,11 +19,40 @@ import java.util.concurrent.TimeUnit
 class InviteViewModel(private val groupRepository: GroupRepository) {
     internal var resetDataStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val searchInviteObservable = PublishSubject.create<String>()
+    internal val updateAutocompleteList = PublishSubject.create<DiffUtil.DiffResult>()
+    internal var users = mutableListOf<User>()
+
+    init {
+        initSearchListUser()
+    }
 
     constructor() : this(GroupRepository())
 
     internal fun searchListUser(query: String = "") {
         searchInviteObservable.onNext(query)
+    }
+
+    private fun initSearchListUser() {
+        searchInviteObservable
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .filter { it.isNotEmpty() }
+                .flatMap {
+                    getListUser(it)
+                }.doOnNext {
+            val diff = Diff(users, it)
+                    .areItemsTheSame { oldItem, newItem ->
+                        oldItem.id == newItem.id
+                    }
+                    .areContentsTheSame { oldItem, newItem ->
+                        oldItem.name == newItem.name
+                    }
+                    .calculateDiff()
+
+            users.clear()
+            users.addAll(it)
+            updateAutocompleteList.onNext(diff)
+        }.subscribe()
     }
 
     internal fun triggerSearchListUser(): Observable<List<User>> =
