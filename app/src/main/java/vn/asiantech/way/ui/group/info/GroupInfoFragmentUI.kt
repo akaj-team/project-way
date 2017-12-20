@@ -25,7 +25,7 @@ import vn.asiantech.way.R
  *
  * Created by haingoq on 28/11/2017.
  */
-class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
+class GroupInfoFragmentUI(userId: String, users: MutableList<User>)
     : AnkoComponent<GroupInfoFragment> {
 
     internal lateinit var tvGroupName: TextView
@@ -33,7 +33,7 @@ class GroupInfoFragmentUI(userId: String, members: MutableList<User>)
     internal lateinit var tvCreateAt: TextView
     internal lateinit var imgApprove: ImageView
     internal lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    internal val memberListAdapter = MemberListAdapter(userId, members)
+    internal val memberListAdapter = MemberListAdapter(userId, users)
 
     override fun createView(ui: AnkoContext<GroupInfoFragment>) = with(ui) {
         verticalLayout {
