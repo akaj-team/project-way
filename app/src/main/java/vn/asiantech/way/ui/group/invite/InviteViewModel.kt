@@ -70,6 +70,9 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
 
     private fun getListUser(name: String): Observable<List<User>> = groupRepository
             .searchUser(name)
-            .doOnSubscribe { resetDataStatus.onNext(true) }
+            .doOnSubscribe {
+                users.clear()
+                resetDataStatus.onNext(true)
+            }
             .subscribeOn(Schedulers.io())
 }

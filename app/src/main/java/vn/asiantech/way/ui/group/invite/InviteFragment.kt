@@ -113,8 +113,7 @@ class InviteFragment : BaseFragment() {
      */
     private fun handleClearDataListWhenStartSearch(isReset: Boolean) {
         if (isReset) {
-            viewModel.users.clear()
-            ui.userListAdapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 }
