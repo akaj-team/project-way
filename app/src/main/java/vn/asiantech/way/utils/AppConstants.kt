@@ -28,7 +28,6 @@ object AppConstants {
     const val PROGRESS_BAR_MAX = 100
     const val MIN_SPEED = 0.2
     const val MAX_SPEED = 15.5
-    const val NUM_CHAR_REMOVE = 3
     // Key SharePref Tracking
     const val KEY_TRACKING_HISTORY = "tracking_history"
     const val KEY_USER_ID = "key_user_id"

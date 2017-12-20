@@ -8,7 +8,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.SingleSubject
-import org.hamcrest.CoreMatchers
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Before
@@ -87,17 +86,17 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun `Given countries - When get countries - Then return right countries`() {
+    fun `Given null old countries - When get countries - Then return right diff`() {
         /* Given */
         val countries = listOf(Country("84", "12345"), Country("12", "123456789"))
-        val getCountriesTest = TestObserver<DiffUtil.DiffResult>()
+        val getDiffCountriesTest = TestObserver<DiffUtil.DiffResult>()
         `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(countries))
 
         /* When */
-        viewModel.getCountries().subscribe(getCountriesTest)
+        viewModel.getCountries().subscribe(getDiffCountriesTest)
 
         /* Then */
-        getCountriesTest.assertValue {
+        getDiffCountriesTest.assertValue {
             it.dispatchUpdatesTo(object : ListUpdateCallback {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
                     // No-op
@@ -108,8 +107,8 @@ class RegisterViewModelTest {
                 }
 
                 override fun onInserted(position: Int, count: Int) {
-                    Assert.assertThat(position, CoreMatchers.`is`(0))
-                    Assert.assertThat(count, CoreMatchers.`is`(2))
+                    Assert.assertThat(position, `is`(0))
+                    Assert.assertThat(count, `is`(2))
                 }
 
                 override fun onRemoved(position: Int, count: Int) {
@@ -119,6 +118,134 @@ class RegisterViewModelTest {
             true
         }
         Assert.assertThat(viewModel.countries.size, `is`(2))
+        Assert.assertThat(viewModel.countries[0].iso, `is`("84"))
+        Assert.assertThat(viewModel.countries[0].tel, `is`("12345"))
+        Assert.assertThat(viewModel.countries[1].iso, `is`("12"))
+        Assert.assertThat(viewModel.countries[1].tel, `is`("123456789"))
+    }
+
+    @Test
+    fun `Given old countries already value - When get countries - Then return right diff`() {
+        /* Given */
+        val newCountries = listOf(Country("12", "1234567"), Country("45", "012"))
+        val getDiffCountriesTest = TestObserver<DiffUtil.DiffResult>()
+        viewModel.countries.addAll(listOf(Country("84", "12345")))
+        `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(newCountries))
+
+        /* When */
+        viewModel.getCountries().subscribe(getDiffCountriesTest)
+
+        /* Then */
+        getDiffCountriesTest.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    // No-op
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    // No-op
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(0))
+                    Assert.assertThat(count, `is`(2))
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(0))
+                    Assert.assertThat(count, `is`(1))
+                }
+            })
+            true
+        }
+        Assert.assertThat(viewModel.countries.size, `is`(2))
+        Assert.assertThat(viewModel.countries[0].iso, `is`("12"))
+        Assert.assertThat(viewModel.countries[0].tel, `is`("1234567"))
+        Assert.assertThat(viewModel.countries[1].iso, `is`("45"))
+        Assert.assertThat(viewModel.countries[1].tel, `is`("012"))
+    }
+
+    @Test
+    fun `Given old  size bigger new countries - When get countries - Then return right diff`() {
+        /* Given */
+        val newCountries = listOf(Country("12", "1234567"), Country("45", "012"))
+        val getDiffCountriesTest = TestObserver<DiffUtil.DiffResult>()
+        viewModel.countries.addAll(listOf(Country("45", "012"), Country("84", "0976545507"),Country("12", "1234567")))
+        `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(newCountries))
+
+        /* When */
+        viewModel.getCountries().subscribe(getDiffCountriesTest)
+
+        /* Then */
+        getDiffCountriesTest.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    // No-op
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    Assert.assertThat(fromPosition, `is`(1))
+                    Assert.assertThat(toPosition, `is`(0))
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    // No-op
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(1))
+                    Assert.assertThat(count, `is`(1))
+                }
+            })
+            true
+        }
+        Assert.assertThat(viewModel.countries.size, `is`(2))
+        Assert.assertThat(viewModel.countries[0].iso, `is`("12"))
+        Assert.assertThat(viewModel.countries[0].tel, `is`("1234567"))
+        Assert.assertThat(viewModel.countries[1].iso, `is`("45"))
+        Assert.assertThat(viewModel.countries[1].tel, `is`("012"))
+    }
+
+    @Test
+    fun `Given new countries similar id but difference value - When get countries - Then return right diff`() {
+        /* Given */
+        val newCountries = listOf(Country("12", "1234567"), Country("45", "012"))
+        val getDiffCountriesTest = TestObserver<DiffUtil.DiffResult>()
+        viewModel.countries.addAll(listOf(Country("12", "01234"), Country("84", "12345") , Country("01", "0976545507")))
+        `when`(assetDataRepository.getCountries()).thenReturn(Observable.just(newCountries))
+
+        /* When */
+        viewModel.getCountries().subscribe(getDiffCountriesTest)
+
+        /* Then */
+        getDiffCountriesTest.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    Assert.assertThat(position, `is`(0))
+                    Assert.assertThat(count, `is`(1))
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    // No-op
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(1))
+                    Assert.assertThat(count, `is`(1))
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(1))
+                    Assert.assertThat(count, `is`(2))
+                }
+            })
+            true
+        }
+        Assert.assertThat(viewModel.countries.size, `is`(2))
+        Assert.assertThat(viewModel.countries[0].iso, `is`("12"))
+        Assert.assertThat(viewModel.countries[0].tel, `is`("1234567"))
+        Assert.assertThat(viewModel.countries[1].iso, `is`("45"))
+        Assert.assertThat(viewModel.countries[1].tel, `is`("012"))
     }
 
     @Test

@@ -15,6 +15,7 @@ import vn.asiantech.way.data.model.Country
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.data.source.remote.response.ResponseStatus
+import vn.asiantech.way.extension.getCountryByIso
 import vn.asiantech.way.extension.toBase64
 import vn.asiantech.way.ui.base.Diff
 import vn.asiantech.way.utils.AppConstants
@@ -42,8 +43,8 @@ class RegisterViewModel(private val wayRepository: WayRepository, private val as
                                 oldItem.iso == newItem.iso
                             }
                             .areContentsTheSame { oldItem, newItem ->
-                                oldItem.countryName == newItem.countryName &&
-                                        oldItem.flagFilePath == newItem.flagFilePath
+                                oldItem.tel == newItem.tel &&
+                                        oldItem.countryName == newItem.countryName
                             }
                             .calculateDiff()
                     countries.clear()
@@ -60,7 +61,8 @@ class RegisterViewModel(private val wayRepository: WayRepository, private val as
             .doOnError { progressBarStatus.onNext(false) }
 
     internal fun isEnableUpdateButton(name: String, phone: String, avatar: Bitmap?): Boolean {
-        if (name == user.name && phone == user.phone.removeRange(0, AppConstants.NUM_CHAR_REMOVE)
+        val numberCharRemove = phone.split("/")[0].length + 1
+        if (name == user.name && phone == user.phone.removeRange(0, numberCharRemove)
                 && avatar != null) {
             return false
         }
@@ -75,11 +77,8 @@ class RegisterViewModel(private val wayRepository: WayRepository, private val as
                     val basePhone: List<String>? = user.phone?.split("/")
                     if (basePhone != null) {
                         val isoCode = basePhone[0]
-                        for (i in 0 until countries.size) {
-                            if (isoCode == countries[i].iso) {
-                                countryObservable.onSuccess(countries[i])
-                                break
-                            }
+                        countries.getCountryByIso(isoCode)?.let {
+                            countryObservable.onSuccess(it)
                         }
                     }
                     progressBarStatus.onNext(false)
