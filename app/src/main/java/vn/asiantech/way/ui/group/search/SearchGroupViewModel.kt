@@ -68,6 +68,7 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .flatMap { searchGroup(it) }
+                .observeOn(Schedulers.computation())
                 .doOnNext {
                     val diff = Diff(groups, it)
                             .areItemsTheSame { oldItem, newItem ->

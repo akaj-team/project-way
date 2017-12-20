@@ -14,7 +14,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.data.model.Group
-import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.ui.group.search.SearchGroupViewModel
 import vn.asiantech.way.util.RxSchedulersOverrideRule
@@ -110,5 +109,6 @@ class SearchGroupViewModelTest {
 
         /* Then */
         test.assertValues(true, false)
+
     }
 }

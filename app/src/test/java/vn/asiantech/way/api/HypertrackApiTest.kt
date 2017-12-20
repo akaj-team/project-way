@@ -79,8 +79,6 @@ class HypertrackApiTest {
 
         /* Then */
         val request = server.takeRequest()
-
-        print(request.body.toString())
         assertThat(request.method.toUpperCase(), `is`("PATCH"))
         assertThat(request.requestUrl.pathSegments(), hasItems("userId"))
         assertThat(request.body.readUtf8(), `is`("{\"group_id\":\"groupId\"}"))
