@@ -100,11 +100,11 @@ class RegisterViewModelTest {
         getCountriesTest.assertValue {
             it.dispatchUpdatesTo(object : ListUpdateCallback {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
 
                 override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
 
                 override fun onInserted(position: Int, count: Int) {
@@ -113,7 +113,7 @@ class RegisterViewModelTest {
                 }
 
                 override fun onRemoved(position: Int, count: Int) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
             })
             true
