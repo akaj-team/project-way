@@ -148,6 +148,9 @@
     <string name="invite_text_cancel">Cancel</string>
     <string name="item_user_invite">Invite</string>
     <string name="item_user_text_hint">Enter user name</string>
+
     <string name="text_search_edit_text_hint">Search for a look, style, or an item</string>
     <string name="text_search_cancel">Cancel</string>
+    <string name="text_search_recent_header">Recent Searches</string>
+    <string name="text_search_popular_header">Popular Searches</string>
 </resources>

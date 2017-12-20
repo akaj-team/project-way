@@ -162,6 +162,9 @@ dependencies {
     // Dependencies for local unit tests
     testImplementation "junit:junit:4.12"
     testImplementation 'org.mockito:mockito-inline:2.11.0'
+
+    // Shape Image V
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
 
 /*

@@ -13,14 +13,12 @@ import vn.asiantech.way.R
 class HeaderSearchItemUI : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>): View {
         val textView = with(ui) {
-            linearLayout {
-                textView {
+            textView {
                     id = R.id.text_search_recent_iten_header_name
                     textSize = 14f
                     textColorResource = R.color.colorBlack
                     typeface = Typeface.DEFAULT_BOLD
                     verticalPadding = dimen(R.dimen.text_search_padding)
-                }
             }
         }
         textView.tag = RecentSearchAdapter.HeaderViewHolder(textView)

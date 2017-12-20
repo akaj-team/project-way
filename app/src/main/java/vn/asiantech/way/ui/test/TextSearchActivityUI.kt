@@ -23,6 +23,18 @@ class TextSearchActivityUI : AnkoComponent<TestActivity> {
 
     private lateinit var imgClearText: ImageView
     private lateinit var edtSearchQuery: EditText
+    private val recentList = mutableListOf<Any>()
+
+    init {
+        recentList.add(HeaderModel(R.string.text_search_recent_header))
+        recentList.add(RecentModel("Lưu Diệc Phi", "Thần tiên tỷ tỷ", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(RecentModel("Lưu Diệc Phi", "Thần tiên tỷ tỷ", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(RecentModel("Lưu Diệc Phi", "Thần tiên tỷ t", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(HeaderModel(R.string.text_search_popular_header))
+        recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+    }
 
     override fun createView(ui: AnkoContext<TestActivity>) = with(ui) {
         verticalLayout {
@@ -86,7 +98,7 @@ class TextSearchActivityUI : AnkoComponent<TestActivity> {
 
                 recyclerView {
                     layoutManager = LinearLayoutManager(ctx)
-                    adapter = RecentSearchAdapter()
+                    adapter = RecentSearchAdapter(recentList)
                 }
             }.lparams(matchParent, matchParent) {
                 topMargin = dimen(R.dimen.text_search_padding)

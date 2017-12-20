@@ -135,4 +135,6 @@
     <item name="text_search_recent_item_tv_name" type="id" />
     <item name="text_search_recent_item_tv_description" type="id" />
     <item name="text_search_recent_iten_header_name" type="id" />
+    <item name="text_search_popular_item_tv_name" type="id" />
+    <item name="text_search_popular_item_img_icon" type="id" />
 </resources>
