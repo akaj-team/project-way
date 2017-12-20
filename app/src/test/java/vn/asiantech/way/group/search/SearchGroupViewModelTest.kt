@@ -1,18 +1,25 @@
 package vn.asiantech.way.group.search
 
+import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
+import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.`is`
+import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.util.TestUtil
 import vn.asiantech.way.data.model.Group
-import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.ui.group.search.SearchGroupViewModel
+import vn.asiantech.way.util.RxSchedulersOverrideRule
 
 /**
  *  Copyright © 2017 AsianTech inc.
@@ -25,6 +32,9 @@ class SearchGroupViewModelTest {
     private lateinit var groupRepository: GroupRepository
     private lateinit var viewModel: SearchGroupViewModel
 
+    @get:Rule
+    val rule = RxSchedulersOverrideRule()
+
     @Before
     fun initTest() {
         MockitoAnnotations.initMocks(this)
@@ -34,20 +44,42 @@ class SearchGroupViewModelTest {
     @Test
     fun `Given a group name - When call trigger search group - Then return list Group`() {
         /* Given */
-        val testGroup = TestObserver<List<Group>>()
-        val groups = mutableListOf<Group>()
+        val groups = mutableListOf<Group>(Group("1", "groupName", "xxxx", "xxx", "xxx", "xxx"),
+                Group("2", "groupName", "xxxx", "xxx", "xxx", "xxx"))
         val groupName = "groupName"
-        val invite = Invite("from", "to", "groupName", true)
-        `when`(groupRepository.getCurrentRequestOfUser(TestUtil.any())).thenReturn(Observable.just(invite))
+        val updateListViewStatus = TestObserver<DiffUtil.DiffResult>()
+
         `when`(groupRepository.searchGroup(TestUtil.any())).thenReturn(Observable.just(groups))
 
-
         /* When */
-        groupRepository.searchGroup(groupName).subscribe(testGroup)
-        viewModel.triggerSearchGroup().subscribe(testGroup)
+        viewModel.updateGroupList.subscribeOn(Schedulers.computation()).subscribe(updateListViewStatus)
+        viewModel.eventAfterTextChanged(groupName)
 
         /* Then */
-        testGroup.assertValue { it == groups }
+        updateListViewStatus.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    Assert.assertThat(position, `is`(0))
+                    Assert.assertThat(count, `is`(2))
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+            })
+            true
+        }
+        Assert.assertThat(viewModel.groups.size, `is`(2))
+        Assert.assertThat(viewModel.groups[0].id, `is`("1"))
+        Assert.assertThat(viewModel.groups[0].name, `is`("groupName"))
     }
 
     @Test

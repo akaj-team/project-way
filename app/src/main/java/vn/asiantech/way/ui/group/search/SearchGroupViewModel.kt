@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
+import android.support.v7.util.DiffUtil
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -8,6 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
+import vn.asiantech.way.ui.base.Diff
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
 
@@ -19,8 +21,16 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
     private val searchGroupObservable = PublishSubject.create<String>()
     internal var currentRequest: Invite = Invite("", "", "", false)
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
+    internal val updateGroupList = PublishSubject.create<DiffUtil.DiffResult>()
+    internal var groups = mutableListOf<Group>()
 
-    constructor(userId: String) : this(GroupRepository(), userId)
+    init {
+        initSearchGroup()
+    }
+
+    constructor(userId: String) : this(GroupRepository(), userId) {
+        getCurrentRequestOfUser()
+    }
 
     private fun searchGroup(query: String): Observable<List<Group>> = groupRepository
             .searchGroup(query)
@@ -43,15 +53,34 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                 }
     }
 
-    internal fun triggerSearchGroup(): Observable<List<Group>> = groupRepository
-            .getCurrentRequestOfUser(userId)
-            .doOnNext { currentRequest = it }
-            .flatMap {
-                searchGroupQuery()
-            }
+    private fun getCurrentRequestOfUser() {
+        groupRepository
+                .getCurrentRequestOfUser(userId)
+                .doOnNext {
+                    currentRequest = it
+                }.subscribe()
+    }
 
-    private fun searchGroupQuery(): Observable<List<Group>> = searchGroupObservable
-            .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
-            .flatMap { searchGroup(it) }
+    private fun initSearchGroup() {
+        searchGroupObservable
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .flatMap { searchGroup(it) }
+                .observeOn(Schedulers.computation())
+                .doOnNext {
+                    val diff = Diff(groups, it)
+                            .areItemsTheSame { oldItem, newItem ->
+                                oldItem.id == newItem.id
+                            }
+                            .areContentsTheSame { oldItem, newItem ->
+                                oldItem.name == newItem.name
+                            }
+                            .calculateDiff()
+
+                    groups.clear()
+                    groups.addAll(it)
+                    updateGroupList.onNext(diff)
+                }.subscribe()
+    }
+
 }
