@@ -73,6 +73,5 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
             .doOnSubscribe {
                 users.clear()
                 resetDataStatus.onNext(true)
-            }
-            .subscribeOn(Schedulers.io())
+            }.subscribeOn(Schedulers.io())
 }
