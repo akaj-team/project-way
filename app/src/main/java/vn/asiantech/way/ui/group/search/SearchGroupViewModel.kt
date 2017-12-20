@@ -25,10 +25,12 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
     internal val updateGroupList = PublishSubject.create<DiffUtil.DiffResult>()
     internal var groups = mutableListOf<Group>()
 
-    constructor(userId: String) : this(GroupRepository(), userId)
-
     init {
-        triggerSearchGroup()
+        initSearchGroup()
+    }
+
+    constructor(userId: String) : this(GroupRepository(), userId){
+        getCurrentRequestOfUser()
     }
 
     private fun searchGroup(query: String): Observable<List<Group>> = groupRepository
@@ -52,13 +54,19 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                 }
     }
 
-    internal fun triggerSearchGroup() {
+    private fun getCurrentRequestOfUser() {
         groupRepository
                 .getCurrentRequestOfUser(userId)
-                .doOnNext { currentRequest = it }
-                .flatMap {
-                    searchGroupQuery()
-                }
+                .doOnNext {
+                    currentRequest = it
+                }.subscribe()
+    }
+
+    private fun initSearchGroup() {
+        searchGroupObservable
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .flatMap { searchGroup(it) }
                 .observeOn(Schedulers.computation())
                 .doOnNext {
                     val diff = Diff(groups, it)
@@ -73,13 +81,8 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                     groups.clear()
                     groups.addAll(it)
                     updateGroupList.onNext(diff)
-                }.doOnError {
-            updateGroupList.onError(it)
-        }.subscribe()
+                }.subscribe()
+
     }
 
-    private fun searchGroupQuery(): Observable<List<Group>> = searchGroupObservable
-            .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
-            .flatMap { searchGroup(it) }
 }

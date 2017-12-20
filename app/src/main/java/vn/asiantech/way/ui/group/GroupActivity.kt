@@ -20,7 +20,6 @@ class GroupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = GroupActivityUI()
         ui.setContentView(this)
-        supportFragmentManager.beginTransaction().replace(id.group_activity_ui_fr_content, SearchGroupFragment.getInstance("")).commit()
     }
 
     override fun onBindViewModel() {

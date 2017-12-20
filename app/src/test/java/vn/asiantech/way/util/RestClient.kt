@@ -1,4 +1,4 @@
-package vn.asiantech.way
+package vn.asiantech.way.util
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
