@@ -1,7 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
 import android.support.v7.util.DiffUtil
-import android.util.Log.d
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -29,7 +28,7 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
         initSearchGroup()
     }
 
-    constructor(userId: String) : this(GroupRepository(), userId){
+    constructor(userId: String) : this(GroupRepository(), userId) {
         getCurrentRequestOfUser()
     }
 
@@ -82,7 +81,6 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                     groups.addAll(it)
                     updateGroupList.onNext(diff)
                 }.subscribe()
-
     }
 
 }

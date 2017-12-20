@@ -3,7 +3,6 @@ package vn.asiantech.way.ui.group.search
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.util.DiffUtil
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
