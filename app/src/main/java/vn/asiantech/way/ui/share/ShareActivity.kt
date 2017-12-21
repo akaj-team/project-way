@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.util.Log.d
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -36,6 +37,7 @@ import vn.asiantech.way.data.model.LocationRoad
 import vn.asiantech.way.data.model.Row
 import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.data.model.WayLocation
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.custom.ArrivedDialog
@@ -117,7 +119,8 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui.setContentView(this)
-        shareViewModel = ShareViewModel(this)
+        shareViewModel = ShareViewModel(WayRepository())
+        shareViewModel.registerBatteryReceiver(this)
         supportMapFragment = SupportMapFragment()
         if (intent.extras != null) {
             myLocation = intent.getParcelableExtra(AppConstants.KEY_LOCATION)
@@ -137,10 +140,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                 .subscribe(this::handleShowBatteryCapacity),
                 shareViewModel.getCalendarDateTime()
                         .observeOnUiThread()
-                        .subscribe(this::handleGetCurrentDateTime),
-                shareViewModel.result
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetCurrentLocation))
+                        .subscribe(this::handleGetCurrentDateTime))
     }
 
     override fun onLocationChanged(location: Location) {
@@ -264,6 +264,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     // Get ETA Distance and duration
     private fun handleDistanceETA(row: List<Row>) {
+        d("zxc", "aa $row")
         ui.trackingInfo.tvTime.text = resources.getString(R.string.eta, row[0].elements[0]
                 .duration.text)
         ui.trackingInfo.tvDistance.text = resources.getString(R.string.open_parentheses,
@@ -292,10 +293,10 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         ui.trackingInfo.circleProgressBar.circleProgressColor = ContextCompat.getColor(this, R.color.violet)
         ui.trackingInfo.tvStartTime.text = timeStart
         locationLatLng?.let {
-            addDisposables(shareViewModel.getLocationName(it)
+            addDisposables(shareViewModel.getLocationName(this, it)
                     .observeOnUiThread()
                     .subscribe(handleStartAddress),
-                    shareViewModel.getLocationName(destinationLatLng)
+                    shareViewModel.getLocationName(this, destinationLatLng)
                             .observeOnUiThread()
                             .subscribe(handleEndAddress),
                     shareViewModel.getCalendarDateTime()
@@ -400,7 +401,9 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun requestLocation() {
-        shareViewModel.getCurrentLocationHypertrack()
+        addDisposables(shareViewModel.getCurrentLocationHyperTrack()
+                .observeOnUiThread()
+                .subscribe(this::handleGetCurrentLocation))
     }
 
     private fun updateCurrentTimeView() {
@@ -412,6 +415,8 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
         currentLatLng = latLng
         // Get location distance estimate
+        d("zxc", "kdkdk " + "${latLng.latitude},${latLng.longitude}" +
+                "${destinationLatLng.latitude},${destinationLatLng.longitude}")
         addDisposables(shareViewModel
                 .getLocationDistance("${latLng.latitude},${latLng.longitude}",
                         "${destinationLatLng.latitude},${destinationLatLng.longitude}")
@@ -522,7 +527,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         val handleDescription: (string: String) -> Unit = { description = it }
         if (currentStatus != status) {
             if (status == STOP_STATUS) {
-                addDisposables(shareViewModel.getLocationName(latLng)
+                addDisposables(shareViewModel.getLocationName(this, latLng)
                         .observeOnUiThread()
                         .subscribe(handleDescription))
             } else {
@@ -645,7 +650,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
                     }
             addDestinationMarker(locationLatLng)
             currentLatLng?.let {
-                addDisposables(shareViewModel.getLocationName(it)
+                addDisposables(shareViewModel.getLocationName(this, it)
                         .observeOnUiThread()
                         .subscribe(this::getLocationName))
             }
@@ -660,7 +665,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     private fun setLocationNameWhenCameraMoving() {
         if (myLocation?.geometry?.location == null || action == AppConstants.ACTION_CHOOSE_ON_MAP) {
             locationLatLng?.let {
-                addDisposables(shareViewModel.getLocationName(it)
+                addDisposables(shareViewModel.getLocationName(this, it)
                         .observeOnUiThread()
                         .subscribe(this::getLocationName))
             }
@@ -670,7 +675,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
             if (lat != null && lng != null) {
                 locationLatLng = LatLng(lat, lng)
                 locationLatLng?.let {
-                    addDisposables(shareViewModel.getLocationName(it)
+                    addDisposables(shareViewModel.getLocationName(this, it)
                             .observeOnUiThread()
                             .subscribe(this::getLocationName))
                 }
@@ -722,7 +727,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun handleDrawCurrentMarker() {
-        addDisposables(shareViewModel.getCurrentLocation()
+        addDisposables(shareViewModel.getCurrentLocation(this)
                 .observeOnUiThread()
                 .subscribe(this::getCurrentLocation))
     }

@@ -4,22 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.os.BatteryManager
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
-import com.hypertrack.lib.HyperTrack
-import com.hypertrack.lib.callbacks.HyperTrackCallback
-import com.hypertrack.lib.models.*
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.utils.AppConstants
-import vn.asiantech.way.utils.LocationUtil
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,12 +19,10 @@ import java.util.*
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by datbuit. on 04/12/2017.
  */
-class ShareViewModel(val context: Context) {
+class ShareViewModel(private val wayRepository: WayRepository) {
     var batteryCapacity: BehaviorSubject<Int> = BehaviorSubject.create<Int>()
-    val result: BehaviorSubject<HyperTrackLocation> = BehaviorSubject.create<HyperTrackLocation>()
     private val resultDistancePerSecond = SingleSubject.create<List<Float>>()
     private val resultTimeDuring = SingleSubject.create<String>()
-    private val wayRepository = WayRepository()
     private val currentBatteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             val level = p1?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
@@ -47,7 +37,7 @@ class ShareViewModel(val context: Context) {
         private const val NUMBER_FOUR = 4.0
     }
 
-    init {
+    internal fun registerBatteryReceiver(context: Context) {
         context.registerReceiver(currentBatteryReceiver, IntentFilter(Intent
                 .ACTION_BATTERY_CHANGED))
     }
@@ -58,38 +48,14 @@ class ShareViewModel(val context: Context) {
     internal fun getListLocationWhenReOpen(url: String) =
             wayRepository.getListLocation(url).map { it.locationRoads }
 
-    internal fun getTrackingURL(): Single<String> {
-        val link = SingleSubject.create<String>()
-        val builder = ActionParamsBuilder()
-        HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
-            override fun onSuccess(response: SuccessResponse) {
-                if (response.responseObject != null) {
-                    val action = response.responseObject as? Action
-                    HyperTrack.clearServiceNotificationParams()
-                    val url = action?.trackingURL
-                    url?.let { link.onSuccess(it) }
-                }
-            }
+    internal fun getTrackingURL(): Single<String> = wayRepository.getTrackingURL()
 
-            override fun onError(errorResponse: ErrorResponse) {
-                Log.d("zxc", "at-datbui " + errorResponse.errorMessage)
-            }
-        })
-        return link
-    }
+    internal fun getLocationName(context: Context, latLng: LatLng): Single<String> =
+            wayRepository.getLocationName(context, latLng)
 
-    internal fun getLocationName(latLng: LatLng): Single<String> {
-        val locationName = SingleSubject.create<String>()
-        val geoCoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address> = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-        if (addresses.isNotEmpty()) {
-            val address: Address = addresses[0]
-            locationName.onSuccess(address.getAddressLine(0))
-        } else {
-            locationName.onSuccess("")
-        }
-        return locationName
-    }
+    internal fun getCurrentLocationHyperTrack() = wayRepository.getCurrentLocationHyperTrack()
+
+    internal fun getCurrentLocation(context: Context) = wayRepository.getCurrentLocation(context)
 
     internal fun getCalendarDateTime(): Single<String> {
         val result = SingleSubject.create<String>()
@@ -97,23 +63,6 @@ class ShareViewModel(val context: Context) {
         val simple = SimpleDateFormat("KK:mm a', Th'MM dd", Locale.ENGLISH)
         result.onSuccess(simple.format(calendar))
         return result
-    }
-
-    internal fun getCurrentLocationHypertrack() {
-        HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
-            override fun onSuccess(p0: SuccessResponse) {
-                try {
-                    val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
-                    result.onNext(hyperTrackLocation)
-                } catch (e: IOException) {
-                    Log.d("zxc", "ErrorResponse: " + e.message)
-                }
-            }
-
-            override fun onError(p0: ErrorResponse) {
-                Log.d("at-dinhvo", "ErrorResponse: " + p0.errorMessage)
-            }
-        })
     }
 
     internal fun compareLocation(currentLatLng: LatLng, destinationLatLng: LatLng): Single<Boolean> {
@@ -177,12 +126,6 @@ class ShareViewModel(val context: Context) {
         val result = SingleSubject.create<Float>()
         result.onSuccess(((degrees(Math.atan2(deltaLong, deltaPi)) + AppConstants.RADIUS) %
                 AppConstants.RADIUS).toFloat())
-        return result
-    }
-
-    internal fun getCurrentLocation(): Single<Location> {
-        val result = SingleSubject.create<Location>()
-        LocationUtil(context).getCurrentLocation()?.let { result.onSuccess(it) }
         return result
     }
 
