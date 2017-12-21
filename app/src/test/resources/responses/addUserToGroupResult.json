@@ -1,0 +1,49 @@
+{
+  "id": "0f3831a1-8131-4e70-be02-f6f85b1936f6",
+  "group_id": "e8a8e87e-1ac4-40ba-a1aa-47543ed1e5d1",
+  "lookup_id": "66666",
+  "name": "mmmm",
+  "phone": "VN/66666",
+  "photo": "https://hypertrack-api-v2-prod.s3.amazonaws.com/default_drivers/v2/a8.png",
+  "availability_status": "active",
+  "vehicle_type": "unknown",
+  "pending_actions": [
+    "315a64b7-e966-44c6-85f5-fcf2910152b6",
+    "5c82e131-8da7-40c6-8192-fda51942c253",
+    "83ca41e5-7f0d-4d3c-872e-28cdf22d59f6",
+    "0c866cf7-1b82-408a-a521-a2cc0be78c0f",
+    "330c29e6-69cd-4faa-acc9-2d55170e3120",
+    "13f9bf6f-b134-461f-9c50-c9f33eabccd7"
+  ],
+  "is_connected": true,
+  "last_location": {
+    "bearing": 333,
+    "activity_confidence": 100,
+    "altitude": -71,
+    "provider": "gps",
+    "geojson": {
+      "type": "Point",
+      "coordinates": [
+        108.2386655,
+        16.0807633
+      ]
+    },
+    "activity": "stationary",
+    "recorded_at": "2017-12-18T06:31:53.756000+00:00",
+    "speed": 0.79999995,
+    "accuracy": 63
+  },
+  "last_heartbeat_at": "2017-12-18T06:50:29.548935Z",
+  "last_battery": 51,
+  "location_status": "location_available",
+  "display": {
+    "sub_status_text": "Last updated 3 minutes ago",
+    "seconds_elapsed_since_last_heartbeat": 205.044635,
+    "battery": 51,
+    "status_text": "Stopped",
+    "speed": 0.79999995,
+    "is_warning": false
+  },
+  "created_at": "2017-12-05T03:10:53.121440Z",
+  "modified_at": "2017-12-18T06:53:54.584954Z"
+}
