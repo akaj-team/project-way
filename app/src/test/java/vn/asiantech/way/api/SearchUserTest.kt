@@ -1,10 +1,11 @@
 package vn.asiantech.way.api
 
 import io.reactivex.observers.TestObserver
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.hasItems
-import org.junit.*
+import org.junit.Assert
+import org.junit.FixMethodOrder
+import org.junit.Test
 import org.junit.runners.MethodSorters
 import vn.asiantech.way.data.model.UserListResult
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
@@ -18,19 +19,12 @@ import vn.asiantech.way.util.RestClient
 @Suppress("IllegalIdentifier")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class SearchUserTest {
-    private val server = MockWebServer()
-    private lateinit var restClient: HypertrackService
 
-    @Before
-    fun initTests() {
-        server.start()
-        val baseUrl = server.url("/users/")
-        restClient = RestClient.getClient(baseUrl, HypertrackService::class.java)
-    }
-
-    @After
-    fun afterTests() {
-        server.shutdown()
+    companion object {
+        private val restClient: HypertrackService by lazy {
+            val baseUrl = ApiSuiteTest.server.url("/users/")
+            RestClient.getClient(baseUrl, HypertrackService::class.java)
+        }
     }
 
     @Test
@@ -39,13 +33,13 @@ class SearchUserTest {
 
         /* Given */
         val test = TestObserver<UserListResult>()
-        server.addResponseBody("searchUser.json")
+        ApiSuiteTest.server.addResponseBody("searchUser.json")
 
         /* When */
         restClient.searchUser(name).subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         Assert.assertThat(request.method.toUpperCase(), `is`("GET"))
         Assert.assertThat(request.requestUrl.queryParameterNames(), hasItems("name"))
         Assert.assertThat(request.requestUrl.queryParameter("name"), `is`("rim"))

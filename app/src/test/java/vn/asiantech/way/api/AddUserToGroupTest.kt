@@ -2,11 +2,8 @@ package vn.asiantech.way.api
 
 import com.hypertrack.lib.models.User
 import io.reactivex.observers.TestObserver
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.After
 import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
@@ -22,32 +19,25 @@ import vn.asiantech.way.extension.addResponseBody
 @Suppress("IllegalIdentifier")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class AddUserToGroupTest {
-    private val server = MockWebServer()
-    private lateinit var restClient: HypertrackService
 
-    @Before
-    fun initTest() {
-        server.start()
-        val baseUrl = server.url("/api/v1/")
-        restClient = HypertrackRestClient.getClient(baseUrl, HypertrackService::class.java)
-    }
-
-    @After
-    fun cleanUp() {
-        server.shutdown()
+    companion object {
+        private val restClient: HypertrackService by lazy {
+            val baseUrl = ApiSuiteTest.server.url("/api/v1/")
+            HypertrackRestClient.getClient(baseUrl, HypertrackService::class.java)
+        }
     }
 
     @Test
     fun `Given any group id and any user id - When call addUserToGroup - Then return user object`() {
         /* Given */
         val test = TestObserver<User>()
-        server.addResponseBody("addUserToGroupResult.json")
+        ApiSuiteTest.server.addResponseBody("addUserToGroupResult.json")
 
         /* When */
         restClient.addUserToGroup("userId", BodyAddUserToGroup("groupId")).subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("PATCH"))
         assertThat(request.getHeader("Authorization"), `is`("token sk_test_3b4f98fbf6b58eb9d6f710c98c7fcb7a52d2acb6"))
 
