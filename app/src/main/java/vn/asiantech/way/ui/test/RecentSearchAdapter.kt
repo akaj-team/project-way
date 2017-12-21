@@ -21,6 +21,7 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
         private const val TYPE_HEADER = 0
         private const val TYPE_RECENT = 1
         private const val TYPE_POPULAR = 2
+        private const val TYPE_TAG = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
@@ -53,6 +54,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
             is RecentModel -> TYPE_RECENT
 
             is PopularModel -> TYPE_POPULAR
+
+            is TagModel -> TYPE_HEADER
 
             else -> TYPE_HEADER
         }
@@ -95,5 +98,9 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
                 tvName.text = popular.name
             }
         }
+    }
+
+    class TagSearchItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     }
 }

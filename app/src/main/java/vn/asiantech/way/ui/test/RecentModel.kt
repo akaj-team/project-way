@@ -11,3 +11,5 @@ data class RecentModel(var name: String, var description: String, var icon: Stri
 data class PopularModel(var name: String, var icon: String)
 
 data class HeaderModel(@StringRes var name: Int)
+
+data class TagModel(var name: String, var postCount: Int)
