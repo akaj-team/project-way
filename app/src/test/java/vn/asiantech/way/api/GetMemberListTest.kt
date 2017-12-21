@@ -2,12 +2,9 @@ package vn.asiantech.way.api
 
 import com.hypertrack.lib.models.User
 import io.reactivex.observers.TestObserver
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.hasItems
-import org.junit.After
 import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
@@ -23,32 +20,25 @@ import vn.asiantech.way.extension.addResponseBody
 @Suppress("IllegalIdentifier")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class GetMemberListTest {
-    private val server = MockWebServer()
-    private lateinit var restClient: HypertrackService
 
-    @Before
-    fun initTest() {
-        server.start()
-        val baseUrl = server.url("/api/v1/")
-        restClient = HypertrackRestClient.getClient(baseUrl, HypertrackService::class.java)
-    }
-
-    @After
-    fun cleanUp() {
-        server.shutdown()
+    companion object {
+        private val restClient: HypertrackService by lazy {
+            val baseUrl = ApiSuiteTest.server.url("/api/v1/")
+            HypertrackRestClient.getClient(baseUrl, HypertrackService::class.java)
+        }
     }
 
     @Test
     fun `Given any group id - When request getGroupMembers - Then return response object with results attribute is user mutable list`() {
         /* Given */
         val test = TestObserver<Response<MutableList<User>>>()
-        server.addResponseBody("groupMemberList.json")
+        ApiSuiteTest.server.addResponseBody("groupMemberList.json")
 
         /* When */
         restClient.getGroupMembers("groupId").subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItems("group_id"))
         assertThat(request.requestUrl.queryParameter("group_id"), `is`("groupId"))

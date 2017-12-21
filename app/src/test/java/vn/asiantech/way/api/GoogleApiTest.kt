@@ -1,21 +1,18 @@
 package vn.asiantech.way.api
 
 import io.reactivex.observers.TestObserver
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.*
-import org.junit.After
 import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import vn.asiantech.way.util.RestClient
 import vn.asiantech.way.data.model.AutoCompleteResult
 import vn.asiantech.way.data.model.LocationAddress
 import vn.asiantech.way.data.model.ResultPlaceDetail
 import vn.asiantech.way.data.source.remote.googleapi.ApiService
 import vn.asiantech.way.data.source.remote.response.Response
 import vn.asiantech.way.extension.addResponseBody
+import vn.asiantech.way.util.RestClient
 
 /**
  *
@@ -24,32 +21,25 @@ import vn.asiantech.way.extension.addResponseBody
 @Suppress("IllegalIdentifier")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class GoogleApiTest {
-    private val server = MockWebServer()
-    private lateinit var restClient: ApiService
 
-    @Before
-    fun initTests() {
-        server.start()
-        val baseUrl = server.url("/maps/api/")
-        restClient = RestClient.getClient(baseUrl, ApiService::class.java)
-    }
-
-    @After
-    fun cleanUp() {
-        server.shutdown()
+    companion object {
+        private val restClient: ApiService by lazy {
+            val baseUrl = ApiSuiteTest.server.url("/maps/api/")
+            RestClient.getClient(baseUrl, ApiService::class.java)
+        }
     }
 
     @Test
     fun `Given mock response - When request searchLocation - Then return autocomplete object`() {
         /* Given */
         val test = TestObserver<AutoCompleteResult>()
-        server.addResponseBody("searchLocation.json")
+        ApiSuiteTest.server.addResponseBody("searchLocation.json")
 
         /* When */
         restClient.searchLocations("keyWord").subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItems("input", "key", "language"))
         assertThat(request.requestUrl.queryParameter("input"), `is`("keyWord"))
@@ -70,13 +60,13 @@ class GoogleApiTest {
         /* Given */
         val test = TestObserver<Response<MutableList<LocationAddress>>>()
         val latLng = "16.087190, 108.232773"
-        server.addResponseBody("getAddressLocation.json")
+        ApiSuiteTest.server.addResponseBody("getAddressLocation.json")
 
         /* When */
         restClient.getAddressLocation(latLng).subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItem("latlng"))
         assertThat(request.requestUrl.queryParameter("latlng"), `is`(latLng))
@@ -96,13 +86,13 @@ class GoogleApiTest {
         /* Given */
         val test = TestObserver<ResultPlaceDetail>()
         val placeId = "ChIJ8bYoOR8YQjERMiVjLDsw3Kg"
-        server.addResponseBody("getLocationDetail.json")
+        ApiSuiteTest.server.addResponseBody("getLocationDetail.json")
 
         /* When */
         restClient.getLocationDetail(placeId).subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItem("placeid"))
         assertThat(request.requestUrl.queryParameter("placeid"), `is`(placeId))

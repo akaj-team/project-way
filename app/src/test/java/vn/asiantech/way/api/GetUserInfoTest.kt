@@ -2,13 +2,10 @@ package vn.asiantech.way.api
 
 import com.hypertrack.lib.models.User
 import io.reactivex.observers.TestObserver
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.hasItems
-import org.junit.After
 import org.junit.Assert
 import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.Test
 import vn.asiantech.way.data.source.remote.hypertrackapi.HypertrackService
 import vn.asiantech.way.extension.addResponseBody
@@ -20,19 +17,12 @@ import vn.asiantech.way.util.RestClient
  */
 @Suppress("IllegalIdentifier")
 class GetUserInfoTest {
-    private val server = MockWebServer()
-    private lateinit var restClient: HypertrackService
 
-    @Before
-    fun initTests() {
-        server.start()
-        val baseUrl = server.url("/users/{userId}/")
-        restClient = RestClient.getClient(baseUrl, HypertrackService::class.java)
-    }
-
-    @After
-    fun afterTests() {
-        server.shutdown()
+    companion object {
+        private val restClient: HypertrackService by lazy {
+            val baseUrl = ApiSuiteTest.server.url("/users/{userId}/")
+            RestClient.getClient(baseUrl, HypertrackService::class.java)
+        }
     }
 
     @Test
@@ -41,13 +31,13 @@ class GetUserInfoTest {
 
         /* Given */
         val test = TestObserver<User>()
-        server.addResponseBody("getUserInfo.json")
+        ApiSuiteTest.server.addResponseBody("getUserInfo.json")
 
         /* When */
         restClient.getUserInfo(userId).subscribe(test)
 
         /* Then */
-        val request = server.takeRequest()
+        val request = ApiSuiteTest.server.takeRequest()
         Assert.assertThat(request.method.toUpperCase(), `is`("GET"))
         Assert.assertThat(request.requestUrl.pathSegments(), hasItems("users", "{userId}"))
 
