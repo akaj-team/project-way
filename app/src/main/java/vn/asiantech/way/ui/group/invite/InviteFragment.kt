@@ -62,11 +62,7 @@ class InviteFragment : BaseFragment() {
     override fun onBindViewModel() {
         addDisposables(viewModel.updateAutocompleteList
                 .observeOnUiThread()
-                .subscribe(this::handleGetListUserInviteComplete),
-
-                viewModel.resetDataStatus
-                        .observeOnUiThread()
-                        .subscribe(this::handleClearDataListWhenStartSearch))
+                .subscribe(this::handleGetListUserInviteComplete))
         viewModel.searchListUser()
     }
 
@@ -106,14 +102,5 @@ class InviteFragment : BaseFragment() {
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString(KEY_GROUP_NAME)
         ownerId = arguments.getString(KEY_GROUP_OWNER)
-    }
-
-    /**
-     * On reload list when start search action
-     */
-    private fun handleClearDataListWhenStartSearch(isReset: Boolean) {
-        if (isReset) {
-            adapter.notifyDataSetChanged()
-        }
     }
 }

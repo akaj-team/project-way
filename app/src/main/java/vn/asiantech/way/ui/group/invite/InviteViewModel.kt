@@ -4,7 +4,6 @@ import android.support.v7.util.DiffUtil
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
@@ -17,10 +16,10 @@ import java.util.concurrent.TimeUnit
  * @author NgocTTN
  */
 class InviteViewModel(private val groupRepository: GroupRepository) {
-    internal var resetDataStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
-    private val searchInviteObservable = PublishSubject.create<String>()
+
     internal val updateAutocompleteList = PublishSubject.create<DiffUtil.DiffResult>()
     internal var users = mutableListOf<User>()
+    private val searchInviteObservable = PublishSubject.create<String>()
 
     init {
         initSearchListUser()
@@ -71,7 +70,16 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
     private fun getListUser(name: String): Observable<List<User>> = groupRepository
             .searchUser(name)
             .doOnSubscribe {
+                val emptyList = mutableListOf<User>()
+                val diff = Diff(users, emptyList)
+                        .areItemsTheSame { oldItem, newItem ->
+                            oldItem.id == newItem.id
+                        }
+                        .areContentsTheSame { oldItem, newItem ->
+                            oldItem.name == newItem.name
+                        }
+                        .calculateDiff()
                 users.clear()
-                resetDataStatus.onNext(true)
+                updateAutocompleteList.onNext(diff)
             }.subscribeOn(Schedulers.io())
 }
