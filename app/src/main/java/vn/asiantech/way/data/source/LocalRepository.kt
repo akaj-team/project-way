@@ -3,6 +3,8 @@ package vn.asiantech.way.data.source
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.annotation.RawRes
+import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -78,7 +80,12 @@ class LocalRepository(val context: Context) : LocalDataSource {
     }
 
     override fun getTrackingHistory(): MutableList<TrackingInformation>? {
-        val result = mutableListOf<TrackingInformation>()
+        val result = mutableListOf(TrackingInformation("2016-03-09T05:20:19.742229", "Tracking", "xxxx", LatLng(423.0, 12.0)),
+                TrackingInformation("2016-03-09T05:20:19.742229", "Stop", "xxxx", LatLng(32.0, 14.0)),
+                TrackingInformation("2016-03-09T05:20:19.742229", "Stopp", "xxxx", LatLng(32.0, 14.0)),
+                TrackingInformation("2016-03-09T05:20:19.742229", "Stopp", "xxxx", LatLng(32.0, 14.0)),
+                TrackingInformation("2016-03-09T05:20:19.742229", "Stopp", "xxxx", LatLng(32.0, 14.0)),
+                TrackingInformation("2016-03-09T05:20:19.742229", "Stopp", "xxxx", LatLng(32.0, 14.0)))
         return try {
             val history = pref.getString(AppConstants.KEY_TRACKING_HISTORY, "[]")
             val jsonArray = JSONArray(history)
