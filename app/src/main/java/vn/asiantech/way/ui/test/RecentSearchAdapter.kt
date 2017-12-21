@@ -32,6 +32,9 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
             TYPE_POPULAR -> PopularSearchItemUI().createView(AnkoContext.Companion.create(parent.context, parent, false))
                     .tag as? PopularSearchItemViewHolder
 
+            TYPE_TAG -> TagSearchItemUI().createView(AnkoContext.Companion.create(parent.context, parent, false))
+                    .tag as? TagSearchItemViewHolder
+
             else -> HeaderSearchItemUI().createView(AnkoContext.Companion.create(parent.context, parent, false))
                     .tag as? HeaderViewHolder
         }
@@ -45,6 +48,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
 
             is PopularSearchItemViewHolder -> holder.onBind(items[position])
 
+            is TagSearchItemViewHolder -> holder.onBind(items[position])
+
             is HeaderViewHolder -> holder.onBind(items[position])
         }
     }
@@ -55,7 +60,7 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
 
             is PopularModel -> TYPE_POPULAR
 
-            is TagModel -> TYPE_HEADER
+            is TagModel -> TYPE_TAG
 
             else -> TYPE_HEADER
         }
@@ -101,6 +106,15 @@ class RecentSearchAdapter(private val items: MutableList<Any>) : RecyclerView.Ad
     }
 
     class TagSearchItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvTagName: TextView = itemView.find(R.id.text_search_tag_item_tv_name)
+        private val tvPostCount: TextView = itemView.findViewById(R.id.text_search_tag_item_tv_post_count)
 
+        fun onBind(item: Any) {
+            val tag = item as? TagModel
+            if (tag != null) {
+                tvTagName.text = tag.name
+                tvPostCount.text = itemView.context.getString(R.string.text_search_tag_item_post_count, item.postCount)
+            }
+        }
     }
 }

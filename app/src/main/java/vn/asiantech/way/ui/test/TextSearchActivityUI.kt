@@ -34,14 +34,22 @@ class TextSearchActivityUI : AnkoComponent<TestActivity> {
         recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
         recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
         recentList.add(PopularModel("Lưu Diệc Phi", "http://sohanews.sohacdn.com/2017/2-1492136563590.jpg"))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
+        recentList.add(TagModel("#cuongcao", 15635))
     }
 
     override fun createView(ui: AnkoContext<TestActivity>) = with(ui) {
         verticalLayout {
             lparams(matchParent, matchParent)
-            padding = dimen(R.dimen.text_search_padding)
 
             linearLayout {
+                padding = dimen(R.dimen.text_search_padding)
                 gravity = Gravity.CENTER_VERTICAL
 
                 linearLayout {
@@ -100,9 +108,7 @@ class TextSearchActivityUI : AnkoComponent<TestActivity> {
                     layoutManager = LinearLayoutManager(ctx)
                     adapter = RecentSearchAdapter(recentList)
                 }
-            }.lparams(matchParent, matchParent) {
-                topMargin = dimen(R.dimen.text_search_padding)
-            }
+            }.lparams(matchParent, matchParent)
         }
     }
 }

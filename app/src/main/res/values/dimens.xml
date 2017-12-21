@@ -139,4 +139,5 @@
     <dimen name="text_search_item_break_line">1dp</dimen>
     <dimen name="text_search_item_vertical_margin">5dp</dimen>
     <dimen name="text_search_item_boder_width">2dp</dimen>
+    <dimen name="text_search_item_vertical_padding">15dp</dimen>
 </resources>

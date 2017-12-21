@@ -153,4 +153,5 @@
     <string name="text_search_cancel">Cancel</string>
     <string name="text_search_recent_header">Recent Searches</string>
     <string name="text_search_popular_header">Popular Searches</string>
+    <string name="text_search_tag_item_post_count">%d posts</string>
 </resources>
