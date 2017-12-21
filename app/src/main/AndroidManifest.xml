@@ -30,8 +30,8 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name=".ui.home.HomeActivity">
+            android:name=".ui.search.SearchActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,6 +81,8 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.group.GroupActivity" />
 
         <!-- Register meta-data here -->
         <!--
