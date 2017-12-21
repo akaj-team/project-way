@@ -3,7 +3,6 @@ package vn.asiantech.way.ui.home
 import android.content.Context
 import android.os.SystemClock
 import android.support.v7.util.DiffUtil
-import android.util.Log.d
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.TrackingInformation
