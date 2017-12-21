@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.home
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
@@ -22,13 +21,13 @@ import vn.asiantech.way.data.model.TrackingInformation
  *  Copyright © 2017 AsianTech inc.
  *  Created by at-hoavo on 27/11/2017.
  */
-class HomeAdapter(private val context: Context,
-                  private val locations: List<TrackingInformation>,
-                  val onClickItem: (Int) -> Unit)
+class HomeAdapter(
+        private val locations: List<TrackingInformation>)
     : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
+    internal var onClickItem: (Int) -> Unit = {}
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeAdapterUI()
-            .createView(AnkoContext.create(context, parent, false))
+            .createView(AnkoContext.create(parent.context, parent, false))
             .tag as? HomeViewHolder
 
     override fun onBindViewHolder(holder: HomeViewHolder?, position: Int) {
@@ -36,7 +35,6 @@ class HomeAdapter(private val context: Context,
     }
 
     override fun getItemCount(): Int = locations.size
-
     /**
      * To save data for items in recyclerView of locations
      */
