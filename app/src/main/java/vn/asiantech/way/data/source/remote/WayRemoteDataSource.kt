@@ -193,7 +193,6 @@ internal class WayRemoteDataSource : WayDataSource {
         return link
     }
 
-
     override fun getLocationName(context: Context, latLng: LatLng): Single<String> {
         val locationName = SingleSubject.create<String>()
         val geoCoder = Geocoder(context, Locale.getDefault())

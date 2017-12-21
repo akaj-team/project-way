@@ -64,8 +64,7 @@ class WayRepository : WayDataSource {
 
     override fun getTrackingURL(): Single<String> = remoteDataSource.getTrackingURL()
 
-    override fun getLocationName(context: Context, latLng: LatLng): Single<String> =
-            remoteDataSource.getLocationName(context, latLng)
+    override fun getLocationName(context: Context, latLng: LatLng): Single<String> = remoteDataSource.getLocationName(context, latLng)
 
     override fun getCurrentLocationHyperTrack(): Single<HyperTrackLocation> =
             remoteDataSource.getCurrentLocationHyperTrack()
