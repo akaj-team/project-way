@@ -40,11 +40,10 @@ class ShowRequestViewModelTest {
         /* Given */
         val testUser = TestObserver<User>()
         val user = User()
-        val groupId = "groupId"
         `when`(groupRepository.getUserInfo(TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
-        groupRepository.getUserInfo(groupId).subscribe(testUser)
+        viewModel.getUserInfo("").subscribe(testUser)
 
         /* Then */
         testUser.assertValue { it == user }
@@ -55,12 +54,10 @@ class ShowRequestViewModelTest {
         /* Given */
         val testUser = TestObserver<User>()
         val user = User()
-        val groupId = "groupId"
-        val userId = "userId"
         `when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
-        viewModel.addUserToGroup(groupId, userId).subscribe(testUser)
+        viewModel.addUserToGroup("", "").subscribe(testUser)
 
         /* Then */
         testUser.assertValue { it == user }
@@ -70,12 +67,10 @@ class ShowRequestViewModelTest {
     fun `Given a group id and user id - When call remove request in group - Then return true`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val groupId = "groupId"
-        val userId = "userId"
         `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
-        viewModel.removeRequestInGroup(groupId, userId).subscribe(test)
+        viewModel.removeRequestInGroup("", "").subscribe(test)
 
         /* Then */
         test.assertValue(true)
@@ -85,12 +80,10 @@ class ShowRequestViewModelTest {
     fun `Given a group id and user id - When call remove request in group - Then return false`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val groupId = "groupId"
-        val userId = "userId"
         `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
 
         /* When */
-        viewModel.removeRequestInGroup(groupId, userId).subscribe(test)
+        viewModel.removeRequestInGroup("", "").subscribe(test)
 
         /* Then */
         test.assertValue(false)
@@ -101,13 +94,11 @@ class ShowRequestViewModelTest {
         /* Given */
         val test = TestObserver<Boolean>()
         val user = User()
-        val groupId = "groupId"
-        val userId = "userId"
         `when`(wayRepository.addUserToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Observable.just(user))
 
         /* When */
         viewModel.progressDialogObservable.subscribe(test)
-        viewModel.addUserToGroup(groupId, userId).subscribe()
+        viewModel.addUserToGroup("", "").subscribe()
 
         /* Then */
         test.assertValues(true, false)
@@ -117,13 +108,11 @@ class ShowRequestViewModelTest {
     fun `Given progress dialog  - When call remove request in group  - Then progress dialog should show then hide`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val groupId = "groupId"
-        val userId = "userId"
         `when`(groupRepository.deleteGroupRequest(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
         viewModel.progressDialogObservable.subscribe(test)
-        viewModel.removeRequestInGroup(groupId, userId).subscribe()
+        viewModel.removeRequestInGroup("", "").subscribe()
 
         /* Then */
         test.assertValues(true, false)
