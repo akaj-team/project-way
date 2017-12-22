@@ -31,12 +31,11 @@ class GroupInfoViewModelTest {
     }
 
     @Test
-    fun `Given a group Id - When call get group info  - Then return a group`() {
+    fun `Given a group id - When call get group info  - Then return a group`() {
         /* Given */
         val test = TestObserver<Group>()
         val groupId = "groupId"
-        val group = Group(id = "id", name = "name", token = "token", ownerId = "ownerId",
-                createAt = "createAt", modifiedAt = "modifiedAt")
+        val group = Group("id", "name", "token", "ownerId", "createAt", "modifiedAt")
         `when`(groupRepository.getGroupInfo(TestUtil.any())).thenReturn(Observable.just(group))
 
         /* When */
@@ -47,7 +46,7 @@ class GroupInfoViewModelTest {
     }
 
     @Test
-    fun `Given a group Id - When call get member list  - Then return list users `() {
+    fun `Given a group id - When call get member list  - Then return list users `() {
         /* Given */
         val test = TestObserver<List<User>>()
         val groupId = "groupId"
@@ -62,13 +61,12 @@ class GroupInfoViewModelTest {
     }
 
     @Test
-    fun `Given a userId - When call leave group - Then return an user `() {
+    fun `Given a user id - When call leave group - Then return an user `() {
         /* Given */
         val test = TestObserver<User>()
         val userId = "userId"
         val user = User()
         `when`(groupRepository.removeUserFromGroup(TestUtil.any())).thenReturn(Single.just(user))
-
 
         /* When */
         viewModel.leaveGroup(userId).subscribe(test)
@@ -78,12 +76,12 @@ class GroupInfoViewModelTest {
     }
 
     @Test
-    fun `Given a groupId and newOwnerId - When call change group owner  - Then return true `() {
+    fun `Given a group id and new owner id - When call change group owner  - Then return true `() {
         /* Given */
-        val test =  TestObserver<Boolean>()
+        val test = TestObserver<Boolean>()
         val groupId = "groupId"
         val newOwnerId = "newOwnerId"
-        `when`(groupRepository.changeGroupOwner(TestUtil.any(),TestUtil.any())).thenReturn(Single.just(true))
+        `when`(groupRepository.changeGroupOwner(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
         viewModel.changeGroupOwner(groupId, newOwnerId).subscribe(test)
@@ -93,12 +91,12 @@ class GroupInfoViewModelTest {
     }
 
     @Test
-    fun `Given a groupId and newOwnerId - When call change group owner  - Then return false `() {
+    fun `Given a group id and new owner id - When call change group owner  - Then return false `() {
         /* Given */
-        val test =  TestObserver<Boolean>()
+        val test = TestObserver<Boolean>()
         val groupId = "groupId"
         val newOwnerId = "newOwnerId"
-        `when`(groupRepository.changeGroupOwner(TestUtil.any(),TestUtil.any())).thenReturn(Single.just(false))
+        `when`(groupRepository.changeGroupOwner(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
 
         /* When */
         viewModel.changeGroupOwner(groupId, newOwnerId).subscribe(test)
