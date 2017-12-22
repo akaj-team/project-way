@@ -108,7 +108,7 @@ class GoogleApiTest {
     }
 
     @Test
-    fun `Given mock two lat lng point - When request google distance matrix api - Then return resultDistance object`() {
+    fun `Given mock two lat lng point - When request google distance matrix api - Then return result distance object`() {
         /* Given */
         val test = TestObserver<ResultDistance>()
         val origin = "16.083833,108.243501"
@@ -133,12 +133,12 @@ class GoogleApiTest {
             Assert.assertThat(item.duration.text, `is`("1 min"))
             Assert.assertThat(item.duration.value, `is`(76))
 
-            it.rows.isNotEmpty()
+            true
         }
     }
 
     @Test
-    fun `Given mock an url - When request google road api - Then return resultRoad object`() {
+    fun `Given mock an url - When request google road api - Then return result road object`() {
         /* Given */
         val test = TestObserver<ResultRoad>()
         val url = "roads.googleapis.com/v1/snapToRoads?path=16.0798071,108.2364393|16.0803531,108.2354526&interpolate=true&key=AIzaSyCZc4PAEpeVC18QnS5fPBt5hk3EFMbFjj8"
@@ -164,7 +164,7 @@ class GoogleApiTest {
             Assert.assertThat(it.locationRoads[8].point.longitude, `is`(108.23596334365941))
             Assert.assertThat(it.locationRoads[8].placeId, `is`("ChIJnXA9wiAYQjERQ1CTfr7tnSE"))
 
-            it.locationRoads.isNotEmpty()
+            true
         }
     }
 }
