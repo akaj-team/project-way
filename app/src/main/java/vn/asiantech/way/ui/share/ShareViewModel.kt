@@ -53,7 +53,7 @@ class ShareViewModel(private val wayRepository: WayRepository) {
     internal fun getLocationName(context: Context, latLng: LatLng): Single<String> =
             wayRepository.getLocationName(context, latLng)
 
-    internal fun getCurrentLocationHyperTrack() = wayRepository.getCurrentLocationHyperTrack()
+    internal fun getCurrentHyperTrackLocation() = wayRepository.getCurrentHyperTrackLocation()
 
     internal fun getCurrentLocation(context: Context) = wayRepository.getCurrentLocation(context)
 

@@ -205,7 +205,7 @@ internal class WayRemoteDataSource : WayDataSource {
         return locationName
     }
 
-    override fun getCurrentLocationHyperTrack(): Single<HyperTrackLocation> {
+    override fun getCurrentHyperTrackLocation(): Single<HyperTrackLocation> {
         val result = SingleSubject.create<HyperTrackLocation>()
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {

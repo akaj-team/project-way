@@ -401,7 +401,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
     }
 
     private fun requestLocation() {
-        addDisposables(shareViewModel.getCurrentLocationHyperTrack()
+        addDisposables(shareViewModel.getCurrentHyperTrackLocation()
                 .observeOnUiThread()
                 .subscribe(this::handleGetCurrentLocation))
     }

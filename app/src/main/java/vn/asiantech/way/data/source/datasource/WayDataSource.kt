@@ -170,7 +170,7 @@ internal interface WayDataSource {
      *
      * @return HyperTrackLocation object which is Observable
      */
-    fun getCurrentLocationHyperTrack(): Single<HyperTrackLocation>
+    fun getCurrentHyperTrackLocation(): Single<HyperTrackLocation>
 
     /**
      * This method return Location

@@ -72,7 +72,7 @@ class ShareViewModelTest {
     }
 
     @Test
-    fun `Given a latLng point - When compare two point - Then return compare result`() {
+    fun `Given a latLng point - When compare two point - Then return compare result true`() {
         /* Given */
         val resultTest = TestObserver<Boolean>()
         val currentLatLng = LatLng(1.123456, 1.123456)
@@ -83,6 +83,20 @@ class ShareViewModelTest {
 
         /* Then */
         resultTest.assertValue { it }
+    }
+
+    @Test
+    fun `Given a latLng point - When compare two point - Then return compare result false`() {
+        /* Given */
+        val resultTest = TestObserver<Boolean>()
+        val currentLatLng = LatLng(1.123456, 1.123456)
+        val destinationLatLng = LatLng(1.12456, 1.12456)
+
+        /* When */
+        viewModel.compareLocation(currentLatLng, destinationLatLng).subscribe(resultTest)
+
+        /* Then */
+        resultTest.assertValue { !it }
     }
 
     @Test
@@ -99,8 +113,7 @@ class ShareViewModelTest {
         viewModel.getAngleMarker(startLatLng1, endLatLng1).subscribe(resultTest)
 
         /* Then */
-        resultTest.assertValueAt(0, 0.0f)
-        resultTest.assertValueAt(1, 325.53668f)
+        resultTest.assertValues(0.0f, 325.53668f)
     }
 
     @Test
@@ -136,10 +149,10 @@ class ShareViewModelTest {
         /* Given */
         val test = TestObserver<HyperTrackLocation>()
         val hyperTrackLocation = HyperTrackLocation(Location("point"))
-        `when`(wayRepository.getCurrentLocationHyperTrack()).thenReturn(Single.just(hyperTrackLocation))
+        `when`(wayRepository.getCurrentHyperTrackLocation()).thenReturn(Single.just(hyperTrackLocation))
 
         /* When */
-        viewModel.getCurrentLocationHyperTrack().subscribe(test)
+        viewModel.getCurrentHyperTrackLocation().subscribe(test)
 
         /* Then */
         test.assertValue { it == hyperTrackLocation }
