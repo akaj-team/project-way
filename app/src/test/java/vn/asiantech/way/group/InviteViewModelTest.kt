@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -67,5 +68,6 @@ class InviteViewModelTest {
             })
             true
         }
+        Assert.assertThat(viewModel.users.size, `is`(2))
     }
 }
