@@ -36,7 +36,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given a group id - When call get requests of user - Then return an user`() {
+    fun `Given a group id - When call get get user infor - Then return an user`() {
         /* Given */
         val testUser = TestObserver<User>()
         val user = User()
