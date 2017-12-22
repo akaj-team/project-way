@@ -82,7 +82,7 @@ class GroupInfoViewModelTest {
         viewModel.changeGroupOwner("", "").subscribe(test)
 
         /* Then */
-        test.assertValue { it }
+        test.assertValue { it == true }
     }
 
     @Test
@@ -95,6 +95,6 @@ class GroupInfoViewModelTest {
         viewModel.changeGroupOwner("", "").subscribe(test)
 
         /* Then */
-        test.assertValue { !it }
+        test.assertValue { it == false }
     }
 }
