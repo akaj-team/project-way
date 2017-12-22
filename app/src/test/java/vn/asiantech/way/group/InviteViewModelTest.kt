@@ -1,8 +1,12 @@
 package vn.asiantech.way.group
 
+import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -33,15 +37,35 @@ class InviteViewModelTest {
     fun `Given a name - When call trigger search list user - Then return list user`() {
         /* Given */
         val name = ""
-        val users = mutableListOf<User>()
-        val test = TestObserver<List<User>>()
+        val users = mutableListOf<User>(User(), User())
+        val updateUserListObservable = TestObserver<DiffUtil.DiffResult>()
         `when`(groupRepository.searchUser(TestUtil.any())).thenReturn(Observable.just(users))
 
         /* When */
-        groupRepository.searchUser(name).subscribe(test)
-        viewModel.triggerSearchListUser().subscribe(test)
+        viewModel.updateAutocompleteList.subscribe(updateUserListObservable)
+        viewModel.searchListUser(name)
 
         /* Then */
-        test.assertValue { it == users }
+        updateUserListObservable.assertValue {
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onInserted(position: Int, count: Int) {
+                    assertThat(count, `is`(2))
+                    assertThat(viewModel.users[position], `is`(users[position]))
+                }
+
+                override fun onRemoved(position: Int, count: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+            })
+            true
+        }
     }
 }

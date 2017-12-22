@@ -54,15 +54,6 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
         }.subscribe()
     }
 
-    internal fun triggerSearchListUser(): Observable<List<User>> =
-            searchInviteObservable
-                    .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                    .distinctUntilChanged()
-                    .filter { it.isNotEmpty() }
-                    .flatMap {
-                        getListUser(it)
-                    }
-
     internal fun inviteUserJoinToGroup(userId: String, invite: Invite) {
         groupRepository.inviteUserJoinGroup(userId, invite)
     }
