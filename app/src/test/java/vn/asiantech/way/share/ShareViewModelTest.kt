@@ -10,12 +10,10 @@ import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.WayRepository
-import vn.asiantech.way.ui.share.ShareActivity
 import vn.asiantech.way.ui.share.ShareViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,14 +26,12 @@ import java.util.*
 class ShareViewModelTest {
     @Mock
     private lateinit var wayRepository: WayRepository
-
-    private lateinit var viewModel: ShareViewModel
+    @Mock
     private lateinit var context: Context
+    private lateinit var viewModel: ShareViewModel
 
     @Before
     fun initTests() {
-        val context = Mockito.mock(ShareActivity::class.java)
-        this.context = context
         MockitoAnnotations.initMocks(this)
         viewModel = ShareViewModel(wayRepository)
     }
@@ -79,14 +75,14 @@ class ShareViewModelTest {
     fun `Given a latLng point - When compare two point - Then return compare result`() {
         /* Given */
         val resultTest = TestObserver<Boolean>()
-        val currentLatLng = LatLng(1.123, 1.123)
-        val destinationLatLng = LatLng(1.1, 1.1)
+        val currentLatLng = LatLng(1.123456, 1.123456)
+        val destinationLatLng = LatLng(1.12311, 1.12311)
 
         /* When */
         viewModel.compareLocation(currentLatLng, destinationLatLng).subscribe(resultTest)
 
         /* Then */
-        resultTest.assertValue { true }
+        resultTest.assertValue { it }
     }
 
     @Test
@@ -118,7 +114,7 @@ class ShareViewModelTest {
         viewModel.getCurrentLocation(context).subscribe(resultTest)
 
         /* Then */
-        resultTest.assertValue { true }
+        resultTest.assertValue { it == location }
     }
 
     @Test
@@ -146,7 +142,7 @@ class ShareViewModelTest {
         viewModel.getCurrentLocationHyperTrack().subscribe(test)
 
         /* Then */
-        test.assertValue { true }
+        test.assertValue { it == hyperTrackLocation }
         test.assertResult(hyperTrackLocation)
     }
 

@@ -142,8 +142,9 @@ internal class WayRemoteDataSource : WayDataSource {
         val result = AsyncSubject.create<Float>()
         HyperTrack.getETA(destination, vehicle, object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
-                val res = (response.responseObject as? Double)?.toFloat()
-                res?.let { result.onNext(it) }
+                response.responseObject.let {
+                    it as Float
+                }.let { result.onNext(it) }
                 result.onComplete()
             }
 
@@ -178,10 +179,8 @@ internal class WayRemoteDataSource : WayDataSource {
         HyperTrack.createAndAssignAction(builder.build(), object : HyperTrackCallback() {
             override fun onSuccess(response: SuccessResponse) {
                 if (response.responseObject != null) {
-                    val action = response.responseObject as? Action
+                    response.responseObject.let { it as? Action }?.trackingURL?.let { link.onSuccess(it) }
                     HyperTrack.clearServiceNotificationParams()
-                    val url = action?.trackingURL
-                    url?.let { link.onSuccess(it) }
                 }
             }
 
@@ -211,8 +210,11 @@ internal class WayRemoteDataSource : WayDataSource {
         HyperTrack.getCurrentLocation(object : HyperTrackCallback() {
             override fun onSuccess(p0: SuccessResponse) {
                 try {
-                    val hyperTrackLocation = HyperTrackLocation((p0.responseObject) as Location?)
-                    result.onSuccess(hyperTrackLocation)
+                    p0.responseObject.let {
+                        HyperTrackLocation(it as Location?)
+                    }.let {
+                        result.onSuccess(it)
+                    }
                 } catch (e: IOException) {
                     Log.d("zxc", "ErrorResponse: " + e.message)
                 }
