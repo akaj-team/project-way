@@ -62,6 +62,7 @@
     <string name="register_request_permission">Please turn on Internet and GPS</string>
     <string name="register_tel">+84</string>
     <string name="register_update">Update</string>
+    <string name="register_unknown">Unknown</string>
     <!--Home screen-->
     <string name="toolbar_title">Home</string>
     <string name="not_update_current_location">\"Do not update the current location!\"</string>
