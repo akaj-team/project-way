@@ -12,8 +12,6 @@ import android.location.Location
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.util.Log
-import android.util.Log.d
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.common.api.GoogleApiClient
@@ -200,7 +198,7 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
             (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip =
                     ClipData.newPlainText("tracking_url", ui.bottomCard.tvURL.text)
         } catch (e: IOException) {
-            Log.d("zxc", "ErrorResponse: " + e.message)
+            val throwable = Throwable(e.message)
         }
     }
 
@@ -264,7 +262,6 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
 
     // Get ETA Distance and duration
     private fun handleDistanceETA(row: List<Row>) {
-        d("zxc", "aa $row")
         ui.trackingInfo.tvTime.text = resources.getString(R.string.eta, row[0].elements[0]
                 .duration.text)
         ui.trackingInfo.tvDistance.text = resources.getString(R.string.open_parentheses,
@@ -415,8 +412,6 @@ class ShareActivity : BaseActivity(), GoogleMap.OnCameraIdleListener, LocationLi
         val latLng = hyperTrackLocation.geoJSONLocation.latLng
         currentLatLng = latLng
         // Get location distance estimate
-        d("zxc", "kdkdk " + "${latLng.latitude},${latLng.longitude}" +
-                "${destinationLatLng.latitude},${destinationLatLng.longitude}")
         addDisposables(shareViewModel
                 .getLocationDistance("${latLng.latitude},${latLng.longitude}",
                         "${destinationLatLng.latitude},${destinationLatLng.longitude}")

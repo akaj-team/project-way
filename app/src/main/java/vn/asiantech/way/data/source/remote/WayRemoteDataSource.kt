@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.FirebaseDatabase
 import com.hypertrack.lib.HyperTrack
@@ -216,7 +215,8 @@ internal class WayRemoteDataSource : WayDataSource {
                         result.onSuccess(it)
                     }
                 } catch (e: IOException) {
-                    Log.d("zxc", "ErrorResponse: " + e.message)
+                    val throwable = Throwable(e.message)
+                    result.onError(throwable)
                 }
             }
 
