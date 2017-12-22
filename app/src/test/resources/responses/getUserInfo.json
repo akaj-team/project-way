@@ -1,0 +1,40 @@
+{
+  "id": "a7f13570-5e5e-4651-a58d-985bfcfcedf7",
+  "group_id": "5bb1367e-8941-4874-8897-0bb84f154bfa",
+  "lookup_id": "56866",
+  "name": "rim",
+  "phone": "null/56866",
+  "photo": "https://core-api-prod-assets.s3.amazonaws.com/uploads/photos/drivers/driver_b47e6aef-57fd-4969-a535-1bc5237c0877_image_name",
+  "availability_status": "online",
+  "vehicle_type": "unknown",
+  "pending_actions": [],
+  "is_connected": true,
+  "last_location": {
+    "activity_confidence": 33,
+    "activity": "stationary",
+    "provider": "non_gps",
+    "geojson": {
+      "type": "Point",
+      "coordinates": [
+        108.2197734,
+        16.0728241
+      ]
+    },
+    "recorded_at": "2017-12-16T02:49:57.257000+00:00",
+    "accuracy": 1700
+  },
+  "last_heartbeat_at": "2017-12-18T06:46:21.636206Z",
+  "last_battery": 69,
+  "location_status": "location_disabled",
+  "display": {
+    "sub_status_text": "Last updated 15 minutes ago",
+    "seconds_elapsed_since_last_heartbeat": 950.702721,
+    "battery": 69,
+    "status_text": "Location disabled",
+    "speed": null,
+    "is_warning": true
+  },
+  "created_at": "2017-12-07T04:42:55.635339Z",
+  "modified_at": "2017-12-18T06:46:21.637335Z"
+
+}
