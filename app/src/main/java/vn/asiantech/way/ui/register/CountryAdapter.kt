@@ -1,6 +1,5 @@
 package vn.asiantech.way.ui.register
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
@@ -17,7 +16,7 @@ import vn.asiantech.way.data.model.Country
  * Adapter of RecyclerView Country.
  * Created by haingoq on 27/11/2017.
  */
-class CountryAdapter(val context: Context, private val countries: List<Country>) :
+class CountryAdapter(private val countries: List<Country>) :
         RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemCountryUI()
@@ -79,7 +78,7 @@ class CountryAdapter(val context: Context, private val countries: List<Country>)
          * Bind country
          */
         fun bindHolder(country: Country) {
-            Picasso.with(context).load(country.flagFilePath).into(imgFlag)
+            Picasso.with(itemView.context).load(country.flagFilePath).into(imgFlag)
             tvTel.text = country.countryName
         }
     }
