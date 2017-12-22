@@ -15,11 +15,11 @@ import vn.asiantech.way.ui.custom.floatingButton
  * Created at 11 / 2017
  * Created by at-hoavo on 27/11/2017.
  */
-class HomeActivityUI(private val locations: MutableList<TrackingInformation>) : AnkoComponent<HomeActivity> {
+class HomeActivityUI(trackingInformations: MutableList<TrackingInformation>) : AnkoComponent<HomeActivity> {
 
     internal lateinit var fabMenuGroup: FloatingMenuButton
     internal lateinit var recycleViewLocation: RecyclerView
-    internal val homeAdapter = HomeAdapter(locations)
+    internal val homeAdapter = HomeAdapter(trackingInformations)
 
     override fun createView(ui: AnkoContext<HomeActivity>) = with(ui) {
 
