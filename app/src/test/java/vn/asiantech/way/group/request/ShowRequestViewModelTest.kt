@@ -36,7 +36,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given a group Id - When call get requests of user - Then return an user`() {
+    fun `Given a group id - When call get requests of user - Then return an user`() {
         /* Given */
         val testUser = TestObserver<User>()
         val user = User()
@@ -51,7 +51,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given a group Id and user Id - When call add user to group - Then return an user`() {
+    fun `Given a group id and user id - When call add user to group - Then return an user`() {
         /* Given */
         val testUser = TestObserver<User>()
         val user = User()
@@ -67,7 +67,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given a group Id and user Id - When call remove request in group - Then return true`() {
+    fun `Given a group id and user id - When call remove request in group - Then return true`() {
         /* Given */
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
@@ -82,7 +82,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given a group Id and user Id - When call remove request in group - Then return false`() {
+    fun `Given a group id and user id - When call remove request in group - Then return false`() {
         /* Given */
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
@@ -97,7 +97,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given progressDialog - When call add user to group - Then progress dialog should show then hide`() {
+    fun `Given progress dialog - When call add user to group - Then progress dialog should show then hide`() {
         /* Given */
         val test = TestObserver<Boolean>()
         val user = User()
@@ -114,7 +114,7 @@ class ShowRequestViewModelTest {
     }
 
     @Test
-    fun `Given progressDialog  - When call remove request in group  - Then progress dialog should show then hide`() {
+    fun `Given progress dialog  - When call remove request in group  - Then progress dialog should show then hide`() {
         /* Given */
         val test = TestObserver<Boolean>()
         val groupId = "groupId"
