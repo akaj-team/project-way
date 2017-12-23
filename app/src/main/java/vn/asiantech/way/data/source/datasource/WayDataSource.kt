@@ -1,5 +1,7 @@
 package vn.asiantech.way.data.source.datasource
 
+import android.content.Context
+import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
@@ -111,7 +113,7 @@ internal interface WayDataSource {
      *
      *  @return HyperTrackLocation object which is Observable.
      */
-    fun getCurrentLocation(): Observable<HyperTrackLocation>
+//    fun getCurrentLocation(): Observable<HyperTrackLocation>
 
     /**
      *  Get ETA(Estimated Time of Arrival) of user
@@ -133,9 +135,8 @@ internal interface WayDataSource {
     /**
      * This method return ETA distance and ETA duration.
      *
-     *  @param units the units of return value type
-     *  @param origins the start LatLng
-     *  @param destinations the destinations LatLng*
+     *  @param origin the start LatLng
+     *  @param destination the destinations LatLng*
      *  @return ResultDistance object which is Observable.
      */
     fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance>
@@ -147,4 +148,35 @@ internal interface WayDataSource {
      *  @return ResultRoad object which is Observable.
      */
     fun getListLocation(url: String): Observable<ResultRoad>
+
+    /**
+     * This method return the url for sharing your location
+     *
+     * @return String url which is Observable
+     */
+    fun getTrackingURL(): Single<String>
+
+    /**
+     * This method return the location name for sharing your location
+     *
+     * @param context the context
+     * @param latLng the location LatLng
+     * @return String location name which is Observable
+     */
+    fun getLocationName(context: Context, latLng: LatLng): Single<String>
+
+    /**
+     * This method return HyperTrack current location
+     *
+     * @return HyperTrackLocation object which is Observable
+     */
+    fun getCurrentHyperTrackLocation(): Single<HyperTrackLocation>
+
+    /**
+     * This method return Location
+     *
+     * @param context the context
+     * @return Location object which is Observable
+     */
+    fun getCurrentLocation(context: Context): Single<Location>
 }
