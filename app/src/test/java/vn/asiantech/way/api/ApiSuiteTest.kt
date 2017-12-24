@@ -15,7 +15,11 @@ import org.junit.runners.Suite
         GoogleApiTest::class,
         GetUserInfoTest::class,
         GetMemberListTest::class,
-        AddUserToGroupTest::class
+        AddUserToGroupTest::class,
+        GetGroupInfoTest::class,
+        CreateGroupTest::class,
+        SearchGroupTest::class,
+        RemoveUserFromGroupTest::class
 )
 class ApiSuiteTest {
     companion object {

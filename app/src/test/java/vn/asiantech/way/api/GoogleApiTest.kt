@@ -43,7 +43,6 @@ class GoogleApiTest {
         assertThat(request.method.toUpperCase(), `is`("GET"))
         assertThat(request.requestUrl.queryParameterNames(), hasItems("input", "key", "language"))
         assertThat(request.requestUrl.queryParameter("input"), `is`("keyWord"))
-
         test.assertValue {
             val item = it.predictions[0]
             assertThat(it.predictions.size, `is`(2))
