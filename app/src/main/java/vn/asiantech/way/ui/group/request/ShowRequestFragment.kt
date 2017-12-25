@@ -54,7 +54,7 @@ class ShowRequestFragment : BaseFragment() {
     override fun onBindViewModel() {
         addDisposables(
                 viewModel
-                        .getRequestsOfUser(groupId)
+                        .getUserInfo(groupId)
                         .observeOnUiThread()
                         .subscribe(this::handleGetRequestsOfUserSuccess, this::handleGetRequestsOfUserFailed),
 

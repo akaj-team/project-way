@@ -13,12 +13,12 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import vn.asiantech.way.util.RxSchedulersOverrideRule
-import vn.asiantech.way.util.TestUtil
 import vn.asiantech.way.data.model.*
 import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.ui.search.SearchViewModel
+import vn.asiantech.way.util.RxSchedulersOverrideRule
+import vn.asiantech.way.util.TestUtil
 
 
 /**
@@ -63,7 +63,7 @@ class SearchViewModelTest {
         val input = "input"
         val language = "vi"
         val sensor = false
-        val autoCompleteResult = AutoCompleteResult(listOf(AutoCompleteLocation("description", StructuredFormatting(""),"1","placeId")))
+        val autoCompleteResult = AutoCompleteResult(listOf(AutoCompleteLocation("description", StructuredFormatting(""), "1", "placeId")))
         val wayLocations = listOf(WayLocation("1", "place", "name", "xxx"), WayLocation("12", "place", "name", "xxx"))
         val updateListViewStatus = TestObserver<DiffUtil.DiffResult>()
         `when`(wayRepository.searchLocations(input, language, sensor))
@@ -78,7 +78,7 @@ class SearchViewModelTest {
 
         /* Then */
         updateListViewStatus.assertValue {
-            it.dispatchUpdatesTo(object : ListUpdateCallback{
+            it.dispatchUpdatesTo(object : ListUpdateCallback {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
@@ -97,7 +97,7 @@ class SearchViewModelTest {
                 }
 
             })
-        true
+            true
         }
         Assert.assertThat(viewModel.locations.size, `is`(1))
     }
@@ -122,7 +122,6 @@ class SearchViewModelTest {
                 .observeOn(Schedulers.computation())
                 .subscribe(updateListViewStatus)
         viewModel.searchLocations("")
-
 
         /* Then */
         updateListViewStatus.assertValue {
