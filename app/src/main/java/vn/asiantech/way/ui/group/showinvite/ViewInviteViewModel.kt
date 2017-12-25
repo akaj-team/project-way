@@ -10,9 +10,10 @@ import vn.asiantech.way.data.source.GroupRepository
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 06/12/2017.
  */
-class ViewInviteViewModel(private val userId: String) {
+class ViewInviteViewModel(private val userId: String, private val groupRepository: GroupRepository) {
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
-    private val groupRepository = GroupRepository()
+
+    constructor(userId: String) : this(userId, GroupRepository())
 
     internal fun getInvitesOfUser(): Observable<Invite> = groupRepository.getInvite(userId)
 

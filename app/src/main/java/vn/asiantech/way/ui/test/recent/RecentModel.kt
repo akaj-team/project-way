@@ -1,4 +1,4 @@
-package vn.asiantech.way.ui.test
+package vn.asiantech.way.ui.test.recent
 
 import android.support.annotation.StringRes
 

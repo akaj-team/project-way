@@ -81,6 +81,12 @@ internal class WayRemoteDataSource : WayDataSource {
     override fun searchLocations(input: String, language: String, sensor: Boolean)
             : Observable<AutoCompleteResult> = ApiClient.instance.searchLocations(input, language, sensor).toObservable()
 
+    override fun getLocationDistance(origin: String, destination: String): Observable<ResultDistance> =
+            ApiClient.instance.getLocationDistance(origin, destination).toObservable()
+
+    override fun getListLocation(url: String): Observable<ResultRoad> =
+            ApiClient.instance.getListLocation(url)
+
     override fun createGroup(name: String): Observable<Group> = HypertrackApi.instance.createGroup(name).toObservable()
 
     override fun getGroupInfo(groupId: String): Observable<Group> = HypertrackApi.instance.getGroupInfo(groupId).toObservable()
@@ -96,6 +102,7 @@ internal class WayRemoteDataSource : WayDataSource {
                 }
                 .addOnSuccessListener {
                     HypertrackApi.instance.addUserToGroup(userId, body).toObservable()
+                            .subscribeOn(Schedulers.io())
                             .subscribe({
                                 result.onNext(it)
                             }, {
