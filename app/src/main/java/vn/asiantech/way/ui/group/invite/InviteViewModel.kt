@@ -60,17 +60,5 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
 
     private fun getListUser(name: String): Observable<List<User>> = groupRepository
             .searchUser(name)
-            .doOnSubscribe {
-                val emptyList = mutableListOf<User>()
-                val diff = Diff(users, emptyList)
-                        .areItemsTheSame { oldItem, newItem ->
-                            oldItem.id == newItem.id
-                        }
-                        .areContentsTheSame { oldItem, newItem ->
-                            oldItem.name == newItem.name
-                        }
-                        .calculateDiff()
-                users.clear()
-                updateAutocompleteList.onNext(diff)
-            }.subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
 }

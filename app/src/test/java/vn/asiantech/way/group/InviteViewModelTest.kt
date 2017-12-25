@@ -9,12 +9,14 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.ui.group.invite.InviteViewModel
+import vn.asiantech.way.util.RxSchedulersOverrideRule
 import vn.asiantech.way.util.TestUtil
 
 /**
@@ -28,6 +30,9 @@ class InviteViewModelTest {
 
     private lateinit var viewModel: InviteViewModel
 
+    @get:Rule
+    val rule = RxSchedulersOverrideRule()
+
     @Before
     fun initTests() {
         MockitoAnnotations.initMocks(this)
@@ -37,7 +42,7 @@ class InviteViewModelTest {
     @Test
     fun `Given a name - When call trigger search list user - Then return list user`() {
         /* Given */
-        val name = ""
+        val name = "hoa"
         val users = mutableListOf<User>(User(), User())
         val updateUserListObservable = TestObserver<DiffUtil.DiffResult>()
         `when`(groupRepository.searchUser(TestUtil.any())).thenReturn(Observable.just(users))
@@ -59,7 +64,7 @@ class InviteViewModelTest {
 
                 override fun onInserted(position: Int, count: Int) {
                     assertThat(count, `is`(2))
-                    assertThat(viewModel.users[position], `is`(users[position]))
+                    assertThat(position, `is`(0))
                 }
 
                 override fun onRemoved(position: Int, count: Int) {
