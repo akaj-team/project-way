@@ -19,8 +19,12 @@ import vn.asiantech.way.data.model.Invite
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>, private var currentRequest: Invite, private val listener: (Group) -> Unit)
+class GroupListAdapter(private val context: Context, private val groups: MutableList<Group>)
     : RecyclerView.Adapter<GroupListAdapter.SearchGroupHolder>() {
+
+    internal var onJoinButtonClick: (Group) -> Unit = {}
+    private var currentRequest = Invite("", "", "", false)
+
     override fun onBindViewHolder(holder: SearchGroupHolder?, position: Int) {
         holder?.onBind()
     }
@@ -46,7 +50,7 @@ class GroupListAdapter(private val context: Context, private val groups: Mutable
         init {
             tvJoinGroup.onClick {
                 tvJoinGroup.visibility = View.GONE
-                listener(groups[adapterPosition])
+                onJoinButtonClick(groups[adapterPosition])
             }
         }
 

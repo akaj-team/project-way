@@ -31,7 +31,7 @@
 
         <activity
             android:configChanges="orientation|screenSize"
-            android:name=".ui.search.SearchActivity">
+            android:name=".ui.group.GroupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,7 +82,6 @@
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
-        <activity android:name=".ui.group.GroupActivity" />
 
         <!-- Register meta-data here -->
         <!--

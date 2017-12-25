@@ -1,5 +1,7 @@
 package vn.asiantech.way.data.source
 
+import android.content.Context
+import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.hypertrack.lib.internal.common.models.VehicleType
 import com.hypertrack.lib.models.*
@@ -50,15 +52,23 @@ class WayRepository : WayDataSource {
     override fun removeUserFromGroup(userId: String, body: BodyAddUserToGroup): Observable<User>
             = remoteDataSource.removeUserFromGroup(userId, body)
 
-    override fun getCurrentLocation(): Observable<HyperTrackLocation>
-            = remoteDataSource.getCurrentLocation()
-
     override fun getETA(destination: LatLng, vehicle: VehicleType): Observable<Float>
             = remoteDataSource.getETA(destination, vehicle)
 
     override fun getListLocation(url: String): Observable<ResultRoad> {
         return remoteDataSource.getListLocation(url)
     }
+
     override fun createAndAssignAction(builder: ActionParamsBuilder): Observable<Action>
             = remoteDataSource.createAndAssignAction(builder)
+
+    override fun getTrackingURL(): Single<String> = remoteDataSource.getTrackingURL()
+
+    override fun getLocationName(context: Context, latLng: LatLng): Single<String> = remoteDataSource.getLocationName(context, latLng)
+
+    override fun getCurrentHyperTrackLocation(): Single<HyperTrackLocation> =
+            remoteDataSource.getCurrentHyperTrackLocation()
+
+    override fun getCurrentLocation(context: Context): Single<Location> =
+            remoteDataSource.getCurrentLocation(context)
 }
