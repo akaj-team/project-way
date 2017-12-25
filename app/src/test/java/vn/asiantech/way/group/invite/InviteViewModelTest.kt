@@ -1,4 +1,4 @@
-package vn.asiantech.way.group
+package vn.asiantech.way.group.invite
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.util.ListUpdateCallback
