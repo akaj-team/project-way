@@ -55,7 +55,7 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
     }
 
     internal fun inviteUserJoinToGroup(userId: String, invite: Invite) =
-        groupRepository.inviteUserJoinGroup(userId, invite)
+            groupRepository.inviteUserJoinGroup(userId, invite)
 
     private fun getListUser(name: String): Observable<List<User>> = groupRepository
             .searchUser(name)
