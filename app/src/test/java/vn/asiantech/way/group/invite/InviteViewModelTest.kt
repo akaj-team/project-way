@@ -78,7 +78,6 @@ class InviteViewModelTest {
         Assert.assertThat(viewModel.users.size, `is`(2))
     }
 
-
     @Test
     fun `Given an user id and an invite - When call invite user join to group  - Then return true `() {
         /* Given */
@@ -92,7 +91,6 @@ class InviteViewModelTest {
         /* Then */
         test.assertValue { it == true }
     }
-
 
     @Test
     fun `Given an user id and an invite - When call invite user join to group  - Then return false `() {
