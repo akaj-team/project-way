@@ -4,6 +4,7 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.util.ListUpdateCallback
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,6 +15,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
 import vn.asiantech.way.ui.group.invite.InviteViewModel
 import vn.asiantech.way.util.RxSchedulersOverrideRule
@@ -74,5 +76,35 @@ class InviteViewModelTest {
             true
         }
         Assert.assertThat(viewModel.users.size, `is`(2))
+    }
+
+
+    @Test
+    fun `Given an user id and an invite - When call invite user join to group  - Then return true `() {
+        /* Given */
+        val test = TestObserver<Boolean>()
+        val invite = Invite(from = "from", to = "to", groupName = "groupName", request = false)
+        `when`(groupRepository.inviteUserJoinGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
+
+        /* When */
+        viewModel.inviteUserJoinToGroup("", invite).subscribe(test)
+
+        /* Then */
+        test.assertValue { it == true }
+    }
+
+
+    @Test
+    fun `Given an user id and an invite - When call invite user join to group  - Then return false `() {
+        /* Given */
+        val test = TestObserver<Boolean>()
+        val invite = Invite(from = "from", to = "to", groupName = "groupName", request = false)
+        `when`(groupRepository.inviteUserJoinGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(false))
+
+        /* When */
+        viewModel.inviteUserJoinToGroup("", invite).subscribe(test)
+
+        /* Then */
+        test.assertValue { it == false }
     }
 }
