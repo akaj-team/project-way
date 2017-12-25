@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.test.recent
 
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import org.jetbrains.anko.AnkoContext
@@ -24,15 +25,32 @@ class RecentSearchAdapter(private val items: MutableList<Any>, internal var onIt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
         return when (viewType) {
-            TYPE_RECENT -> RecentSearchItemViewHolder(RecentSearchItemUI(), parent)
+            TYPE_RECENT -> {
+                val recentSearchItemUI = RecentSearchItemUI()
+                RecentSearchItemViewHolder(recentSearchItemUI,
+                        recentSearchItemUI.createView(AnkoContext.Companion.create(parent.context, parent, false)))
+            }
 
-            TYPE_POPULAR -> PopularSearchItemViewHolder(PopularSearchItemUI(), parent)
+            TYPE_POPULAR -> {
+                val popularSearchItemUI = PopularSearchItemUI()
+                PopularSearchItemViewHolder(popularSearchItemUI,
+                        popularSearchItemUI.createView(AnkoContext.Companion.create(parent.context, parent, false)))
+            }
 
-            TYPE_TAG -> TagSearchItemViewHolder(TagSearchItemUI(), parent)
+            TYPE_TAG -> {
+                val tagSearchItemUI = TagSearchItemUI()
+                TagSearchItemViewHolder(tagSearchItemUI,
+                        tagSearchItemUI.createView(AnkoContext.Companion.create(parent.context, parent, false)))
+            }
 
-            else -> HeaderViewHolder(HeaderSearchItemUI(), parent)
+            else -> {
+                val headerSearchItemUI = HeaderSearchItemUI()
+                HeaderViewHolder(headerSearchItemUI,
+                        headerSearchItemUI.createView(AnkoContext.Companion.create(parent.context, parent, false)))
+            }
         }
     }
+
     override
     fun getItemCount() = items.size
 
@@ -60,8 +78,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>, internal var onIt
         }
     }
 
-    inner class HeaderViewHolder(val ui: HeaderSearchItemUI, parent: ViewGroup)
-        : RecyclerView.ViewHolder(ui.createView(AnkoContext.Companion.create(parent.context, parent, false))) {
+    inner class HeaderViewHolder(val ui: HeaderSearchItemUI, itemView: View)
+        : RecyclerView.ViewHolder(itemView) {
 
         fun onBind(item: Any) {
             val header = item as? HeaderModel
@@ -71,7 +89,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>, internal var onIt
         }
     }
 
-    inner class RecentSearchItemViewHolder(val ui: RecentSearchItemUI, parent: ViewGroup) : RecyclerView.ViewHolder(ui.createView(AnkoContext.Companion.create(parent.context, parent, false))) {
+    inner class RecentSearchItemViewHolder(val ui: RecentSearchItemUI, itemView: View)
+        : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.onClick {
@@ -89,8 +108,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>, internal var onIt
         }
     }
 
-    inner class PopularSearchItemViewHolder(val ui: PopularSearchItemUI, parent: ViewGroup)
-        : RecyclerView.ViewHolder(ui.createView(AnkoContext.Companion.create(parent.context, parent, false))) {
+    inner class PopularSearchItemViewHolder(val ui: PopularSearchItemUI, itemView: View)
+        : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.onClick {
@@ -107,8 +126,8 @@ class RecentSearchAdapter(private val items: MutableList<Any>, internal var onIt
         }
     }
 
-    inner class TagSearchItemViewHolder(val ui: TagSearchItemUI, parent: ViewGroup)
-        : RecyclerView.ViewHolder(ui.createView(AnkoContext.Companion.create(parent.context, parent, false))) {
+    inner class TagSearchItemViewHolder(val ui: TagSearchItemUI, itemView: View)
+        : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.onClick {
