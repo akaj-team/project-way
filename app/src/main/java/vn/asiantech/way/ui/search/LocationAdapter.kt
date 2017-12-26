@@ -1,14 +1,10 @@
 package vn.asiantech.way.ui.search
 
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import vn.asiantech.way.R
 import vn.asiantech.way.data.model.WayLocation
 
 /**
@@ -26,20 +22,16 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
         holder?.onBind()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? =
-            LocationAdapterUI().createView(AnkoContext.Companion.create(parent.context,
-                    parent, false)).tag as? LocationViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder? {
+        val locationItemUI = LocationItemUI()
+        return LocationViewHolder(locationItemUI,
+                locationItemUI.createView(AnkoContext.Companion.create(parent.context, parent, false)))
+    }
 
     /**
      * View holder of RecyclerView's item.
      */
-    inner class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imgLocationIcon: ImageView
-                = itemView.find(R.id.location_adapter_ui_img_location_icon)
-        private val tvLocationName: TextView
-                = itemView.find(R.id.location_adapter_ui_tv_location_name)
-        private val tvLocationAddress: TextView
-                = itemView.find(R.id.location_adapter_ui_tv_location_format_address)
+    inner class LocationViewHolder(val ui: LocationItemUI, itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.onClick {
@@ -52,62 +44,10 @@ class LocationAdapter(val locations: MutableList<WayLocation>)
          */
         fun onBind() {
             with(locations[adapterPosition]) {
-                imgLocationIcon.setImageResource(locationIcon)
-                tvLocationName.text = name
-                tvLocationAddress.text = formatAddress
+                ui.imgLocationIcon.setImageResource(locationIcon)
+                ui.tvLocationName.text = name
+                ui.tvLocationAddress.text = formatAddress
             }
-        }
-    }
-
-    /**
-     * Item layout of RecyclerView.
-     */
-    inner class LocationAdapterUI : AnkoComponent<ViewGroup> {
-
-        override fun createView(ui: AnkoContext<ViewGroup>): View {
-            val view = with(ui) {
-                relativeLayout {
-                    lparams(matchParent, wrapContent)
-                    backgroundColor = Color.WHITE
-                    view {
-                        id = R.id.location_adapter_ui_view_break_line
-                        backgroundResource = R.color.colorSearchScreenBackground
-                    }.lparams(matchParent, dimen(R.dimen.break_line_view_height)) {
-                        bottomMargin = dimen(R.dimen.break_line_top_bot_margin)
-                        topMargin = dimen(R.dimen.break_line_top_bot_margin)
-                        leftMargin = dimen(R.dimen.break_line_left_margin)
-                    }
-
-                    imageView {
-                        id = R.id.location_adapter_ui_img_location_icon
-                    }.lparams {
-                        margin = dimen(R.dimen.default_padding_margin)
-                        below(R.id.location_adapter_ui_view_break_line)
-                    }
-
-                    textView {
-                        id = R.id.location_adapter_ui_tv_location_name
-                        singleLine = true
-                        textSizeDimen = R.dimen.search_screen_text_size
-                    }.lparams {
-                        below(R.id.location_adapter_ui_view_break_line)
-                        leftMargin = dimen(R.dimen.default_padding_margin)
-                        rightOf(R.id.location_adapter_ui_img_location_icon)
-                    }
-
-                    textView {
-                        id = R.id.location_adapter_ui_tv_location_format_address
-                        singleLine = true
-                        textSizeDimen = R.dimen.search_screen_text_size
-                    }.lparams {
-                        below(R.id.location_adapter_ui_tv_location_name)
-                        leftMargin = dimen(R.dimen.default_padding_margin)
-                        rightOf(R.id.location_adapter_ui_img_location_icon)
-                    }
-                }
-            }
-            view.tag = LocationViewHolder(view)
-            return view
         }
     }
 }
