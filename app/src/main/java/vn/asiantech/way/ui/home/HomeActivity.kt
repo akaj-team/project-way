@@ -134,8 +134,12 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun initRecyclerView() {
+        locations.add(TrackingInformation("1:00", "driver", "ahihiahihiahihiahihiahihiahihiahihiahihiahihi", LatLng(16.0792576, 108.2411593)))
+        locations.add(TrackingInformation("1:00", "driver", "ahihi", LatLng(16.0792576, 108.2411593)))
+        locations.add(TrackingInformation("1:00", "driver", "ahihi", LatLng(16.0792576, 108.2411593)))
+        locations.add(TrackingInformation("1:00", "driver", "ahihi", LatLng(16.0792576, 108.2411593)))
         val positions: MutableList<Int> = mutableListOf()
-        homeAdapter = HomeAdapter(this, locations) {
+        homeAdapter = HomeAdapter(locations) {
             if (position >= 0) {
                 locations[position].isChoose = false
                 homeAdapter.notifyItemChanged(position)
@@ -164,4 +168,3 @@ class HomeActivity : BaseActivity() {
         }
     }
 }
-
