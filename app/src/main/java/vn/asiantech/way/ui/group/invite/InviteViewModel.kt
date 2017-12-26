@@ -35,7 +35,6 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
         searchInviteObservable
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .filter { it.isNotEmpty() }
                 .flatMap {
                     getListUser(it)
                 }.doOnNext {

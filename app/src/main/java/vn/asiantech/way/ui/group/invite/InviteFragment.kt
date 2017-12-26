@@ -95,7 +95,7 @@ class InviteFragment : BaseFragment() {
     }
 
     /**
-     * On get infomation of user invite
+     * On get information of user invite
      */
     private fun initInvitedUser() {
         userId = arguments.getString(KEY_USER)

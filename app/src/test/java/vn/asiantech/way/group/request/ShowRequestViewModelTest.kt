@@ -73,7 +73,7 @@ class ShowRequestViewModelTest {
         viewModel.removeRequestInGroup("", "").subscribe(test)
 
         /* Then */
-        test.assertValue(true)
+        test.assertValue { it }
     }
 
     @Test
@@ -86,7 +86,7 @@ class ShowRequestViewModelTest {
         viewModel.removeRequestInGroup("", "").subscribe(test)
 
         /* Then */
-        test.assertValue(false)
+        test.assertValue { !it }
     }
 
     @Test

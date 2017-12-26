@@ -45,7 +45,7 @@ class InviteViewModelTest {
     fun `Given a name - When call trigger search list user - Then return list user`() {
         /* Given */
         val name = "hoa"
-        val users = mutableListOf<User>(User(), User())
+        val users = mutableListOf(User(), User())
         val updateUserListObservable = TestObserver<DiffUtil.DiffResult>()
         `when`(groupRepository.searchUser(TestUtil.any())).thenReturn(Observable.just(users))
 
@@ -57,7 +57,6 @@ class InviteViewModelTest {
         updateUserListObservable.assertValue {
             it.dispatchUpdatesTo(object : ListUpdateCallback {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
 
                 override fun onMoved(fromPosition: Int, toPosition: Int) {
@@ -89,7 +88,7 @@ class InviteViewModelTest {
         viewModel.inviteUserJoinToGroup("", invite).subscribe(test)
 
         /* Then */
-        test.assertValue { it == true }
+        test.assertValue { it }
     }
 
     @Test
@@ -103,6 +102,6 @@ class InviteViewModelTest {
         viewModel.inviteUserJoinToGroup("", invite).subscribe(test)
 
         /* Then */
-        test.assertValue { it == false }
+        test.assertValue { !it }
     }
 }
