@@ -1,12 +1,13 @@
 package vn.asiantech.way.ui.group.invite
 
+import android.support.v7.util.DiffUtil
 import com.hypertrack.lib.models.User
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.data.source.GroupRepository
+import vn.asiantech.way.ui.base.Diff
 import vn.asiantech.way.utils.AppConstants
 import java.util.concurrent.TimeUnit
 
@@ -15,8 +16,14 @@ import java.util.concurrent.TimeUnit
  * @author NgocTTN
  */
 class InviteViewModel(private val groupRepository: GroupRepository) {
-    internal var resetDataStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
+
+    internal val updateAutocompleteList = PublishSubject.create<DiffUtil.DiffResult>()
+    internal var users = mutableListOf<User>()
     private val searchInviteObservable = PublishSubject.create<String>()
+
+    init {
+        initSearchListUser()
+    }
 
     constructor() : this(GroupRepository())
 
@@ -24,21 +31,32 @@ class InviteViewModel(private val groupRepository: GroupRepository) {
         searchInviteObservable.onNext(query)
     }
 
-    internal fun triggerSearchListUser(): Observable<List<User>> =
-            searchInviteObservable
-                    .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
-                    .distinctUntilChanged()
-                    .filter { it.isNotEmpty() }
-                    .flatMap {
-                        getListUser(it)
+    private fun initSearchListUser() {
+        searchInviteObservable
+                .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .flatMap {
+                    getListUser(it)
+                }.doOnNext {
+            val diff = Diff(users, it)
+                    .areItemsTheSame { oldItem, newItem ->
+                        oldItem.id == newItem.id
                     }
+                    .areContentsTheSame { oldItem, newItem ->
+                        oldItem.name == newItem.name
+                    }
+                    .calculateDiff()
 
-    internal fun inviteUserJoinToGroup(userId: String, invite: Invite) {
-        groupRepository.inviteUserJoinGroup(userId, invite)
+            users.clear()
+            users.addAll(it)
+            updateAutocompleteList.onNext(diff)
+        }.subscribe()
     }
+
+    internal fun inviteUserJoinToGroup(userId: String, invite: Invite) =
+            groupRepository.inviteUserJoinGroup(userId, invite)
 
     private fun getListUser(name: String): Observable<List<User>> = groupRepository
             .searchUser(name)
-            .doOnSubscribe { resetDataStatus.onNext(true) }
             .subscribeOn(Schedulers.io())
 }

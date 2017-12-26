@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.invite
 
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,6 @@ class InviteFragment : BaseFragment() {
     private lateinit var ui: InviteFragmentUI
     private lateinit var viewModel: InviteViewModel
     private lateinit var adapter: InviteUserListAdapter
-    private val users = mutableListOf<User>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -53,20 +53,16 @@ class InviteFragment : BaseFragment() {
         viewModel = InviteViewModel()
         initInvitedUser()
         // Init adapter
-        adapter = InviteUserListAdapter(users)
+        adapter = InviteUserListAdapter(viewModel.users)
         // Init UI
         ui = InviteFragmentUI(adapter)
         return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
-        addDisposables(viewModel.triggerSearchListUser()
+        addDisposables(viewModel.updateAutocompleteList
                 .observeOnUiThread()
-                .subscribe(this::handleGetListUserInviteComplete),
-
-                viewModel.resetDataStatus
-                        .observeOnUiThread()
-                        .subscribe(this::handleClearDataListWhenStartSearch))
+                .subscribe(this::handleGetListUserInviteComplete))
         viewModel.searchListUser()
     }
 
@@ -94,30 +90,17 @@ class InviteFragment : BaseFragment() {
     /**
      * On get list user invite complete from search action
      */
-    private fun handleGetListUserInviteComplete(usersList: List<User>?) {
-        if (usersList != null) {
-            users.addAll(usersList)
-            ui.userListAdapter.notifyDataSetChanged()
-        }
+    private fun handleGetListUserInviteComplete(diff: DiffUtil.DiffResult) {
+        diff.dispatchUpdatesTo(adapter)
     }
 
     /**
-     * On get infomation of user invite
+     * On get information of user invite
      */
     private fun initInvitedUser() {
         userId = arguments.getString(KEY_USER)
         groupId = arguments.getString(KEY_GROUP)
         groupName = arguments.getString(KEY_GROUP_NAME)
         ownerId = arguments.getString(KEY_GROUP_OWNER)
-    }
-
-    /**
-     * On reload list when start search action
-     */
-    private fun handleClearDataListWhenStartSearch(isReset: Boolean) {
-        if (isReset) {
-            users.clear()
-            ui.userListAdapter.notifyDataSetChanged()
-        }
     }
 }
