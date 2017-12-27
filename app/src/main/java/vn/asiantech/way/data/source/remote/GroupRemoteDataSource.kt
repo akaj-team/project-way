@@ -258,7 +258,7 @@ class GroupRemoteDataSource : GroupDataSource {
             }
 
     override fun getMemberList(groupId: String): Single<MutableList<User>>
-            = HypertrackApi.instance.getGroupMembers(groupId).map { it.results }
+            = HypertrackApi.instance.getGroupMembers(groupId).subscribeOn(Schedulers.io()).map { it.results }
 
     override fun acceptInvite(userId: String, invite: Invite): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()

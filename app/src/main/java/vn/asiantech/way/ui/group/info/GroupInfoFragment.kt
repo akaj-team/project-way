@@ -1,6 +1,7 @@
 package vn.asiantech.way.ui.group.info
 
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,6 @@ class GroupInfoFragment : BaseFragment() {
     private var userId = ""
     private var groupId = ""
     private val groupInfoViewModel = GroupInfoViewModel()
-    private val users = mutableListOf<User>()
 
     companion object {
 
@@ -53,7 +53,7 @@ class GroupInfoFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        ui = GroupInfoFragmentUI(userId, users)
+        ui = GroupInfoFragmentUI(userId, groupInfoViewModel.users)
         return ui.createView(AnkoContext.create(context, this))
     }
 
@@ -61,7 +61,10 @@ class GroupInfoFragment : BaseFragment() {
         addDisposables(
                 groupInfoViewModel.getGroupInfo(groupId)
                         .observeOnUiThread()
-                        .subscribe(this::handleGetGroupInfoCompleted)
+                        .subscribe(this::handleGetGroupInfoCompleted),
+                groupInfoViewModel.updateMemberList
+                        .observeOnUiThread()
+                        .subscribe(this::handleGetMemberListCompleted, this::handleGetMemberListFailed)
         )
     }
 
@@ -123,12 +126,7 @@ class GroupInfoFragment : BaseFragment() {
 
     private fun handleGetGroupInfoCompleted(groupToBind: Group) {
         bindGroupInfoToView(groupToBind)
-        addDisposables(
-                groupInfoViewModel.getMemberList(groupId)
-                        .observeOnUiThread()
-                        .subscribe(this::handleGetMemberListCompleted,
-                                this::handleGetMemberListFailed)
-        )
+        groupInfoViewModel.getMemberList(groupId)
     }
 
     private fun bindGroupInfoToView(groupToBind: Group) {
@@ -146,12 +144,9 @@ class GroupInfoFragment : BaseFragment() {
         }
     }
 
-    private fun handleGetMemberListCompleted(users: MutableList<User>) {
-        ui.swipeRefreshLayout.isRefreshing = false
-        ui.tvMembersCount.text = getString(R.string.members_count, users.size)
-        this.users.clear()
-        this.users.addAll(users)
-        ui.memberListAdapter.notifyDataSetChanged()
+    private fun handleGetMemberListCompleted(diffResult: DiffUtil.DiffResult) {
+        diffResult.dispatchUpdatesTo(ui.memberListAdapter)
+        ui.tvMembersCount.text = getString(R.string.members_count, groupInfoViewModel.users.size)
     }
 
     private fun handleGetMemberListFailed(throwable: Throwable) {
