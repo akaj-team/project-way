@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import org.hamcrest.CoreMatchers.`is`
+import org.junit.Assert
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +39,7 @@ class GroupInfoViewModelTest {
     @Test
     fun `Given any group id - When call getMemberList - Then return list user`() {
         /* Given */
-        val users = mutableListOf<User>(User(), User())
+        val users = mutableListOf(User(), User())
         val updateMemberListObservable = TestObserver<DiffUtil.DiffResult>()
         `when`(groupRepository.getMemberList("groupId")).thenReturn(Single.just(users))
 
@@ -50,11 +51,11 @@ class GroupInfoViewModelTest {
         updateMemberListObservable.assertValue {
             it.dispatchUpdatesTo(object : ListUpdateCallback {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
 
                 override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
 
                 override fun onInserted(position: Int, count: Int) {
@@ -63,11 +64,13 @@ class GroupInfoViewModelTest {
                 }
 
                 override fun onRemoved(position: Int, count: Int) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    // No-op
                 }
             })
             true
         }
+        Assert.assertThat(groupInfoViewModel.users.size, `is`(2))
+        Assert.assertThat(groupInfoViewModel.users[0], `is`(users[0]))
     }
 
     @Test
