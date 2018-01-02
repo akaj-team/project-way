@@ -26,7 +26,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getGroupInfo(groupId: String): Observable<Group> {
         val result = PublishSubject.create<Group>()
-        val groupRef = firebaseDatabase.getReference("group/$groupId/info")
+        val groupRef = firebaseDatabase.getReference("groups/$groupId/info")
         groupRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
                 result.onError(Throwable(p0?.message))
@@ -77,7 +77,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getGroupRequest(groupId: String): Observable<Invite> {
         val result = PublishSubject.create<Invite>()
-        val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
+        val inviteRef = firebaseDatabase.getReference("groups/$groupId/request")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                 val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
@@ -91,7 +91,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun postGroupInfo(group: Group): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val groupRef = firebaseDatabase.getReference("group/${group.id}/info")
+        val groupRef = firebaseDatabase.getReference("groups/${group.id}/info")
         groupRef.setValue(group) { databaseError, dataSuccess ->
             if (databaseError != null) {
                 result.onError(databaseError.toException())
@@ -105,7 +105,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun changeGroupOwner(groupId: String, newOwner: String): Single<Boolean> {
         val result = SingleSubject.create<Boolean>()
-        val inviteRef = firebaseDatabase.getReference("group/$groupId/info/ownerId")
+        val inviteRef = firebaseDatabase.getReference("groups/$groupId/info/ownerId")
         inviteRef.setValue(newOwner) { databaseError, dataSuccess ->
             if (databaseError != null) {
                 result.onSuccess(false)
@@ -174,7 +174,7 @@ class GroupRemoteDataSource : GroupDataSource {
             override fun onDataChange(p0: DataSnapshot?) {
                 if (p0?.value == null) {
                     userRequest.setValue(request)
-                    val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                    val requestRef = firebaseDatabase.getReference("groups/$groupId" +
                             "/request/${request.from}")
                     requestRef.setValue(request).addOnSuccessListener {
                         result.onSuccess(true)
@@ -184,11 +184,11 @@ class GroupRemoteDataSource : GroupDataSource {
                 } else {
                     val currentRequest = gson.fromJson(gson.toJson(p0.value), Invite::class.java)
                     val currentGroupRequestRef = firebaseDatabase
-                            .getReference("group/${currentRequest.to}/request/${request.from}")
+                            .getReference("groups/${currentRequest.to}/request/${request.from}")
                     currentGroupRequestRef.removeValue()
                             .addOnSuccessListener {
                                 userRequest.setValue(request)
-                                val requestRef = firebaseDatabase.getReference("group/$groupId" +
+                                val requestRef = firebaseDatabase.getReference("groups/$groupId" +
                                         "/request/${request.from}")
                                 requestRef.setValue(request).addOnSuccessListener {
                                     result.onSuccess(true)
@@ -234,7 +234,7 @@ class GroupRemoteDataSource : GroupDataSource {
         val result = SingleSubject.create<Boolean>()
         val userRequestRef = firebaseDatabase.getReference("user/$userId" + "/request")
         userRequestRef.removeValue()
-        val groupRequestRef = firebaseDatabase.getReference("group/$groupId" + "/request/$userId")
+        val groupRequestRef = firebaseDatabase.getReference("groups/$groupId" + "/request/$userId")
         groupRequestRef.removeValue().addOnCompleteListener {
             result.onSuccess(true)
         }.addOnFailureListener {
@@ -286,7 +286,7 @@ class GroupRemoteDataSource : GroupDataSource {
 
     override fun getUserInfo(groupId: String): Observable<User> {
         val result = PublishSubject.create<User>()
-        val inviteRef = firebaseDatabase.getReference("group/$groupId/request")
+        val inviteRef = firebaseDatabase.getReference("groups/$groupId/request")
         inviteRef.addChildEventListener(object : SimpleChildEventListener {
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
                 val invite = Gson().fromJson(p0?.value.toString(), Invite::class.java)
@@ -322,7 +322,7 @@ class GroupRemoteDataSource : GroupDataSource {
             // We will create a request to group and set value for current request of user.
             userRequest.setValue(invite)
             invite.request = true
-            val requestRef = firebaseDatabase.getReference("group/${invite.to}" +
+            val requestRef = firebaseDatabase.getReference("groups/${invite.to}" +
                     "/request/${invite.to}")
             invite.to = userId
             requestRef.setValue(invite).addOnSuccessListener {
@@ -336,7 +336,7 @@ class GroupRemoteDataSource : GroupDataSource {
     private fun acceptInviteWhenUserHaveAnotherRequestAtTime(result: SingleSubject<Boolean>, userId: String, invite: Invite,
                                                              currentGroupRequestId: String) {
         val userRequest = firebaseDatabase.getReference("user/$userId/request")
-        val currentGroupRequestRef = firebaseDatabase.getReference("group/$currentGroupRequestId/request/$userId")
+        val currentGroupRequestRef = firebaseDatabase.getReference("groups/$currentGroupRequestId/request/$userId")
         currentGroupRequestRef.removeValue().addOnSuccessListener {
             if (invite.request) {
                 // This case handle when invite sent by group owner.
@@ -355,7 +355,7 @@ class GroupRemoteDataSource : GroupDataSource {
                 invite.request = true
                 userRequest.setValue(invite)
                         .addOnSuccessListener {
-                            val newGroupRef = firebaseDatabase.getReference("group/${invite.to}/request/$userId")
+                            val newGroupRef = firebaseDatabase.getReference("groups/${invite.to}/request/$userId")
                             invite.to = userId
                             newGroupRef.setValue(invite)
                                     .addOnSuccessListener {
