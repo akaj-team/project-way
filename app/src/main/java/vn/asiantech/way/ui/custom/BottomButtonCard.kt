@@ -36,27 +36,9 @@ class BottomButtonCard(context: Context) :
     internal lateinit var tvCopyLink: TextView
     internal lateinit var imgLoader: ImageView
 
-    var actionType: ActionType
-
-    val onCloseButtonClick: () -> Unit = {}
-    val onActionButtonClick: () -> Unit = {}
-    val onCopyButtonClick: () -> Unit = {}
-
-    // TODO: Will use in future
-//    val isActionTypeConfirmLocation: Boolean
-//        get() = actionType == ActionType.CONFIRM_LOCATION
-//
-//    val isActionTypeStartTracking: Boolean
-//        get() = actionType == ActionType.START_TRACKING
-//
-//    val isActionTypeShareTrackingLink: Boolean
-//        get() = actionType == ActionType.SHARE_TRACKING_URL
-//
-//    val isActionTypeShareBackLocation: Boolean
-//        get() = actionType == ActionType.SHARE_BACK_LOCATION
+    var onBottomCardListener: OnBottomCardListener? = null
 
     init {
-        actionType = ActionType.START_TRACKING
 
         AnkoContext.createDelegate(this).apply {
             rlBottomCard = relativeLayout {
@@ -68,29 +50,29 @@ class BottomButtonCard(context: Context) :
                     alignParentBottom()
                 }
                 btnClose = rippleView {
+                    visibility = View.GONE
                     id = R.id.bottom_button_card_btn_close
                     bottomPadding = dimen(R.dimen.padding_medium)
-                    leftPadding = dimen(R.dimen.padding_medium)
-                    rightPadding = dimen(R.dimen.padding_medium)
+                    horizontalPadding = dimen(R.dimen.padding_medium)
 
                     setOnRippleCompleteListener {
-                        onCloseButtonClick
+                        onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.CLOSE.name)
                     }
 
                     imageView {
                         imageResource = R.drawable.ic_navigation_close
                     }.lparams(dimen(R.dimen.image_size), dimen(R.dimen.image_size))
 
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams {
                     alignParentRight()
                 }
 
-                tvTitle = textView(R.string.bottom_button_card_title_text) {
+                tvTitle = textView(R.string.share_textview_text_look_good) {
                     id = R.id.bottom_button_card_tv_title
-                    textColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    textColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                     textSize = px2dip(dimen(R.dimen.text_large))
                     typeface = Typeface.DEFAULT_BOLD
-                }.lparams(wrapContent, wrapContent) {
+                }.lparams {
                     centerHorizontally()
                     topMargin = dimen(R.dimen.margin_low)
                 }
@@ -102,8 +84,7 @@ class BottomButtonCard(context: Context) :
                 }.lparams(matchParent, wrapContent) {
                     centerHorizontally()
                     below(R.id.bottom_button_card_tv_title)
-                    leftMargin = dimen(R.dimen.margin_huge)
-                    rightMargin = dimen(R.dimen.margin_huge)
+                    horizontalMargin = dimen(R.dimen.margin_huge)
                     topMargin = dimen(R.dimen.margin_base)
                 }
 
@@ -112,26 +93,25 @@ class BottomButtonCard(context: Context) :
                     backgroundResource = R.drawable.custom_bg_button_share
 
                     setOnRippleCompleteListener {
-                        onActionButtonClick
+                        onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.ACTION.name)
                     }
 
                     tvStartShare = textView(R.string.bottom_button_card_view_text_start_share) {
                         textSize = px2dip(dimen(R.dimen.text_large))
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerInParent()
                     }
 
                     imgLoader = imageView(R.drawable.ic_live_location_loading) {
                         visibility = View.GONE
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerInParent()
                     }
                 }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     centerHorizontally()
                     below(R.id.bottom_button_card_tv_description)
+                    horizontalMargin = dimen(R.dimen.margin_huge)
                     bottomMargin = dimen(R.dimen.margin_low)
-                    leftMargin = dimen(R.dimen.margin_huge)
-                    rightMargin = dimen(R.dimen.margin_huge)
                     topMargin = dimen(R.dimen.margin_high)
                 }
 
@@ -140,48 +120,43 @@ class BottomButtonCard(context: Context) :
                     padding = dimen(R.dimen.padding_very_low)
 
                     tvURL = textView(R.string.bottom_button_card_link_text) {
-                        textColor = ContextCompat.getColor(context, R.color.colorWhite)
+                        textColor = ContextCompat.getColor(ctx, R.color.colorWhite)
                         setTextIsSelectable(true)
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         centerVertically()
                         visibility = View.GONE
                         leftMargin = dimen(R.dimen.margin_xxhigh)
                     }
 
                     tvCopyLink = textView(R.string.bottom_button_card_text_copy_link) {
-                        textColor = ContextCompat.getColor(context, R.color.black)
+                        textColor = ContextCompat.getColor(ctx, R.color.black)
                         backgroundResource = R.drawable.custom_bg_button_copy
                         padding = dimen(R.dimen.padding_base)
 
                         onClick {
-                            onCopyButtonClick
+                            onBottomCardListener?.onBottomCardItemClick(BottomCardActionType.COPY.name)
                             tvCopyLink.isEnabled = false
-                            tvCopyLink.text = context.getString(R.string.share_textview_text_copied)
-
+                            tvCopyLink.text = ctx.getString(R.string.share_textview_text_copied)
                         }
 
-                    }.lparams(wrapContent, wrapContent) {
+                    }.lparams {
                         alignParentRight()
                         margin = dimen(R.dimen.margin_low)
                     }
                 }.lparams(matchParent, dimen(R.dimen.layout_height)) {
                     below(R.id.bottom_button_card_btn_sharing)
-                    leftMargin = dimen(R.dimen.margin_medium)
-                    rightMargin = dimen(R.dimen.margin_medium)
+                    horizontalMargin = dimen(R.dimen.margin_medium)
                     topMargin = dimen(R.dimen.margin_medium)
                 }
             }
         }
     }
 
-    /*
-     * Enum define for item type
+    /**
+     * Enum define for action type
      */
-    enum class ActionType {
-        START_TRACKING,
-        CONFIRM_LOCATION,
-        SHARE_TRACKING_URL,
-        SHARE_BACK_LOCATION
+    enum class BottomCardActionType {
+        CLOSE, COPY, ACTION
     }
 
     internal fun setTitleText(title: String): BottomButtonCard {
@@ -235,7 +210,7 @@ class BottomButtonCard(context: Context) :
 
     internal fun hideBottomCardLayout() {
         hideProgress()
-        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION, rlBottomCard)
+        AnimationUtils.collapse(this, AnimationUtils.DURATION_DEFAULT_VALUE_ANIMATION)
     }
 
 //    fun showTrackingProgress() {
@@ -297,7 +272,19 @@ class BottomButtonCard(context: Context) :
         tvTitle.visibility = View.VISIBLE
         return this
     }
+
+    /**
+     * Interface create fun onClickListener for BottomButtonCard
+     */
+    interface OnBottomCardListener {
+        /**
+         * Bottom card item click listener
+         */
+        fun onBottomCardItemClick(action: String)
+    }
 }
+
+internal fun ViewManager.bottomCard() = bottomCard {}
 
 internal fun ViewManager.bottomCard(init: BottomButtonCard.() -> Unit): BottomButtonCard
         = ankoView({ BottomButtonCard(it) }, 0, init)
