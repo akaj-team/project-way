@@ -4,8 +4,8 @@ import android.support.v7.util.DiffUtil
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
-import org.hamcrest.CoreMatchers
-import org.junit.Assert
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,7 +31,7 @@ class SearchGroupViewModelTest {
     private lateinit var viewModel: SearchGroupViewModel
 
     @get:Rule
-    val rule1 = RxSchedulersOverrideRule()
+    val rule = RxSchedulersOverrideRule()
 
     @Before
     fun initTest() {
@@ -43,39 +43,38 @@ class SearchGroupViewModelTest {
     fun `Given a right group name and empty list group - When call trigger search group - Then return list Group not empty`() {
         /* Given */
         val groups = mutableListOf<Group>()
-        val updateListViewStatus1 = TestObserver<DiffUtil.DiffResult>()
+        val updateListViewStatus = TestObserver<DiffUtil.DiffResult>()
         groups.add(Group("id", "name", "token", "ownerId", "", ""))
         groups.add(Group("id", "name", "token", "ownerId", "", ""))
         `when`(groupRepository.searchGroup(TestUtil.any())).thenReturn(Observable.just(groups))
 
         /* When */
         viewModel.updateAutocompleteList
-                .subscribe(updateListViewStatus1)
+                .subscribe(updateListViewStatus)
         viewModel.eventAfterTextChanged("groupName")
 
         /* Then */
-        updateListViewStatus1.assertValue {
+        updateListViewStatus.assertValue {
             it.dispatchUpdatesTo(ListUpdatesCallbackForDispatch.callback(
                     onChanged = { _, _, _ -> },
                     onMoved = { _, _ -> },
                     onInserted = { position, count ->
-                        Assert.assertThat(position, CoreMatchers.`is`(0))
-                        Assert.assertThat(count, CoreMatchers.`is`(2))
+                        assertThat(position, `is`(0))
+                        assertThat(count, `is`(2))
                     },
                     onRemoved = { _, _ -> }
             ))
             true
         }
-
-        Assert.assertThat(viewModel.groups.size, CoreMatchers.`is`(2))
-        Assert.assertThat(viewModel.groups[0].id, CoreMatchers.`is`("id"))
-        Assert.assertThat(viewModel.groups[0].token, CoreMatchers.`is`("token"))
+        assertThat(viewModel.groups.size, `is`(2))
+        assertThat(viewModel.groups[0].id, `is`("id"))
+        assertThat(viewModel.groups[0].token, `is`("token"))
     }
 
     @Test
     fun `Given a right group name and old list group - When call trigger search - Then return list Group not empty`() {
         /* Given */
-        val updateListViewStatus1 = TestObserver<DiffUtil.DiffResult>()
+        val updateListViewStatus = TestObserver<DiffUtil.DiffResult>()
         val groups = mutableListOf<Group>()
         viewModel.groups.add(Group("id", "name", "token", "ownerId", "", ""))
         viewModel.groups.add(Group("id1", "name1", "token1", "ownerId1", "", ""))
@@ -87,41 +86,36 @@ class SearchGroupViewModelTest {
 
         /* When */
         viewModel.updateAutocompleteList
-                .subscribe(updateListViewStatus1)
+                .subscribe(updateListViewStatus)
         viewModel.eventAfterTextChanged("groupName")
 
         /* Then */
-        updateListViewStatus1.assertValue {
+        updateListViewStatus.assertValue {
             it.dispatchUpdatesTo(ListUpdatesCallbackForDispatch.callback(
                     onChanged = { position, count, _ ->
-                        println("onChanged: at position:$position  with count: $count   ")
-                        Assert.assertThat(position, CoreMatchers.`is`(0))
-                        Assert.assertThat(count, CoreMatchers.`is`(1))
+                        assertThat(position, `is`(0))
+                        assertThat(count, `is`(1))
                     },
                     onMoved = { fromPosition, toPosition ->
-                        println("onMoved: from position:$fromPosition  toPosition: $toPosition   ")
-                        Assert.assertThat(fromPosition, CoreMatchers.`is`(2))
-                        Assert.assertThat(toPosition, CoreMatchers.`is`(0))
+                        assertThat(fromPosition, `is`(2))
+                        assertThat(toPosition, `is`(0))
                     },
                     onInserted = { position, count ->
-                        println("onInserted: at position:$position  with count: $count   ")
-                        Assert.assertThat(position, CoreMatchers.`is`(0))
-                        Assert.assertThat(count, CoreMatchers.`is`(1))
+                        assertThat(position, `is`(0))
+                        assertThat(count, `is`(1))
                     },
                     onRemoved = { position, count ->
-                        println("onRemoved: at position:$position  with count: $count   ")
-                        Assert.assertThat(position, CoreMatchers.`is`(2))
-                        Assert.assertThat(count, CoreMatchers.`is`(1))
+                        assertThat(position, `is`(2))
+                        assertThat(count, `is`(1))
                     }
             ))
             true
         }
-
-        Assert.assertThat(viewModel.groups.size, CoreMatchers.`is`(3))
-        Assert.assertThat(viewModel.groups[0].id, CoreMatchers.`is`("id1"))
-        Assert.assertThat(viewModel.groups[0].name, CoreMatchers.`is`("name at id1"))
-        Assert.assertThat(viewModel.groups[0].token, CoreMatchers.`is`("token1"))
-        Assert.assertThat(viewModel.groups[0].ownerId, CoreMatchers.`is`("ownerId1"))
+        assertThat(viewModel.groups.size, `is`(3))
+        assertThat(viewModel.groups[0].id, `is`("id1"))
+        assertThat(viewModel.groups[0].name, `is`("name at id1"))
+        assertThat(viewModel.groups[0].token, `is`("token1"))
+        assertThat(viewModel.groups[0].ownerId, `is`("ownerId1"))
     }
 
     @Test
@@ -134,7 +128,7 @@ class SearchGroupViewModelTest {
         viewModel.eventAfterTextChanged("groupName")
 
         /* Then */
-        Assert.assertThat(viewModel.groups.size, CoreMatchers.`is`(0))
+        assertThat(viewModel.groups.size, `is`(0))
     }
 
     @Test
@@ -148,7 +142,7 @@ class SearchGroupViewModelTest {
         viewModel.postRequestToGroup(group).subscribe(test)
 
         /* Then */
-        test.assertValue(true)
+        test.assertValue { it }
     }
 
     @Test

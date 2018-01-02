@@ -28,11 +28,8 @@ class SearchGroupFragment : BaseFragment() {
          * Get instance of SearchGroupFragemt with a given user.
          */
         fun getInstance(userId: String): SearchGroupFragment {
-            val instance = SearchGroupFragment()
-            val bundle = Bundle()
-            bundle.putSerializable(KEY_USER, userId)
-            instance.arguments = bundle
-            return instance
+            val bundle = Bundle().apply { putSerializable(KEY_USER, userId) }
+            return SearchGroupFragment().apply { arguments = bundle }
         }
     }
 
@@ -42,8 +39,7 @@ class SearchGroupFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val userId = arguments.getString(KEY_USER)
-        viewModel = SearchGroupViewModel(userId)
+        viewModel = SearchGroupViewModel(arguments.getString(KEY_USER))
         ui = SearchGroupFragmentUI(viewModel.groups, context)
         ui.searchGroupAdapter.onJoinButtonClick = {
             eventOnJoinButtonClicked(it)
@@ -61,8 +57,7 @@ class SearchGroupFragment : BaseFragment() {
                         .observeOnUiThread()
                         .subscribe(
                                 this::handleRecyclerViewGroupWhenSearchSuccess,
-                                this::handleSearchGroupError
-                        ),
+                                this::handleSearchGroupError),
                 viewModel.updateCurrentRequest
                         .observeOnUiThread()
                         .subscribe(

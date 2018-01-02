@@ -43,24 +43,24 @@ class SearchGroupTest {
         assertThat(request.requestUrl.queryParameter("name"), `is`("nameGroup"))
 
         testSearchGroup.assertValue {
-            val item = it.groups[0]
             assertThat(it.groups.size, `is`(2))
+            val item = it.groups[0]
             assertThat(item.id, `is`("83892b6f-4d4e-4ead-bcdd-d95a24571506"))
             assertThat(item.name, `is`("Group Cua Cuong"))
             assertThat(item.createAt, `is`("2017-11-09T04:02:01.769935Z"))
             assertThat(item.modifiedAt, `is`("2017-11-09T04:02:01.784838Z"))
             assertThat(item.token, `is`("gk_f1a6f81c400dc67bacfd547dfd66aa16b08f8191"))
-            it.groups.isNotEmpty()
+            true
         }
     }
 
     @Test
     fun `Given mock response - When search group with wrong name - Then return SearchGroupResult object without group`() {
-        val testSearchGroup1 = TestObserver<SearchGroupResult>()
+        val testSearchGroup = TestObserver<SearchGroupResult>()
         server.addResponseBody("searchGroupWrongName.json")
 
         /* When */
-        restClient.searchGroup("").subscribe(testSearchGroup1)
+        restClient.searchGroup("").subscribe(testSearchGroup)
 
         /* Then */
         val request = server.takeRequest()
@@ -68,9 +68,9 @@ class SearchGroupTest {
         assertThat(request.requestUrl.queryParameterNames(), hasItems("name"))
         assertThat(request.requestUrl.queryParameter("name"), `is`(""))
 
-        testSearchGroup1.assertValue {
+        testSearchGroup.assertValue {
             assertThat(it.groups.size, `is`(0))
-            it.groups.isEmpty()
+            true
         }
     }
 }

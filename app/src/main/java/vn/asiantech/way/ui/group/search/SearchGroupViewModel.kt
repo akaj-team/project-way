@@ -22,7 +22,6 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
     internal val progressDialogObservable = BehaviorSubject.create<Boolean>()
     internal val updateAutocompleteList = PublishSubject.create<DiffUtil.DiffResult>()
     internal val updateCurrentRequest = PublishSubject.create<Invite>()
-
     internal var groups = mutableListOf<Group>()
 
     constructor(userId: String) : this(GroupRepository(), userId) {
@@ -65,10 +64,10 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
 
     private fun searchGroupQuery() {
         searchGroupObservable
+                .observeOn(Schedulers.computation())
                 .debounce(AppConstants.WAITING_TIME_FOR_SEARCH_FUNCTION, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .flatMap { searchGroup(it) }
-                .observeOn(Schedulers.computation())
                 .doOnNext {
                     val diff = Diff(groups, it)
                             .areItemsTheSame { oldItem, newItem ->
@@ -82,7 +81,6 @@ class SearchGroupViewModel(private val groupRepository: GroupRepository, private
                     groups.clear()
                     groups.addAll(it)
                     updateAutocompleteList.onNext(diff)
-                }
-                .subscribe()
+                }.subscribe()
     }
 }
