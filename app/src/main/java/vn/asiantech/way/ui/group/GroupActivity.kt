@@ -1,11 +1,13 @@
 package vn.asiantech.way.ui.group
 
 import android.os.Bundle
-import android.util.Log
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
+import vn.asiantech.way.R
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
+import vn.asiantech.way.ui.group.info.GroupInfoFragment
+import vn.asiantech.way.ui.group.nongroup.NonGroupFragment
 
 /**
  *
@@ -32,7 +34,6 @@ class GroupActivity : BaseActivity() {
     }
 
     private fun handleAfterLoadUserCompleted(user: User) {
-        Log.i("tag11", "111111111111")
         addDisposables(groupViewModel.listenerForGroupChange(user.id)
                 .observeOnUiThread()
                 .subscribe {
@@ -44,18 +45,15 @@ class GroupActivity : BaseActivity() {
 
     private fun handleUserInfo(user: User) {
         if (user.groupId == null) {
-            // TODO: Replace HomeFragment
             currentGroupId = ""
-            Log.i("tag11", "121212121212")
+            replaceFragment(R.id.group_activity_ui_fr_content, NonGroupFragment.getInstance(user.id))
             return
         }
 
         if (user.groupId != currentGroupId) {
             currentGroupId = user.groupId
-            // TODO: Replace GroupInfoFragment
-            Log.i("tag11", "load lai")
+            replaceFragment(R.id.group_activity_ui_fr_content, GroupInfoFragment.getInstance(user.id, currentGroupId))
             return
         }
-        Log.i("tag11", "xxxxxxxxxxxx")
     }
 }

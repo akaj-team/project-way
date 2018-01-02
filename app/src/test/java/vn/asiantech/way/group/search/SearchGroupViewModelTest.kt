@@ -54,7 +54,7 @@ class SearchGroupViewModelTest {
     fun `Given a group - When call post request to group - Then return true`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val group = Group("id", "name", "token", "ownerId", "createAt", "modifiedAt")
+        val group = Group("id", "name", "token", "ownerId", "created_at", "modified_at")
         `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
@@ -68,7 +68,7 @@ class SearchGroupViewModelTest {
     fun `Given progressDialog - When call post request to group - Then progress dialog should show then hide`() {
         /* Given */
         val test = TestObserver<Boolean>()
-        val group = Group("id", "name", "token", "ownerId", "createAt", "modifiedAt")
+        val group = Group("id", "name", "token", "ownerId", "created_at", "modified_at")
         `when`(groupRepository.postRequestToGroup(TestUtil.any(), TestUtil.any())).thenReturn(Single.just(true))
 
         /* When */
