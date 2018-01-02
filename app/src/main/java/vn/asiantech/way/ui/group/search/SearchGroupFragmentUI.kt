@@ -1,5 +1,6 @@
 package vn.asiantech.way.ui.group.search
 
+import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -9,13 +10,15 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
+import vn.asiantech.way.data.model.Group
 import vn.asiantech.way.extension.onTextChangeListener
 
 /**
  *  Copyright © 2017 AsianTech inc.
  *  Created by hoavot on 04/12/2017.
  */
-class SearchGroupFragmentUI(private val SearchGroupAdapter: GroupListAdapter) : AnkoComponent<SearchGroupFragment> {
+class SearchGroupFragmentUI(groups: MutableList<Group>, context: Context) : AnkoComponent<SearchGroupFragment> {
+    internal val searchGroupAdapter = GroupListAdapter(context, groups)
 
     override fun createView(ui: AnkoContext<SearchGroupFragment>): View = with(ui) {
 
@@ -54,7 +57,7 @@ class SearchGroupFragmentUI(private val SearchGroupAdapter: GroupListAdapter) : 
 
             recyclerView {
                 layoutManager = LinearLayoutManager(context)
-                adapter = SearchGroupAdapter
+                adapter = searchGroupAdapter
             }.lparams(matchParent, matchParent) {
                 topMargin = dimen(R.dimen.search_group_top_margin)
             }

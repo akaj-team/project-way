@@ -2,6 +2,7 @@ package vn.asiantech.way.ui.group.search
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.R
 import vn.asiantech.way.data.model.Group
+import vn.asiantech.way.data.model.Invite
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
 
@@ -26,44 +28,42 @@ class SearchGroupFragment : BaseFragment() {
          * Get instance of SearchGroupFragemt with a given user.
          */
         fun getInstance(userId: String): SearchGroupFragment {
-            val instance = SearchGroupFragment()
-            val bundle = Bundle()
-            bundle.putSerializable(KEY_USER, userId)
-            instance.arguments = bundle
-            return instance
+            val bundle = Bundle().apply { putSerializable(KEY_USER, userId) }
+            return SearchGroupFragment().apply { arguments = bundle }
         }
     }
 
-    private lateinit var adapter: GroupListAdapter
     private lateinit var ui: SearchGroupFragmentUI
     private lateinit var progressDialog: ProgressDialog
-
     private lateinit var viewModel: SearchGroupViewModel
-    private var groups = mutableListOf<Group>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val userId = arguments.getString(KEY_USER)
-        viewModel = SearchGroupViewModel(userId)
-        adapter = GroupListAdapter(context, groups, viewModel.currentRequest) {
+        viewModel = SearchGroupViewModel(arguments.getString(KEY_USER))
+        ui = SearchGroupFragmentUI(viewModel.groups, context)
+        ui.searchGroupAdapter.onJoinButtonClick = {
             eventOnJoinButtonClicked(it)
         }
-        ui = SearchGroupFragmentUI(adapter)
         initProgressDialog()
         return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onBindViewModel() {
-        addDisposables(viewModel
-                .triggerSearchGroup()
-                .observeOnUiThread()
-                .subscribe(
-                        this::handleRecyclerViewGroupWhenSearchSuccess,
-                        this::handleSearchGroupError
-                ),
+        addDisposables(
                 viewModel.progressDialogObservable
                         .observeOnUiThread()
-                        .subscribe(this::updateProgressDialog)
+                        .subscribe(this::updateProgressDialog),
+                viewModel.updateAutocompleteList
+                        .observeOnUiThread()
+                        .subscribe(
+                                this::handleRecyclerViewGroupWhenSearchSuccess,
+                                this::handleSearchGroupError),
+                viewModel.updateCurrentRequest
+                        .observeOnUiThread()
+                        .subscribe(
+                                this::handleWhenUpdateCurrentRequestSuccess,
+                                this::handleWhenUpdateCurrentRequestError
+                        )
         )
     }
 
@@ -81,11 +81,8 @@ class SearchGroupFragment : BaseFragment() {
         progressDialog.setMessage(getString(R.string.processing))
     }
 
-    private fun handleRecyclerViewGroupWhenSearchSuccess(data: List<Group>) {
-        adapter.updateCurrentRequest(viewModel.currentRequest)
-        groups.clear()
-        groups.addAll(data)
-        adapter.notifyDataSetChanged()
+    private fun handleRecyclerViewGroupWhenSearchSuccess(diff: DiffUtil.DiffResult) {
+        diff.dispatchUpdatesTo(ui.searchGroupAdapter)
     }
 
     private fun handleSearchGroupError(error: Throwable) {
@@ -106,8 +103,6 @@ class SearchGroupFragment : BaseFragment() {
 
     private fun handlePostRequestToGroupSuccess(isSuccess: Boolean) {
         toast(getString(R.string.success))
-        adapter.updateCurrentRequest(viewModel.currentRequest)
-        adapter.notifyDataSetChanged()
     }
 
     private fun handlePostRequestToGroupError(error: Throwable) {
@@ -120,5 +115,14 @@ class SearchGroupFragment : BaseFragment() {
         } else {
             progressDialog.dismiss()
         }
+    }
+
+    private fun handleWhenUpdateCurrentRequestSuccess(invite: Invite) {
+        ui.searchGroupAdapter.updateCurrentRequest(invite)
+        ui.searchGroupAdapter.notifyDataSetChanged()
+    }
+
+    private fun handleWhenUpdateCurrentRequestError(error: Throwable) {
+        toast(error.message.toString())
     }
 }
