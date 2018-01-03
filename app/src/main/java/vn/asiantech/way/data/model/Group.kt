@@ -7,7 +7,9 @@ import java.io.Serializable
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 09/11/2017
  */
-data class Group(val id: String, var name: String, var token: String,
+data class Group(val id: String,
+                 var name: String,
+                 var token: String,
                  var ownerId: String,
-                 @SerializedName("created_at") val created_at: String,
-                 @SerializedName("modified_at") var modified_at: String) : Serializable
+                 val created_at: String,
+                 var modified_at: String) : Serializable
