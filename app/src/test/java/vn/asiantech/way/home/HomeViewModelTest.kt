@@ -48,7 +48,7 @@ class HomeViewModelTest {
 
         /* When */
         viewModel.updateHistoryTrackingList.subscribe(test)
-        viewModel.getTrackingHistory()
+        viewModel.getListTrackingHistory()
 
         /* Then */
         test.assertValue {
@@ -87,7 +87,7 @@ class HomeViewModelTest {
 
         /* When */
         viewModel.updateHistoryTrackingList.subscribe(test)
-        viewModel.getTrackingHistory()
+        viewModel.getListTrackingHistory()
 
         /* Then */
         test.assertValue {

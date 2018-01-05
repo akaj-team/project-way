@@ -40,18 +40,16 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var ui: HomeActivityUI
     private lateinit var viewModel: HomeViewModel
-
-    private var position = -1
     private var googleMap: GoogleMap? = null
-    private val positions: MutableList<Int> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = HomeViewModel(this)
-        ui = HomeActivityUI(viewModel.historyTrackingList)
+        ui = HomeActivityUI(viewModel.oldHistoryTracking)
         ui.setContentView(this)
         initViews()
         initMap()
+        viewModel.trackingHistory()
     }
 
     override fun onBackPressed() {
@@ -63,7 +61,6 @@ class HomeActivity : BaseActivity() {
                 .observeOnUiThread()
                 .subscribe(this::handleUpdateHistoryTrackingList),
                 viewModel.backStatus.subscribe(this::handleEventBackPressed))
-        viewModel.getTrackingHistory()
     }
 
     internal fun eventOnClickItemMenu(view: View) {
@@ -76,25 +73,18 @@ class HomeActivity : BaseActivity() {
     }
 
     internal fun eventOnClickItemRecyclerView(pos: Int) {
-        if (position >= 0) {
-            viewModel.historyTrackingList[position].isChoose = false
-            ui.homeAdapter.notifyItemChanged(position)
-        }
-        positions.add(pos)
-        if (positions.size > 1) {
-            if (pos > positions[positions.size - 2]) {
-                ui.recycleViewLocation.scrollToPosition(pos + 1)
-            } else {
-                ui.recycleViewLocation.scrollToPosition(pos)
-            }
-        }
-        viewModel.historyTrackingList[pos].isChoose = true
-        ui.homeAdapter.notifyItemChanged(pos)
-        position = pos
+        addDisposables(viewModel.getItemPosition(pos)
+                .observeOnUiThread()
+                .subscribe(this::handleScrollItemRecyclerView))
+        viewModel.changeBackgroundItem(pos)
     }
 
     private fun initViews() {
         setStatusBarTranslucent(true)
+    }
+
+    private fun handleScrollItemRecyclerView(pos: Int) {
+        ui.recycleViewLocation.scrollToPosition(pos)
     }
 
     private fun handleEventBackPressed(isBack: Boolean) {

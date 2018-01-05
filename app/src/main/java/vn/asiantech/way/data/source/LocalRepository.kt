@@ -90,6 +90,20 @@ class LocalRepository(val context: Context) : LocalDataSource {
         }
     }
 
+    override fun saveTrackingHistory(trackingInformation: TrackingInformation) {
+        val editor = pref.edit()
+        var history = getTrackingHistory()
+        if (history == null) {
+            history = mutableListOf()
+        }
+        history.add(0, trackingInformation)
+        if (history.size > AppConstants.SEARCH_SCREEN_HISTORY_MAX_SIZE) {
+            history.removeAt(AppConstants.SEARCH_SCREEN_HISTORY_MAX_SIZE - 1)
+        }
+        editor?.putString(AppConstants.KEY_TRACKING_HISTORY, Gson().toJson(history))
+        editor?.apply()
+    }
+
     private fun readJsonFromDirectory(@RawRes resId: Int): String {
         val iStream = context.resources.openRawResource(resId)
         val byteStream = ByteArrayOutputStream()
