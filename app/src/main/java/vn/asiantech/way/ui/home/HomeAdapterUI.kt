@@ -97,9 +97,6 @@ class HomeAdapterUI : AnkoComponent<ViewGroup> {
         }
     }.view
 
-    /**
-     * Function to custom expandableTextView
-     */
     private inline fun ViewManager.expandableTextView(init: ExpandableTextView.() -> Unit)
             : ExpandableTextView = ankoView({ ExpandableTextView(it) }, theme = 0, init = init)
 }

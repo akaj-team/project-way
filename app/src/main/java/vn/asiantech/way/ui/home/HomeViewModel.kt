@@ -37,12 +37,6 @@ class HomeViewModel(private val assetDataRepository: LocalRepository) {
         trackingHistorySubject.onNext(isGetHistory)
     }
 
-    internal fun getListTrackingHistory(): Single<MutableList<TrackingInformation>> {
-        val subject = SingleSubject.create<MutableList<TrackingInformation>>()
-        subject.onSuccess(assetDataRepository.getTrackingHistory()!!)
-        return subject
-    }
-
     internal fun eventBackPressed() {
         backStatus.onNext(handleBackKeyEvent())
     }
@@ -101,6 +95,12 @@ class HomeViewModel(private val assetDataRepository: LocalRepository) {
         oldList.clear()
         oldList.addAll(newList)
         updateHistoryTrackingList.onNext(diff)
+    }
+
+    private fun getListTrackingHistory(): Single<MutableList<TrackingInformation>> {
+        val subject = SingleSubject.create<MutableList<TrackingInformation>>()
+        assetDataRepository.getTrackingHistory()?.let { subject.onSuccess(it) }
+        return subject
     }
 
     private fun getListTrackingChanged(): Single<MutableList<TrackingInformation>> {

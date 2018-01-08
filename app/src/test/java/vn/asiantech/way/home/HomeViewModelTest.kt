@@ -48,7 +48,7 @@ class HomeViewModelTest {
 
         /* When */
         viewModel.updateHistoryTrackingList.subscribe(test)
-        viewModel.getListTrackingHistory()
+        viewModel.trackingHistory()
 
         /* Then */
         test.assertValue {
@@ -72,8 +72,8 @@ class HomeViewModelTest {
             })
             true
         }
-        Assert.assertThat(viewModel.historyTrackingList.size, `is`(2))
-        Assert.assertThat(viewModel.historyTrackingList[0].status, `is`("Tracking"))
+        Assert.assertThat(viewModel.oldHistoryTracking.size, `is`(2))
+        Assert.assertThat(viewModel.oldHistoryTracking[0].status, `is`("Tracking"))
     }
 
     @Test
@@ -82,12 +82,12 @@ class HomeViewModelTest {
         val newTrackingHistories = mutableListOf(TrackingInformation("1", "Tracking", "xxxx", LatLng(423.0, 12.0)),
                 TrackingInformation("1", "Stop", "xxxx", LatLng(32.0, 14.0)))
         val test = TestObserver<DiffUtil.DiffResult>()
-        viewModel.historyTrackingList.add(TrackingInformation("2016-03-09T05:20:19.742229", "Trackinaag", "xxxxx", LatLng(423.0, 13.0)))
+        viewModel.oldHistoryTracking.add(TrackingInformation("2016-03-09T05:20:19.742229", "Trackinaag", "xxxxx", LatLng(423.0, 13.0)))
         `when`(localRepository.getTrackingHistory()).thenReturn(newTrackingHistories)
 
         /* When */
         viewModel.updateHistoryTrackingList.subscribe(test)
-        viewModel.getListTrackingHistory()
+        viewModel.trackingHistory()
 
         /* Then */
         test.assertValue {
@@ -112,8 +112,8 @@ class HomeViewModelTest {
             })
             true
         }
-        Assert.assertThat(viewModel.historyTrackingList.size, `is`(2))
-        Assert.assertThat(viewModel.historyTrackingList[0].time, `is`("1"))
-        Assert.assertThat(viewModel.historyTrackingList[0].status, `is`("Tracking"))
+        Assert.assertThat(viewModel.oldHistoryTracking.size, `is`(2))
+        Assert.assertThat(viewModel.oldHistoryTracking[0].time, `is`("1"))
+        Assert.assertThat(viewModel.oldHistoryTracking[0].status, `is`("Tracking"))
     }
 }
