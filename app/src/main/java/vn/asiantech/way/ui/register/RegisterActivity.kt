@@ -37,6 +37,9 @@ class RegisterActivity : BaseActivity() {
         private const val REQUEST_CODE_GALLERY = 1003
         private const val AVATAR_SIZE = 300
         private const val KEY_FROM_REGISTER = "Register"
+
+        const val INTENT_CODE_SPLASH = 1001
+        const val INTENT_REGISTER = "Register"
     }
 
     private lateinit var ui: RegisterActivityUI

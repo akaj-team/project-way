@@ -30,8 +30,8 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name=".ui.search.SearchActivity">
+            android:name=".ui.splash.SplashActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,6 +83,7 @@
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.group.GroupActivity" />
+        <activity android:name=".ui.search.SearchActivity" />
 
         <!-- Register meta-data here -->
         <!--
