@@ -216,8 +216,10 @@ class RegisterActivityUI(val countryAdapter: CountryAdapter) : AnkoComponent<Reg
             if (view is EditText) {
                 when (view) {
                     edtName, edtPhone -> view.onTextChangeListener {
-                        owner.onHandleTextChange(edtName.text.toString().trim(),
-                                edtPhone.text.toString().trim())
+                        view.onTextChangeListener({}, {
+                            owner.onHandleTextChange(edtName.text.toString().trim(),
+                                    edtPhone.text.toString().trim())
+                        }, {})
                     }
                 }
             }

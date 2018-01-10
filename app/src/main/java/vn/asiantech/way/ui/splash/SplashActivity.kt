@@ -8,7 +8,9 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.ScaleAnimation
@@ -16,15 +18,19 @@ import com.hypertrack.lib.HyperTrack
 import com.hypertrack.lib.HyperTrackUtils
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
+import vn.asiantech.way.data.source.LocalRepository
 import vn.asiantech.way.extension.toast
 import vn.asiantech.way.ui.base.BaseActivity
-import vn.asiantech.way.ui.group.search.SearchGroupFragment
+import vn.asiantech.way.ui.home.HomeActivity
+import vn.asiantech.way.ui.register.RegisterActivity
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by atHangTran on 26/09/2017.
  */
 class SplashActivity : BaseActivity() {
+    lateinit var assetRepository: LocalRepository
+
     companion object {
         const val DELAY = 3000L
     }
@@ -59,12 +65,10 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ui = SplashActivityUI()
         ui.setContentView(this)
+        assetRepository = LocalRepository(this)
         setAnimationForBackground()
         setScaleForCircle()
         requestPermission()
-        // Open fragment
-        replaceFragment(SearchGroupFragment.getInstance(""))
-
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -74,29 +78,29 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun startSwitchScreen() {
-//        if (HyperTrackUtils.isInternetConnected(this)) {
-//            if (HyperTrackUtils.isLocationEnabled(this)) {
-//                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
-//                    ui.progressBar.visibility = View.VISIBLE
-//                    ui.btnEnableLocation.visibility = View.GONE
-//                    ui.tvAppDescription.visibility = View.GONE
-//                    if (prefs.getBoolean(KEY_LOGIN, false)) {
-//                        Handler().postDelayed({
-//                            startActivity(Intent(this, HomeActivity::class.java))
-//                            finish()
-//                        }, DELAY)
-//
-//                    } else {
-//                        Handler().postDelayed({
-//                            val intent = Intent(this, RegisterActivity::class.java)
-//                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
-//                            startActivity(intent)
-//                            finish()
-//                        }, DELAY)
-//                    }
-//                }
-//            }
-//        }
+        if (HyperTrackUtils.isInternetConnected(this)) {
+            if (HyperTrackUtils.isLocationEnabled(this)) {
+                if (HyperTrackUtils.isLocationPermissionAvailable(this)) {
+                    ui.progressBar.visibility = View.VISIBLE
+                    ui.btnEnableLocation.visibility = View.GONE
+                    ui.tvAppDescription.visibility = View.GONE
+                    if (assetRepository.getLoginStatus()) {
+                        Handler().postDelayed({
+                            startActivity(Intent(this, HomeActivity::class.java))
+                            finish()
+                        }, DELAY)
+
+                    } else {
+                        Handler().postDelayed({
+                            val intent = Intent(this, RegisterActivity::class.java)
+                            intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                            startActivity(intent)
+                            finish()
+                        }, DELAY)
+                    }
+                }
+            }
+        }
     }
 
     private fun setAnimationForBackground() {

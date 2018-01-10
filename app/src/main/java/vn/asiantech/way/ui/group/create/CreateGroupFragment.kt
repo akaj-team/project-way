@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.toast
 import vn.asiantech.way.R
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseFragment
+import vn.asiantech.way.ui.group.GroupActivity
 
 /**
  * Fragment create group
@@ -74,6 +76,7 @@ class CreateGroupFragment : BaseFragment() {
     }
 
     private fun handleCreateGroupSuccess(boolean: Boolean) {
-        TODO("Will update code later")
+        activity.finish()
+        activity.startActivity<GroupActivity>()
     }
 }

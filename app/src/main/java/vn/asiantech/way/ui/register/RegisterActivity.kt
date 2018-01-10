@@ -37,6 +37,9 @@ class RegisterActivity : BaseActivity() {
         private const val REQUEST_CODE_GALLERY = 1003
         private const val AVATAR_SIZE = 300
         private const val KEY_FROM_REGISTER = "Register"
+
+        const val INTENT_CODE_SPLASH = 1001
+        const val INTENT_REGISTER = "Register"
     }
 
     private lateinit var ui: RegisterActivityUI
@@ -134,7 +137,7 @@ class RegisterActivity : BaseActivity() {
         when (view) {
             ui.frAvatar -> checkPermissionGallery()
 
-            ui.tvSkip ->
+            ui.tvSkip -> {
                 if (registerViewModel.isRegister) {
                     // Create default user
                     registerViewModel.createUserDefault(getString(R.string.register_user_name_default))
@@ -142,6 +145,9 @@ class RegisterActivity : BaseActivity() {
                     // Come back Home when cancel update user
                     startActivity<HomeActivity>()
                 }
+                // Save login status to SharePreference
+                registerViewModel.saveLoginStatus(true)
+            }
 
             ui.btnRegister -> {
                 // Create User param
@@ -155,6 +161,7 @@ class RegisterActivity : BaseActivity() {
                     addDisposables(registerViewModel.createUser(userParam)
                             .observeOnUiThread()
                             .subscribe(this::handleCreateUserCompleted))
+                    startActivity<HomeActivity>()
                     // Save login status to SharePreference
                     registerViewModel.saveLoginStatus(true)
                 } else {
@@ -162,6 +169,7 @@ class RegisterActivity : BaseActivity() {
                     addDisposables(registerViewModel.updateUser(userParam)
                             .observeOnUiThread()
                             .subscribe(this::handleUpdateUserCompleted))
+                    finish()
                 }
             }
         }

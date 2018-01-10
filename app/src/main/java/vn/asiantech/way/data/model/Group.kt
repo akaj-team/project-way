@@ -7,4 +7,4 @@ import java.io.Serializable
  * Created by cuongcaov on 09/11/2017
  */
 data class Group(val id: String, var name: String, var token: String,
-                 var ownerId: String, val createAt: String, var modifiedAt: String) : Serializable
+                 var ownerId: String, val created_at: String, var modified_at: String) : Serializable

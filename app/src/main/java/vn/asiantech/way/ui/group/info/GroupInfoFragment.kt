@@ -136,7 +136,7 @@ class GroupInfoFragment : BaseFragment() {
         with(group) {
             ui.memberListAdapter.groupOwnerId = ownerId
             ui.tvGroupName.text = name
-            ui.tvCreateAt.text = getString(R.string.create_at, createAt.substring(0,
+            ui.tvCreateAt.text = getString(R.string.create_at, created_at.substring(0,
                     AppConstants.STANDARD_DATE_TIME_LENGTH))
             if (userId == group.ownerId) {
                 ui.imgApprove.visibility = View.VISIBLE
