@@ -4,6 +4,8 @@ import android.os.Bundle
 import com.hypertrack.lib.models.User
 import org.jetbrains.anko.setContentView
 import vn.asiantech.way.R
+import vn.asiantech.way.data.source.GroupRepository
+import vn.asiantech.way.data.source.WayRepository
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.group.info.GroupInfoFragment
@@ -16,7 +18,7 @@ import vn.asiantech.way.ui.group.nongroup.NonGroupFragment
 class GroupActivity : BaseActivity() {
 
     private lateinit var ui: GroupActivityUI
-    private val groupViewModel = GroupActivityViewModel()
+    private val groupViewModel = GroupActivityViewModel(GroupRepository(), WayRepository())
     private var currentGroupId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
