@@ -89,7 +89,7 @@ class SplashActivity : BaseActivity() {
         } else {
             Handler().postDelayed({
                 val intent = Intent(this, RegisterActivity::class.java)
-                intent.putExtra(RegisterActivity.INTENT_REGISTER, RegisterActivity.INTENT_CODE_SPLASH)
+                intent.putExtra(RegisterActivity.KEY_FROM_REGISTER, RegisterActivity.REQUEST_REGISTER)
                 startActivity(intent)
                 finish()
             }, SplashViewModel.DELAY)
