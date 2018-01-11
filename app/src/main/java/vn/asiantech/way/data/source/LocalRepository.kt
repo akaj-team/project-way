@@ -48,7 +48,6 @@ class LocalRepository(val context: Context) : LocalDataSource {
     }
 
     override fun saveSearchHistory(location: WayLocation) {
-        val editor = pref.edit()
         var history = getSearchHistory()
         if (history == null) {
             history = mutableListOf()
@@ -61,8 +60,7 @@ class LocalRepository(val context: Context) : LocalDataSource {
         if (history.size > AppConstants.SEARCH_SCREEN_HISTORY_MAX_SIZE) {
             history.removeAt(AppConstants.SEARCH_SCREEN_HISTORY_MAX_SIZE - 1)
         }
-        editor?.putString(AppConstants.KEY_SEARCH_SCREEN_WAY_LOCATION_HISTORY, Gson().toJson(history))
-        editor?.apply()
+        pref.edit().putString(AppConstants.KEY_SEARCH_SCREEN_WAY_LOCATION_HISTORY, Gson().toJson(history)).apply()
     }
 
     override fun getLoginStatus(): Boolean = pref.getBoolean(KEY_LOGIN_TOKEN, false)

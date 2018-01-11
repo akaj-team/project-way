@@ -38,6 +38,7 @@ class HomeActivity : BaseActivity() {
         private const val UNIT_PADDING_BOTTOM = 3
     }
 
+    private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
     private lateinit var viewModel: HomeViewModel
     private var googleMap: GoogleMap? = null
@@ -45,7 +46,8 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = HomeViewModel(this)
-        ui = HomeActivityUI(viewModel.oldHistoryTracking)
+        homeAdapter = HomeAdapter(viewModel.oldHistoryTracking)
+        ui = HomeActivityUI(homeAdapter)
         ui.setContentView(this)
         initViews()
         initMap()
@@ -136,7 +138,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun handleUpdateHistoryTrackingList(diff: DiffUtil.DiffResult) {
-        diff.dispatchUpdatesTo(ui.homeAdapter)
+        diff.dispatchUpdatesTo(homeAdapter)
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
