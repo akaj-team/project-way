@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import vn.asiantech.way.R
 
 /**
@@ -80,6 +81,7 @@ class SplashActivityUI : AnkoComponent<SplashActivity> {
                     leftPadding = dimen(R.dimen.splash_buttonEnableButton_padding)
                     rightPadding = dimen(R.dimen.splash_buttonEnableButton_padding)
                     textColor = ContextCompat.getColor(context, R.color.colorWhite)
+                    onClick { owner.eventSetPermission() }
                 }.lparams(wrapContent, wrapContent) {
                     alignParentBottom()
                     centerHorizontally()
