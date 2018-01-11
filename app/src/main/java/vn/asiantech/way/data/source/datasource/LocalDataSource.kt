@@ -51,4 +51,11 @@ interface LocalDataSource {
      * @return list were be tracking
      */
     fun getTrackingHistory(): MutableList<TrackingInformation>?
+
+    /**
+     * This method save tracking history information
+     *
+     * @param trackingInformation
+     */
+    fun saveTrackingHistory(trackingInformation: TrackingInformation)
 }

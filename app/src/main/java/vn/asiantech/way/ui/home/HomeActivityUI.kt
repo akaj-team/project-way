@@ -33,6 +33,9 @@ class HomeActivityUI(private val homeAdapter: HomeAdapter) : AnkoComponent<HomeA
                     backgroundColor = Color.TRANSPARENT
                     layoutManager = LinearLayoutManager(context)
                     adapter = homeAdapter
+                    homeAdapter.onClickItem = {
+                        owner.eventOnClickItemRecyclerView(it)
+                    }
                 }.lparams(matchParent, dimen(R.dimen.home_screen_recyclerView_height)) {
                     alignParentBottom()
                     centerVertically()

@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.view.View
 import android.view.WindowManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,7 +19,6 @@ import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import vn.asiantech.way.R
-import vn.asiantech.way.data.model.TrackingInformation
 import vn.asiantech.way.extension.observeOnUiThread
 import vn.asiantech.way.ui.base.BaseActivity
 import vn.asiantech.way.ui.group.GroupActivity
@@ -41,19 +41,17 @@ class HomeActivity : BaseActivity() {
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var ui: HomeActivityUI
     private lateinit var viewModel: HomeViewModel
-
-    private var locations = mutableListOf<TrackingInformation>()
-    private var position = -1
     private var googleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initRecyclerView()
+        viewModel = HomeViewModel(this)
+        homeAdapter = HomeAdapter(viewModel.oldHistoryTracking)
         ui = HomeActivityUI(homeAdapter)
         ui.setContentView(this)
         initViews()
         initMap()
-        viewModel = HomeViewModel(this)
+        viewModel.trackingHistory()
     }
 
     override fun onBackPressed() {
@@ -61,9 +59,9 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onBindViewModel() {
-        addDisposables(viewModel.getTrackingHistory()
+        addDisposables(viewModel.updateHistoryTrackingList
                 .observeOnUiThread()
-                .subscribe(this::setDataForRecyclerView),
+                .subscribe(this::handleUpdateHistoryTrackingList),
                 viewModel.backStatus.subscribe(this::handleEventBackPressed))
     }
 
@@ -76,8 +74,19 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    internal fun eventOnClickItemRecyclerView(pos: Int) {
+        addDisposables(viewModel.getItemPosition(pos)
+                .observeOnUiThread()
+                .subscribe(this::handleScrollItemRecyclerView))
+        viewModel.changeBackgroundItem(pos)
+    }
+
     private fun initViews() {
         setStatusBarTranslucent(true)
+    }
+
+    private fun handleScrollItemRecyclerView(pos: Int) {
+        ui.recycleViewLocation.scrollToPosition(pos)
     }
 
     private fun handleEventBackPressed(isBack: Boolean) {
@@ -128,30 +137,8 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    private fun setDataForRecyclerView(data: MutableList<TrackingInformation>?) {
-        data?.let { locations.addAll(it) }
-        homeAdapter.notifyDataSetChanged()
-    }
-
-    private fun initRecyclerView() {
-        val positions: MutableList<Int> = mutableListOf()
-        homeAdapter = HomeAdapter(this, locations) {
-            if (position >= 0) {
-                locations[position].isChoose = false
-                homeAdapter.notifyItemChanged(position)
-            }
-            positions.add(it)
-            if (positions.size > 1) {
-                if (it > positions[positions.size - 2]) {
-                    ui.recycleViewLocation.scrollToPosition(it + 1)
-                } else {
-                    ui.recycleViewLocation.scrollToPosition(it)
-                }
-            }
-            locations[it].isChoose = true
-            homeAdapter.notifyItemChanged(it)
-            position = it
-        }
+    private fun handleUpdateHistoryTrackingList(diff: DiffUtil.DiffResult) {
+        diff.dispatchUpdatesTo(homeAdapter)
     }
 
     private fun setStatusBarTranslucent(makeTranslucent: Boolean) {
@@ -164,4 +151,3 @@ class HomeActivity : BaseActivity() {
         }
     }
 }
-
