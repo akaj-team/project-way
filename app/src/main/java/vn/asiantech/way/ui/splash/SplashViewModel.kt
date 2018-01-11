@@ -23,6 +23,7 @@ class SplashViewModel(private val assetRepository: LocalRepository) {
 
     companion object {
         const val DELAY = 3000L
+        private const val ANIMATION_DURATION = 800L
     }
 
     lateinit var context: Context
@@ -78,8 +79,8 @@ class SplashViewModel(private val assetRepository: LocalRepository) {
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f)
 
-        growAnim.duration = 800
-        shrinkAnim.duration = 800
+        growAnim.duration = ANIMATION_DURATION
+        shrinkAnim.duration = ANIMATION_DURATION
 
         setAnimation.onNext(growAnim)
 

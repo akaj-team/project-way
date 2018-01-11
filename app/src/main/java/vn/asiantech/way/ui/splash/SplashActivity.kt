@@ -22,6 +22,10 @@ import vn.asiantech.way.ui.register.RegisterActivity
  * Created by atHangTran on 26/09/2017.
  */
 class SplashActivity : BaseActivity() {
+    companion object {
+        private const val ANIMATION_DURATION = 10000L
+    }
+
     private lateinit var ui: SplashActivityUI
     private lateinit var splashViewModel: SplashViewModel
 
@@ -100,7 +104,7 @@ class SplashActivity : BaseActivity() {
         val transAnim = ValueAnimator.ofFloat(0.0f, 1.0f)
         transAnim.repeatCount = ValueAnimator.INFINITE
         transAnim.interpolator = LinearInterpolator()
-        transAnim.duration = 10000L
+        transAnim.duration = ANIMATION_DURATION
         transAnim.addUpdateListener { animation ->
             val width = ui.imgFrontBackground.width
             addDisposables(
