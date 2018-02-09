@@ -1,4 +1,4 @@
-node('android') {
+
      step([$class: 'StashNotifier'])
      checkout scm
      stage('Build') {
@@ -19,4 +19,3 @@ node('android') {
        archiveArtifacts 'app/build/outputs/apk/*'
      }
      step([$class: 'StashNotifier'])
- }
